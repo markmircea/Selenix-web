@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Templates - Selenix.io</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components/components.css">
+    <link rel="stylesheet" href="templates.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- Navbar Component will be loaded here -->
+    <div id="navbar-container"></div>
+
+    <section class="templates-hero">
+        <div class="container">
+            <div class="templates-hero-content">
+                <h1>Ready-Made Automation Templates</h1>
+                <p>Get started instantly with our library of pre-built workflows. No need to build from scratch—just download, customize if needed, and run!</p>
+                <div class="hero-cta">
+                    <a href="#templates-library" class="primary-button">
+                        <i class="fa-solid fa-download"></i>
+                        Browse Templates
+                    </a>
+                    <a href="../docs/templates.html" class="secondary-outline-button">
+                        <i class="fa-solid fa-book"></i>
+                        Learn How to Use Templates
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="templates-benefits">
+        <div class="container">
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Save Time</h3>
+                        <p>Get up and running in minutes with pre-built automation workflows.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Learn By Example</h3>
+                        <p>See how experienced users structure complex automations.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Fully Customizable</h3>
+                        <p>Use templates as-is or customize them to fit your specific needs.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Verified & Tested</h3>
+                        <p>All templates are verified and tested by our team for reliability.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="templates-library" class="templates-library">
+        <div class="container">
+            <div class="section-header">
+                <h2>Browse Templates</h2>
+                <p>Find the perfect automation template for your use case and get started right away.</p>
+            </div>
+
+            <div class="templates-filter">
+                <div class="filters">
+                    <button class="filter-button active" data-category="all">All Templates</button>
+                    <button class="filter-button" data-category="data-scraping">Data Scraping</button>
+                    <button class="filter-button" data-category="form-filling">Form Filling</button>
+                    <button class="filter-button" data-category="social-media">Social Media</button>
+                    <button class="filter-button" data-category="e-commerce">E-Commerce</button>
+                    <button class="filter-button" data-category="marketing">Marketing</button>
+                </div>
+                <div class="search-container">
+                    <input type="text" placeholder="Search templates..." class="search-input">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+
+            <div class="templates-grid">
+                <!-- Data Scraping Templates -->
+                <div class="template-card" data-category="data-scraping">
+                    <div class="template-badge">
+                        <span>Featured</span>
+                    </div>
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-table"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">Data Scraping</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 2,547</span>
+                        </div>
+                    </div>
+                    <h3>Product Data Scraper</h3>
+                    <p>Extract product information from e-commerce websites including prices, descriptions, ratings, and more.</p>
+                    <div class="template-tags">
+                        <span class="tag">E-commerce</span>
+                        <span class="tag">Products</span>
+                        <span class="tag">Pricing</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="data-scraping">
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-list"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">Data Scraping</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 1,823</span>
+                        </div>
+                    </div>
+                    <h3>Contact Information Collector</h3>
+                    <p>Gather contact information from business directories, LinkedIn, or company websites automatically.</p>
+                    <div class="template-tags">
+                        <span class="tag">Lead Generation</span>
+                        <span class="tag">Business</span>
+                        <span class="tag">Contacts</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Form Filling Templates -->
+                <div class="template-card" data-category="form-filling">
+                    <div class="template-badge premium">
+                        <span>Premium</span>
+                    </div>
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-keyboard"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">Form Filling</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 1,356</span>
+                        </div>
+                    </div>
+                    <h3>Multi-Site Job Application</h3>
+                    <p>Automatically fill out job applications across multiple job boards using your resume data.</p>
+                    <div class="template-tags">
+                        <span class="tag">Jobs</span>
+                        <span class="tag">Applications</span>
+                        <span class="tag">Career</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="form-filling">
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-file-invoice"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">Form Filling</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 987</span>
+                        </div>
+                    </div>
+                    <h3>Invoice Data Entry</h3>
+                    <p>Automate entering invoice data into your accounting system from PDF or email invoices.</p>
+                    <div class="template-tags">
+                        <span class="tag">Accounting</span>
+                        <span class="tag">Finance</span>
+                        <span class="tag">Invoicing</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Social Media Templates -->
+                <div class="template-card" data-category="social-media">
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">Social Media</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 2,134</span>
+                        </div>
+                    </div>
+                    <h3>LinkedIn Connection Manager</h3>
+                    <p>Automatically send personalized connection requests and follow-up messages on LinkedIn.</p>
+                    <div class="template-tags">
+                        <span class="tag">Networking</span>
+                        <span class="tag">Outreach</span>
+                        <span class="tag">LinkedIn</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="social-media">
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">Social Media</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 1,456</span>
+                        </div>
+                    </div>
+                    <h3>Cross-Platform Content Publisher</h3>
+                    <p>Publish content across multiple social media platforms with custom formatting for each platform.</p>
+                    <div class="template-tags">
+                        <span class="tag">Content</span>
+                        <span class="tag">Publishing</span>
+                        <span class="tag">Marketing</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <!-- E-Commerce Templates -->
+                <div class="template-card" data-category="e-commerce">
+                    <div class="template-badge">
+                        <span>New</span>
+                    </div>
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-tags"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">E-Commerce</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 876</span>
+                        </div>
+                    </div>
+                    <h3>Price Monitor & Alerts</h3>
+                    <p>Track product prices across multiple websites and receive alerts when prices drop.</p>
+                    <div class="template-tags">
+                        <span class="tag">Price Tracking</span>
+                        <span class="tag">Shopping</span>
+                        <span class="tag">Alerts</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="e-commerce">
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">E-Commerce</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 1,234</span>
+                        </div>
+                    </div>
+                    <h3>Inventory Manager</h3>
+                    <p>Automatically update inventory across multiple e-commerce platforms when stock changes.</p>
+                    <div class="template-tags">
+                        <span class="tag">Inventory</span>
+                        <span class="tag">Stock Management</span>
+                        <span class="tag">Multi-platform</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Marketing Templates -->
+                <div class="template-card" data-category="marketing">
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">Marketing</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 1,567</span>
+                        </div>
+                    </div>
+                    <h3>Competitor Analysis Tracker</h3>
+                    <p>Monitor competitors' websites, social media, and content for changes and new campaigns.</p>
+                    <div class="template-tags">
+                        <span class="tag">Competitor Analysis</span>
+                        <span class="tag">Research</span>
+                        <span class="tag">Monitoring</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+
+                <div class="template-card" data-category="marketing">
+                    <div class="template-badge premium">
+                        <span>Premium</span>
+                    </div>
+                    <div class="template-header">
+                        <div class="template-icon">
+                            <i class="fa-solid fa-envelope-open-text"></i>
+                        </div>
+                        <div class="template-meta">
+                            <span class="template-category">Marketing</span>
+                            <span class="template-downloads"><i class="fa-solid fa-download"></i> 983</span>
+                        </div>
+                    </div>
+                    <h3>Email Campaign Manager</h3>
+                    <p>Automate email campaign management across multiple platforms with analytics tracking.</p>
+                    <div class="template-tags">
+                        <span class="tag">Email Marketing</span>
+                        <span class="tag">Campaigns</span>
+                        <span class="tag">Analytics</span>
+                    </div>
+                    <div class="template-actions">
+                        <a href="#" class="template-download-btn">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                        <a href="#" class="template-preview-btn">
+                            <i class="fa-solid fa-eye"></i> Preview
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="templates-pagination">
+                <button class="pagination-button active">1</button>
+                <button class="pagination-button">2</button>
+                <button class="pagination-button">3</button>
+                <button class="pagination-button">4</button>
+                <button class="pagination-button next">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-to-use">
+        <div class="container">
+            <div class="section-header">
+                <h2>How to Use Templates</h2>
+                <p>Get started with pre-built templates in just a few simple steps.</p>
+            </div>
+
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Download Template</h3>
+                        <p>Browse our library and download the template that fits your needs.</p>
+                        <img src="https://via.placeholder.com/400x225" alt="Download Template" class="step-image">
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Import to Selenix</h3>
+                        <p>Open Selenix application and import the template file through the "Import" option.</p>
+                        <img src="https://via.placeholder.com/400x225" alt="Import to Selenix" class="step-image">
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Configure as Needed</h3>
+                        <p>Customize the template to match your specific requirements (optional).</p>
+                        <img src="https://via.placeholder.com/400x225" alt="Configure Template" class="step-image">
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Run the Automation</h3>
+                        <p>Click "Run" and watch as Selenix automates your tasks for you!</p>
+                        <img src="https://via.placeholder.com/400x225" alt="Run Automation" class="step-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="create-share">
+        <div class="container">
+            <div class="create-share-content">
+                <div class="create-share-text">
+                    <h2>Create & Share Your Own Templates</h2>
+                    <p>Built a powerful automation workflow? Share it with the Selenix community and help others save time.</p>
+                    <ul class="benefits-list">
+                        <li><i class="fa-solid fa-check"></i> Get recognition from the community</li>
+                        <li><i class="fa-solid fa-check"></i> Earn rewards for popular templates</li>
+                        <li><i class="fa-solid fa-check"></i> Help others automate their tasks</li>
+                        <li><i class="fa-solid fa-check"></i> Showcase your automation skills</li>
+                    </ul>
+                    <a href="../docs/create-templates.html" class="primary-button">
+                        <i class="fa-solid fa-upload"></i>
+                        Learn How to Create Templates
+                    </a>
+                </div>
+                <div class="create-share-image">
+                    <img src="https://via.placeholder.com/500x350" alt="Create and Share Templates">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Automate with Selenix?</h2>
+                <p>Download Selenix today and access all these templates to start saving time immediately.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="primary-button">
+                        <i class="fa-solid fa-download"></i>
+                        Download Selenix
+                    </a>
+                    <a href="/docs" class="secondary-outline-button">
+                        <i class="fa-solid fa-book"></i>
+                        Read Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Component will be loaded here -->
+    <div id="footer-container"></div>
+
+    <script src="../script.js"></script>
+    <script src="../components/components.js"></script>
+    <script src="../components/navbar/navbar.js"></script>
+    <script src="../components/footer/footer.js"></script>
+    <script src="templates.js"></script>
+</body>
+</html>

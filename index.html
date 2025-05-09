@@ -14,10 +14,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        .component-placeholder {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px dashed #ddd;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar Component will be loaded here -->
-    <div id="navbar-container"></div>
+    <div id="navbar-container">
+        <div class="component-placeholder">
+            <p>Navbar component loading... If you see this message, there might be an issue with the component loader.</p>
+        </div>
+    </div>
 
     <section class="hero">
         <div class="container">
@@ -211,9 +226,42 @@
     </section>
 
     <!-- Footer Component will be loaded here -->
-    <div id="footer-container"></div>
+    <div id="footer-container">
+        <div class="component-placeholder">
+            <p>Footer component loading... If you see this message, there might be an issue with the component loader.</p>
+        </div>
+    </div>
 
+    <!-- Load all necessary scripts -->
     <script src="script.js"></script>
+    
+    <!-- Component scripts -->
+    <script>
+        // Debug function to log component loading status
+        function logComponentStatus(message) {
+            console.log(`Component Status: ${message}`);
+        }
+        
+        window.addEventListener('load', function() {
+            logComponentStatus('Window loaded, checking component status');
+            
+            // Check component containers
+            const navbarContainer = document.getElementById('navbar-container');
+            const footerContainer = document.getElementById('footer-container');
+            
+            setTimeout(function() {
+                if (navbarContainer && navbarContainer.querySelector('.component-placeholder')) {
+                    logComponentStatus('Navbar still showing placeholder after 2 seconds - component may have failed to load');
+                }
+                
+                if (footerContainer && footerContainer.querySelector('.component-placeholder')) {
+                    logComponentStatus('Footer still showing placeholder after 2 seconds - component may have failed to load');
+                }
+            }, 2000);
+        });
+    </script>
+    
+    <!-- Component loading scripts -->
     <script src="components/components.js"></script>
     <script src="components/navbar/navbar.js"></script>
     <script src="components/footer/footer.js"></script>
