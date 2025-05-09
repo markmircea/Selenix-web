@@ -6,18 +6,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const pathParts = window.location.pathname.split('/').filter(Boolean);
         const isRootPath = pathParts.length === 0 || (pathParts.length === 1 && pathParts[0] === 'index.html');
         const isFirstLevel = pathParts.length === 1 || (pathParts.length === 2 && pathParts[1] === 'index.html');
+        const isInDocsDir = pathParts.length > 0 && pathParts[0] === 'docs';
+        
+        console.log('Path parts:', pathParts);
+        console.log('Is root path:', isRootPath);
+        console.log('Is first level:', isFirstLevel);
+        console.log('Is in docs directory:', isInDocsDir);
         
         // Base path varies depending on location in site structure
         let basePath = '';
         if (!isRootPath) {
-            if (!isFirstLevel) {
+            if (isInDocsDir) {
+                basePath = '../components/'; // For docs/index.html, etc.
+            } else if (!isFirstLevel) {
                 basePath = '../components/'; // For product/templates.html, etc.
             } else {
-                basePath = './components/'; // For docs/index.html, etc.
+                basePath = './components/'; // For other first level pages
             }
         } else {
             basePath = 'components/'; // For root index.html
         }
+        
+        console.log('Using base path:', basePath);
+        console.log('Final component path:', basePath + componentName);
         
         return basePath + componentName;
     }

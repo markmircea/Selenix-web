@@ -15,10 +15,63 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Favicon -->
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    
+    <!-- This script adds a console.log to debug component loading -->
+    <script>
+        // Log when the document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Document is ready in docs/index.html');
+            
+            // Attempt to manually initialize components
+            setTimeout(function() {
+                if (window.initializeNavbar) {
+                    console.log('Manually initializing navbar...');
+                    window.initializeNavbar();
+                } else {
+                    console.log('initializeNavbar function not available');
+                }
+            }, 1000);
+        });
+    </script>
 </head>
 <body class="docs-page">
     <!-- Navbar Component will be loaded here -->
-    <div id="navbar-container"></div>
+    <div id="navbar-container">
+        <!-- Fallback navbar if component loading fails -->
+        <header>
+            <div class="container">
+                <nav>
+                    <a href="/" class="logo">
+                        <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="/docs/index.html" id="nav-docs" class="active">Docs</a>
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle" id="nav-product">Product <i class="fas fa-chevron-down"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="../product/no-code-builder.html" id="nav-no-code-builder">No-code builder</a>
+                                <a href="../product/no-code-steps.html" id="nav-no-code-steps">No-code steps</a>
+                                <a href="../product/bot-runner.html" id="nav-bot-runner">Bot runner</a>
+                                <a href="../product/templates.html" id="nav-templates">Templates</a>
+                                <a href="../product/video-guides.html" id="nav-video-guides">Video guides</a>
+                                <a href="../product/release-notes.html" id="nav-release-notes">Release notes</a>
+                            </div>
+                        </div>
+                        <a href="#pricing" id="nav-pricing">Pricing</a>
+                        <a href="#support" id="nav-support">Support</a>
+                        <a href="#blog" id="nav-blog">Blog</a>
+                    </div>
+                    <a href="#download" class="cta-button">
+                        <i class="fa-solid fa-download"></i>
+                        Download Selenix
+                    </a>
+                    <div class="mobile-menu-button">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                </nav>
+            </div>
+        </header>
+    </div>
 
     <div class="docs-container">
         <div class="docs-sidebar">
@@ -204,5 +257,45 @@
     <script src="../components/navbar/navbar.js"></script>
     <script src="../components/footer/footer.js"></script>
     <script src="docs.js"></script>
+    <script src="docs-nav-fix.js"></script>
+    
+    <!-- Script Loading Debug -->
+    <script>
+        // Check which scripts were loaded
+        window.addEventListener('load', function() {
+            console.log('Window loaded, checking loaded scripts');
+            
+            // Create an array of expected scripts
+            const expectedScripts = [
+                '../script.js',
+                '../components/components.js',
+                '../components/navbar/navbar.js',
+                '../components/footer/footer.js',
+                'docs.js'
+            ];
+            
+            // Check each script
+            const loadedScripts = Array.from(document.scripts).map(script => script.src.replace(window.location.origin, ''));
+            console.log('Loaded scripts:', loadedScripts);
+            
+            expectedScripts.forEach(script => {
+                const scriptLoaded = document.querySelector(`script[src*="${script}"]`);
+                console.log(`Script ${script} loaded: ${scriptLoaded !== null}`);
+            });
+            
+            // Try to load navbar component directly
+            fetch('../components/navbar/navbar.html')
+                .then(response => {
+                    console.log('Navbar fetch response:', response.status);
+                    return response.text();
+                })
+                .then(html => {
+                    console.log('Navbar HTML loaded, length:', html.length);
+                })
+                .catch(error => {
+                    console.error('Error loading navbar directly:', error);
+                });
+        });
+    </script>
 </body>
 </html>

@@ -18,7 +18,42 @@
 </head>
 <body class="docs-page">
     <!-- Navbar Component will be loaded here -->
-    <div id="navbar-container"></div>
+    <div id="navbar-container">
+        <!-- Fallback navbar if component loading fails -->
+        <header>
+            <div class="container">
+                <nav>
+                    <a href="/" class="logo">
+                        <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="/docs/index.html" id="nav-docs" class="active">Docs</a>
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle" id="nav-product">Product <i class="fas fa-chevron-down"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="../product/no-code-builder.html" id="nav-no-code-builder">No-code builder</a>
+                                <a href="../product/no-code-steps.html" id="nav-no-code-steps">No-code steps</a>
+                                <a href="../product/bot-runner.html" id="nav-bot-runner">Bot runner</a>
+                                <a href="../product/templates.html" id="nav-templates">Templates</a>
+                                <a href="../product/video-guides.html" id="nav-video-guides">Video guides</a>
+                                <a href="../product/release-notes.html" id="nav-release-notes">Release notes</a>
+                            </div>
+                        </div>
+                        <a href="#pricing" id="nav-pricing">Pricing</a>
+                        <a href="#support" id="nav-support">Support</a>
+                        <a href="#blog" id="nav-blog">Blog</a>
+                    </div>
+                    <a href="#download" class="cta-button">
+                        <i class="fa-solid fa-download"></i>
+                        Download Selenix
+                    </a>
+                    <div class="mobile-menu-button">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                </nav>
+            </div>
+        </header>
+    </div>
 
     <div class="docs-container">
         <div class="docs-sidebar">
@@ -302,5 +337,6 @@ sudo apt install ./selenix_x.x.x_amd64.deb</code></pre>
     <script src="../components/navbar/navbar.js"></script>
     <script src="../components/footer/footer.js"></script>
     <script src="docs.js"></script>
+    <script src="docs-nav-fix.js"></script>
 </body>
 </html>
