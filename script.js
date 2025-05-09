@@ -11,75 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     });
     
-    // Sticky Header Effect
-    const header = document.querySelector('header');
-    
-    function updateHeaderStyle() {
-        if (window.scrollY > 10) {
-            header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
-        } else {
-            header.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.05)';
-            header.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
-        }
-    }
-    
-    // Initial header style
-    updateHeaderStyle();
-    
-    // Update on scroll
-    window.addEventListener('scroll', updateHeaderStyle);
-
-    // Mobile Menu Toggle
-    const mobileMenuButton = document.querySelector('.mobile-menu-button');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (mobileMenuButton && navLinks) {
-        mobileMenuButton.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-            
-            // Toggle icon between bars and X
-            const icon = this.querySelector('i');
-            if (icon) {
-                if (icon.classList.contains('fa-bars')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-xmark');
-                } else {
-                    icon.classList.remove('fa-xmark');
-                    icon.classList.add('fa-bars');
-                }
-            }
-        });
-    }
-    
-    // Smooth Scrolling for Anchor Links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80, // Offset for header
-                    behavior: 'smooth'
-                });
-                
-                // Close mobile menu if open
-                if (navLinks && navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                    const icon = mobileMenuButton.querySelector('i');
-                    if (icon) {
-                        icon.classList.remove('fa-xmark');
-                        icon.classList.add('fa-bars');
-                    }
-                }
-            }
-        });
-    });
-    
     // Reveal Elements on Scroll
     function revealElements() {
         const windowHeight = window.innerHeight;
@@ -193,4 +124,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initial check
         checkCounters();
     }
+    
+    // Smooth Scrolling for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80, // Offset for header
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                const navLinks = document.querySelector('.nav-links');
+                const mobileMenuButton = document.querySelector('.mobile-menu-button');
+                
+                if (navLinks && navLinks.classList.contains('active') && mobileMenuButton) {
+                    navLinks.classList.remove('active');
+                    const icon = mobileMenuButton.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
+                }
+            }
+        });
+    });
 });

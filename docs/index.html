@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation - Selenix.io</title>
     <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components/components.css">
     <link rel="stylesheet" href="docs.css">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,308 +16,114 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
 </head>
-<body class="docs-page">
-    <header>
-        <div class="container">
-            <nav>
-                <a href="../" class="logo">
-                    <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
-                </a>
-                <div class="nav-links">
-                    <a href="/docs" class="active">Docs</a>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle">Product <i class="fas fa-chevron-down"></i></a>
-                        <div class="dropdown-menu">
-                            <a href="../product/no-code-builder.html">No-code builder</a>
-                            <a href="../product/no-code-steps.html">No-code steps</a>
-                            <a href="../product/bot-runner.html">Bot runner</a>
-                            <a href="../product/templates.html">Templates</a>
-                            <a href="../product/video-guides.html">Video guides</a>
-                            <a href="../product/release-notes.html">Release notes</a>
-                        </div>
-                    </div>
-                    <a href="#pricing">Pricing</a>
-                    <a href="#support">Support</a>
-                    <a href="#blog">Blog</a>
-                </div>
-                <a href="#download" class="cta-button">
-                    <i class="fa-solid fa-download"></i>
-                    Download Selenix
-                </a>
-                <div class="mobile-menu-button">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
-            </nav>
-        </div>
-    </header>
+<body>
+    <!-- Navbar Component will be loaded here -->
+    <div id="navbar-container"></div>
 
     <div class="docs-container">
-        <aside class="docs-sidebar">
-            <div class="search-container">
-                <input type="text" placeholder="Search documentation" class="search-input">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3>Current page</h3>
-                <ul class="sidebar-nav">
-                    <li><a href="#getting-started" class="active"><i class="fa-solid fa-rocket"></i> Getting started</a></li>
-                    <li><a href="#how-documentation-is-organised"><i class="fa-solid fa-sitemap"></i> How the documentation is organised</a></li>
-                    <li><a href="#task-types"><i class="fa-solid fa-list-check"></i> Type of tasks you wish to automate</a></li>
-                    <li><a href="#core-features"><i class="fa-solid fa-puzzle-piece"></i> Core features</a></li>
-                    <li><a href="#configuration"><i class="fa-solid fa-gear"></i> Configuration settings</a></li>
-                    <li><a href="#runtime"><i class="fa-solid fa-clock"></i> Runtime</a></li>
-                    <li><a href="#troubleshooting"><i class="fa-solid fa-wrench"></i> Troubleshooting</a></li>
-                    <li><a href="#developers"><i class="fa-solid fa-code"></i> Developers</a></li>
-                    <li><a href="#account"><i class="fa-solid fa-user"></i> Managing your account</a></li>
+        <div class="docs-sidebar">
+            <div class="docs-nav">
+                <h3>Getting Started</h3>
+                <ul>
+                    <li><a href="index.html" class="active">Introduction</a></li>
+                    <li><a href="installation.html">Installation</a></li>
+                    <li><a href="#">Quick Start</a></li>
                 </ul>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3>Location</h3>
-                <ul class="sidebar-nav">
-                    <li><a href="#"><i class="fa-solid fa-file-lines"></i> Docs</a></li>
-                </ul>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3>Browse</h3>
-                <ul class="sidebar-nav">
-                    <li><a href="installation.html"><i class="fa-solid fa-forward"></i> Next: Installation</a></li>
-                    <li><a href="table-of-contents.html"><i class="fa-solid fa-list"></i> Table of contents</a></li>
-                </ul>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3>Get Started</h3>
-                <ul class="sidebar-nav">
-                    <li><a href="first-automation.html"><i class="fa-solid fa-wand-magic-sparkles"></i> First automation</a></li>
-                    <li><a href="dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
-                    <li><a href="builder.html"><i class="fa-solid fa-hammer"></i> Builder</a></li>
-                    <li><a href="passing-data.html"><i class="fa-solid fa-arrows-left-right"></i> Passing data between steps</a></li>
-                    <li><a href="running-bots.html"><i class="fa-solid fa-robot"></i> Running bots</a></li>
-                    <li><a href="share-automation.html"><i class="fa-solid fa-share-nodes"></i> Share your automation</a></li>
-                    <li><a href="support.html"><i class="fa-solid fa-headset"></i> Getting support</a></li>
-                </ul>
-            </div>
-            
-            <div class="sidebar-section">
-                <h3>Tutorials</h3>
-                <ul class="sidebar-nav">
-                    <li><a href="browser-actions.html"><i class="fa-solid fa-globe"></i> Browser actions</a></li>
-                    <li><a href="extract-data.html"><i class="fa-solid fa-database"></i> Extract data</a></li>
-                    <li><a href="selector-tool.html"><i class="fa-solid fa-crosshairs"></i> Selector tool</a></li>
-                    <li><a href="import-export.html"><i class="fa-solid fa-file-export"></i> Import/export data</a></li>
-                    <li><a href="upload-download.html"><i class="fa-solid fa-cloud-arrow-up"></i> Upload/download files</a></li>
-                    <li><a href="form-filling.html"><i class="fa-solid fa-keyboard"></i> Form filling</a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="docs-content">
-            <h1 class="docs-title">Documentation</h1>
-            <p class="docs-intro">Are you new to automating in the browser? If so, you're in the right place! This is where you can start learning all the basics.</p>
-
-            <section id="getting-started" class="docs-section">
-                <h2><i class="fa-solid fa-rocket"></i> Getting started</h2>
                 
-                <div class="setup-section">
-                    <h3>Setup:</h3>
-                    <div class="setup-links">
-                        <a href="install.html" class="setup-link"><i class="fa-solid fa-download"></i> Install</a>
-                        <a href="account.html" class="setup-link"><i class="fa-solid fa-user"></i> Account</a>
-                        <a href="dashboard.html" class="setup-link"><i class="fa-solid fa-gauge"></i> The dashboard</a>
-                    </div>
-                </div>
-
-                <div class="tutorials-section">
-                    <h3>Tutorials:</h3>
-                    <div class="tutorials-links">
-                        <a href="bot-builder.html" class="tutorial-link">Part 1: Overview Bot builder entry</a>
-                        <a href="import-export.html" class="tutorial-link">Part 2: How to import, pass, transform and export data</a>
-                        <a href="web-scraping.html" class="tutorial-link">Part 3: Get started web scraping</a>
-                        <a href="data-entry.html" class="tutorial-link">Part 4: Get started data entry</a>
-                        <a href="data-entry-advanced.html" class="tutorial-link">Part 5: Get started data entry</a>
-                        <a href="browser-actions.html" class="tutorial-link">Part 6: Automating browser actions</a>
-                        <a href="file-downloads.html" class="tutorial-link">Part 7: Get started file downloads</a>
-                    </div>
-                </div>
-
-                <div class="advanced-tutorials-section">
-                    <h3>Advanced Tutorials:</h3>
-                    <div class="advanced-links">
-                        <a href="logic.html" class="advanced-link">Logic</a>
-                        <a href="looping.html" class="advanced-link">Looping</a>
-                        <a href="javascript.html" class="advanced-link">Javascript</a>
-                        <a href="webhooks.html" class="advanced-link">Webhooks</a>
-                        <a href="login.html" class="advanced-link">Login</a>
-                        <a href="proxy.html" class="advanced-link">Proxy</a>
-                        <a href="anti-bot.html" class="advanced-link">Anti bot blocking measures</a>
-                    </div>
-                </div>
-
-                <div class="running-bots-section">
-                    <h3>Running bots:</h3>
-                    <div class="bot-links">
-                        <a href="run-bot.html" class="bot-link">Part 1: How to run a bot</a>
-                        <a href="advanced-running.html" class="bot-link">Part 2: Advanced running methods</a>
-                    </div>
-                </div>
-
-                <div class="help-section">
-                    <h3>Stuck? We'd like to help.</h3>
-                    <ul class="help-links">
-                        <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> Try the FAQ</a> - Its got answers to many customer questions</li>
-                        <li><a href="content-table.html"><i class="fa-solid fa-table-list"></i> Looking for specific information try the detailed</a> table of content</li>
-                        <li><a href="community.html"><i class="fa-solid fa-users"></i> Not found anything? <span class="highlight">Getting help</span></a> for information on getting support and asking questions to the community</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="how-documentation-is-organised" class="docs-section">
-                <h2><i class="fa-solid fa-sitemap"></i> How the documentation is organised</h2>
-                <p>There is always a lot to learn. Here is a high-level overview of how things are organized so you can find what you need.</p>
+                <h3>Core Concepts</h3>
+                <ul>
+                    <li><a href="#">Workflows</a></li>
+                    <li><a href="#">Actions</a></li>
+                    <li><a href="#">Selectors</a></li>
+                    <li><a href="#">Variables</a></li>
+                </ul>
                 
-                <div class="doc-organization">
-                    <div class="organization-item">
-                        <h4><i class="fa-solid fa-book"></i> Tutorials</h4>
-                        <p>Take you by the hand through a series of tutorials teaching you how to automate in the browser. If you're new to selenix.io look at "<a href="first-automation.html">First automation</a>"</p>
-                    </div>
-                    
-                    <div class="organization-item">
-                        <h4><i class="fa-solid fa-compass"></i> Guides</h4>
-                        <p>Discover design patterns for making automations in the browser such as web scraping, data entry and file uploads/downloads.</p>
-                    </div>
-                    
-                    <div class="organization-item">
-                        <h4><i class="fa-solid fa-clipboard-list"></i> Reference</h4>
-                        <p>Technical information about Selenix.io's API and detailed documentation on its features.</p>
-                    </div>
-                    
-                    <div class="organization-item">
-                        <h4><i class="fa-solid fa-circle-question"></i> FAQ</h4>
-                        <p>Common questions and answers for when you need quick solutions.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="task-types" class="docs-section">
-                <h2><i class="fa-solid fa-list-check"></i> Type of tasks you wish to automate</h2>
-                <p>Selenix.io provides powerful tools for various automation tasks:</p>
+                <h3>Advanced Usage</h3>
+                <ul>
+                    <li><a href="#">Conditional Logic</a></li>
+                    <li><a href="#">Loops</a></li>
+                    <li><a href="#">Data Export</a></li>
+                    <li><a href="#">Integrations</a></li>
+                </ul>
                 
-                <div class="task-types">
-                    <div class="task-type">
-                        <i class="fa-solid fa-spider task-icon"></i>
-                        <h4>Web Scraping</h4>
-                        <p>Extract data from websites effortlessly using our visual selector tools.</p>
-                        <a href="web-scraping.html" class="learn-more">Learn more <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    
-                    <div class="task-type">
-                        <i class="fa-solid fa-keyboard task-icon"></i>
-                        <h4>Data Entry</h4>
-                        <p>Automate form filling and data entry across any website or application.</p>
-                        <a href="data-entry.html" class="learn-more">Learn more <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    
-                    <div class="task-type">
-                        <i class="fa-solid fa-table task-icon"></i>
-                        <h4>Spreadsheet Automation</h4>
-                        <p>Connect directly with Google Sheets and Excel to import/export data.</p>
-                        <a href="spreadsheets.html" class="learn-more">Learn more <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                    
-                    <div class="task-type">
-                        <i class="fa-solid fa-cloud-arrow-down task-icon"></i>
-                        <h4>File Downloads</h4>
-                        <p>Automate downloading files from websites and process them automatically.</p>
-                        <a href="file-downloads.html" class="learn-more">Learn more <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Additional sections as needed -->
-            <section id="core-features" class="docs-section">
-                <h2><i class="fa-solid fa-puzzle-piece"></i> Core features</h2>
-                <p>Explore the powerful features that make Selenix.io the ideal automation platform:</p>
-                
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <i class="fa-solid fa-wand-magic-sparkles feature-card-icon"></i>
-                        <h4>Visual Bot Builder</h4>
-                        <p>Create bots with no coding required using our intuitive drag-and-drop interface.</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <i class="fa-solid fa-bolt feature-card-icon"></i>
-                        <h4>High-Speed Execution</h4>
-                        <p>Run your automations at maximum efficiency with our cloud infrastructure.</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <i class="fa-solid fa-brain feature-card-icon"></i>
-                        <h4>AI-Powered Assistance</h4>
-                        <p>Get intelligent suggestions and automatic error handling with our AI system.</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <i class="fa-solid fa-plug feature-card-icon"></i>
-                        <h4>Integrations</h4>
-                        <p>Connect with your favorite tools like Google Sheets, Zapier, and more.</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>selenix.io</h3>
-                    <p class="footer-description">Modern browser automation tool that helps you save time and increase productivity without writing a single line of code.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                        <a href="#"><i class="fa-brands fa-github"></i></a>
-                        <a href="#"><i class="fa-brands fa-discord"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Product</h3>
-                    <ul>
-                        <li><a href="#"><i class="fa-solid fa-file-lines"></i> Documentation</a></li>
-                        <li><a href="#"><i class="fa-solid fa-cubes"></i> No-code builder</a></li>
-                        <li><a href="#"><i class="fa-solid fa-list-check"></i> No-code steps</a></li>
-                        <li><a href="#"><i class="fa-solid fa-tag"></i> Pricing</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Web automation</h3>
-                    <ul>
-                        <li><a href="#"><i class="fa-solid fa-robot"></i> Automate website actions</a></li>
-                        <li><a href="#"><i class="fa-solid fa-keyboard"></i> Automate Data Entry</a></li>
-                        <li><a href="#"><i class="fa-solid fa-pen-to-square"></i> Automate Form Filling</a></li>
-                        <li><a href="#"><i class="fa-solid fa-puzzle-piece"></i> Browser extension</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Blog</h3>
-                    <ul>
-                        <li><a href="#"><i class="fa-solid fa-bug"></i> Debugging automations</a></li>
-                        <li><a href="#"><i class="fa-solid fa-plug"></i> Integration guides</a></li>
-                        <li><a href="#"><i class="fa-solid fa-brain"></i> ChatGPT web scraping</a></li>
-                        <li><a href="#"><i class="fa-solid fa-lightbulb"></i> Browser automation tips</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 selenix.io. All rights reserved.</p>
+                <h3>Templates</h3>
+                <ul>
+                    <li><a href="#">Using Templates</a></li>
+                    <li><a href="#">Creating Templates</a></li>
+                    <li><a href="#">Template Library</a></li>
+                </ul>
             </div>
         </div>
-    </footer>
-
-    <script src="../script.js"></script>
-    <script src="docs.js"></script>
-</body>
-</html>
+        
+        <div class="docs-content">
+            <h1>Introduction to Selenix</h1>
+            
+            <p class="docs-intro">Selenix is a powerful browser automation tool that allows you to automate repetitive tasks, scrape data, and interact with websites without writing a single line of code.</p>
+            
+            <div class="alert alert-info">
+                <i class="fa-solid fa-circle-info"></i>
+                <div>
+                    <strong>New to Selenix?</strong>
+                    <p>Check out our <a href="../product/templates.html">ready-made templates</a> to quickly get started with common automation tasks.</p>
+                </div>
+            </div>
+            
+            <h2>What is Selenix?</h2>
+            
+            <p>Selenix is a visual browser automation tool that lets you record and automate workflows on any website. With its intuitive no-code interface, you can create powerful automations in minutes, even if you have no programming experience.</p>
+            
+            <div class="image-container">
+                <img src="https://via.placeholder.com/800x450" alt="Selenix Interface" class="docs-image">
+                <div class="image-caption">The Selenix interface showing a workflow builder</div>
+            </div>
+            
+            <h2>Key Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3>No-Code Builder</h3>
+                    <p>Create automations visually with our drag-and-drop interface. No coding required.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-spider"></i>
+                    </div>
+                    <h3>Data Extraction</h3>
+                    <p>Easily extract data from websites and export it to CSV, Excel, or your favorite tools.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-repeat"></i>
+                    </div>
+                    <h3>Scheduled Runs</h3>
+                    <p>Schedule your automations to run at specific times or trigger them based on events.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-puzzle-piece"></i>
+                    </div>
+                    <h3>Templates</h3>
+                    <p>Get started quickly with our library of pre-built templates for common automation tasks.</p>
+                </div>
+            </div>
+            
+            <h2>Who is Selenix for?</h2>
+            
+            <p>Selenix is designed for anyone who wants to save time by automating repetitive tasks. Our users include:</p>
+            
+            <ul class="docs-list">
+                <li><strong>Business Owners</strong> - Automate data entry, customer outreach, and market research</li>
+                <li><strong>Marketers</strong> - Scrape competitor data, automate social media posts, and monitor campaigns</li>
+                <li><strong>Data Analysts</strong> - Collect data from multiple sources without writing complex scripts</li>
+                <li><strong>HR Professionals</strong> - Streamline candidate sourcing and application processes</li>
+                <li><strong>E-commerce Managers</strong> - Monitor prices, track inventory, and update product listings</li>
+            </ul>
+            
+            <div class="cta-box">
+                <h3>Ready to get
