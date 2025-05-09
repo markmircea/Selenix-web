@@ -7,16 +7,16 @@
                 <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
             </a>
             <div class="nav-links">
-                <a href="/docs/index.html">Docs</a>
+                <a href="/docs/index.html" id="nav-docs">Docs</a>
                 <div class="dropdown">
-                    <a href="#" class="dropdown-toggle">Product <i class="fas fa-chevron-down"></i></a>
+                    <a href="#" class="dropdown-toggle" id="nav-product">Product <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-menu">
-                        <a href="/product/no-code-builder.html">No-code builder</a>
-                        <a href="/product/no-code-steps.html">No-code steps</a>
-                        <a href="/product/bot-runner.html">Bot runner</a>
-                        <a href="/product/templates.html">Templates</a>
-                        <a href="/product/video-guides.html">Video guides</a>
-                        <a href="/product/release-notes.html">Release notes</a>
+                        <a href="/product/no-code-builder.html" id="nav-no-code-builder">No-code builder</a>
+                        <a href="/product/no-code-steps.html" id="nav-no-code-steps">No-code steps</a>
+                        <a href="/product/bot-runner.html" id="nav-bot-runner">Bot runner</a>
+                        <a href="/product/templates.html" id="nav-templates">Templates</a>
+                        <a href="/product/video-guides.html" id="nav-video-guides">Video guides</a>
+                        <a href="/product/release-notes.html" id="nav-release-notes">Release notes</a>
                     </div>
                 </div>
                 <a href="#pricing">Pricing</a>
@@ -75,6 +75,35 @@ if (mobileMenuButton && navLinks) {
             }
         }
     });
+}
+
+// Fix navigation paths based on the current location
+const pathParts = window.location.pathname.split('/').filter(Boolean);
+const isInProductDir = pathParts.length > 0 && pathParts[0] === 'product';
+
+// Update navigation links based on current location
+const navLinks = {
+    'nav-docs': isInProductDir ? '../docs/index.html' : '/docs/index.html',
+    'nav-no-code-builder': isInProductDir ? './no-code-builder.html' : '/product/no-code-builder.html',
+    'nav-no-code-steps': isInProductDir ? './no-code-steps.html' : '/product/no-code-steps.html',
+    'nav-bot-runner': isInProductDir ? './bot-runner.html' : '/product/bot-runner.html',
+    'nav-templates': isInProductDir ? './templates.html' : '/product/templates.html',
+    'nav-video-guides': isInProductDir ? './video-guides.html' : '/product/video-guides.html',
+    'nav-release-notes': isInProductDir ? './release-notes.html' : '/product/release-notes.html'
+};
+
+// Update each link href
+Object.keys(navLinks).forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.href = navLinks[id];
+    }
+});
+
+// Logo should always go to home
+const logo = document.querySelector('.logo');
+if (logo) {
+    logo.href = isInProductDir ? '../' : '/';
 }
 
 // Set active state for current page

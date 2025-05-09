@@ -6,16 +6,16 @@
                 <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
             </a>
             <div class="nav-links">
-                <a href="docs/index.html" id="nav-docs">Docs</a>
+                <a href="/docs/index.html" id="nav-docs">Docs</a>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle" id="nav-product">Product <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-menu">
-                        <a href="product/no-code-builder.html" id="nav-no-code-builder">No-code builder</a>
-                        <a href="product/no-code-steps.html" id="nav-no-code-steps">No-code steps</a>
-                        <a href="product/bot-runner.html" id="nav-bot-runner">Bot runner</a>
-                        <a href="product/templates.html" id="nav-templates">Templates</a>
-                        <a href="product/video-guides.html" id="nav-video-guides">Video guides</a>
-                        <a href="product/release-notes.html" id="nav-release-notes">Release notes</a>
+                        <a href="/product/no-code-builder.html" id="nav-no-code-builder">No-code builder</a>
+                        <a href="/product/no-code-steps.html" id="nav-no-code-steps">No-code steps</a>
+                        <a href="/product/bot-runner.html" id="nav-bot-runner">Bot runner</a>
+                        <a href="/product/templates.html" id="nav-templates">Templates</a>
+                        <a href="/product/video-guides.html" id="nav-video-guides">Video guides</a>
+                        <a href="/product/release-notes.html" id="nav-release-notes">Release notes</a>
                     </div>
                 </div>
                 <a href="#pricing" id="nav-pricing">Pricing</a>
@@ -39,27 +39,17 @@
         // Get the current path depth to determine relative paths
         const pathParts = window.location.pathname.split('/').filter(Boolean);
         const isRootPath = pathParts.length === 0 || (pathParts.length === 1 && pathParts[0] === 'index.html');
-        const isFirstLevel = pathParts.length === 1 || (pathParts.length === 2 && pathParts[1] === 'index.html');
-        let prefix = '';
+        const isInProductDir = pathParts.length > 0 && pathParts[0] === 'product';
         
-        // Add proper prefix based on path depth
-        if (!isRootPath) {
-            if (!isFirstLevel) {
-                prefix = '../';  // For deeper paths like product/templates
-            } else {
-                prefix = './';   // For first level paths like docs/ or product/
-            }
-        }
-        
-        // Update navigation links
+        // Update navigation links based on current location
         const navLinks = {
-            'nav-docs': prefix + 'docs/index.html',
-            'nav-no-code-builder': prefix + 'product/no-code-builder.html',
-            'nav-no-code-steps': prefix + 'product/no-code-steps.html',
-            'nav-bot-runner': prefix + 'product/bot-runner.html',
-            'nav-templates': prefix + 'product/templates.html',
-            'nav-video-guides': prefix + 'product/video-guides.html',
-            'nav-release-notes': prefix + 'product/release-notes.html'
+            'nav-docs': isInProductDir ? '../docs/index.html' : '/docs/index.html',
+            'nav-no-code-builder': isInProductDir ? './no-code-builder.html' : '/product/no-code-builder.html',
+            'nav-no-code-steps': isInProductDir ? './no-code-steps.html' : '/product/no-code-steps.html',
+            'nav-bot-runner': isInProductDir ? './bot-runner.html' : '/product/bot-runner.html',
+            'nav-templates': isInProductDir ? './templates.html' : '/product/templates.html',
+            'nav-video-guides': isInProductDir ? './video-guides.html' : '/product/video-guides.html',
+            'nav-release-notes': isInProductDir ? './release-notes.html' : '/product/release-notes.html'
         };
         
         // Update each link href
@@ -73,7 +63,7 @@
         // Logo should always go to home
         const logo = document.querySelector('.logo');
         if (logo) {
-            logo.href = isRootPath ? '/' : prefix;
+            logo.href = isInProductDir ? '../' : '/';
         }
         
         // Mark current page as active
