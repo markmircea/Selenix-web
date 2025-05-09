@@ -16,10 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Base path varies depending on location in site structure
         let basePath = '';
         if (!isRootPath) {
-            if (isInDocsDir) {
-                basePath = '../components/'; // For docs/index.html, etc.
-            } else if (!isFirstLevel) {
-                basePath = '../components/'; // For product/templates.html, etc.
+            if (isInDocsDir || pathParts[0] === 'product') {
+                basePath = '../components/'; // For docs/index.html and product/*.html
             } else {
                 basePath = './components/'; // For other first level pages
             }
