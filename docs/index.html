@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Selenix.io</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="docs.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+</head>
+<body class="docs-page">
+    <header>
+        <div class="container">
+            <nav>
+                <a href="../" class="logo">
+                    <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
+                </a>
+                <div class="nav-links">
+                    <a href="/docs" class="active">Docs</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle">Product <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="/product/no-code-builder">No-code builder</a>
+                            <a href="/product/no-code-steps">No-code steps</a>
+                            <a href="/product/bot-runner">Bot runner</a>
+                            <a href="/product/templates">Templates</a>
+                            <a href="/product/video-guides">Video guides</a>
+                            <a href="/product/release-notes">Release notes</a>
+                        </div>
+                    </div>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#support">Support</a>
+                    <a href="#blog">Blog</a>
+                </div>
+                <a href="#download" class="cta-button">
+                    <i class="fa-solid fa-download"></i>
+                    Install Chrome Extension
+                </a>
+                <div class="mobile-menu-button">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="docs-container">
+        <aside class="docs-sidebar">
+            <div class="search-container">
+                <input type="text" placeholder="Search documentation" class="search-input">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Current page</h3>
+                <ul class="sidebar-nav">
+                    <li><a href="#getting-started" class="active"><i class="fa-solid fa-rocket"></i> Getting started</a></li>
+                    <li><a href="#how-documentation-is-organised"><i class="fa-solid fa-sitemap"></i> How the documentation is organised</a></li>
+                    <li><a href="#task-types"><i class="fa-solid fa-list-check"></i> Type of tasks you wish to automate</a></li>
+                    <li><a href="#core-features"><i class="fa-solid fa-puzzle-piece"></i> Core features</a></li>
+                    <li><a href="#configuration"><i class="fa-solid fa-gear"></i> Configuration settings</a></li>
+                    <li><a href="#runtime"><i class="fa-solid fa-clock"></i> Runtime</a></li>
+                    <li><a href="#troubleshooting"><i class="fa-solid fa-wrench"></i> Troubleshooting</a></li>
+                    <li><a href="#developers"><i class="fa-solid fa-code"></i> Developers</a></li>
+                    <li><a href="#account"><i class="fa-solid fa-user"></i> Managing your account</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Location</h3>
+                <ul class="sidebar-nav">
+                    <li><a href="#"><i class="fa-solid fa-file-lines"></i> Docs</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Browse</h3>
+                <ul class="sidebar-nav">
+                    <li><a href="installation.html"><i class="fa-solid fa-forward"></i> Next: Installation</a></li>
+                    <li><a href="table-of-contents.html"><i class="fa-solid fa-list"></i> Table of contents</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Get Started</h3>
+                <ul class="sidebar-nav">
+                    <li><a href="first-automation.html"><i class="fa-solid fa-wand-magic-sparkles"></i> First automation</a></li>
+                    <li><a href="dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                    <li><a href="builder.html"><i class="fa-solid fa-hammer"></i> Builder</a></li>
+                    <li><a href="passing-data.html"><i class="fa-solid fa-arrows-left-right"></i> Passing data between steps</a></li>
+                    <li><a href="running-bots.html"><i class="fa-solid fa-robot"></i> Running bots</a></li>
+                    <li><a href="share-automation.html"><i class="fa-solid fa-share-nodes"></i> Share your automation</a></li>
+                    <li><a href="support.html"><i class="fa-solid fa-headset"></i> Getting support</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Tutorials</h3>
+                <ul class="sidebar-nav">
+                    <li><a href="browser-actions.html"><i class="fa-solid fa-globe"></i> Browser actions</a></li>
+                    <li><a href="extract-data.html"><i class="fa-solid fa-database"></i> Extract data</a></li>
+                    <li><a href="selector-tool.html"><i class="fa-solid fa-crosshairs"></i> Selector tool</a></li>
+                    <li><a href="import-export.html"><i class="fa-solid fa-file-export"></i> Import/export data</a></li>
+                    <li><a href="upload-download.html"><i class="fa-solid fa-cloud-arrow-up"></i> Upload/download files</a></li>
+                    <li><a href="form-filling.html"><i class="fa-solid fa-keyboard"></i> Form filling</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="docs-content">
+            <h1 class="docs-title">Documentation</h1>
+            <p class="docs-intro">Are you new to automating in the browser? If so, you're in the right place! This is where you can start learning all the basics.</p>
+
+            <section id="getting-started" class="docs-section">
+                <h2><i class="fa-solid fa-rocket"></i> Getting started</h2>
+                
+                <div class="setup-section">
+                    <h3>Setup:</h3>
+                    <div class="setup-links">
+                        <a href="install.html" class="setup-link"><i class="fa-solid fa-download"></i> Install</a>
+                        <a href="account.html" class="setup-link"><i class="fa-solid fa-user"></i> Account</a>
+                        <a href="dashboard.html" class="setup-link"><i class="fa-solid fa-gauge"></i> The dashboard</a>
+                    </div>
+                </div>
+
+                <div class="tutorials-section">
+                    <h3>Tutorials:</h3>
+                    <div class="tutorials-links">
+                        <a href="bot-builder.html" class="tutorial-link">Part 1: Overview Bot builder entry</a>
+                        <a href="import-export.html" class="tutorial-link">Part 2: How to import, pass, transform and export data</a>
+                        <a href="web-scraping.html" class="tutorial-link">Part 3: Get started web scraping</a>
+                        <a href="data-entry.html" class="tutorial-link">Part 4: Get started data entry</a>
+                        <a href="data-entry-advanced.html" class="tutorial-link">Part 5: Get started data entry</a>
+                        <a href="browser-actions.html" class="tutorial-link">Part 6: Automating browser actions</a>
+                        <a href="file-downloads.html" class="tutorial-link">Part 7: Get started file downloads</a>
+                    </div>
+                </div>
+
+                <div class="advanced-tutorials-section">
+                    <h3>Advanced Tutorials:</h3>
+                    <div class="advanced-links">
+                        <a href="logic.html" class="advanced-link">Logic</a>
+                        <a href="looping.html" class="advanced-link">Looping</a>
+                        <a href="javascript.html" class="advanced-link">Javascript</a>
+                        <a href="webhooks.html" class="advanced-link">Webhooks</a>
+                        <a href="login.html" class="advanced-link">Login</a>
+                        <a href="proxy.html" class="advanced-link">Proxy</a>
+                        <a href="anti-bot.html" class="advanced-link">Anti bot blocking measures</a>
+                    </div>
+                </div>
+
+                <div class="running-bots-section">
+                    <h3>Running bots:</h3>
+                    <div class="bot-links">
+                        <a href="run-bot.html" class="bot-link">Part 1: How to run a bot</a>
+                        <a href="advanced-running.html" class="bot-link">Part 2: Advanced running methods</a>
+                    </div>
+                </div>
+
+                <div class="help-section">
+                    <h3>Stuck? We'd like to help.</h3>
+                    <ul class="help-links">
+                        <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> Try the FAQ</a> - Its got answers to many customer questions</li>
+                        <li><a href="content-table.html"><i class="fa-solid fa-table-list"></i> Looking for specific information try the detailed</a> table of content</li>
+                        <li><a href="community.html"><i class="fa-solid fa-users"></i> Not found anything? <span class="highlight">Getting help</span></a> for information on getting support and asking questions to the community</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="how-documentation-is-organised" class="docs-section">
+                <h2><i class="fa-solid fa-sitemap"></i> How the documentation is organised</h2>
+                <p>There is always a lot to learn. Here is a high-level overview of how things are organized so you can find what you need.</p>
+                
+                <div class="doc-organization">
+                    <div class="organization-item">
+                        <h4><i class="fa-solid fa-book"></i> Tutorials</h4>
+                        <p>Take you by the hand through a series of tutorials teaching you how to automate in the browser. If you're new to selenix.io look at "<a href="first-automation.html">First automation</a>"</p>
+                    </div>
+                    
+                    <div class="organization-item">
+                        <h4><i class="fa-solid fa-compass"></i> Guides</h4>
+                        <p>Discover design patterns for making automations in the browser such as web scraping, data entry and file uploads/downloads.</p>
+                    </div>
+                    
+                    <div class="organization-item">
+                        <h4><i class="fa-solid fa-clipboard-list"></i> Reference</h4>
+                        <p>Technical information about Selenix.io's API and detailed documentation on its features.</p>
+                    </div>
+                    
+                    <div class="organization-item">
+                        <h4><i class="fa-solid fa-circle-question"></i> FAQ</h4>
+                        <p>Common questions and answers for when you need quick solutions.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="task-types" class="docs-section">
+                <h2><i class="fa-solid fa-list-check"></i> Type of tasks you wish to automate</h2>
+                <p>Selenix.io provides powerful tools for various automation tasks:</p>
+                
+                <div class="task-types">
+                    <div class="task-type">
+                        <i class="fa-solid fa-spider task-icon"></i>
+                        <h4>Web Scraping</h4>
+                        <p>Extract data from websites effortlessly using our visual selector tools.</p>
+                        <a href="web-scraping.html" class="learn-more">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="task-type">
+                        <i class="fa-solid fa-keyboard task-icon"></i>
+                        <h4>Data Entry</h4>
+                        <p>Automate form filling and data entry across any website or application.</p>
+                        <a href="data-entry.html" class="learn-more">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="task-type">
+                        <i class="fa-solid fa-table task-icon"></i>
+                        <h4>Spreadsheet Automation</h4>
+                        <p>Connect directly with Google Sheets and Excel to import/export data.</p>
+                        <a href="spreadsheets.html" class="learn-more">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="task-type">
+                        <i class="fa-solid fa-cloud-arrow-down task-icon"></i>
+                        <h4>File Downloads</h4>
+                        <p>Automate downloading files from websites and process them automatically.</p>
+                        <a href="file-downloads.html" class="learn-more">Learn more <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional sections as needed -->
+            <section id="core-features" class="docs-section">
+                <h2><i class="fa-solid fa-puzzle-piece"></i> Core features</h2>
+                <p>Explore the powerful features that make Selenix.io the ideal automation platform:</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-wand-magic-sparkles feature-card-icon"></i>
+                        <h4>Visual Bot Builder</h4>
+                        <p>Create bots with no coding required using our intuitive drag-and-drop interface.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fa-solid fa-bolt feature-card-icon"></i>
+                        <h4>High-Speed Execution</h4>
+                        <p>Run your automations at maximum efficiency with our cloud infrastructure.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fa-solid fa-brain feature-card-icon"></i>
+                        <h4>AI-Powered Assistance</h4>
+                        <p>Get intelligent suggestions and automatic error handling with our AI system.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fa-solid fa-plug feature-card-icon"></i>
+                        <h4>Integrations</h4>
+                        <p>Connect with your favorite tools like Google Sheets, Zapier, and more.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>selenix.io</h3>
+                    <p class="footer-description">Modern browser automation tool that helps you save time and increase productivity without writing a single line of code.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="#"><i class="fa-brands fa-github"></i></a>
+                        <a href="#"><i class="fa-brands fa-discord"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Product</h3>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-file-lines"></i> Documentation</a></li>
+                        <li><a href="#"><i class="fa-solid fa-cubes"></i> No-code builder</a></li>
+                        <li><a href="#"><i class="fa-solid fa-list-check"></i> No-code steps</a></li>
+                        <li><a href="#"><i class="fa-solid fa-tag"></i> Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Web automation</h3>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-robot"></i> Automate website actions</a></li>
+                        <li><a href="#"><i class="fa-solid fa-keyboard"></i> Automate Data Entry</a></li>
+                        <li><a href="#"><i class="fa-solid fa-pen-to-square"></i> Automate Form Filling</a></li>
+                        <li><a href="#"><i class="fa-solid fa-puzzle-piece"></i> Browser extension</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Blog</h3>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-bug"></i> Debugging automations</a></li>
+                        <li><a href="#"><i class="fa-solid fa-plug"></i> Integration guides</a></li>
+                        <li><a href="#"><i class="fa-solid fa-brain"></i> ChatGPT web scraping</a></li>
+                        <li><a href="#"><i class="fa-solid fa-lightbulb"></i> Browser automation tips</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 selenix.io. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script src="docs.js"></script>
+</body>
+</html>
