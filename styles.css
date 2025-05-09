@@ -142,7 +142,8 @@ nav {
     font-size: 0.95rem;
 }
 
-.nav-links a::after {
+.nav-links > a::after,
+.dropdown-toggle::after {
     content: '';
     position: absolute;
     width: 0%;
@@ -153,12 +154,79 @@ nav {
     transition: width 0.3s ease;
 }
 
-.nav-links a:hover {
+.nav-links > a:hover,
+.dropdown-toggle:hover {
     color: var(--primary-color);
 }
 
-.nav-links a:hover::after {
+.nav-links > a:hover::after,
+.dropdown-toggle:hover::after {
     width: 100%;
+}
+
+/* Dropdown menu styles */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.dropdown-toggle i {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.dropdown:hover .dropdown-toggle i {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 220px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 100;
+    padding: 0.75rem 0;
+    margin-top: 0.5rem;
+}
+
+.dropdown:hover .dropdown-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--light-bg);
+    color: var(--primary-color);
+}
+
+.dropdown-menu a::after {
+    display: none;
 }
 
 .cta-button {
