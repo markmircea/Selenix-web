@@ -16,47 +16,58 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
 </head>
-<body>
+<body class="docs-page">
     <!-- Navbar Component will be loaded here -->
     <div id="navbar-container"></div>
 
     <div class="docs-container">
         <div class="docs-sidebar">
-            <div class="docs-nav">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search documentation...">
+                <i class="fa-solid fa-search search-icon"></i>
+            </div>
+            
+            <div class="sidebar-section">
                 <h3>Getting Started</h3>
-                <ul>
-                    <li><a href="index.html" class="active">Introduction</a></li>
-                    <li><a href="installation.html">Installation</a></li>
-                    <li><a href="#">Quick Start</a></li>
+                <ul class="sidebar-nav">
+                    <li><a href="index.html" class="active"><i class="fa-solid fa-book-open"></i> Introduction</a></li>
+                    <li><a href="installation.html"><i class="fa-solid fa-download"></i> Installation</a></li>
+                    <li><a href="#"><i class="fa-solid fa-bolt"></i> Quick Start</a></li>
                 </ul>
-                
+            </div>
+            
+            <div class="sidebar-section">
                 <h3>Core Concepts</h3>
-                <ul>
-                    <li><a href="#">Workflows</a></li>
-                    <li><a href="#">Actions</a></li>
-                    <li><a href="#">Selectors</a></li>
-                    <li><a href="#">Variables</a></li>
+                <ul class="sidebar-nav">
+                    <li><a href="#"><i class="fa-solid fa-diagram-project"></i> Workflows</a></li>
+                    <li><a href="#"><i class="fa-solid fa-play"></i> Actions</a></li>
+                    <li><a href="#"><i class="fa-solid fa-crosshairs"></i> Selectors</a></li>
+                    <li><a href="#"><i class="fa-solid fa-code"></i> Variables</a></li>
                 </ul>
-                
+            </div>
+            
+            <div class="sidebar-section">
                 <h3>Advanced Usage</h3>
-                <ul>
-                    <li><a href="#">Conditional Logic</a></li>
-                    <li><a href="#">Loops</a></li>
-                    <li><a href="#">Data Export</a></li>
-                    <li><a href="#">Integrations</a></li>
+                <ul class="sidebar-nav">
+                    <li><a href="#"><i class="fa-solid fa-code-branch"></i> Conditional Logic</a></li>
+                    <li><a href="#"><i class="fa-solid fa-repeat"></i> Loops</a></li>
+                    <li><a href="#"><i class="fa-solid fa-file-export"></i> Data Export</a></li>
+                    <li><a href="#"><i class="fa-solid fa-plug"></i> Integrations</a></li>
                 </ul>
-                
+            </div>
+            
+            <div class="sidebar-section">
                 <h3>Templates</h3>
-                <ul>
-                    <li><a href="#">Using Templates</a></li>
-                    <li><a href="#">Creating Templates</a></li>
-                    <li><a href="#">Template Library</a></li>
+                <ul class="sidebar-nav">
+                    <li><a href="#"><i class="fa-solid fa-puzzle-piece"></i> Using Templates</a></li>
+                    <li><a href="#"><i class="fa-solid fa-plus"></i> Creating Templates</a></li>
+                    <li><a href="#"><i class="fa-solid fa-book"></i> Template Library</a></li>
                 </ul>
             </div>
         </div>
         
         <div class="docs-content">
-            <h1>Introduction to Selenix</h1>
+            <h1 class="docs-title">Introduction to Selenix</h1>
             
             <p class="docs-intro">Selenix is a powerful browser automation tool that allows you to automate repetitive tasks, scrape data, and interact with websites without writing a single line of code.</p>
             
@@ -68,62 +79,130 @@
                 </div>
             </div>
             
-            <h2>What is Selenix?</h2>
-            
-            <p>Selenix is a visual browser automation tool that lets you record and automate workflows on any website. With its intuitive no-code interface, you can create powerful automations in minutes, even if you have no programming experience.</p>
-            
-            <div class="image-container">
-                <img src="https://via.placeholder.com/800x450" alt="Selenix Interface" class="docs-image">
-                <div class="image-caption">The Selenix interface showing a workflow builder</div>
-            </div>
-            
-            <h2>Key Features</h2>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </div>
-                    <h3>No-Code Builder</h3>
-                    <p>Create automations visually with our drag-and-drop interface. No coding required.</p>
-                </div>
+            <div class="docs-section">
+                <h2><i class="fa-solid fa-info-circle"></i> What is Selenix?</h2>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-spider"></i>
-                    </div>
-                    <h3>Data Extraction</h3>
-                    <p>Easily extract data from websites and export it to CSV, Excel, or your favorite tools.</p>
-                </div>
+                <p>Selenix is a visual browser automation tool that lets you record and automate workflows on any website. With its intuitive no-code interface, you can create powerful automations in minutes, even if you have no programming experience.</p>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-repeat"></i>
-                    </div>
-                    <h3>Scheduled Runs</h3>
-                    <p>Schedule your automations to run at specific times or trigger them based on events.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-puzzle-piece"></i>
-                    </div>
-                    <h3>Templates</h3>
-                    <p>Get started quickly with our library of pre-built templates for common automation tasks.</p>
+                <div class="image-container">
+                    <img src="https://via.placeholder.com/800x450" alt="Selenix Interface" class="docs-image">
+                    <div class="image-caption">The Selenix interface showing a workflow builder</div>
                 </div>
             </div>
             
-            <h2>Who is Selenix for?</h2>
+            <div class="docs-section">
+                <h2><i class="fa-solid fa-star"></i> Key Features</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h4>No-Code Builder</h4>
+                        <p>Create automations visually with our drag-and-drop interface. No coding required.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fa-solid fa-spider"></i>
+                        </div>
+                        <h4>Data Extraction</h4>
+                        <p>Easily extract data from websites and export it to CSV, Excel, or your favorite tools.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fa-solid fa-repeat"></i>
+                        </div>
+                        <h4>Scheduled Runs</h4>
+                        <p>Schedule your automations to run at specific times or trigger them based on events.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-card-icon">
+                            <i class="fa-solid fa-puzzle-piece"></i>
+                        </div>
+                        <h4>Templates</h4>
+                        <p>Get started quickly with our library of pre-built templates for common automation tasks.</p>
+                    </div>
+                </div>
+            </div>
             
-            <p>Selenix is designed for anyone who wants to save time by automating repetitive tasks. Our users include:</p>
+            <div class="docs-section">
+                <h2><i class="fa-solid fa-users"></i> Who is Selenix for?</h2>
+                
+                <p>Selenix is designed for anyone who wants to save time by automating repetitive tasks. Our users include:</p>
+                
+                <ul class="docs-list">
+                    <li><strong>Business Owners</strong> - Automate data entry, customer outreach, and market research</li>
+                    <li><strong>Marketers</strong> - Scrape competitor data, automate social media posts, and monitor campaigns</li>
+                    <li><strong>Data Analysts</strong> - Collect data from multiple sources without writing complex scripts</li>
+                    <li><strong>HR Professionals</strong> - Streamline candidate sourcing and application processes</li>
+                    <li><strong>E-commerce Managers</strong> - Monitor prices, track inventory, and update product listings</li>
+                </ul>
+            </div>
             
-            <ul class="docs-list">
-                <li><strong>Business Owners</strong> - Automate data entry, customer outreach, and market research</li>
-                <li><strong>Marketers</strong> - Scrape competitor data, automate social media posts, and monitor campaigns</li>
-                <li><strong>Data Analysts</strong> - Collect data from multiple sources without writing complex scripts</li>
-                <li><strong>HR Professionals</strong> - Streamline candidate sourcing and application processes</li>
-                <li><strong>E-commerce Managers</strong> - Monitor prices, track inventory, and update product listings</li>
-            </ul>
+            <div class="docs-section">
+                <h2><i class="fa-solid fa-book"></i> Documentation Organization</h2>
+                
+                <p>Our documentation is organized to help you learn Selenix efficiently:</p>
+                
+                <div class="doc-organization">
+                    <div class="organization-item">
+                        <h4><i class="fa-solid fa-rocket"></i> Getting Started</h4>
+                        <p>Learn how to install Selenix, set up your first automation, and understand the basic concepts.</p>
+                        <a href="installation.html">Start here →</a>
+                    </div>
+                    
+                    <div class="organization-item">
+                        <h4><i class="fa-solid fa-cubes"></i> Core Concepts</h4>
+                        <p>Understand the fundamental building blocks of Selenix, including workflows, actions, and selectors.</p>
+                        <a href="#">Learn the basics →</a>
+                    </div>
+                    
+                    <div class="organization-item">
+                        <h4><i class="fa-solid fa-graduation-cap"></i> Advanced Usage</h4>
+                        <p>Take your automations to the next level with conditional logic, loops, and integrations.</p>
+                        <a href="#">Advanced concepts →</a>
+                    </div>
+                    
+                    <div class="organization-item">
+                        <h4><i class="fa-solid fa-puzzle-piece"></i> Templates</h4>
+                        <p>Use and create templates to save time and share your automations with others.</p>
+                        <a href="../product/templates.html">Browse templates →</a>
+                    </div>
+                </div>
+            </div>
             
-            <div class="cta-box">
-                <h3>Ready to get
+            <div class="help-section">
+                <h3>Need Additional Help?</h3>
+                <p>If you can't find what you're looking for in our documentation, we're here to help!</p>
+                
+                <ul class="help-links">
+                    <li>
+                        <i class="fa-solid fa-comments"></i>
+                        <span>Join our <a href="#">community forum</a> to connect with other Selenix users and get help with your automations.</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>Contact our <a href="#">support team</a> if you encounter any issues or have questions about Selenix.</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-video"></i>
+                        <span>Watch our <a href="#">video tutorials</a> for step-by-step guides on using Selenix.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component will be loaded here -->
+    <div id="footer-container"></div>
+
+    <script src="../script.js"></script>
+    <script src="../components/components.js"></script>
+    <script src="../components/navbar/navbar.js"></script>
+    <script src="../components/footer/footer.js"></script>
+    <script src="docs.js"></script>
+</body>
+</html>

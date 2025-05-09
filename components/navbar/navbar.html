@@ -6,21 +6,21 @@
                 <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
             </a>
             <div class="nav-links">
-                <a href="/docs/index.html">Docs</a>
+                <a href="docs/index.html" id="nav-docs">Docs</a>
                 <div class="dropdown">
-                    <a href="#" class="dropdown-toggle">Product <i class="fas fa-chevron-down"></i></a>
+                    <a href="#" class="dropdown-toggle" id="nav-product">Product <i class="fas fa-chevron-down"></i></a>
                     <div class="dropdown-menu">
-                        <a href="/product/no-code-builder.html">No-code builder</a>
-                        <a href="/product/no-code-steps.html">No-code steps</a>
-                        <a href="/product/bot-runner.html">Bot runner</a>
-                        <a href="/product/templates.html">Templates</a>
-                        <a href="/product/video-guides.html">Video guides</a>
-                        <a href="/product/release-notes.html">Release notes</a>
+                        <a href="product/no-code-builder.html" id="nav-no-code-builder">No-code builder</a>
+                        <a href="product/no-code-steps.html" id="nav-no-code-steps">No-code steps</a>
+                        <a href="product/bot-runner.html" id="nav-bot-runner">Bot runner</a>
+                        <a href="product/templates.html" id="nav-templates">Templates</a>
+                        <a href="product/video-guides.html" id="nav-video-guides">Video guides</a>
+                        <a href="product/release-notes.html" id="nav-release-notes">Release notes</a>
                     </div>
                 </div>
-                <a href="#pricing">Pricing</a>
-                <a href="#support">Support</a>
-                <a href="#blog">Blog</a>
+                <a href="#pricing" id="nav-pricing">Pricing</a>
+                <a href="#support" id="nav-support">Support</a>
+                <a href="#blog" id="nav-blog">Blog</a>
             </div>
             <a href="#download" class="cta-button">
                 <i class="fa-solid fa-download"></i>
@@ -32,3 +32,75 @@
         </nav>
     </div>
 </header>
+
+<script>
+    // Fix navigation paths based on the current location
+    (function() {
+        // Get the current path depth to determine relative paths
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const isRootPath = pathParts.length === 0 || (pathParts.length === 1 && pathParts[0] === 'index.html');
+        const isFirstLevel = pathParts.length === 1 || (pathParts.length === 2 && pathParts[1] === 'index.html');
+        let prefix = '';
+        
+        // Add proper prefix based on path depth
+        if (!isRootPath) {
+            if (!isFirstLevel) {
+                prefix = '../';  // For deeper paths like product/templates
+            } else {
+                prefix = './';   // For first level paths like docs/ or product/
+            }
+        }
+        
+        // Update navigation links
+        const navLinks = {
+            'nav-docs': prefix + 'docs/index.html',
+            'nav-no-code-builder': prefix + 'product/no-code-builder.html',
+            'nav-no-code-steps': prefix + 'product/no-code-steps.html',
+            'nav-bot-runner': prefix + 'product/bot-runner.html',
+            'nav-templates': prefix + 'product/templates.html',
+            'nav-video-guides': prefix + 'product/video-guides.html',
+            'nav-release-notes': prefix + 'product/release-notes.html'
+        };
+        
+        // Update each link href
+        Object.keys(navLinks).forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.href = navLinks[id];
+            }
+        });
+
+        // Logo should always go to home
+        const logo = document.querySelector('.logo');
+        if (logo) {
+            logo.href = isRootPath ? '/' : prefix;
+        }
+        
+        // Mark current page as active
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('/docs/')) {
+            const docsLink = document.getElementById('nav-docs');
+            if (docsLink) docsLink.classList.add('active');
+        } else if (currentPath.includes('/product/')) {
+            const productToggle = document.querySelector('.dropdown-toggle');
+            if (productToggle) productToggle.classList.add('active');
+            
+            // Check specific product pages
+            const productLinkIds = [
+                'nav-no-code-builder', 
+                'nav-no-code-steps', 
+                'nav-bot-runner', 
+                'nav-templates', 
+                'nav-video-guides', 
+                'nav-release-notes'
+            ];
+            
+            productLinkIds.forEach(id => {
+                const element = document.getElementById(id);
+                if (element && currentPath.includes(element.getAttribute('href').split('/').pop())) {
+                    element.classList.add('active');
+                }
+            });
+        }
+    })();
+</script>

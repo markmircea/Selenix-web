@@ -1,27 +1,37 @@
 // Main Components Loader
 document.addEventListener('DOMContentLoaded', function() {
-    // Get the base path for components
-    const getBasePath = () => {
-        // Get current script path to calculate the base path
-        const scripts = document.getElementsByTagName('script');
-        for (let i = 0; i < scripts.length; i++) {
-            const src = scripts[i].src;
-            if (src.includes('components/components.js')) {
-                return src.substring(0, src.indexOf('components/components.js'));
+    // Function to determine component path based on current location
+    function getComponentPath(componentName) {
+        // Get path depth to calculate relative path
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const isRootPath = pathParts.length === 0 || (pathParts.length === 1 && pathParts[0] === 'index.html');
+        const isFirstLevel = pathParts.length === 1 || (pathParts.length === 2 && pathParts[1] === 'index.html');
+        
+        // Base path varies depending on location in site structure
+        let basePath = '';
+        if (!isRootPath) {
+            if (!isFirstLevel) {
+                basePath = '../components/'; // For product/templates.html, etc.
+            } else {
+                basePath = './components/'; // For docs/index.html, etc.
             }
+        } else {
+            basePath = 'components/'; // For root index.html
         }
-        // Fallback to a relative path from current page
-        const path = window.location.pathname;
-        const isSubdirectory = path.split('/').length > 2; // Check if in subdirectory
-        return isSubdirectory ? '../' : './';
-    };
-
-    const basePath = getBasePath();
+        
+        return basePath + componentName;
+    }
+    
+    // Add a debug console log
+    console.log('Components.js loaded. Current path:', window.location.pathname);
     
     // Load Navbar Component
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
-        fetch(`${basePath}components/navbar/navbar.html`)
+        const navbarPath = getComponentPath('navbar/navbar.html');
+        console.log('Loading navbar from:', navbarPath);
+        
+        fetch(navbarPath)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -30,19 +40,17 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(html => {
                 navbarContainer.innerHTML = html;
-                // Call navbar initialization if needed
-                if (typeof initializeNavbar === 'function') {
-                    initializeNavbar();
-                }
+                console.log('Navbar loaded successfully');
             })
             .catch(error => {
                 console.error('Error loading navbar:', error);
-                // Display error message for debugging
                 navbarContainer.innerHTML = `
-                    <div style="padding: 20px; background-color: #ff6b6b; color: white; border-radius: 5px;">
+                    <div style="padding: 20px; background-color: #ff6b6b; color: white; border-radius: 5px; margin: 20px 0;">
                         <h2>Error Loading Navbar Component</h2>
                         <p>${error.message}</p>
-                        <p>Path attempted: ${basePath}components/navbar/navbar.html</p>
+                        <p>Path attempted: ${navbarPath}</p>
+                        <p>Current location: ${window.location.href}</p>
+                        <p>Try using the embedded navbar in components/embedded-navbar.html</p>
                     </div>
                 `;
             });
@@ -51,7 +59,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load Footer Component
     const footerContainer = document.getElementById('footer-container');
     if (footerContainer) {
-        fetch(`${basePath}components/footer/footer.html`)
+        const footerPath = getComponentPath('footer/footer.html');
+        console.log('Loading footer from:', footerPath);
+        
+        fetch(footerPath)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -60,19 +71,17 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(html => {
                 footerContainer.innerHTML = html;
-                // Call footer initialization if needed
-                if (typeof initializeFooter === 'function') {
-                    initializeFooter();
-                }
+                console.log('Footer loaded successfully');
             })
             .catch(error => {
                 console.error('Error loading footer:', error);
-                // Display error message for debugging
                 footerContainer.innerHTML = `
-                    <div style="padding: 20px; background-color: #ff6b6b; color: white; border-radius: 5px;">
+                    <div style="padding: 20px; background-color: #ff6b6b; color: white; border-radius: 5px; margin: 20px 0;">
                         <h2>Error Loading Footer Component</h2>
                         <p>${error.message}</p>
-                        <p>Path attempted: ${basePath}components/footer/footer.html</p>
+                        <p>Path attempted: ${footerPath}</p>
+                        <p>Current location: ${window.location.href}</p>
+                        <p>Try using the embedded footer in components/embedded-footer.html</p>
                     </div>
                 `;
             });
