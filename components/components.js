@@ -16,8 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // Base path varies depending on location in site structure
         let basePath = '';
         if (!isRootPath) {
-            if (isInDocsDir || pathParts[0] === 'product') {
-                basePath = '../components/'; // For docs/index.html and product/*.html
+            if (isInDocsDir) {
+                basePath = '../components/'; // For docs/index.html
+            } else if (pathParts[0] === 'product') {
+                // Check if we're in a nested product subdirectory
+                if (pathParts.length > 1) {
+                    basePath = '../../components/'; // For product/subdirectory/*.html
+                } else {
+                    basePath = '../components/'; // For product/*.html
+                }
             } else {
                 basePath = './components/'; // For other first level pages
             }
