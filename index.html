@@ -25,13 +25,62 @@
             color: #666;
         }
     </style>
+    
+    <!-- This script adds a console.log to debug component loading -->
+    <script>
+        // Log when the document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Document is ready in index.html');
+            
+            // Attempt to manually initialize components
+            setTimeout(function() {
+                if (window.initializeNavbar) {
+                    console.log('Manually initializing navbar...');
+                    window.initializeNavbar();
+                } else {
+                    console.log('initializeNavbar function not available');
+                }
+            }, 1000);
+        });
+    </script>
 </head>
 <body>
     <!-- Navbar Component will be loaded here -->
     <div id="navbar-container">
-        <div class="component-placeholder">
-            <p>Navbar component loading... If you see this message, there might be an issue with the component loader.</p>
-        </div>
+        <!-- Fallback navbar if component loading fails -->
+        <header>
+            <div class="container">
+                <nav>
+                    <a href="index.html" class="logo">
+                        <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
+                    </a>
+                    <div class="nav-links">
+                        <a href="docs/index.html" id="nav-docs">Docs</a>
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle" id="nav-product">Product <i class="fas fa-chevron-down"></i></a>
+                            <div class="dropdown-menu">
+                                <a href="product/no-code-builder.html" id="nav-no-code-builder">No-code builder</a>
+                                <a href="product/no-code-steps.html" id="nav-no-code-steps">No-code steps</a>
+                                <a href="product/bot-runner.html" id="nav-bot-runner">Bot runner</a>
+                                <a href="product/templates.html" id="nav-templates">Templates</a>
+                                <a href="product/video-guides.html" id="nav-video-guides">Video guides</a>
+                                <a href="product/release-notes.html" id="nav-release-notes">Release notes</a>
+                            </div>
+                        </div>
+                        <a href="#pricing" id="nav-pricing">Pricing</a>
+                        <a href="#support" id="nav-support">Support</a>
+                        <a href="#blog" id="nav-blog">Blog</a>
+                    </div>
+                    <a href="#download" class="cta-button">
+                        <i class="fa-solid fa-download"></i>
+                        Download Selenix
+                    </a>
+                    <div class="mobile-menu-button">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                </nav>
+            </div>
+        </header>
     </div>
 
     <section class="hero">
@@ -258,6 +307,44 @@
                     logComponentStatus('Footer still showing placeholder after 2 seconds - component may have failed to load');
                 }
             }, 2000);
+            
+            // Check which scripts were loaded
+            const expectedScripts = [
+                'script.js',
+                'components/components.js',
+                'components/navbar/navbar.js',
+                'components/footer/footer.js'
+            ];
+            
+            // Check each script
+            const loadedScripts = Array.from(document.scripts).map(script => script.src.replace(window.location.origin, ''));
+            console.log('Loaded scripts:', loadedScripts);
+            
+            expectedScripts.forEach(script => {
+                const scriptLoaded = document.querySelector(`script[src*="${script}"]`);
+                console.log(`Script ${script} loaded: ${scriptLoaded !== null}`);
+            });
+            
+            // Try to load navbar component directly
+            fetch('components/navbar/navbar.html')
+                .then(response => {
+                    console.log('Navbar fetch response:', response.status);
+                    return response.text();
+                })
+                .then(html => {
+                    console.log('Navbar HTML loaded, length:', html.length);
+                })
+                .catch(error => {
+                    console.error('Error loading navbar directly:', error);
+                });
+            
+            // Manually initialize navbar if available
+            if (window.initializeNavbar) {
+                console.log('Manually initializing navbar...');
+                window.initializeNavbar();
+            } else {
+                console.log('initializeNavbar function not available');
+            }
         });
     </script>
     
