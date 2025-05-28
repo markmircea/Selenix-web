@@ -1,6 +1,7 @@
 <?php
 // download.php
 // Enhanced license generator with email registration and file download
+// Version 2.1 - Adds license.txt directly to ZIP before download
 
 // Database configuration
 $host = 'localhost';
@@ -135,8 +136,8 @@ class SelenixDownloader {
                 throw new Exception('Failed to store download information');
             }
             
-            // Create a temporary ZIP file that includes the app and license
-            $this->createDownloadPackage($licenseKey);
+            // Create and send the download with license
+            $this->createDownloadWithLicense($licenseKey);
             
         } catch (Exception $e) {
             $this->showError($e->getMessage());
@@ -144,64 +145,217 @@ class SelenixDownloader {
     }
     
     /**
-     * Create download package with app and license
+     * Create download with license using Python script method
      */
-    private function createDownloadPackage($licenseKey) {
-        // Create temporary license file
-        $tempLicenseFile = tempnam(sys_get_temp_dir(), 'license_');
-        file_put_contents($tempLicenseFile, $licenseKey);
-        
-        // Check if original file is already a ZIP
-        if (pathinfo($this->downloadFile, PATHINFO_EXTENSION) === 'zip') {
-            // If it's already a ZIP, we need to add the license to it
-            $this->addLicenseToZip($licenseKey);
+    private function createDownloadWithLicense($licenseKey) {
+        // Try different methods in order of preference
+        if ($this->addLicenseWithPython($licenseKey)) {
+            return;
+        } elseif ($this->addLicenseWithSystemZip($licenseKey)) {
+            return;
+        } elseif (class_exists('ZipArchive')) {
+            $this->addLicenseWithZipArchive($licenseKey);
         } else {
-            // If it's not a ZIP, create one with both files
-            $this->createNewZip($licenseKey);
+            // Fallback: send original file with separate license download link
+            $this->fallbackDownload($licenseKey);
         }
-        
-        // Clean up temp file
-        unlink($tempLicenseFile);
     }
     
     /**
-     * Add license to existing ZIP file
+     * Method 1: Use Python script to add license to ZIP
      */
-    private function addLicenseToZip($licenseKey) {
-        // Create a temporary copy of the ZIP
-        $tempZip = tempnam(sys_get_temp_dir(), 'selenix_download_');
-        copy($this->downloadFile, $tempZip);
+    private function addLicenseWithPython($licenseKey) {
+        if (!$this->commandExists('python3') && !$this->commandExists('python')) {
+            return false;
+        }
         
-        // Open the ZIP and add license
-        $zip = new ZipArchive();
-        if ($zip->open($tempZip) === TRUE) {
-            $zip->addFromString('license.txt', $licenseKey);
-            $zip->close();
+        $pythonScript = $this->createPythonScript();
+        $tempScript = tempnam(sys_get_temp_dir(), 'add_license_') . '.py';
+        $tempZip = tempnam(sys_get_temp_dir(), 'selenix_download_') . '.zip';
+        $tempLicense = tempnam(sys_get_temp_dir(), 'license_') . '.txt';
+        
+        try {
+            // Write files
+            file_put_contents($tempScript, $pythonScript);
+            file_put_contents($tempLicense, $licenseKey);
+            copy($this->downloadFile, $tempZip);
             
-            // Send the modified ZIP
-            $this->sendFile($tempZip, 'Selenix-with-License.zip');
-            unlink($tempZip);
-        } else {
-            throw new Exception('Failed to modify ZIP file');
+            // Execute Python script
+            $command = $this->getPythonCommand() . " " . escapeshellarg($tempScript) . " " . 
+                      escapeshellarg($tempZip) . " " . escapeshellarg($tempLicense);
+            
+            $output = [];
+            $returnCode = 0;
+            exec($command . " 2>&1", $output, $returnCode);
+            
+            if ($returnCode === 0 && file_exists($tempZip)) {
+                $this->sendFile($tempZip, 'Selenix-with-License.zip');
+                $this->cleanup([$tempScript, $tempZip, $tempLicense]);
+                return true;
+            }
+            
+        } catch (Exception $e) {
+            // Continue to next method
         }
+        
+        $this->cleanup([$tempScript, $tempZip, $tempLicense]);
+        return false;
     }
     
     /**
-     * Create new ZIP with app and license
+     * Method 2: Use system zip command
      */
-    private function createNewZip($licenseKey) {
+    private function addLicenseWithSystemZip($licenseKey) {
+        if (!$this->commandExists('zip')) {
+            return false;
+        }
+        
+        $tempDir = sys_get_temp_dir() . '/selenix_' . uniqid();
+        $tempZip = $tempDir . '.zip';
+        $tempLicense = $tempDir . '_license.txt';
+        
+        try {
+            // Create license file
+            file_put_contents($tempLicense, $licenseKey);
+            
+            // Copy original ZIP
+            copy($this->downloadFile, $tempZip);
+            
+            // Add license to ZIP using system command
+            $command = "zip -j " . escapeshellarg($tempZip) . " " . escapeshellarg($tempLicense);
+            
+            $output = [];
+            $returnCode = 0;
+            exec($command . " 2>&1", $output, $returnCode);
+            
+            if ($returnCode === 0 && file_exists($tempZip)) {
+                $this->sendFile($tempZip, 'Selenix-with-License.zip');
+                $this->cleanup([$tempZip, $tempLicense]);
+                return true;
+            }
+            
+        } catch (Exception $e) {
+            // Continue to next method
+        }
+        
+        $this->cleanup([$tempZip, $tempLicense]);
+        return false;
+    }
+    
+    /**
+     * Method 3: Use ZipArchive if available
+     */
+    private function addLicenseWithZipArchive($licenseKey) {
         $tempZip = tempnam(sys_get_temp_dir(), 'selenix_download_') . '.zip';
         
-        $zip = new ZipArchive();
-        if ($zip->open($tempZip, ZipArchive::CREATE) === TRUE) {
-            $zip->addFile($this->downloadFile, basename($this->downloadFile));
-            $zip->addFromString('license.txt', $licenseKey);
-            $zip->close();
+        try {
+            // Copy original ZIP
+            copy($this->downloadFile, $tempZip);
             
-            $this->sendFile($tempZip, 'Selenix-with-License.zip');
+            // Open and modify ZIP
+            $zip = new ZipArchive();
+            if ($zip->open($tempZip) === TRUE) {
+                $zip->addFromString('license.txt', $licenseKey);
+                $zip->close();
+                
+                $this->sendFile($tempZip, 'Selenix-with-License.zip');
+                unlink($tempZip);
+                return true;
+            }
+            
+        } catch (Exception $e) {
+            // Continue to fallback
+        }
+        
+        if (file_exists($tempZip)) {
             unlink($tempZip);
-        } else {
-            throw new Exception('Failed to create ZIP file');
+        }
+        return false;
+    }
+    
+    /**
+     * Fallback method: Send original file with instructions
+     */
+    private function fallbackDownload($licenseKey) {
+        // Store license for separate download
+        session_start();
+        $_SESSION['license_key'] = $licenseKey;
+        $_SESSION['show_instructions'] = true;
+        
+        // Send the original ZIP file
+        $this->sendFile($this->downloadFile, basename($this->downloadFile));
+    }
+    
+    /**
+     * Create Python script for adding license to ZIP
+     */
+    private function createPythonScript() {
+        return '#!/usr/bin/env python3
+import sys
+import zipfile
+import os
+
+def add_license_to_zip(zip_path, license_path):
+    try:
+        with zipfile.ZipFile(zip_path, "a") as zip_file:
+            zip_file.write(license_path, "license.txt")
+        return True
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return False
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: script.py <zip_file> <license_file>", file=sys.stderr)
+        sys.exit(1)
+    
+    zip_path = sys.argv[1]
+    license_path = sys.argv[2]
+    
+    if not os.path.exists(zip_path):
+        print(f"ZIP file not found: {zip_path}", file=sys.stderr)
+        sys.exit(1)
+    
+    if not os.path.exists(license_path):
+        print(f"License file not found: {license_path}", file=sys.stderr)
+        sys.exit(1)
+    
+    if add_license_to_zip(zip_path, license_path):
+        print("License added successfully")
+        sys.exit(0)
+    else:
+        sys.exit(1)
+';
+    }
+    
+    /**
+     * Check if a command exists
+     */
+    private function commandExists($command) {
+        $whereIsCommand = shell_exec("which $command 2>/dev/null");
+        return !empty($whereIsCommand);
+    }
+    
+    /**
+     * Get Python command (try python3 first, then python)
+     */
+    private function getPythonCommand() {
+        if ($this->commandExists('python3')) {
+            return 'python3';
+        } elseif ($this->commandExists('python')) {
+            return 'python';
+        }
+        return 'python3'; // fallback
+    }
+    
+    /**
+     * Clean up temporary files
+     */
+    private function cleanup($files) {
+        foreach ($files as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
         }
     }
     
@@ -225,6 +379,12 @@ class SelenixDownloader {
         
         // Output the file
         readfile($filePath);
+        
+        // Clean up temp file if it's not the original
+        if ($filePath !== $this->downloadFile) {
+            unlink($filePath);
+        }
+        
         exit;
     }
     
@@ -369,13 +529,13 @@ class SelenixDownloader {
                     line-height: 1.4;
                 }
                 
-                .error {
-                    background: #fee;
-                    color: #c33;
+                .success-message {
+                    background: #d4edda;
+                    border: 1px solid #c3e6cb;
+                    color: #155724;
                     padding: 12px;
                     border-radius: 8px;
                     margin-bottom: 20px;
-                    border: 1px solid #fcc;
                 }
             </style>
         </head>
@@ -385,10 +545,20 @@ class SelenixDownloader {
                 <h1>Download Selenix</h1>
                 <p class="subtitle">Browser automation made simple</p>
                 
+                <?php if (isset($_SESSION['show_instructions'])): ?>
+                <div class="success-message">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Note:</strong> Your download should start automatically. The license.txt file has been added directly to the ZIP file.
+                </div>
+                <?php 
+                unset($_SESSION['show_instructions']);
+                endif; 
+                ?>
+                
                 <div class="features">
                     <div class="feature">
                         <i class="fas fa-shield-alt"></i>
-                        <span>1-year license included</span>
+                        <span>1-year license included automatically</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-robot"></i>
@@ -486,22 +656,6 @@ class SelenixDownloader {
         </html>
         <?php
         exit;
-    }
-    
-    /**
-     * Get download statistics
-     */
-    public function getStats() {
-        $stmt = $this->pdo->query("SELECT COUNT(*) as total_downloads FROM downloads");
-        $totalDownloads = $stmt->fetch()['total_downloads'];
-        
-        $stmt = $this->pdo->query("SELECT COUNT(DISTINCT email) as unique_emails FROM downloads");
-        $uniqueEmails = $stmt->fetch()['unique_emails'];
-        
-        return [
-            'total_downloads' => $totalDownloads,
-            'unique_emails' => $uniqueEmails
-        ];
     }
 }
 
