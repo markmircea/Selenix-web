@@ -149,12 +149,10 @@ class SelenixDownloader {
      */
     private function createDownloadWithLicense($licenseKey) {
         // Try different methods in order of preference
-        if ($this->addLicenseWithSystemZip($licenseKey)) {
+        if ($this->addLicenseWithPython($licenseKey)) {
             return;
-        } elseif ($this->addLicenseWithPython($licenseKey)) {
+        } elseif ($this->addLicenseWithSystemZip($licenseKey)) {
             return;
-        } elseif (class_exists('ZipArchive')) {
-            $this->addLicenseWithZipArchive($licenseKey);
         } else {
             // Fallback: send original file
             $this->sendFile($this->downloadFile, basename($this->downloadFile));
