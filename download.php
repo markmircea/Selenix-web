@@ -1,7 +1,7 @@
 <?php
 // download.php
 // Enhanced license generator with email registration and file download
-// Version 2.1 - Adds license.txt directly to ZIP before download
+// Version 2.2 - With loading animation and fixed admin warning
 
 // Database configuration
 $host = 'localhost';
@@ -145,24 +145,63 @@ class SelenixDownloader {
     }
     
     /**
-     * Create download with license using Python script method
+     * Create download with license using multiple methods
      */
     private function createDownloadWithLicense($licenseKey) {
         // Try different methods in order of preference
-        if ($this->addLicenseWithPython($licenseKey)) {
+        if ($this->addLicenseWithSystemZip($licenseKey)) {
             return;
-        } elseif ($this->addLicenseWithSystemZip($licenseKey)) {
+        } elseif ($this->addLicenseWithPython($licenseKey)) {
             return;
         } elseif (class_exists('ZipArchive')) {
             $this->addLicenseWithZipArchive($licenseKey);
         } else {
-            // Fallback: send original file with separate license download link
-            $this->fallbackDownload($licenseKey);
+            // Fallback: send original file
+            $this->sendFile($this->downloadFile, basename($this->downloadFile));
         }
     }
     
     /**
-     * Method 1: Use Python script to add license to ZIP
+     * Method 1: Use system zip command
+     */
+    private function addLicenseWithSystemZip($licenseKey) {
+        if (!$this->commandExists('zip')) {
+            return false;
+        }
+        
+        $tempZip = tempnam(sys_get_temp_dir(), 'selenix_download_') . '.zip';
+        $tempLicense = tempnam(sys_get_temp_dir(), 'license_') . '.txt';
+        
+        try {
+            // Create license file
+            file_put_contents($tempLicense, $licenseKey);
+            
+            // Copy original ZIP
+            copy($this->downloadFile, $tempZip);
+            
+            // Add license to ZIP using system command
+            $command = "zip -j " . escapeshellarg($tempZip) . " " . escapeshellarg($tempLicense);
+            
+            $output = [];
+            $returnCode = 0;
+            exec($command . " 2>&1", $output, $returnCode);
+            
+            if ($returnCode === 0 && file_exists($tempZip)) {
+                $this->sendFile($tempZip, 'Selenix-with-License.zip');
+                $this->cleanup([$tempZip, $tempLicense]);
+                return true;
+            }
+            
+        } catch (Exception $e) {
+            // Continue to next method
+        }
+        
+        $this->cleanup([$tempZip, $tempLicense]);
+        return false;
+    }
+    
+    /**
+     * Method 2: Use Python script to add license to ZIP
      */
     private function addLicenseWithPython($licenseKey) {
         if (!$this->commandExists('python3') && !$this->commandExists('python')) {
@@ -203,46 +242,6 @@ class SelenixDownloader {
     }
     
     /**
-     * Method 2: Use system zip command
-     */
-    private function addLicenseWithSystemZip($licenseKey) {
-        if (!$this->commandExists('zip')) {
-            return false;
-        }
-        
-        $tempDir = sys_get_temp_dir() . '/selenix_' . uniqid();
-        $tempZip = $tempDir . '.zip';
-        $tempLicense = $tempDir . '_license.txt';
-        
-        try {
-            // Create license file
-            file_put_contents($tempLicense, $licenseKey);
-            
-            // Copy original ZIP
-            copy($this->downloadFile, $tempZip);
-            
-            // Add license to ZIP using system command
-            $command = "zip -j " . escapeshellarg($tempZip) . " " . escapeshellarg($tempLicense);
-            
-            $output = [];
-            $returnCode = 0;
-            exec($command . " 2>&1", $output, $returnCode);
-            
-            if ($returnCode === 0 && file_exists($tempZip)) {
-                $this->sendFile($tempZip, 'Selenix-with-License.zip');
-                $this->cleanup([$tempZip, $tempLicense]);
-                return true;
-            }
-            
-        } catch (Exception $e) {
-            // Continue to next method
-        }
-        
-        $this->cleanup([$tempZip, $tempLicense]);
-        return false;
-    }
-    
-    /**
      * Method 3: Use ZipArchive if available
      */
     private function addLicenseWithZipArchive($licenseKey) {
@@ -264,25 +263,14 @@ class SelenixDownloader {
             }
             
         } catch (Exception $e) {
-            // Continue to fallback
+            // Fallback to original file
         }
         
         if (file_exists($tempZip)) {
             unlink($tempZip);
         }
-        return false;
-    }
-    
-    /**
-     * Fallback method: Send original file with instructions
-     */
-    private function fallbackDownload($licenseKey) {
-        // Store license for separate download
-        session_start();
-        $_SESSION['license_key'] = $licenseKey;
-        $_SESSION['show_instructions'] = true;
         
-        // Send the original ZIP file
+        // Send original file as fallback
         $this->sendFile($this->downloadFile, basename($this->downloadFile));
     }
     
@@ -511,6 +499,8 @@ if __name__ == "__main__":
                     cursor: pointer;
                     width: 100%;
                     transition: transform 0.3s, box-shadow 0.3s;
+                    position: relative;
+                    overflow: hidden;
                 }
                 
                 .download-btn:hover {
@@ -518,8 +508,66 @@ if __name__ == "__main__":
                     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
                 }
                 
-                .download-btn:active {
-                    transform: translateY(0);
+                .download-btn:disabled {
+                    background: #6c757d;
+                    cursor: not-allowed;
+                    transform: none;
+                    box-shadow: none;
+                }
+                
+                .btn-content {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: opacity 0.3s;
+                }
+                
+                .btn-loading {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    display: none;
+                }
+                
+                .processing-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.7);
+                    display: none;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                }
+                
+                .processing-card {
+                    background: white;
+                    padding: 30px;
+                    border-radius: 16px;
+                    text-align: center;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                    max-width: 400px;
+                    margin: 20px;
+                }
+                
+                .spinner {
+                    font-size: 32px;
+                    color: #667eea;
+                    margin-bottom: 20px;
+                }
+                
+                .processing-text {
+                    color: #333;
+                    font-size: 18px;
+                    margin-bottom: 10px;
+                }
+                
+                .processing-subtext {
+                    color: #666;
+                    font-size: 14px;
                 }
                 
                 .privacy-note {
@@ -528,15 +576,6 @@ if __name__ == "__main__":
                     margin-top: 15px;
                     line-height: 1.4;
                 }
-                
-                .success-message {
-                    background: #d4edda;
-                    border: 1px solid #c3e6cb;
-                    color: #155724;
-                    padding: 12px;
-                    border-radius: 8px;
-                    margin-bottom: 20px;
-                }
             </style>
         </head>
         <body>
@@ -544,16 +583,6 @@ if __name__ == "__main__":
                 <div class="logo">selenix<span class="logo-dot">.</span>io</div>
                 <h1>Download Selenix</h1>
                 <p class="subtitle">Browser automation made simple</p>
-                
-                <?php if (isset($_SESSION['show_instructions'])): ?>
-                <div class="success-message">
-                    <i class="fas fa-info-circle"></i>
-                    <strong>Note:</strong> Your download should start automatically. The license.txt file has been added directly to the ZIP file.
-                </div>
-                <?php 
-                unset($_SESSION['show_instructions']);
-                endif; 
-                ?>
                 
                 <div class="features">
                     <div class="feature">
@@ -574,7 +603,7 @@ if __name__ == "__main__":
                     </div>
                 </div>
                 
-                <form method="POST" action="">
+                <form method="POST" action="" id="downloadForm">
                     <div class="form-group">
                         <label for="email">
                             <i class="fas fa-envelope"></i> Email Address
@@ -589,9 +618,15 @@ if __name__ == "__main__":
                         >
                     </div>
                     
-                    <button type="submit" class="download-btn">
-                        <i class="fas fa-download"></i>
-                        Download Selenix + License
+                    <button type="submit" class="download-btn" id="downloadBtn">
+                        <div class="btn-content">
+                            <i class="fas fa-download"></i>
+                            Download Selenix + License
+                        </div>
+                        <div class="btn-loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Preparing Download...
+                        </div>
                     </button>
                 </form>
                 
@@ -601,6 +636,47 @@ if __name__ == "__main__":
                     We never share your information with third parties.
                 </p>
             </div>
+            
+            <!-- Processing Overlay -->
+            <div class="processing-overlay" id="processingOverlay">
+                <div class="processing-card">
+                    <div class="spinner">
+                        <i class="fas fa-cog fa-spin"></i>
+                    </div>
+                    <div class="processing-text">Preparing Your Download</div>
+                    <div class="processing-subtext">Adding license to package... This may take a few seconds</div>
+                </div>
+            </div>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.getElementById('downloadForm');
+                    const downloadBtn = document.getElementById('downloadBtn');
+                    const btnContent = downloadBtn.querySelector('.btn-content');
+                    const btnLoading = downloadBtn.querySelector('.btn-loading');
+                    const processingOverlay = document.getElementById('processingOverlay');
+                    
+                    form.addEventListener('submit', function(e) {
+                        // Show loading state
+                        downloadBtn.disabled = true;
+                        btnContent.style.opacity = '0';
+                        btnLoading.style.display = 'block';
+                        
+                        // Show overlay after a short delay
+                        setTimeout(function() {
+                            processingOverlay.style.display = 'flex';
+                        }, 800);
+                        
+                        // Hide overlay and reset button after estimated download time
+                        setTimeout(function() {
+                            processingOverlay.style.display = 'none';
+                            downloadBtn.disabled = false;
+                            btnContent.style.opacity = '1';
+                            btnLoading.style.display = 'none';
+                        }, 10000); // 10 seconds should be enough
+                    });
+                });
+            </script>
         </body>
         </html>
         <?php

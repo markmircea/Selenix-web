@@ -18,7 +18,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 // Logout
-if ($_GET['action'] === 'logout') {
+if (($_GET['action'] ?? '') === 'logout') {
     session_destroy();
     header('Location: admin.php');
     exit;
