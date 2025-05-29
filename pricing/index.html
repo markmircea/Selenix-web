@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing - Selenix.io</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="components/components.css">
-    <link rel="stylesheet" href="components/navbar/navbar.css">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components/components.css">
+    <link rel="stylesheet" href="../components/navbar/navbar.css">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -18,7 +18,39 @@
 </head>
 <body>
     <!-- Navbar Component -->
-    <div id="navbar-container"></div>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="../" class="logo">
+                    <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
+                </a>
+                <div class="nav-links">
+                    <a href="../docs/index.html" id="nav-docs">Docs</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="nav-product">Product <i class="fas fa-chevron-down"></i></a>
+                        <div class="dropdown-menu">
+                            <a href="../product/no-code-builder/index.html" id="nav-no-code-builder">No-code builder</a>
+                            <a href="../product/no-code-steps/index.html" id="nav-no-code-steps">No-code steps</a>
+                            <a href="../product/bot-runner/index.html" id="nav-bot-runner">Bot runner</a>
+                            <a href="../product/templates/index.html" id="nav-templates">Templates</a>
+                            <a href="../product/video-guides/index.html" id="nav-video-guides">Video guides</a>
+                            <a href="../product/release-notes/index.html" id="nav-release-notes">Release notes</a>
+                        </div>
+                    </div>
+                    <a href="../pricing/index.html" id="nav-pricing" class="active">Pricing</a>
+                    <a href="../support/index.html" id="nav-support">Support</a>
+                    <a href="../blog/index.html" id="nav-blog">Blog</a>
+                </div>
+                <a href="#download" class="cta-button">
+                    <i class="fa-solid fa-download"></i>
+                    Download Selenix
+                </a>
+                <div class="mobile-menu-button">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
 
     <section class="hero">
         <div class="container">
@@ -200,9 +232,16 @@
     <!-- Footer Component -->
     <div id="footer-container"></div>
 
-    <script src="script.js"></script>
-    <script src="components/components.js"></script>
-    <script src="components/footer/footer.js"></script>
+    <script src="../script.js"></script>
+    <script src="../components/components.js"></script>
+    <script src="../components/footer/footer.js"></script>
+    <script src="../components/navbar/navbar.js"></script>
+    <script>
+        // Initialize navbar functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNavbar();
+        });
+    </script>
 
     <script>
         // Pricing toggle functionality
