@@ -4,38 +4,84 @@ document.addEventListener('DOMContentLoaded', function() {
     function getComponentPath(componentName) {
         // Get path depth to calculate relative path
         const pathParts = window.location.pathname.split('/').filter(Boolean);
-        const isRootPath = pathParts.length === 0 || (pathParts.length === 1 && pathParts[0] === 'index.html');
-        const isFirstLevel = pathParts.length === 1 || (pathParts.length === 2 && pathParts[1] === 'index.html');
-        const isInDocsDir = pathParts.length > 0 && pathParts[0] === 'docs';
+        const pathDepth = pathParts.length;
         
         console.log('Path parts:', pathParts);
-        console.log('Is root path:', isRootPath);
-        console.log('Is first level:', isFirstLevel);
-        console.log('Is in docs directory:', isInDocsDir);
+        console.log('Path depth:', pathDepth);
         
-        // Base path varies depending on location in site structure
+        // Calculate how many levels up we need to go to reach the root
         let basePath = '';
-        if (!isRootPath) {
-            if (isInDocsDir) {
-                basePath = '../components/'; // For docs/index.html
-            } else if (pathParts[0] === 'product') {
-                // Check if we're in a nested product subdirectory
-                if (pathParts.length > 1) {
-                    basePath = '../../components/'; // For product/subdirectory/*.html
-                } else {
-                    basePath = '../components/'; // For product/*.html
-                }
-            } else {
-                basePath = './components/'; // For other first level pages
-            }
+        
+        if (pathDepth === 0) {
+            // We're at root (/)
+            basePath = 'components/';
+        } else if (pathDepth === 1) {
+            // We're one level deep (/docs/ or /product/)
+            basePath = '../components/';
+        } else if (pathDepth === 2) {
+            // We're two levels deep (/product/templates/ or /docs/subfolder/)
+            basePath = '../../components/';
         } else {
-            basePath = 'components/'; // For root index.html
+            // For any deeper nesting, go up the appropriate number of levels
+            basePath = '../'.repeat(pathDepth) + 'components/';
         }
         
-        console.log('Using base path:', basePath);
-        console.log('Final component path:', basePath + componentName);
+        const finalPath = basePath + componentName;
         
-        return basePath + componentName;
+        console.log('Calculated base path:', basePath);
+        console.log('Final component path:', finalPath);
+        
+        return finalPath;
+    }
+
+    // Function to set active navigation states after navbar loads
+    function setActiveNavigation() {
+        const currentPath = window.location.pathname;
+        const isDocsPage = currentPath.includes('/docs/');
+        const isProductPage = currentPath.includes('/product/');
+        
+        console.log('Setting active navigation:', { currentPath, isDocsPage, isProductPage });
+        
+        // Remove all existing active classes
+        document.querySelectorAll('.nav-links a, .dropdown-menu a, .dropdown-toggle').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        if (isDocsPage) {
+            const docsLink = document.getElementById('nav-docs');
+            if (docsLink) {
+                docsLink.classList.add('active');
+                console.log('✅ Added active class to docs link');
+            } else {
+                console.log('❌ Could not find docs link element');
+            }
+        } else if (isProductPage) {
+            const productToggle = document.querySelector('.dropdown-toggle');
+            if (productToggle) {
+                productToggle.classList.add('active');
+                console.log('✅ Added active class to product dropdown');
+            }
+            
+            // Check specific product pages
+            const productPages = {
+                'no-code-builder': 'nav-no-code-builder',
+                'no-code-steps': 'nav-no-code-steps',
+                'bot-runner': 'nav-bot-runner',
+                'templates': 'nav-templates',
+                'video-guides': 'nav-video-guides',
+                'release-notes': 'nav-release-notes'
+            };
+            
+            Object.keys(productPages).forEach(page => {
+                if (currentPath.includes(page)) {
+                    const element = document.getElementById(productPages[page]);
+                    if (element) {
+                        element.classList.add('active');
+                        console.log('✅ Added active class to', productPages[page]);
+                    }
+                }
+            });
+        }
     }
     
     // Add a debug console log
@@ -57,6 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(html => {
                 navbarContainer.innerHTML = html;
                 console.log('Navbar loaded successfully');
+                
+                // Set active navigation after navbar is loaded and DOM is updated
+                setTimeout(() => {
+                    setActiveNavigation();
+                }, 100);
             })
             .catch(error => {
                 console.error('Error loading navbar:', error);
@@ -66,7 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p>${error.message}</p>
                         <p>Path attempted: ${navbarPath}</p>
                         <p>Current location: ${window.location.href}</p>
-                        <p>Try using the embedded navbar in components/embedded-navbar.html</p>
                     </div>
                 `;
             });
@@ -97,7 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p>${error.message}</p>
                         <p>Path attempted: ${footerPath}</p>
                         <p>Current location: ${window.location.href}</p>
-                        <p>Try using the embedded footer in components/embedded-footer.html</p>
                     </div>
                 `;
             });

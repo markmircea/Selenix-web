@@ -1,4 +1,4 @@
-<!-- Navbar Component -->
+<!-- Universal Navbar Component -->
 <header>
     <div class="container">
         <nav>
@@ -32,65 +32,3 @@
         </nav>
     </div>
 </header>
-
-<script>
-    // Fix navigation paths based on the current location
-    (function() {
-        // Get the current path depth to determine relative paths
-        const pathParts = window.location.pathname.split('/').filter(Boolean);
-        const isRootPath = pathParts.length === 0 || (pathParts.length === 1 && pathParts[0] === 'index.html');
-        const isInProductDir = pathParts.length > 0 && pathParts[0] === 'product';
-        
-        // Update navigation links based on current location
-        const navLinks = {
-            'nav-docs': isInProductDir ? '../docs/index.html' : '/docs/index.html',
-            'nav-no-code-builder': isInProductDir ? './no-code-builder.html' : '/product/no-code-builder.html',
-            'nav-no-code-steps': isInProductDir ? './no-code-steps.html' : '/product/no-code-steps.html',
-            'nav-bot-runner': isInProductDir ? './bot-runner.html' : '/product/bot-runner.html',
-            'nav-templates': isInProductDir ? './templates/index.html' : '/product/templates/index.html',
-            'nav-video-guides': isInProductDir ? './video-guides.html' : '/product/video-guides.html',
-            'nav-release-notes': isInProductDir ? './release-notes.html' : '/product/release-notes.html'
-        };
-        
-        // Update each link href
-        Object.keys(navLinks).forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.href = navLinks[id];
-            }
-        });
-
-        // Logo should always go to home
-        const logo = document.querySelector('.logo');
-        if (logo) {
-            logo.href = isInProductDir ? '../' : '/';
-        }
-        
-        // Mark current page as active
-        const currentPath = window.location.pathname;
-        if (currentPath.includes('/docs/')) {
-            const docsLink = document.getElementById('nav-docs');
-            if (docsLink) docsLink.classList.add('active');
-        } else if (currentPath.includes('/product/')) {
-            const productToggle = document.querySelector('.dropdown-toggle');
-            if (productToggle) productToggle.classList.add('active');
-            
-            // Check specific product pages
-            const productLinkIds = [
-                'nav-no-code-builder', 
-                'nav-no-code-steps', 
-                'nav-bot-runner', 
-                'nav-templates', 
-                'nav-video-guides', 
-                'nav-release-notes'
-            ];
-            
-            productLinkIds.forEach(id => {
-                const element = document.getElementById(id);
-                if (element && currentPath.includes(element.getAttribute('href').split('/').pop())) {
-                    element.classList.add('active');
-                }
-            });
-        }
-    })();
-</script>
