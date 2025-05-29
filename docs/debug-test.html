@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Test</title>
+</head>
+<body>
+    <script>
+        // Test if we can load the config
+        console.log('Testing docs system...');
+        
+        // Load the config script
+        const script1 = document.createElement('script');
+        script1.src = 'docs-config.js';
+        script1.onload = () => {
+            console.log('Config loaded:', typeof docsConfig);
+            if (typeof docsConfig !== 'undefined') {
+                console.log('Config contentPath:', docsConfig.contentPath);
+                console.log('Config sections:', docsConfig.sections.length);
+            }
+        };
+        document.head.appendChild(script1);
+        
+        // Test file fetch
+        setTimeout(() => {
+            fetch('./content/introduction.html')
+                .then(response => {
+                    console.log('Fetch response status:', response.status);
+                    return response.text();
+                })
+                .then(content => {
+                    console.log('Content length:', content.length);
+                    console.log('Content preview:', content.substring(0, 100));
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+        }, 1000);
+    </script>
+</body>
+</html>
