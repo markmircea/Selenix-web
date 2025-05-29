@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // We're at root (/)
             basePath = 'components/';
         } else if (pathDepth === 1) {
-            // We're one level deep (/docs/ or /product/)
+            // We're one level deep (/docs/ or /product/ or root-level pages like /pricing.html)
             basePath = '../components/';
         } else if (pathDepth === 2) {
             // We're two levels deep (/product/templates/ or /docs/subfolder/)
@@ -39,8 +39,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentPath = window.location.pathname;
         const isDocsPage = currentPath.includes('/docs/');
         const isProductPage = currentPath.includes('/product/');
+        const isPricingPage = currentPath.includes('/pricing');
+        const isSupportPage = currentPath.includes('/support');
+        const isBlogPage = currentPath.includes('/blog');
         
-        console.log('Setting active navigation:', { currentPath, isDocsPage, isProductPage });
+        console.log('Setting active navigation:', { 
+            currentPath, 
+            isDocsPage, 
+            isProductPage, 
+            isPricingPage, 
+            isSupportPage, 
+            isBlogPage 
+        });
         
         // Remove all existing active classes
         document.querySelectorAll('.nav-links a, .dropdown-menu a, .dropdown-toggle').forEach(link => {
@@ -52,8 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (docsLink) {
                 docsLink.classList.add('active');
                 console.log('✅ Added active class to docs link');
-            } else {
-                console.log('❌ Could not find docs link element');
             }
         } else if (isProductPage) {
             const productToggle = document.querySelector('.dropdown-toggle');
@@ -81,6 +89,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             });
+        } else if (isPricingPage) {
+            const pricingLink = document.getElementById('nav-pricing');
+            if (pricingLink) {
+                pricingLink.classList.add('active');
+                console.log('✅ Added active class to pricing link');
+            }
+        } else if (isSupportPage) {
+            const supportLink = document.getElementById('nav-support');
+            if (supportLink) {
+                supportLink.classList.add('active');
+                console.log('✅ Added active class to support link');
+            }
+        } else if (isBlogPage) {
+            const blogLink = document.getElementById('nav-blog');
+            if (blogLink) {
+                blogLink.classList.add('active');
+                console.log('✅ Added active class to blog link');
+            }
         }
     }
     

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Runner - Selenix.io</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../../components/components.css">
+    <link rel="stylesheet" href="../../components/navbar/navbar.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- Navbar Component -->
+    <div id="navbar-container"></div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Powerful Bot Runner</h1>
+                <p>Execute your automations with our robust bot runner. Schedule, monitor, and manage multiple automations running simultaneously.</p>
+                <div class="hero-cta">
+                    <a href="#features" class="primary-button">
+                        <i class="fa-solid fa-play"></i>
+                        See Features
+                    </a>
+                    <a href="../../docs/index.html#workflows" class="secondary-outline-button">
+                        <i class="fa-solid fa-book"></i>
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://via.placeholder.com/600x400/4f46e5/ffffff?text=Bot+Runner" alt="Bot Runner Interface">
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Enterprise-Grade Bot Execution</h2>
+                <p>Run your automations reliably with advanced scheduling, monitoring, and error handling capabilities.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <h3>Advanced Scheduling</h3>
+                    <p>Schedule bots to run at specific times, intervals, or triggered by external events and webhooks.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3>Real-time Monitoring</h3>
+                    <p>Monitor all running bots in real-time with detailed logs, performance metrics, and status updates.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3>Parallel Execution</h3>
+                    <p>Run multiple bots simultaneously with intelligent resource management and queue prioritization.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-shield-check"></i>
+                    </div>
+                    <h3>Error Recovery</h3>
+                    <p>Automatic error handling with retry logic, fallback actions, and intelligent failure recovery.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <h3>Smart Notifications</h3>
+                    <p>Get notified via email, Slack, or webhooks when bots complete, fail, or need attention.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <h3>Cloud Integration</h3>
+                    <p>Deploy bots to the cloud for 24/7 execution without keeping your computer running.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="execution-modes">
+        <div class="container">
+            <div class="section-header">
+                <h2>Multiple Execution Modes</h2>
+                <p>Choose the right execution mode for your automation needs.</p>
+            </div>
+
+            <div class="modes-grid">
+                <div class="mode-card">
+                    <div class="mode-icon">
+                        <i class="fa-solid fa-desktop"></i>
+                    </div>
+                    <h3>Desktop Mode</h3>
+                    <p>Run bots on your local machine with full browser visibility and debugging capabilities.</p>
+                    <ul class="mode-features">
+                        <li>Full browser control</li>
+                        <li>Real-time debugging</li>
+                        <li>Local file access</li>
+                        <li>Development testing</li>
+                    </ul>
+                </div>
+
+                <div class="mode-card">
+                    <div class="mode-icon">
+                        <i class="fa-solid fa-ghost"></i>
+                    </div>
+                    <h3>Headless Mode</h3>
+                    <p>Run bots in the background without browser UI for maximum performance and resource efficiency.</p>
+                    <ul class="mode-features">
+                        <li>No browser UI</li>
+                        <li>Lower resource usage</li>
+                        <li>Faster execution</li>
+                        <li>Background processing</li>
+                    </ul>
+                </div>
+
+                <div class="mode-card featured">
+                    <div class="mode-badge">Recommended</div>
+                    <div class="mode-icon">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <h3>Cloud Mode</h3>
+                    <p>Deploy bots to our secure cloud infrastructure for 24/7 execution and enterprise scalability.</p>
+                    <ul class="mode-features">
+                        <li>24/7 availability</li>
+                        <li>Auto-scaling</li>
+                        <li>Global execution</li>
+                        <li>Enterprise security</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="monitoring-dashboard">
+        <div class="container">
+            <div class="section-header">
+                <h2>Comprehensive Monitoring Dashboard</h2>
+                <p>Keep track of all your automations with our powerful monitoring and analytics dashboard.</p>
+            </div>
+
+            <div class="dashboard-features">
+                <div class="dashboard-feature">
+                    <div class="feature-visual">
+                        <i class="fa-solid fa-chart-bar"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Execution Analytics</h3>
+                        <p>Detailed analytics on bot performance, success rates, execution times, and resource usage patterns.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-feature">
+                    <div class="feature-visual">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Detailed Logs</h3>
+                        <p>Comprehensive logging with step-by-step execution details, screenshots, and error traces.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-feature">
+                    <div class="feature-visual">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Schedule Management</h3>
+                        <p>Visual calendar interface to manage bot schedules, view upcoming runs, and modify timing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Deploy Your Bots?</h2>
+                <p>Get started with Selenix Bot Runner and automate your tasks 24/7.</p>
+                <div class="cta-buttons">
+                    <a href="#download" class="primary-button">
+                        <i class="fa-solid fa-download"></i>
+                        Download Selenix
+                    </a>
+                    <a href="../../docs/index.html#scheduling" class="secondary-outline-button">
+                        <i class="fa-solid fa-calendar"></i>
+                        Learn About Scheduling
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Component -->
+    <div id="footer-container"></div>
+
+    <script src="../../script.js"></script>
+    <script src="../../components/components.js"></script>
+    <script src="../../components/footer/footer.js"></script>
+</body>
+</html>

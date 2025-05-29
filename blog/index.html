@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Selenix.io</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components/components.css">
+    <link rel="stylesheet" href="components/navbar/navbar.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <!-- Navbar Component -->
+    <div id="navbar-container"></div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>The Selenix Blog</h1>
+                <p>Insights, tutorials, and updates from the world of browser automation. Learn how to maximize your productivity with Selenix.</p>
+                <div class="blog-categories">
+                    <a href="#" class="category-tag active" data-category="all">All Posts</a>
+                    <a href="#" class="category-tag" data-category="tutorials">Tutorials</a>
+                    <a href="#" class="category-tag" data-category="features">Features</a>
+                    <a href="#" class="category-tag" data-category="case-studies">Case Studies</a>
+                    <a href="#" class="category-tag" data-category="automation">Automation Tips</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-post">
+        <div class="container">
+            <div class="featured-content">
+                <div class="featured-image">
+                    <img src="https://via.placeholder.com/600x400/4f46e5/ffffff?text=Featured+Post" alt="Featured Post">
+                    <div class="featured-badge">Featured</div>
+                </div>
+                <div class="featured-text">
+                    <div class="post-meta">
+                        <span class="category">Tutorials</span>
+                        <span class="date">December 15, 2024</span>
+                        <span class="read-time">8 min read</span>
+                    </div>
+                    <h2>Complete Guide to Web Scraping with Selenix</h2>
+                    <p>Learn how to extract data from any website using Selenix's powerful automation tools. This comprehensive guide covers everything from basic data extraction to handling complex dynamic websites.</p>
+                    <div class="post-author">
+                        <img src="https://via.placeholder.com/50x50/6b7280/ffffff?text=JS" alt="John Smith" class="author-avatar">
+                        <div class="author-info">
+                            <span class="author-name">John Smith</span>
+                            <span class="author-title">Lead Developer</span>
+                        </div>
+                    </div>
+                    <a href="#" class="read-more-btn">Read Full Article</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="blog-posts">
+        <div class="container">
+            <div class="posts-grid">
+                <article class="post-card" data-category="features">
+                    <div class="post-image">
+                        <img src="https://via.placeholder.com/400x250/7c3aed/ffffff?text=AI+Features" alt="AI-Powered Automation">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category">Features</span>
+                            <span class="date">December 10, 2024</span>
+                        </div>
+                        <h3>Introducing AI-Powered Element Detection</h3>
+                        <p>Our latest update brings machine learning to element selection, making your automations more reliable than ever.</p>
+                        <div class="post-footer">
+                            <div class="author-mini">
+                                <img src="https://via.placeholder.com/30x30/6b7280/ffffff?text=SE" alt="Sarah Evans">
+                                <span>Sarah Evans</span>
+                            </div>
+                            <span class="read-time">5 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="post-card" data-category="case-studies">
+                    <div class="post-image">
+                        <img src="https://via.placeholder.com/400x250/dc2626/ffffff?text=Case+Study" alt="E-commerce Success">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category">Case Studies</span>
+                            <span class="date">December 8, 2024</span>
+                        </div>
+                        <h3>How TechCorp Saved 40 Hours Weekly</h3>
+                        <p>Discover how a growing e-commerce company transformed their workflow using Selenix automation templates.</p>
+                        <div class="post-footer">
+                            <div class="author-mini">
+                                <img src="https://via.placeholder.com/30x30/6b7280/ffffff?text=MJ" alt="Mike Johnson">
+                                <span>Mike Johnson</span>
+                            </div>
+                            <span class="read-time">12 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="post-card" data-category="tutorials">
+                    <div class="post-image">
+                        <img src="https://via.placeholder.com/400x250/059669/ffffff?text=Tutorial" alt="Form Automation">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category">Tutorials</span>
+                            <span class="date">December 5, 2024</span>
+                        </div>
+                        <h3>Mastering Complex Form Automation</h3>
+                        <p>Step-by-step guide to automating multi-step forms, file uploads, and dynamic form elements.</p>
+                        <div class="post-footer">
+                            <div class="author-mini">
+                                <img src="https://via.placeholder.com/30x30/6b7280/ffffff?text=AL" alt="Anna Lee">
+                                <span>Anna Lee</span>
+                            </div>
+                            <span class="read-time">15 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="post-card" data-category="automation">
+                    <div class="post-image">
+                        <img src="https://via.placeholder.com/400x250/f59e0b/ffffff?text=Tips" alt="Automation Tips">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category">Automation Tips</span>
+                            <span class="date">December 3, 2024</span>
+                        </div>
+                        <h3>10 Pro Tips for Faster Web Automation</h3>
+                        <p>Boost your automation performance with these expert tips and best practices from our power users.</p>
+                        <div class="post-footer">
+                            <div class="author-mini">
+                                <img src="https://via.placeholder.com/30x30/6b7280/ffffff?text=JS" alt="John Smith">
+                                <span>John Smith</span>
+                            </div>
+                            <span class="read-time">7 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="post-card" data-category="features">
+                    <div class="post-image">
+                        <img src="https://via.placeholder.com/400x250/8b5cf6/ffffff?text=Cloud" alt="Cloud Features">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category">Features</span>
+                            <span class="date">November 28, 2024</span>
+                        </div>
+                        <h3>Cloud Execution: Run Automations 24/7</h3>
+                        <p>Learn about our new cloud execution feature that lets you run automations without keeping your computer on.</p>
+                        <div class="post-footer">
+                            <div class="author-mini">
+                                <img src="https://via.placeholder.com/30x30/6b7280/ffffff?text=DR" alt="David Rodriguez">
+                                <span>David Rodriguez</span>
+                            </div>
+                            <span class="read-time">6 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="post-card" data-category="tutorials">
+                    <div class="post-image">
+                        <img src="https://via.placeholder.com/400x250/10b981/ffffff?text=API" alt="API Integration">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="category">Tutorials</span>
+                            <span class="date">November 25, 2024</span>
+                        </div>
+                        <h3>Integrating APIs with Your Automations</h3>
+                        <p>Connect external services and APIs to create powerful, integrated automation workflows.</p>
+                        <div class="post-footer">
+                            <div class="author-mini">
+                                <img src="https://via.placeholder.com/30x30/6b7280/ffffff?text=LT" alt="Lisa Thompson">
+                                <span>Lisa Thompson</span>
+                            </div>
+                            <span class="read-time">10 min read</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="load-more-section">
+                <button class="load-more-btn">
+                    <i class="fa-solid fa-plus"></i>
+                    Load More Posts
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-signup">
+        <div class="container">
+            <div class="newsletter-content">
+                <div class="newsletter-text">
+                    <h2>Stay Updated</h2>
+                    <p>Get the latest automation tips, tutorials, and product updates delivered to your inbox.</p>
+                </div>
+                <div class="newsletter-form">
+                    <form>
+                        <input type="email" placeholder="Enter your email address" required>
+                        <button type="submit">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Subscribe
+                        </button>
+                    </form>
+                    <p class="newsletter-note">No spam, unsubscribe anytime. 5,000+ subscribers and growing!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Component -->
+    <div id="footer-container"></div>
+
+    <script src="script.js"></script>
+    <script src="components/components.js"></script>
+    <script src="components/footer/footer.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Category filtering
+            const categoryTags = document.querySelectorAll('.category-tag');
+            const postCards = document.querySelectorAll('.post-card');
+
+            categoryTags.forEach(tag => {
+                tag.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Update active tag
+                    categoryTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const selectedCategory = this.getAttribute('data-category');
+                    
+                    // Filter posts
+                    postCards.forEach(card => {
+                        if (selectedCategory === 'all' || card.getAttribute('data-category') === selectedCategory) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Newsletter form
+            const newsletterForm = document.querySelector('.newsletter-form form');
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                alert(`Thanks for subscribing with: ${email}`);
+                this.reset();
+            });
+
+            // Load more functionality
+            const loadMoreBtn = document.querySelector('.load-more-btn');
+            loadMoreBtn.addEventListener('click', function() {
+                this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+                setTimeout(() => {
+                    alert('More posts would be loaded here!');
+                    this.innerHTML = '<i class="fa-solid fa-plus"></i> Load More Posts';
+                }, 1500);
+            });
+        });
+    </script>
+
+    <style>
+        .blog-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .category-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .category-tag:hover,
+        .category-tag.active {
+            background: white;
+            color: var(--primary-color);
+            border-color: white;
+        }
+
+        .featured-post {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+
+        .featured-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .featured-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .post-meta .category {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .author-name {
+            font-weight: 600;
+            display: block;
+        }
+
+        .author-title {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .read-more-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .read-more-btn:hover {
+            background: var(--primary-color-dark, #3730a3);
+            transform: translateY(-2px);
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-content h3 {
+            margin: 0.5rem 0 1rem 0;
+            color: #1f2937;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .author-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .author-mini img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .load-more-section {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .load-more-btn {
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            background: var(--primary-color-dark, #3730a3);
+            transform: translateY(-2px);
+        }
+
+        .newsletter-signup {
+            background: var(--primary-color);
+            color: white;
+            padding: 4rem 0;
+        }
+
+        .newsletter-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .newsletter-form form {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .newsletter-form button {
+            padding: 1rem 1.5rem;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--secondary-color-dark, #f97316);
+        }
+
+        .newsletter-note {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .featured-content,
+            .newsletter-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</body>
+</html>
