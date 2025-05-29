@@ -593,7 +593,7 @@ if __name__ == "__main__":
                     </div>
                     <div class="feature">
                         <i class="fas fa-download"></i>
-                        <span>Windows version (Beta)</span>
+                        <span>Windows version x64 (Beta)</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-file-archive"></i>
