@@ -19,7 +19,7 @@ class BlogModel {
     public function getPosts($page = 1, $category = null, $limit = POSTS_PER_PAGE) {
         $offset = ($page - 1) * $limit;
         
-        $where = "WHERE is_published = TRUE";
+        $where = "WHERE is_published = true";
         $params = [];
         
         if ($category && $category !== 'all') {
@@ -53,7 +53,7 @@ class BlogModel {
      * Get total count of published posts
      */
     public function getPostsCount($category = null) {
-        $where = "WHERE is_published = TRUE";
+        $where = "WHERE is_published = true";
         $params = [];
         
         if ($category && $category !== 'all') {
@@ -82,7 +82,7 @@ class BlogModel {
                    meta_title, meta_description, published_at, created_at,
                    DATE_PART('epoch', published_at) as published_timestamp
             FROM posts 
-            WHERE slug = :slug AND is_published = TRUE
+            WHERE slug = :slug AND is_published = true
         ";
         
         $stmt = $this->db->prepare($sql);
@@ -99,7 +99,7 @@ class BlogModel {
                    author_name, author_title, author_avatar, read_time, published_at,
                    DATE_PART('epoch', published_at) as published_timestamp
             FROM posts 
-            WHERE is_featured = TRUE AND is_published = TRUE 
+            WHERE is_featured = true AND is_published = true 
             ORDER BY published_at DESC 
             LIMIT 1
         ";
@@ -152,7 +152,7 @@ class BlogModel {
                    author_name, author_title, author_avatar, read_time, published_at,
                    DATE_PART('epoch', published_at) as published_timestamp
             FROM posts 
-            WHERE is_published = TRUE 
+            WHERE is_published = true 
             AND (title ILIKE :query OR content ILIKE :query OR excerpt ILIKE :query)
             ORDER BY published_at DESC 
             LIMIT :limit OFFSET :offset
@@ -174,7 +174,7 @@ class BlogModel {
         $sql = "
             SELECT category, COUNT(*) as post_count 
             FROM posts 
-            WHERE is_published = TRUE 
+            WHERE is_published = true 
             GROUP BY category 
             ORDER BY post_count DESC
         ";
@@ -192,7 +192,7 @@ class BlogModel {
                 INSERT INTO newsletter_subscribers (email) 
                 VALUES (:email) 
                 ON CONFLICT (email) 
-                DO UPDATE SET is_active = TRUE, unsubscribed_at = NULL
+                DO UPDATE SET is_active = true, unsubscribed_at = NULL
             ";
             
             $stmt = $this->db->prepare($sql);
@@ -235,7 +235,7 @@ class BlogModel {
         $sql = "
             SELECT name, email, website, content, created_at 
             FROM comments 
-            WHERE post_id = :post_id AND is_approved = TRUE 
+            WHERE post_id = :post_id AND is_approved = true 
             ORDER BY created_at ASC
         ";
         
@@ -388,7 +388,7 @@ class BlogModel {
         $stats['total_posts'] = $stmt->fetchColumn();
         
         // Published posts
-        $stmt = $this->db->query("SELECT COUNT(*) FROM posts WHERE is_published = TRUE");
+        $stmt = $this->db->query("SELECT COUNT(*) FROM posts WHERE is_published = true");
         $stats['published_posts'] = $stmt->fetchColumn();
         
         // Draft posts
@@ -399,11 +399,11 @@ class BlogModel {
         $stats['total_comments'] = $stmt->fetchColumn();
         
         // Pending comments
-        $stmt = $this->db->query("SELECT COUNT(*) FROM comments WHERE is_approved = FALSE");
+        $stmt = $this->db->query("SELECT COUNT(*) FROM comments WHERE is_approved = false");
         $stats['pending_comments'] = $stmt->fetchColumn();
         
         // Newsletter subscribers
-        $stmt = $this->db->query("SELECT COUNT(*) FROM newsletter_subscribers WHERE is_active = TRUE");
+        $stmt = $this->db->query("SELECT COUNT(*) FROM newsletter_subscribers WHERE is_active = true");
         $stats['newsletter_subscribers'] = $stmt->fetchColumn();
         
         return $stats;
@@ -432,7 +432,7 @@ class BlogModel {
      * Approve comment
      */
     public function approveComment($id) {
-        $sql = "UPDATE comments SET is_approved = TRUE WHERE id = :id";
+        $sql = "UPDATE comments SET is_approved = true WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute(['id' => $id]);
     }

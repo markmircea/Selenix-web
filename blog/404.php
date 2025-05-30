@@ -12,8 +12,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
 </head>
 <body>
     <!-- Navbar Component -->
@@ -58,70 +56,21 @@
                     <i class="fa-solid fa-exclamation-triangle"></i>
                 </div>
                 <h1>404 - Page Not Found</h1>
-                <p>Sorry, the page you are looking for doesn't exist or has been moved.</p>
+                <p>The page you're looking for doesn't exist or has been moved.</p>
                 <div class="error-actions">
                     <a href="blog.php" class="primary-button">
-                        <i class="fa-solid fa-arrow-left"></i>
+                        <i class="fa-solid fa-home"></i>
                         Back to Blog
                     </a>
                     <a href="../" class="secondary-button">
-                        <i class="fa-solid fa-home"></i>
-                        Go Home
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Home Page
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer Component -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>selenix.io</h3>
-                    <p class="footer-description">Modern browser automation tool that helps you save time and increase productivity without writing a single line of code.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                        <a href="#"><i class="fa-brands fa-github"></i></a>
-                        <a href="#"><i class="fa-brands fa-discord"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Product</h3>
-                    <ul>
-                        <li><a href="../docs/index.html"><i class="fa-solid fa-file-lines"></i> Documentation</a></li>
-                        <li><a href="../product/no-code-builder/index.html"><i class="fa-solid fa-cubes"></i> No-code builder</a></li>
-                        <li><a href="../product/no-code-steps/index.html"><i class="fa-solid fa-list-check"></i> No-code steps</a></li>
-                        <li><a href="../pricing/index.html"><i class="fa-solid fa-tag"></i> Pricing</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Web automation</h3>
-                    <ul>
-                        <li><a href="#"><i class="fa-solid fa-robot"></i> Automate website actions</a></li>
-                        <li><a href="#"><i class="fa-solid fa-keyboard"></i> Automate Data Entry</a></li>
-                        <li><a href="#"><i class="fa-solid fa-pen-to-square"></i> Automate Form Filling</a></li>
-                        <li><a href="../product/templates/index.html"><i class="fa-solid fa-puzzle-piece"></i> Automation templates</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Blog</h3>
-                    <ul>
-                        <li><a href="blog.php?category=tutorials"><i class="fa-solid fa-graduation-cap"></i> Tutorials</a></li>
-                        <li><a href="blog.php?category=features"><i class="fa-solid fa-star"></i> Features</a></li>
-                        <li><a href="blog.php?category=case-studies"><i class="fa-solid fa-chart-line"></i> Case Studies</a></li>
-                        <li><a href="blog.php?category=automation"><i class="fa-solid fa-lightbulb"></i> Automation tips</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; <?php echo date('Y'); ?> selenix.io. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="../script.js"></script>
     <style>
         .error-page {
             padding: 8rem 0;
@@ -138,7 +87,7 @@
         
         .error-icon {
             font-size: 6rem;
-            color: var(--secondary-color);
+            color: var(--primary-color);
             margin-bottom: 2rem;
         }
         
@@ -146,7 +95,6 @@
             font-size: 3rem;
             color: var(--heading-color);
             margin-bottom: 1rem;
-            font-weight: 800;
         }
         
         .error-page p {
@@ -167,18 +115,9 @@
                 font-size: 2rem;
             }
             
-            .error-page p {
-                font-size: 1.1rem;
-            }
-            
             .error-actions {
                 flex-direction: column;
                 align-items: center;
-            }
-            
-            .error-actions .primary-button,
-            .error-actions .secondary-button {
-                width: 200px;
             }
         }
     </style>

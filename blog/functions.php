@@ -266,7 +266,9 @@ function sendJsonResponse($data, $statusCode = 200) {
  * Check if user is admin (simple session-based check)
  */
 function isAdmin() {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     return isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
 }
 
@@ -285,7 +287,9 @@ function requireAdmin() {
  */
 function loginAdmin($username, $password) {
     if ($username === ADMIN_USERNAME && password_verify($password, ADMIN_PASSWORD)) {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_username'] = $username;
         $_SESSION['admin_login_time'] = time();
@@ -300,7 +304,9 @@ function loginAdmin($username, $password) {
  * Logout admin user
  */
 function logoutAdmin() {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     session_destroy();
 }
 
@@ -308,7 +314,9 @@ function logoutAdmin() {
  * Check session timeout
  */
 function checkSessionTimeout() {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     
     if (isset($_SESSION['admin_login_time'])) {
         if (time() - $_SESSION['admin_login_time'] > SESSION_TIMEOUT) {
@@ -327,7 +335,9 @@ function checkSessionTimeout() {
  * Generate CSRF token
  */
 function generateCsrfToken() {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     
     if (!isset($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -340,7 +350,9 @@ function generateCsrfToken() {
  * Validate CSRF token
  */
 function validateCsrfToken($token) {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     
     return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
