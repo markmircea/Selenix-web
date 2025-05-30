@@ -30,10 +30,15 @@ $comments = $blogModel->getComments($post['id']);
 
 // Handle comment submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
-    $name = sanitizeInput($_POST['comment_name']);
-    $email = sanitizeInput($_POST['comment_email']);
+    // Debug: Log all POST data
+    error_log('Comment form submitted. POST data: ' . print_r($_POST, true));
+    
+    $name = isset($_POST['comment_name']) ? sanitizeInput($_POST['comment_name']) : '';
+    $email = isset($_POST['comment_email']) ? sanitizeInput($_POST['comment_email']) : '';
     $website = isset($_POST['comment_website']) ? sanitizeInput($_POST['comment_website']) : '';
-    $content = sanitizeInput($_POST['comment_content']);
+    $content = isset($_POST['comment_content']) ? sanitizeInput($_POST['comment_content']) : '';
+    
+    error_log("Processed form data - Name: '$name', Email: '$email', Content length: " . strlen($content));
     
     $errors = [];
     
@@ -49,17 +54,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
         $errors[] = 'Comment content is required';
     }
     
-    // Debug: Log the submission attempt
-    error_log("Comment submission attempt for post ID: {$post['id']}, Name: $name, Email: $email");
+    // Debug: Log validation results
+    error_log("Validation errors: " . (empty($errors) ? 'None' : implode(', ', $errors)));
     
     if (empty($errors)) {
+        // Debug: Log before attempting to add comment
+        error_log("Attempting to add comment for post ID: {$post['id']}");
+        
         $commentId = $blogModel->addComment($post['id'], $name, $email, $website, $content);
         
         if ($commentId) {
-            $commentMessage = 'Thank you for your comment! It will be reviewed and published soon.';
-            $commentSuccess = true;
-            
-            // Debug: Log successful comment
             error_log("Comment added successfully with ID: $commentId");
             
             // Clear form data on success by redirecting
@@ -67,18 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
             header("Location: $redirectUrl");
             exit;
         } else {
+            error_log("Failed to add comment for post ID: {$post['id']}");
             $commentMessage = 'There was an error submitting your comment. Please try again.';
             $commentSuccess = false;
-            
-            // Debug: Log failed comment
-            error_log("Failed to add comment for post ID: {$post['id']}");
         }
     } else {
         $commentMessage = implode(', ', $errors);
         $commentSuccess = false;
-        
-        // Debug: Log validation errors
-        error_log("Comment validation errors: " . implode(', ', $errors));
     }
     
     // Refresh comments after submission
@@ -292,6 +291,16 @@ $breadcrumbs = [
                 <!-- Comment Form -->
                 <div class="comment-form-container">
                     <h4>Leave a Comment</h4>
+                    
+                    <!-- Debug information -->
+                    <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
+                        <div style="background: #f0f8ff; border: 1px solid #0066cc; padding: 10px; margin: 10px 0; border-radius: 5px;">
+                            <strong>Debug Info:</strong><br>
+                            Form submitted: <?php echo isset($_POST['submit_comment']) ? 'Yes' : 'No'; ?><br>
+                            POST data keys: <?php echo implode(', ', array_keys($_POST)); ?><br>
+                            Post ID: <?php echo isset($post['id']) ? $post['id'] : 'Not set'; ?><br>
+                        </div>
+                    <?php endif; ?>
                     
                     <?php if (isset($commentMessage)): ?>
                         <div class="comment-message <?php echo $commentSuccess ? 'success' : 'error'; ?>">
