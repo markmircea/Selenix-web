@@ -235,8 +235,8 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                                         
                                         <div class="comment-meta">
                                             <span class="comment-date"><?php echo timeAgo(strtotime($comment['created_at'])); ?></span>
-                                            <span class="comment-status <?php echo $comment['is_approved'] === 't' ? 'approved' : 'pending'; ?>">
-                                                <?php echo $comment['is_approved'] === 't' ? 'Approved' : 'Pending'; ?>
+                                            <span class="comment-status <?php echo ($comment['is_approved'] === true || $comment['is_approved'] === 't' || $comment['is_approved'] === '1') ? 'approved' : 'pending'; ?>">
+                                                <?php echo ($comment['is_approved'] === true || $comment['is_approved'] === 't' || $comment['is_approved'] === '1') ? 'Approved' : 'Pending'; ?>
                                             </span>
                                         </div>
                                     </div>
@@ -254,7 +254,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                                 </div>
                                 
                                 <div class="comment-actions">
-                                    <?php if ($comment['is_approved'] === 'f'): ?>
+                                    <?php if ($comment['is_approved'] === false || $comment['is_approved'] === 'f' || $comment['is_approved'] === '0' || $comment['is_approved'] === 0): ?>
                                         <form method="POST" style="display: inline;">
                                             <input type="hidden" name="action" value="approve">
                                             <input type="hidden" name="comment_id" value="<?php echo $comment['id']; ?>">
