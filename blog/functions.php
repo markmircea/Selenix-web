@@ -320,7 +320,7 @@ function isAdmin() {
  */
 function requireAdmin() {
     if (!isAdmin()) {
-        header('Location: ' . BLOG_URL . '/admin/login.php');
+        header('Location: ' . BLOG_URL . '/admin-login.php');
         exit;
     }
 }

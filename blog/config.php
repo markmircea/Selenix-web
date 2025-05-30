@@ -12,7 +12,7 @@ define('DB_PASS', 'She-wolf11');
 define('DB_PORT', '5432');
 
 // Site Configuration
-define('SITE_URL', 'http://localhost/Selenix-web');
+define('SITE_URL', 'https://selenix.io');
 define('BLOG_URL', SITE_URL . '/blog');
 define('ADMIN_URL', BLOG_URL . '/admin');
 
