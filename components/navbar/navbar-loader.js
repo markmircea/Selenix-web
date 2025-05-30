@@ -4,6 +4,41 @@ class NavbarLoader {
         this.navbarLoaded = false;
     }
     
+    fixNavbarPaths() {
+        const currentPath = window.location.pathname;
+        const navbarContainer = document.getElementById('navbar-container');
+        
+        if (!navbarContainer) return;
+        
+        // Determine the base path relative to current location
+        let basePath = '/';
+        if (currentPath.includes('/blog/')) {
+            basePath = '../';
+        } else if (currentPath.includes('/docs/') || currentPath.includes('/product/')) {
+            basePath = '../';
+        }
+        
+        // Only fix paths if we're in a subdirectory
+        if (basePath !== '/') {
+            const links = navbarContainer.querySelectorAll('a[href^="/"]');
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('/') && !href.startsWith('//')) {
+                    // Convert absolute paths to relative paths
+                    let newPath = href.substring(1); // Remove leading slash
+                    if (newPath === '') newPath = 'index.html';
+                    link.setAttribute('href', basePath + newPath);
+                }
+            });
+            
+            // Special handling for blog link
+            const blogLink = navbarContainer.querySelector('#nav-blog');
+            if (blogLink && currentPath.includes('/blog/')) {
+                blogLink.setAttribute('href', 'blog.php');
+            }
+        }
+    }
+    
     async loadNavbar() {
         if (this.navbarLoaded) return;
         
@@ -22,6 +57,8 @@ class NavbarLoader {
                 navbarPath = '../components/navbar/navbar.html';
             } else if (currentPath.includes('/product/')) {
                 navbarPath = '../components/navbar/navbar.html';
+            } else if (currentPath.includes('/blog/')) {
+                navbarPath = '../components/navbar/navbar.html';
             } else {
                 navbarPath = './components/navbar/navbar.html';
             }
@@ -37,6 +74,14 @@ class NavbarLoader {
             this.navbarLoaded = true;
             console.log('Navbar loaded successfully');
             
+            // Initialize navbar functionality after loading
+            if (typeof initializeNavbar === 'function') {
+                initializeNavbar();
+            }
+            
+            // Fix navbar paths based on current location
+            this.fixNavbarPaths();
+            
         } catch (error) {
             console.error('Error loading navbar:', error);
             this.showFallbackNavbar();
@@ -48,7 +93,7 @@ class NavbarLoader {
         const navbarContainer = document.getElementById('navbar-container');
         if (navbarContainer) {
             navbarContainer.innerHTML = `
-                <header style="background: #4f46e5; color: white; padding: 1rem;">
+                <header class="navbar-header" style="background: #4f46e5; color: white; padding: 1rem;">
                     <div class="container">
                         <nav style="display: flex; justify-content: space-between; align-items: center;">
                             <a href="/" style="color: white; text-decoration: none; font-weight: bold;">Selenix.io</a>

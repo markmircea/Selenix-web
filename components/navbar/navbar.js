@@ -1,7 +1,7 @@
 // Navbar Component JavaScript
 function initializeNavbar() {
     // Sticky Header Effect
-    const header = document.querySelector('header');
+    const header = document.querySelector('header.navbar-header');
     
     if (header) {
         function updateHeaderStyle() {

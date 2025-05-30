@@ -169,39 +169,7 @@ $breadcrumbs = [
 </head>
 <body>
     <!-- Navbar Component -->
-    <header>
-        <div class="container">
-            <nav>
-                <a href="../" class="logo">
-                    <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
-                </a>
-                <div class="nav-links">
-                    <a href="../docs/index.html">Docs</a>
-                    <div class="dropdown">
-                        <a href="#" class="dropdown-toggle">Product <i class="fas fa-chevron-down"></i></a>
-                        <div class="dropdown-menu">
-                            <a href="../product/no-code-builder/index.html">No-code builder</a>
-                            <a href="../product/no-code-steps/index.html">No-code steps</a>
-                            <a href="../product/bot-runner/index.html">Bot runner</a>
-                            <a href="../product/templates/index.html">Templates</a>
-                            <a href="../product/video-guides/index.html">Video guides</a>
-                            <a href="../product/release-notes/index.html">Release notes</a>
-                        </div>
-                    </div>
-                    <a href="../pricing/index.html">Pricing</a>
-                    <a href="../support/index.html">Support</a>
-                    <a href="blog.php">Blog</a>
-                </div>
-                <a href="../download.php" class="cta-button">
-                    <i class="fa-solid fa-download"></i>
-                    Download Selenix
-                </a>
-                <div class="mobile-menu-button">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <div id="navbar-container"></div>
 
     <article class="post-single">
         <div class="container">
@@ -507,17 +475,10 @@ $breadcrumbs = [
     </footer>
 
     <script src="../script.js"></script>
+    <script src="../components/navbar/navbar.js"></script>
+    <script src="../components/navbar/navbar-loader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu functionality
-            const mobileMenuButton = document.querySelector('.mobile-menu-button');
-            const navLinks = document.querySelector('.nav-links');
-
-            if (mobileMenuButton) {
-                mobileMenuButton.addEventListener('click', function() {
-                    navLinks.classList.toggle('active');
-                });
-            }
 
             // Social share functionality
             document.querySelectorAll('.share-btn').forEach(btn => {

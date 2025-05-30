@@ -1,5 +1,6 @@
-/* Navbar Component Styles */
-header {
+/* Navbar Component Styles - Only target navbar header */
+header.navbar-header,
+.navbar-header {
     background-color: rgba(255, 255, 255, 0.95);
     position: sticky;
     top: 0;
