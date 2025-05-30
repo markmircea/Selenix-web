@@ -127,7 +127,19 @@ nav {
     transition: all 0.3s ease;
     z-index: 100;
     padding: 0.75rem 0;
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+/* Add invisible bridge between trigger and dropdown */
+.dropdown::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 0.5rem;
+    background: transparent;
+    z-index: 99;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -206,6 +218,7 @@ nav {
         opacity: 0;
         pointer-events: none;
         transition: all 0.3s ease;
+        border-radius: 0 0 1rem 1rem;
     }
     
     .nav-links.active {
@@ -216,5 +229,66 @@ nav {
     
     .mobile-menu-button {
         display: block;
+    }
+    
+    /* Mobile dropdown fixes */
+    .nav-links .dropdown {
+        position: relative;
+        width: 100%;
+    }
+    
+    .nav-links .dropdown-toggle {
+        cursor: pointer;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+    }
+    
+    .nav-links .dropdown-menu {
+        position: static;
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background: var(--light-bg);
+        margin: 0.5rem 0 0 0;
+        padding: 0.5rem 0;
+        border-radius: 0.5rem;
+        width: 100%;
+        display: none;
+        border-left: 3px solid var(--primary-color);
+    }
+    
+    .nav-links .dropdown.mobile-open .dropdown-menu {
+        display: block;
+        animation: slideDown 0.3s ease;
+    }
+    
+    .nav-links .dropdown-menu a {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 0.25rem;
+        margin: 0.1rem 0.5rem;
+        transition: all 0.2s ease;
+    }
+    
+    .nav-links .dropdown-menu a:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateX(5px);
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }

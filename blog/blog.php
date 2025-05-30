@@ -322,16 +322,6 @@ if (isset($_GET['ajax'])) {
     <script src="../script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu functionality
-            const mobileMenuButton = document.querySelector('.mobile-menu-button');
-            const navLinks = document.querySelector('.nav-links');
-
-            if (mobileMenuButton) {
-                mobileMenuButton.addEventListener('click', function() {
-                    navLinks.classList.toggle('active');
-                });
-            }
-
             // Newsletter form enhancement
             const newsletterForm = document.querySelector('.newsletter-form form');
             if (newsletterForm) {

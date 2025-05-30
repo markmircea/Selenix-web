@@ -224,6 +224,107 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             });
+            
+            // Handle mobile dropdown toggles - Enhanced functionality
+            const dropdownToggle = document.querySelector('.dropdown-toggle');
+            const dropdown = document.querySelector('.dropdown');
+            
+            if (dropdownToggle && dropdown) {
+                dropdownToggle.addEventListener('click', function(e) {
+                    // Always prevent default for mobile
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Toggle the mobile-open class
+                        dropdown.classList.toggle('mobile-open');
+                        
+                        // Update chevron icon rotation
+                        const chevron = this.querySelector('i');
+                        if (chevron) {
+                            if (dropdown.classList.contains('mobile-open')) {
+                                chevron.style.transform = 'rotate(180deg)';
+                            } else {
+                                chevron.style.transform = 'rotate(0deg)';
+                            }
+                        }
+                        
+                        console.log('Mobile dropdown toggled:', dropdown.classList.contains('mobile-open'));
+                    }
+                });
+            }
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('nav') && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    
+                    // Reset mobile menu icon
+                    const icon = mobileMenuButton.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
+                    
+                    // Close any open dropdowns
+                    if (dropdown) {
+                        dropdown.classList.remove('mobile-open');
+                        const chevron = dropdownToggle?.querySelector('i');
+                        if (chevron) {
+                            chevron.style.transform = 'rotate(0deg)';
+                        }
+                    }
+                }
+            });
+            
+            // Handle window resize to clean up mobile states
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    // Reset mobile states when switching to desktop
+                    navLinks.classList.remove('active');
+                    if (dropdown) {
+                        dropdown.classList.remove('mobile-open');
+                    }
+                    
+                    const icon = mobileMenuButton.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-xmark');
+                        icon.classList.add('fa-bars');
+                    }
+                    
+                    const chevron = dropdownToggle?.querySelector('i');
+                    if (chevron) {
+                        chevron.style.transform = '';
+                    }
+                }
+            });
+        }
+        
+        // Enhanced dropdown functionality for desktop
+        const dropdown = document.querySelector('.dropdown');
+        if (dropdown) {
+            let dropdownTimeout;
+            
+            dropdown.addEventListener('mouseenter', function() {
+                clearTimeout(dropdownTimeout);
+                const menu = this.querySelector('.dropdown-menu');
+                if (menu) {
+                    menu.style.opacity = '1';
+                    menu.style.pointerEvents = 'auto';
+                    menu.style.transform = 'translateY(0)';
+                }
+            });
+            
+            dropdown.addEventListener('mouseleave', function() {
+                const menu = this.querySelector('.dropdown-menu');
+                dropdownTimeout = setTimeout(() => {
+                    if (menu) {
+                        menu.style.opacity = '0';
+                        menu.style.pointerEvents = 'none';
+                        menu.style.transform = 'translateY(10px)';
+                    }
+                }, 100); // Small delay to allow mouse movement
+            });
         }
         
         console.log('Navbar functionality initialized successfully');
