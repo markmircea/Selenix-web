@@ -263,6 +263,11 @@ nav {
     transform: scale(1.1);
 }
 
+/* Hide mobile download button on desktop */
+.mobile-download-btn {
+    display: none;
+}
+
 /* Button Styles */
 .primary-button {
     background: var(--primary-gradient);
@@ -1114,6 +1119,14 @@ footer {
         gap: 2rem;
     }
     
+    nav {
+        padding: 1rem 0;
+    }
+    
+    .cta-button {
+        display: none; /* Hide download button on mobile to save space */
+    }
+    
     .nav-links {
         position: absolute;
         top: 100%;
@@ -1135,6 +1148,31 @@ footer {
         opacity: 1;
         transform: translateY(0);
         pointer-events: all;
+    }
+    
+    /* Mobile download button in menu */
+    .mobile-download-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        background: var(--primary-gradient);
+        color: white;
+        text-decoration: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        text-align: center;
+        margin-top: 1rem;
+        border-top: 1px solid var(--border-color);
+        padding-top: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        color: white;
     }
     
     .mobile-menu-button {
