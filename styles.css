@@ -81,8 +81,8 @@ p {
     color: var(--text-color);
 }
 
-/* Header & Navigation */
-header {
+/* Header & Navigation - Only apply to navbar headers */
+header.navbar-header {
     background-color: rgba(255, 255, 255, 0.95);
     position: sticky;
     top: 0;

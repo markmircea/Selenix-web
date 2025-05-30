@@ -123,7 +123,6 @@ $breadcrumbs = [
     
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="../components/components.css">
-    <link rel="stylesheet" href="../components/navbar/navbar.css">
     <link rel="stylesheet" href="blog-styles.css">
     
     <!-- Font Awesome for icons -->
@@ -475,8 +474,7 @@ $breadcrumbs = [
     </footer>
 
     <script src="../script.js"></script>
-    <script src="../components/navbar/navbar.js"></script>
-    <script src="../components/navbar/navbar-loader.js"></script>
+    <script src="../components/components.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 

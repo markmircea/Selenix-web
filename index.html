@@ -45,43 +45,8 @@
     </script>
 </head>
 <body>
-    <!-- Navbar Component will be loaded here -->
-    <div id="navbar-container">
-        <!-- Fallback navbar if component loading fails -->
-        <header>
-            <div class="container">
-                <nav>
-                    <a href="index.html" class="logo">
-                        <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
-                    </a>
-                    <div class="nav-links">
-                        <a href="docs/index.html" id="nav-docs">Docs</a>
-                        <div class="dropdown">
-                            <a href="#" class="dropdown-toggle" id="nav-product">Product <i class="fas fa-chevron-down"></i></a>
-                            <div class="dropdown-menu">
-                                <a href="product/no-code-builder.html" id="nav-no-code-builder">No-code builder</a>
-                                <a href="product/no-code-steps.html" id="nav-no-code-steps">No-code steps</a>
-                                <a href="product/bot-runner.html" id="nav-bot-runner">Bot runner</a>
-                                <a href="product/templates.html" id="nav-templates">Templates</a>
-                                <a href="product/video-guides.html" id="nav-video-guides">Video guides</a>
-                                <a href="product/release-notes.html" id="nav-release-notes">Release notes</a>
-                            </div>
-                        </div>
-                        <a href="#pricing" id="nav-pricing">Pricing</a>
-                        <a href="#support" id="nav-support">Support</a>
-                        <a href="#blog" id="nav-blog">Blog</a>
-                    </div>
-                    <a href="download.php" class="cta-button">
-                        <i class="fa-solid fa-download"></i>
-                        Download Selenix + License
-                    </a>
-                    <div class="mobile-menu-button">
-                        <i class="fa-solid fa-bars"></i>
-                    </div>
-                </nav>
-            </div>
-        </header>
-    </div>
+    <!-- Navbar Component -->
+    <div id="navbar-container"></div>
 
     <section class="hero">
         <div class="container">
@@ -287,74 +252,6 @@
 
     <!-- Load all necessary scripts -->
     <script src="script.js"></script>
-    
-    <!-- Component scripts -->
-    <script>
-        // Debug function to log component loading status
-        function logComponentStatus(message) {
-            console.log(`Component Status: ${message}`);
-        }
-        
-        window.addEventListener('load', function() {
-            logComponentStatus('Window loaded, checking component status');
-            
-            // Check component containers
-            const navbarContainer = document.getElementById('navbar-container');
-            const footerContainer = document.getElementById('footer-container');
-            
-            setTimeout(function() {
-                if (navbarContainer && navbarContainer.querySelector('.component-placeholder')) {
-                    logComponentStatus('Navbar still showing placeholder after 2 seconds - component may have failed to load');
-                }
-                
-                if (footerContainer && footerContainer.querySelector('.component-placeholder')) {
-                    logComponentStatus('Footer still showing placeholder after 2 seconds - component may have failed to load');
-                }
-            }, 2000);
-            
-            // Check which scripts were loaded
-            const expectedScripts = [
-                'script.js',
-                'components/components.js',
-                'components/navbar/navbar.js',
-                'components/footer/footer.js'
-            ];
-            
-            // Check each script
-            const loadedScripts = Array.from(document.scripts).map(script => script.src.replace(window.location.origin, ''));
-            console.log('Loaded scripts:', loadedScripts);
-            
-            expectedScripts.forEach(script => {
-                const scriptLoaded = document.querySelector(`script[src*="${script}"]`);
-                console.log(`Script ${script} loaded: ${scriptLoaded !== null}`);
-            });
-            
-            // Try to load navbar component directly
-            fetch('components/navbar/navbar.html')
-                .then(response => {
-                    console.log('Navbar fetch response:', response.status);
-                    return response.text();
-                })
-                .then(html => {
-                    console.log('Navbar HTML loaded, length:', html.length);
-                })
-                .catch(error => {
-                    console.error('Error loading navbar directly:', error);
-                });
-            
-            // Manually initialize navbar if available
-            if (window.initializeNavbar) {
-                console.log('Manually initializing navbar...');
-                window.initializeNavbar();
-            } else {
-                console.log('initializeNavbar function not available');
-            }
-        });
-    </script>
-    
-    <!-- Component loading scripts -->
     <script src="components/components.js"></script>
-    <script src="components/navbar/navbar.js"></script>
-    <script src="components/footer/footer.js"></script>
 </body>
 </html>
