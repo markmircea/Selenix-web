@@ -29,62 +29,75 @@ $relatedPosts = $blogModel->getRecentPosts($post['id'], 3);
 $comments = $blogModel->getComments($post['id']);
 
 // Handle comment submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (
-    isset($_POST['submit_comment']) || 
-    (isset($_POST['comment_name']) && isset($_POST['comment_email']) && isset($_POST['comment_content']))
-)) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Debug: Log all POST data
     error_log('Comment form submitted. POST data: ' . print_r($_POST, true));
     
-    $name = isset($_POST['comment_name']) ? sanitizeInput($_POST['comment_name']) : '';
-    $email = isset($_POST['comment_email']) ? sanitizeInput($_POST['comment_email']) : '';
-    $website = isset($_POST['comment_website']) ? sanitizeInput($_POST['comment_website']) : '';
-    $content = isset($_POST['comment_content']) ? sanitizeInput($_POST['comment_content']) : '';
+    // Check if this is a comment submission
+    $isCommentSubmission = isset($_POST['submit_comment']) || 
+                          (isset($_POST['comment_name']) && isset($_POST['comment_email']) && isset($_POST['comment_content']));
     
-    error_log("Processed form data - Name: '$name', Email: '$email', Content length: " . strlen($content));
+    error_log('Is comment submission: ' . ($isCommentSubmission ? 'Yes' : 'No'));
     
-    $errors = [];
-    
-    if (empty($name)) {
-        $errors[] = 'Name is required';
-    }
-    
-    if (empty($email) || !isValidEmail($email)) {
-        $errors[] = 'Valid email is required';
-    }
-    
-    if (empty($content)) {
-        $errors[] = 'Comment content is required';
-    }
-    
-    // Debug: Log validation results
-    error_log("Validation errors: " . (empty($errors) ? 'None' : implode(', ', $errors)));
-    
-    if (empty($errors)) {
-        // Debug: Log before attempting to add comment
-        error_log("Attempting to add comment for post ID: {$post['id']}");
+    if ($isCommentSubmission) {
+        $name = isset($_POST['comment_name']) ? sanitizeInput($_POST['comment_name']) : '';
+        $email = isset($_POST['comment_email']) ? sanitizeInput($_POST['comment_email']) : '';
+        $website = isset($_POST['comment_website']) ? sanitizeInput($_POST['comment_website']) : '';
+        $content = isset($_POST['comment_content']) ? sanitizeInput($_POST['comment_content']) : '';
         
-        $commentId = $blogModel->addComment($post['id'], $name, $email, $website, $content);
+        error_log("Processed form data - Name: '$name', Email: '$email', Website: '$website', Content length: " . strlen($content));
         
-        if ($commentId) {
-            error_log("Comment added successfully with ID: $commentId");
-            
-            // Clear form data on success by redirecting
-            $redirectUrl = $_SERVER['REQUEST_URI'] . '?comment=success#comments';
-            header("Location: $redirectUrl");
-            exit;
-        } else {
-            error_log("Failed to add comment for post ID: {$post['id']}");
-            $commentMessage = 'There was an error submitting your comment. Please try again.';
-            $commentSuccess = false;
+        $errors = [];
+        
+        // Validate name
+        if (empty($name)) {
+            $errors[] = 'Name is required';
         }
-    } else {
-        $commentMessage = implode(', ', $errors);
-        $commentSuccess = false;
+        
+        // Validate email
+        if (empty($email)) {
+            $errors[] = 'Email is required';
+        } elseif (!isValidEmail($email)) {
+            $errors[] = 'Valid email is required';
+        }
+        
+        // Validate content
+        if (empty($content)) {
+            $errors[] = 'Comment content is required';
+        }
+        
+        // Debug: Log validation results
+        error_log("Validation errors: " . (empty($errors) ? 'None' : implode(', ', $errors)));
+        
+        if (empty($errors)) {
+            // Debug: Log before attempting to add comment
+            error_log("Attempting to add comment for post ID: {$post['id']}");
+            
+            $commentId = $blogModel->addComment($post['id'], $name, $email, $website, $content);
+            
+            if ($commentId) {
+                error_log("Comment added successfully with ID: $commentId");
+                
+                // Set success message and redirect to avoid form resubmission
+                $redirectUrl = $_SERVER['REQUEST_URI'];
+                // Remove any existing query parameters and add success parameter
+                $redirectUrl = strtok($redirectUrl, '?') . '?comment=success#comments';
+                header("Location: $redirectUrl");
+                exit;
+            } else {
+                error_log("Failed to add comment for post ID: {$post['id']}");
+                $commentMessage = 'There was an error submitting your comment. Please try again.';
+                $commentSuccess = false;
+            }
+        } else {
+            $commentMessage = implode(', ', $errors);
+            $commentSuccess = false;
+            error_log("Comment validation failed: " . $commentMessage);
+        }
+        
+        // Refresh comments after submission attempt
+        $comments = $blogModel->getComments($post['id']);
     }
-    
-    // Refresh comments after submission
-    $comments = $blogModel->getComments($post['id']);
 }
 
 // Check for success message from redirect
@@ -299,11 +312,12 @@ $breadcrumbs = [
                     <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
                         <div style="background: #f0f8ff; border: 1px solid #0066cc; padding: 10px; margin: 10px 0; border-radius: 5px;">
                             <strong>Debug Info:</strong><br>
-                            Form submitted (submit_comment): <?php echo isset($_POST['submit_comment']) ? 'Yes' : 'No'; ?><br>
-                            Form submitted (has required fields): <?php echo (isset($_POST['comment_name']) && isset($_POST['comment_email']) && isset($_POST['comment_content'])) ? 'Yes' : 'No'; ?><br>
+                            Request Method: <?php echo $_SERVER['REQUEST_METHOD']; ?><br>
+                            Form submitted: Yes<br>
                             POST data keys: <?php echo implode(', ', array_keys($_POST)); ?><br>
+                            Has submit_comment: <?php echo isset($_POST['submit_comment']) ? 'Yes' : 'No'; ?><br>
+                            Has required fields: <?php echo (isset($_POST['comment_name']) && isset($_POST['comment_email']) && isset($_POST['comment_content'])) ? 'Yes' : 'No'; ?><br>
                             Post ID: <?php echo isset($post['id']) ? $post['id'] : 'Not set'; ?><br>
-                            Processing condition met: <?php echo (isset($_POST['submit_comment']) || (isset($_POST['comment_name']) && isset($_POST['comment_email']) && isset($_POST['comment_content']))) ? 'Yes' : 'No'; ?><br>
                         </div>
                     <?php endif; ?>
                     
@@ -314,7 +328,7 @@ $breadcrumbs = [
                         </div>
                     <?php endif; ?>
                     
-                    <form method="POST" action="" class="comment-form">
+                    <form method="POST" action="" class="comment-form" id="comment-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="comment_name">Name *</label>
@@ -337,7 +351,7 @@ $breadcrumbs = [
                             <textarea id="comment_content" name="comment_content" rows="5" required 
                                       placeholder="Share your thoughts..."><?php echo isset($_POST['comment_content']) && !isset($commentSuccess) ? htmlspecialchars($_POST['comment_content']) : ''; ?></textarea>
                         </div>
-                        <button type="submit" name="submit_comment" class="submit-comment-btn">
+                        <button type="submit" name="submit_comment" value="1" class="submit-comment-btn">
                             <i class="fa-solid fa-paper-plane"></i>
                             Submit Comment
                         </button>
@@ -518,21 +532,32 @@ $breadcrumbs = [
                 });
             });
 
-            // Comment form enhancement
-            const commentForm = document.querySelector('.comment-form');
+            // Enhanced comment form handling
+            const commentForm = document.getElementById('comment-form');
+            
             if (commentForm) {
                 commentForm.addEventListener('submit', function(e) {
+                    console.log('Comment form submitted');
+                    
                     const submitButton = this.querySelector('button[type="submit"]');
                     const originalText = submitButton.innerHTML;
                     
+                    // Disable button and show loading state
                     submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
                     submitButton.disabled = true;
                     
-                    // Re-enable button after form submission (in case of errors)
+                    // Log form data for debugging
+                    const formData = new FormData(this);
+                    console.log('Form data:');
+                    for (let [key, value] of formData.entries()) {
+                        console.log(key + ': ' + value);
+                    }
+                    
+                    // Re-enable button after a timeout (in case of errors)
                     setTimeout(() => {
                         submitButton.innerHTML = originalText;
                         submitButton.disabled = false;
-                    }, 3000);
+                    }, 5000);
                 });
             }
 
