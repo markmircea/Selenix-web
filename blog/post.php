@@ -49,6 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
         $errors[] = 'Comment content is required';
     }
     
+    // Debug: Log the submission attempt
+    error_log("Comment submission attempt for post ID: {$post['id']}, Name: $name, Email: $email");
+    
     if (empty($errors)) {
         $commentId = $blogModel->addComment($post['id'], $name, $email, $website, $content);
         
@@ -56,19 +59,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
             $commentMessage = 'Thank you for your comment! It will be reviewed and published soon.';
             $commentSuccess = true;
             
-            // Clear form data on success
-            $_POST = [];
+            // Debug: Log successful comment
+            error_log("Comment added successfully with ID: $commentId");
+            
+            // Clear form data on success by redirecting
+            $redirectUrl = $_SERVER['REQUEST_URI'] . '?comment=success#comments';
+            header("Location: $redirectUrl");
+            exit;
         } else {
             $commentMessage = 'There was an error submitting your comment. Please try again.';
             $commentSuccess = false;
+            
+            // Debug: Log failed comment
+            error_log("Failed to add comment for post ID: {$post['id']}");
         }
     } else {
         $commentMessage = implode(', ', $errors);
         $commentSuccess = false;
+        
+        // Debug: Log validation errors
+        error_log("Comment validation errors: " . implode(', ', $errors));
     }
     
     // Refresh comments after submission
     $comments = $blogModel->getComments($post['id']);
+}
+
+// Check for success message from redirect
+if (isset($_GET['comment']) && $_GET['comment'] === 'success') {
+    $commentMessage = 'Thank you for your comment! It will be reviewed and published soon.';
+    $commentSuccess = true;
 }
 
 // Generate breadcrumbs
@@ -261,7 +281,7 @@ $breadcrumbs = [
     </article>
 
     <!-- Comments Section -->
-    <section class="comments-section">
+    <section class="comments-section" id="comments">
         <div class="container">
             <div class="comments-container">
                 <h3 class="comments-title">
@@ -285,23 +305,23 @@ $breadcrumbs = [
                             <div class="form-group">
                                 <label for="comment_name">Name *</label>
                                 <input type="text" id="comment_name" name="comment_name" required 
-                                       value="<?php echo isset($_POST['comment_name']) ? htmlspecialchars($_POST['comment_name']) : ''; ?>">
+                                       value="<?php echo isset($_POST['comment_name']) && !isset($commentSuccess) ? htmlspecialchars($_POST['comment_name']) : ''; ?>">
                             </div>
                             <div class="form-group">
                                 <label for="comment_email">Email *</label>
                                 <input type="email" id="comment_email" name="comment_email" required 
-                                       value="<?php echo isset($_POST['comment_email']) ? htmlspecialchars($_POST['comment_email']) : ''; ?>">
+                                       value="<?php echo isset($_POST['comment_email']) && !isset($commentSuccess) ? htmlspecialchars($_POST['comment_email']) : ''; ?>">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="comment_website">Website (optional)</label>
                             <input type="url" id="comment_website" name="comment_website" 
-                                   value="<?php echo isset($_POST['comment_website']) ? htmlspecialchars($_POST['comment_website']) : ''; ?>">
+                                   value="<?php echo isset($_POST['comment_website']) && !isset($commentSuccess) ? htmlspecialchars($_POST['comment_website']) : ''; ?>">
                         </div>
                         <div class="form-group">
                             <label for="comment_content">Comment *</label>
                             <textarea id="comment_content" name="comment_content" rows="5" required 
-                                      placeholder="Share your thoughts..."><?php echo isset($_POST['comment_content']) ? htmlspecialchars($_POST['comment_content']) : ''; ?></textarea>
+                                      placeholder="Share your thoughts..."><?php echo isset($_POST['comment_content']) && !isset($commentSuccess) ? htmlspecialchars($_POST['comment_content']) : ''; ?></textarea>
                         </div>
                         <button type="submit" name="submit_comment" class="submit-comment-btn">
                             <i class="fa-solid fa-paper-plane"></i>
