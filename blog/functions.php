@@ -154,7 +154,19 @@ function getCategoryColor($category) {
  */
 function handleFileUpload($file, $allowedTypes = null) {
     if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
-        return ['success' => false, 'error' => 'No file uploaded or upload error'];
+        $errorMessages = [
+            UPLOAD_ERR_INI_SIZE => 'File size exceeds PHP upload_max_filesize',
+            UPLOAD_ERR_FORM_SIZE => 'File size exceeds form MAX_FILE_SIZE',
+            UPLOAD_ERR_PARTIAL => 'File was only partially uploaded',
+            UPLOAD_ERR_NO_FILE => 'No file was uploaded',
+            UPLOAD_ERR_NO_TMP_DIR => 'Missing temporary folder',
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk',
+            UPLOAD_ERR_EXTENSION => 'File upload stopped by extension'
+        ];
+        
+        $error = isset($errorMessages[$file['error']]) ? $errorMessages[$file['error']] : 'Unknown upload error';
+        error_log('File upload error: ' . $error . ' (Code: ' . $file['error'] . ')');
+        return ['success' => false, 'error' => $error];
     }
     
     $allowedTypes = $allowedTypes ?: ALLOWED_EXTENSIONS;
@@ -162,21 +174,52 @@ function handleFileUpload($file, $allowedTypes = null) {
     
     // Validate file size
     if ($file['size'] > $maxSize) {
-        return ['success' => false, 'error' => 'File size exceeds maximum allowed size'];
+        return ['success' => false, 'error' => 'File size exceeds maximum allowed size (' . round($maxSize/1024/1024, 1) . 'MB)'];
     }
     
     // Validate file extension
     $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if (!in_array($extension, $allowedTypes)) {
-        return ['success' => false, 'error' => 'File type not allowed'];
+        return ['success' => false, 'error' => 'File type not allowed. Allowed types: ' . implode(', ', $allowedTypes)];
+    }
+    
+    // Validate MIME type for additional security
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+    
+    $allowedMimes = [
+        'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg', 
+        'png' => 'image/png',
+        'gif' => 'image/gif',
+        'webp' => 'image/webp'
+    ];
+    
+    if (!in_array($mimeType, $allowedMimes)) {
+        return ['success' => false, 'error' => 'Invalid file type. Must be a valid image.'];
     }
     
     // Generate unique filename
     $filename = uniqid() . '_' . time() . '.' . $extension;
     $filepath = UPLOAD_DIR . $filename;
     
+    // Ensure upload directory exists and is writable
+    if (!file_exists(UPLOAD_DIR)) {
+        if (!mkdir(UPLOAD_DIR, 0755, true)) {
+            return ['success' => false, 'error' => 'Could not create upload directory'];
+        }
+    }
+    
+    if (!is_writable(UPLOAD_DIR)) {
+        return ['success' => false, 'error' => 'Upload directory is not writable'];
+    }
+    
     // Move uploaded file
     if (move_uploaded_file($file['tmp_name'], $filepath)) {
+        // Set proper file permissions
+        chmod($filepath, 0644);
+        
         return [
             'success' => true,
             'filename' => $filename,
@@ -185,7 +228,7 @@ function handleFileUpload($file, $allowedTypes = null) {
         ];
     }
     
-    return ['success' => false, 'error' => 'Failed to move uploaded file'];
+    return ['success' => false, 'error' => 'Failed to move uploaded file to destination'];
 }
 
 /**

@@ -209,12 +209,13 @@ class BlogModel {
     public function addComment($postId, $name, $email, $website, $content) {
         try {
             $sql = "
-                INSERT INTO comments (post_id, name, email, website, content) 
-                VALUES (:post_id, :name, :email, :website, :content)
+                INSERT INTO comments (post_id, name, email, website, content, created_at) 
+                VALUES (:post_id, :name, :email, :website, :content, CURRENT_TIMESTAMP)
+                RETURNING id
             ";
             
             $stmt = $this->db->prepare($sql);
-            $stmt->execute([
+            $result = $stmt->execute([
                 'post_id' => $postId,
                 'name' => $name,
                 'email' => $email,
@@ -222,8 +223,13 @@ class BlogModel {
                 'content' => $content
             ]);
             
-            return $this->db->lastInsertId();
+            if ($result) {
+                return $stmt->fetchColumn();
+            }
+            
+            return false;
         } catch (PDOException $e) {
+            error_log('Error adding comment: ' . $e->getMessage());
             return false;
         }
     }

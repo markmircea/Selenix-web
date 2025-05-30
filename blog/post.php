@@ -32,7 +32,7 @@ $comments = $blogModel->getComments($post['id']);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
     $name = sanitizeInput($_POST['comment_name']);
     $email = sanitizeInput($_POST['comment_email']);
-    $website = sanitizeInput($_POST['comment_website']);
+    $website = isset($_POST['comment_website']) ? sanitizeInput($_POST['comment_website']) : '';
     $content = sanitizeInput($_POST['comment_content']);
     
     $errors = [];
@@ -55,6 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
         if ($commentId) {
             $commentMessage = 'Thank you for your comment! It will be reviewed and published soon.';
             $commentSuccess = true;
+            
+            // Clear form data on success
+            $_POST = [];
         } else {
             $commentMessage = 'There was an error submitting your comment. Please try again.';
             $commentSuccess = false;
@@ -63,6 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
         $commentMessage = implode(', ', $errors);
         $commentSuccess = false;
     }
+    
+    // Refresh comments after submission
+    $comments = $blogModel->getComments($post['id']);
 }
 
 // Generate breadcrumbs

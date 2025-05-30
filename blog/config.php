@@ -59,4 +59,9 @@ date_default_timezone_set('UTC');
 if (!file_exists(UPLOAD_DIR)) {
     mkdir(UPLOAD_DIR, 0755, true);
 }
+
+// Ensure uploads directory is writable
+if (!is_writable(UPLOAD_DIR)) {
+    error_log('Uploads directory is not writable: ' . UPLOAD_DIR);
+}
 ?>

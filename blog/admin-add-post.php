@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $featuredImage = $uploadResult['filename'];
         } else {
-            $errors[] = 'Error uploading image: ' . $uploadResult['error'];
+            $errors[] = 'Error uploading featured image: ' . $uploadResult['error'];
         }
     }
     
@@ -221,7 +221,11 @@ global $BLOG_CATEGORIES;
             <?php if (!empty($errors)): ?>
                 <div class="admin-message error">
                     <i class="fa-solid fa-exclamation-circle"></i>
-                    <?php echo implode('<br>', array_map('htmlspecialchars', $errors)); ?>
+                    <div>
+                        <?php foreach ($errors as $error): ?>
+                            <div><?php echo htmlspecialchars($error); ?></div>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             <?php endif; ?>
             
