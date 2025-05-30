@@ -29,7 +29,10 @@ $relatedPosts = $blogModel->getRecentPosts($post['id'], 3);
 $comments = $blogModel->getComments($post['id']);
 
 // Handle comment submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (
+    isset($_POST['submit_comment']) || 
+    (isset($_POST['comment_name']) && isset($_POST['comment_email']) && isset($_POST['comment_content']))
+)) {
     // Debug: Log all POST data
     error_log('Comment form submitted. POST data: ' . print_r($_POST, true));
     
@@ -296,9 +299,11 @@ $breadcrumbs = [
                     <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
                         <div style="background: #f0f8ff; border: 1px solid #0066cc; padding: 10px; margin: 10px 0; border-radius: 5px;">
                             <strong>Debug Info:</strong><br>
-                            Form submitted: <?php echo isset($_POST['submit_comment']) ? 'Yes' : 'No'; ?><br>
+                            Form submitted (submit_comment): <?php echo isset($_POST['submit_comment']) ? 'Yes' : 'No'; ?><br>
+                            Form submitted (has required fields): <?php echo (isset($_POST['comment_name']) && isset($_POST['comment_email']) && isset($_POST['comment_content'])) ? 'Yes' : 'No'; ?><br>
                             POST data keys: <?php echo implode(', ', array_keys($_POST)); ?><br>
                             Post ID: <?php echo isset($post['id']) ? $post['id'] : 'Not set'; ?><br>
+                            Processing condition met: <?php echo (isset($_POST['submit_comment']) || (isset($_POST['comment_name']) && isset($_POST['comment_email']) && isset($_POST['comment_content']))) ? 'Yes' : 'No'; ?><br>
                         </div>
                     <?php endif; ?>
                     
