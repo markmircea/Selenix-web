@@ -11,11 +11,11 @@
 
 .category-tag {
     padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--primary-color);
     color: white;
     text-decoration: none;
     border-radius: 25px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid var(--primary-color);
     transition: all 0.3s ease;
     font-size: 0.9rem;
     font-weight: 500;
@@ -23,9 +23,11 @@
 
 .category-tag:hover,
 .category-tag.active {
-    background: white;
-    color: var(--primary-color);
-    border-color: white;
+    background: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
 }
 
 /* Featured Post */
@@ -341,6 +343,13 @@
     color: white;
     font-size: 2.5rem;
     margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.newsletter-text p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
 .newsletter-form form {
@@ -354,6 +363,12 @@
     border: none;
     border-radius: 8px;
     font-size: 1rem;
+    background: white;
+    color: var(--text-color);
+}
+
+.newsletter-form input::placeholder {
+    color: #9ca3af;
 }
 
 .newsletter-form button {
@@ -365,17 +380,19 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .newsletter-form button:hover {
     background: #f97316;
     transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
 }
 
 .newsletter-note {
     margin-top: 0.5rem;
     font-size: 0.9rem;
-    opacity: 0.8;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .newsletter-message {
