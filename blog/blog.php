@@ -163,6 +163,12 @@ if (isset($_GET['ajax'])) {
                                 <span class="author-title"><?php echo htmlspecialchars($featuredPost['author_title']); ?></span>
                             <?php endif; ?>
                         </div>
+                        <?php if ($featuredPost['comment_count'] > 0): ?>
+                            <a href="post.php?slug=<?php echo $featuredPost['slug']; ?>#comments" class="featured-comment-count" title="View comments">
+                                <i class="fa-solid fa-comments"></i>
+                                <?php echo $featuredPost['comment_count']; ?>
+                            </a>
+                        <?php endif; ?>
                     </div>
                     <a href="post.php?slug=<?php echo $featuredPost['slug']; ?>" class="read-more-btn">Read Full Article</a>
                 </div>
@@ -211,7 +217,15 @@ if (isset($_GET['ajax'])) {
                                         <?php endif; ?>
                                         <span><?php echo htmlspecialchars($post['author_name']); ?></span>
                                     </div>
-                                    <span class="read-time"><?php echo $post['read_time']; ?> min read</span>
+                                    <div class="post-stats">
+                                        <span class="read-time"><?php echo $post['read_time']; ?> min read</span>
+                                        <?php if ($post['comment_count'] > 0): ?>
+                                            <a href="post.php?slug=<?php echo $post['slug']; ?>#comments" class="comment-count" title="View comments">
+                                                <i class="fa-solid fa-comments"></i>
+                                                <?php echo $post['comment_count']; ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </article>

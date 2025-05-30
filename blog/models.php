@@ -19,21 +19,25 @@ class BlogModel {
     public function getPosts($page = 1, $category = null, $limit = POSTS_PER_PAGE) {
         $offset = ($page - 1) * $limit;
         
-        $where = "WHERE is_published = true";
+        $where = "WHERE p.is_published = true";
         $params = [];
         
         if ($category && $category !== 'all') {
-            $where .= " AND category = :category";
+            $where .= " AND p.category = :category";
             $params['category'] = $category;
         }
         
         $sql = "
-            SELECT id, title, slug, excerpt, category, featured_image, author_name, 
-                   author_title, author_avatar, read_time, published_at,
-                   DATE_PART('epoch', published_at) as published_timestamp
-            FROM posts 
+            SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, p.author_name, 
+                   p.author_title, p.author_avatar, p.read_time, p.published_at,
+                   DATE_PART('epoch', p.published_at) as published_timestamp,
+                   COUNT(c.id) as comment_count
+            FROM posts p
+            LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
             $where 
-            ORDER BY published_at DESC 
+            GROUP BY p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
+                     p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at
+            ORDER BY p.published_at DESC 
             LIMIT :limit OFFSET :offset
         ";
         
@@ -95,12 +99,16 @@ class BlogModel {
      */
     public function getFeaturedPost() {
         $sql = "
-            SELECT id, title, slug, excerpt, category, featured_image, 
-                   author_name, author_title, author_avatar, read_time, published_at,
-                   DATE_PART('epoch', published_at) as published_timestamp
-            FROM posts 
-            WHERE is_featured = true AND is_published = true 
-            ORDER BY published_at DESC 
+            SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
+                   p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at,
+                   DATE_PART('epoch', p.published_at) as published_timestamp,
+                   COUNT(c.id) as comment_count
+            FROM posts p
+            LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
+            WHERE p.is_featured = true AND p.is_published = true 
+            GROUP BY p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
+                     p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at
+            ORDER BY p.published_at DESC 
             LIMIT 1
         ";
         
@@ -112,21 +120,25 @@ class BlogModel {
      * Get recent posts excluding current post
      */
     public function getRecentPosts($excludeId = null, $limit = 3) {
-        $where = "WHERE is_published = TRUE";
+        $where = "WHERE p.is_published = TRUE";
         $params = [];
         
         if ($excludeId) {
-            $where .= " AND id != :exclude_id";
+            $where .= " AND p.id != :exclude_id";
             $params['exclude_id'] = $excludeId;
         }
         
         $sql = "
-            SELECT id, title, slug, excerpt, category, featured_image, 
-                   author_name, read_time, published_at,
-                   DATE_PART('epoch', published_at) as published_timestamp
-            FROM posts 
+            SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
+                   p.author_name, p.read_time, p.published_at,
+                   DATE_PART('epoch', p.published_at) as published_timestamp,
+                   COUNT(c.id) as comment_count
+            FROM posts p
+            LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
             $where 
-            ORDER BY published_at DESC 
+            GROUP BY p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
+                     p.author_name, p.read_time, p.published_at
+            ORDER BY p.published_at DESC 
             LIMIT :limit
         ";
         
