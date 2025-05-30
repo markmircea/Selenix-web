@@ -53,7 +53,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Timezone
-date_default_timezone_set('America/New_York'); // Change this to your timezone
+date_default_timezone_set('UTC');
 
 // Create uploads directory if it doesn't exist
 if (!file_exists(UPLOAD_DIR)) {
