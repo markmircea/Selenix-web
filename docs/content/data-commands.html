@@ -1,0 +1,264 @@
+<div class="docs-section">
+    <h2><i class="fa-solid fa-database"></i> Data Management Commands</h2>
+    
+    <p>Selenix provides sophisticated data management capabilities for storing, transforming, and processing variables. These commands enable complex data workflows and intelligent automation.</p>
+    
+    <div class="command-list">
+        
+        <!-- Store -->
+        <div class="command-item" id="store">
+            <div class="command-header">
+                <h3><code>store</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Save a target string as a variable for easy re-use. Creates a string-type variable.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>store | text | variableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>store | Hello World | greeting</code>
+                        <code>store | https://example.com | baseUrl</code>
+                        <code>store | ${firstName} ${lastName} | fullName</code>
+                        <code>echo | ${greeting}</code>
+                    </div>
+                    <div class="example-desc">Store simple values and combine variables</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Store JSON -->
+        <div class="command-item" id="storeJson">
+            <div class="command-header">
+                <h3><code>storeJson</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Save JSON as an object in a variable. Creates an object-type variable that can be accessed with dot notation.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>storeJson | jsonString | variableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeJson | {"name": "John", "age": 30, "city": "New York"} | user</code>
+                        <code>storeJson | [{"id": 1, "title": "Task 1"}, {"id": 2, "title": "Task 2"}] | tasks</code>
+                        <code>echo | User name: ${user.name}</code>
+                        <code>echo | First task: ${tasks[0].title}</code>
+                    </div>
+                    <div class="example-desc">Store structured data and access properties</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Transform Variable -->
+        <div class="command-item" id="transformVariable">
+            <div class="command-header">
+                <h3><code>transformVariable</code></h3>
+                <div class="command-badge">Professional</div>
+            </div>
+            <p class="command-description">Transforms a variable using a JavaScript function. Powerful for data cleaning, formatting, and processing.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>transformVariable | variableName | javascriptFunction</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>transformVariable | prices | data => data.map(price => parseFloat(price.replace('$', '')))</code>
+                        <code>transformVariable | usernames | data => data.filter(name => name.length > 3)</code>
+                        <code>transformVariable | text | data => data.toUpperCase().trim()</code>
+                        <code>transformVariable | dates | data => data.map(d => new Date(d).toISOString())</code>
+                    </div>
+                    <div class="example-desc">Clean prices, filter data, format text, and convert dates</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>JavaScript Functions</h4>
+                <ul>
+                    <li>Use arrow functions: <code>data => data.map(...)</code></li>
+                    <li>Access array methods: <code>filter</code>, <code>map</code>, <code>reduce</code></li>
+                    <li>String methods: <code>replace</code>, <code>trim</code>, <code>split</code></li>
+                    <li>Number parsing: <code>parseInt</code>, <code>parseFloat</code></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Combine Variables -->
+        <div class="command-item" id="combineVariables">
+            <div class="command-header">
+                <h3><code>combineVariables</code></h3>
+                <div class="command-badge">Professional</div>
+            </div>
+            <p class="command-description">Combines multiple variables into one with intelligent type handling. Perfect for preparing data for export or creating comprehensive datasets.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>combineVariables | variablesList | resultVariableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Comma-separated list of variables OR JSON configuration
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Variable name to store the combined result
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>combineVariables | titles,prices,descriptions | productData</code>
+                        <code>combineVariables | {"variables":["users","products"],"mode":"object"} | combinedData</code>
+                        <code>combineVariables | {"variables":["firstName","lastName"],"mode":"string","options":{"separator":" "}} | fullName</code>
+                    </div>
+                    <div class="example-desc">Simple combination, object mode, and string concatenation</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Combination Modes</h4>
+                <ul>
+                    <li><strong>Auto-detection:</strong> Intelligently determines the best combination method</li>
+                    <li><strong>Array mode:</strong> Concatenates arrays, converts objects to arrays</li>
+                    <li><strong>Object mode:</strong> Merges objects, handles key conflicts</li>
+                    <li><strong>String mode:</strong> Concatenates with custom separators</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Inspect Variable -->
+        <div class="command-item" id="inspectVariable">
+            <div class="command-header">
+                <h3><code>inspectVariable</code></h3>
+                <div class="command-badge">Utility</div>
+            </div>
+            <p class="command-description">Display detailed information about a variable including its type, structure, and contents. Essential for debugging data workflows.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>inspectVariable | variableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.product | products</code>
+                        <code>inspectVariable | products</code>
+                        <code>transformVariable | products | data => data.slice(0, 10)</code>
+                        <code>inspectVariable | products</code>
+                    </div>
+                    <div class="example-desc">Scrape data, inspect it, transform it, then inspect again</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Inspection Details</h4>
+                <ul>
+                    <li>Variable type (string, array, object, number, boolean)</li>
+                    <li>Array length and sample elements</li>
+                    <li>Object properties and nested structure</li>
+                    <li>Memory usage for large datasets</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Execute Script -->
+        <div class="command-item" id="executeScript">
+            <div class="command-header">
+                <h3><code>executeScript</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Executes JavaScript in the browser context. Can access page elements and return values to variables.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>executeScript | javascriptCode | variableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>executeScript | return document.title | pageTitle</code>
+                        <code>executeScript | return document.querySelectorAll('.item').length | itemCount</code>
+                        <code>executeScript | window.scrollTo(0, document.body.scrollHeight)</code>
+                        <code>executeScript | return localStorage.getItem('userPrefs') | userPrefs</code>
+                    </div>
+                    <div class="example-desc">Get page info, count elements, scroll, and access localStorage</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Execute Async Script -->
+        <div class="command-item" id="executeAsyncScript">
+            <div class="command-header">
+                <h3><code>executeAsyncScript</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Executes asynchronous JavaScript that returns a Promise. Perfect for API calls and async operations.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>executeAsyncScript | asyncJavaScriptCode | variableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>executeAsyncScript | const response = await fetch('/api/data'); return response.json(); | apiData</code>
+                        <code>executeAsyncScript | return new Promise(resolve => setTimeout(() => resolve('done'), 2000)) | result</code>
+                    </div>
+                    <div class="example-desc">Make API calls and handle async operations</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- For Each -->
+        <div class="command-item" id="forEach">
+            <div class="command-header">
+                <h3><code>forEach</code></h3>
+                <div class="command-badge">Control Flow</div>
+            </div>
+            <p class="command-description">Create a loop that executes commands for each item in an array variable. Must be terminated with an "end" command.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>forEach | arrayVariableName | iteratorVariableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.product-url | productUrls</code>
+                        <code>forEach | productUrls | currentUrl</code>
+                        <code>open | ${currentUrl}</code>
+                        <code>storeText | css=.product-title | title</code>
+                        <code>echo | Processing: ${title}</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Iterate through URLs and process each product page</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

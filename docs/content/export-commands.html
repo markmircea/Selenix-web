@@ -1,0 +1,264 @@
+<div class="docs-section">
+    <h2><i class="fa-solid fa-file-export"></i> Import & Export Commands</h2>
+    
+    <p>Selenix provides comprehensive data import and export capabilities, supporting multiple formats and automated file operations. These commands are essential for data workflows and integration with external systems.</p>
+    
+    <div class="command-list">
+        
+        <!-- Export to CSV -->
+        <div class="command-item" id="exportToCSV">
+            <div class="command-header">
+                <h3><code>exportToCSV</code></h3>
+                <div class="command-badge">Professional</div>
+            </div>
+            <p class="command-description">Exports a variable containing an array of objects to a CSV file. Perfect for spreadsheet analysis and data sharing.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>exportToCSV | variableName | filePath</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Variable name containing array data to export
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> File path where CSV will be saved (absolute or relative)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeStructured | {"_root": "css=.product", "title": "css=.title", "price": "css=.price"} | products</code>
+                        <code>exportToCSV | products | ./exports/products.csv</code>
+                        <code>exportToCSV | userList | C:/data/users-${timestamp}.csv</code>
+                        <code>echo | Data exported successfully</code>
+                    </div>
+                    <div class="example-desc">Scrape product data and export to CSV with timestamp</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>CSV Features</h4>
+                <ul>
+                    <li>Automatically creates headers from object keys</li>
+                    <li>Handles nested objects by flattening them</li>
+                    <li>Supports variable interpolation in file paths</li>
+                    <li>Creates directories if they don't exist</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Export to JSON -->
+        <div class="command-item" id="exportToJSON">
+            <div class="command-header">
+                <h3><code>exportToJSON</code></h3>
+                <div class="command-badge">Professional</div>
+            </div>
+            <p class="command-description">Exports a variable to a JSON file with proper formatting. Preserves data structure and types.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>exportToJSON | variableName | filePath</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>combineVariables | products,users,settings | completeData</code>
+                        <code>exportToJSON | completeData | ./exports/complete-data.json</code>
+                        <code>exportToJSON | scrapedData | C:/backups/data-${date}.json</code>
+                    </div>
+                    <div class="example-desc">Combine multiple datasets and export to JSON</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>JSON Benefits</h4>
+                <ul>
+                    <li>Preserves complex data structures and arrays</li>
+                    <li>Maintains data types (strings, numbers, booleans)</li>
+                    <li>Human-readable with proper indentation</li>
+                    <li>Can be imported back into Selenix</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Import from JSON -->
+        <div class="command-item" id="importFromJSON">
+            <div class="command-header">
+                <h3><code>importFromJSON</code></h3>
+                <div class="command-badge">Professional</div>
+            </div>
+            <p class="command-description">Imports data from a JSON file and stores it in a variable. Variable type will be object or array depending on file contents.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>importFromJSON | filePath | variableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>importFromJSON | ./data/config.json | appConfig</code>
+                        <code>importFromJSON | C:/data/previous-scrape.json | existingData</code>
+                        <code>combineVariables | existingData,newData | mergedData</code>
+                        <code>echo | Loaded ${existingData.length} existing records</code>
+                    </div>
+                    <div class="example-desc">Import configuration and merge with new data</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Import from CSV -->
+        <div class="command-item" id="importFromCSV">
+            <div class="command-header">
+                <h3><code>importFromCSV</code></h3>
+                <div class="command-badge">Professional</div>
+            </div>
+            <p class="command-description">Imports data from a CSV file and stores it as an array of objects. Each row becomes an object with column headers as keys.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>importFromCSV | filePath | variableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>importFromCSV | ./data/customers.csv | customerList</code>
+                        <code>forEach | customerList | customer</code>
+                        <code>echo | Processing customer: ${customer.name}</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Import customer data and process each record</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>CSV Import Features</h4>
+                <ul>
+                    <li>Automatically detects headers from first row</li>
+                    <li>Handles quoted fields and special characters</li>
+                    <li>Converts numeric strings to numbers when appropriate</li>
+                    <li>Skips empty rows automatically</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Download Files -->
+        <div class="command-item" id="downloadFiles">
+            <div class="command-header">
+                <h3><code>downloadFiles</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Downloads files from an array of URLs automatically. Handles multiple files concurrently with progress tracking.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>downloadFiles | urlArrayVariable | downloadPath</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Variable containing array of URLs to download
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Directory path where files will be saved
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.download-link@href | fileUrls</code>
+                        <code>downloadFiles | fileUrls | ./downloads/</code>
+                        <code>scrapeCollection | css=img@src | imageUrls</code>
+                        <code>downloadFiles | imageUrls | C:/images/</code>
+                    </div>
+                    <div class="example-desc">Scrape download links and images, then download them</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Download Features</h4>
+                <ul>
+                    <li>Concurrent downloads for faster processing</li>
+                    <li>Automatic file naming based on URLs</li>
+                    <li>Progress tracking and error handling</li>
+                    <li>Supports various file types (images, documents, etc.)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- HTTP Request -->
+        <div class="command-item" id="httpRequest">
+            <div class="command-header">
+                <h3><code>httpRequest</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Sends HTTP requests and stores the response. Perfect for API integration and data fetching.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>httpRequest | requestConfig | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> JSON configuration for the HTTP request
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Variable name to store the response (optional)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>httpRequest | {"url": "https://api.example.com/data", "method": "GET", "headers": {"Authorization": "Bearer ${token}"}} | apiResponse</code>
+                        <code>httpRequest | {"url": "https://webhook.site/unique-id", "method": "POST", "body": {"data": "${scrapedData}"}} | postResult</code>
+                        <code>echo | API returned: ${apiResponse.status}</code>
+                    </div>
+                    <div class="example-desc">Make GET and POST requests with authentication</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- cURL Request -->
+        <div class="command-item" id="curlRequest">
+            <div class="command-header">
+                <h3><code>curlRequest</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Executes cURL-style HTTP requests natively. Perfect for complex API calls and integrations.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>curlRequest | curlCommand | variableName</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>curlRequest | curl -X GET "https://api.github.com/users/octocat" -H "Accept: application/json" | githubUser</code>
+                        <code>curlRequest | curl -X POST "https://httpbin.org/post" -d "data=${scrapedData}" | postResponse</code>
+                    </div>
+                    <div class="example-desc">Execute cURL commands for API interactions</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>

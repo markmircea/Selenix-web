@@ -1,0 +1,290 @@
+3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Drags an element and drops it on another element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>dragAndDropToObject | sourceLocator | targetLocator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Locator of the element to be dragged
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Locator of the destination element
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>dragAndDropToObject | id=draggable-item | id=drop-zone</code>
+                        <code>dragAndDropToObject | css=.task-card | css=.completed-column</code>
+                    </div>
+                    <div class="example-desc">Drag and drop for kanban boards, file uploads, or sortable lists</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Check/Uncheck -->
+        <div class="command-item" id="check">
+            <div class="command-header">
+                <h3><code>check</code> / <code>uncheck</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Check or uncheck a toggle-button (checkbox/radio).</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>check | locator</code><br>
+                <code>uncheck | locator</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>check | id=agree-terms</code>
+                        <code>uncheck | name=newsletter</code>
+                        <code>check | css=input[value="option1"]</code>
+                    </div>
+                    <div class="example-desc">Handle checkboxes and radio buttons</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Select -->
+        <div class="command-item" id="select">
+            <div class="command-header">
+                <h3><code>select</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Select an element from a drop-down menu using an option locator.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>select | selectLocator | optionLocator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Locator for the select element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Option locator (label=, value=, id=, index=) or just the label text
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>select | id=country | label=United States</code>
+                        <code>select | name=size | value=large</code>
+                        <code>select | css=.category-select | index=2</code>
+                        <code>select | id=color | Red</code>
+                    </div>
+                    <div class="example-desc">Select options using different identification methods</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Edit Content -->
+        <div class="command-item" id="editContent">
+            <div class="command-header">
+                <h3><code>editContent</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Sets the value of a content editable element as if you typed in it.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>editContent | locator | value</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>editContent | css=.rich-editor | &lt;h1&gt;Title&lt;/h1&gt;&lt;p&gt;Content&lt;/p&gt;</code>
+                        <code>editContent | id=wysiwyg | ${formattedText}</code>
+                    </div>
+                    <div class="example-desc">Edit rich text editors and contentEditable elements</div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<style>
+.command-list {
+    margin: 2rem 0;
+}
+
+.command-item {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+}
+
+.command-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.command-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.command-header h3 {
+    margin: 0;
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #4f46e5;
+    font-size: 1.5rem;
+}
+
+.command-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.command-badge {
+    background: #10b981;
+    color: white;
+}
+
+.command-item .command-badge:contains("Advanced") {
+    background: #f59e0b;
+}
+
+.command-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.command-syntax h4,
+.command-params h4,
+.command-examples h4,
+.command-notes h4 {
+    margin: 1.5rem 0 0.75rem 0;
+    color: #333;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.command-syntax h4:before {
+    content: "⌨️";
+}
+
+.command-params h4:before {
+    content: "⚙️";
+}
+
+.command-examples h4:before {
+    content: "💡";
+}
+
+.command-notes h4:before {
+    content: "📝";
+}
+
+.command-syntax code {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    display: block;
+    margin: 0.5rem 0;
+}
+
+.param {
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #4f46e5;
+}
+
+.param strong {
+    color: #4f46e5;
+}
+
+.example {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.example-code {
+    margin-bottom: 0.5rem;
+}
+
+.example-code code {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    display: block;
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+}
+
+.example-desc {
+    color: #666;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.command-notes ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.command-notes li {
+    margin: 0.5rem 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.command-notes li code {
+    background: #e2e8f0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .command-item {
+        padding: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .command-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+</style>

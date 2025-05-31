@@ -1,0 +1,239 @@
+                    <li><strong>Data transformation:</strong> "Convert all prices to numbers..."</li>
+                    <li><strong>Text analysis:</strong> "Summarize this content..."</li>
+                    <li><strong>Format conversion:</strong> "Convert to JSON format..."</li>
+                    <li><strong>Data extraction:</strong> "Extract all phone numbers..."</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Execute PowerShell -->
+        <div class="command-item" id="executePowerShell">
+            <div class="command-header">
+                <h3><code>executePowerShell</code></h3>
+                <div class="command-badge">System Integration</div>
+            </div>
+            <p class="command-description">Execute PowerShell scripts and capture results. Perfect for system operations, file processing, and advanced integrations.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>executePowerShell | scriptPath[|arg1|arg2] | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Path to PowerShell script, optionally followed by arguments separated by | characters
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Variable name to store the script's output
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>executePowerShell | C:/scripts/process-data.ps1|${csvFile}|outputDir | processResult</code>
+                        <code>executePowerShell | C:/scripts/get-system-info.ps1 | systemInfo</code>
+                        <code>executePowerShell | C:/scripts/send-email.ps1|${recipientEmail}|${subject}|${body} | emailResult</code>
+                        <code>echo | Script completed: ${processResult}</code>
+                    </div>
+                    <div class="example-desc">Process data files, get system information, and send emails</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>PowerShell Integration</h4>
+                <ul>
+                    <li>Scripts receive arguments as <code>$args[0]</code>, <code>$args[1]</code>, etc.</li>
+                    <li>Variable interpolation: <code>${variableName}</code> is expanded before script execution</li>
+                    <li>Return structured data as JSON for easy processing in Selenix</li>
+                    <li>Cross-platform: Uses PowerShell Core on macOS/Linux</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Echo -->
+        <div class="command-item" id="echo">
+            <div class="command-header">
+                <h3><code>echo</code></h3>
+                <div class="command-badge">Utility</div>
+            </div>
+            <p class="command-description">Prints the specified message to the log. Essential for debugging and monitoring automation progress.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>echo | message</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>echo | Starting product scraping process</code>
+                        <code>echo | Found ${productCount} products on page ${currentPage}</code>
+                        <code>echo | Processing user: ${user.name} (${user.email})</code>
+                        <code>echo | Export completed: ${exportedRecords} records saved</code>
+                    </div>
+                    <div class="example-desc">Log progress, variable values, and completion status</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Debugging Tips</h4>
+                <ul>
+                    <li>Use before/after scraping commands to track progress</li>
+                    <li>Include variable values to verify data processing</li>
+                    <li>Add timestamps: <code>${new Date().toISOString()}</code></li>
+                    <li>Use in loops to monitor iteration progress</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Debugger -->
+        <div class="command-item" id="debugger">
+            <div class="command-header">
+                <h3><code>debugger</code></h3>
+                <div class="command-badge">Development</div>
+            </div>
+            <p class="command-description">Breaks execution and enters debugger mode. Allows you to inspect variables and step through commands manually.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>debugger</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.product | products</code>
+                        <code>debugger</code>
+                        <code>transformVariable | products | data => data.filter(p => p.price > 100)</code>
+                        <code>debugger</code>
+                        <code>exportToCSV | products | ./results.csv</code>
+                    </div>
+                    <div class="example-desc">Add breakpoints to inspect data at different stages</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pause -->
+        <div class="command-item" id="pause">
+            <div class="command-header">
+                <h3><code>pause</code></h3>
+                <div class="command-badge">Utility</div>
+            </div>
+            <p class="command-description">Wait for the specified amount of time before continuing execution.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>pause | milliseconds</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | css=.load-more-button</code>
+                        <code>pause | 3000</code>
+                        <code>scrapeCollection | css=.newly-loaded-item | newItems</code>
+                        <code>pause | 5000</code>
+                        <code>click | id=submit-form</code>
+                    </div>
+                    <div class="example-desc">Wait for content to load and forms to process</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>When to Use Pause</h4>
+                <ul>
+                    <li>After clicking load buttons to wait for new content</li>
+                    <li>Between rapid API calls to respect rate limits</li>
+                    <li>For slow-loading dynamic content</li>
+                    <li>Consider using <code>waitForElementVisible</code> instead when possible</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Set Speed -->
+        <div class="command-item" id="setSpeed">
+            <div class="command-header">
+                <h3><code>setSpeed</code></h3>
+                <div class="command-badge">Configuration</div>
+            </div>
+            <p class="command-description">Set execution speed by adding delays between commands. Useful for slower websites or debugging.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>setSpeed | milliseconds</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>setSpeed | 1000</code>
+                        <code>open | https://slow-website.com</code>
+                        <code>click | css=.menu-item</code>
+                        <code>setSpeed | 0</code>
+                        <code>scrapeCollection | css=.fast-content | data</code>
+                    </div>
+                    <div class="example-desc">Slow down for problematic sites, then speed up for data extraction</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Speed Settings</h4>
+                <ul>
+                    <li><code>0</code>: No delay (fastest)</li>
+                    <li><code>500-1000</code>: Good for most websites</li>
+                    <li><code>2000+</code>: For very slow or problematic sites</li>
+                    <li>Global setting affects all subsequent commands</li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<style>
+.command-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+}
+
+.command-item:has(.command-badge:contains("AI-Powered")) .command-badge {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.command-item:has(.command-badge:contains("System Integration")) .command-badge {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.command-item:has(.command-badge:contains("Development")) .command-badge {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.command-item:has(.command-badge:contains("Configuration")) .command-badge {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.command-item:has(.command-badge:contains("Utility")) .command-badge {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+    }
+    to {
+        box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
+    }
+}
+</style>

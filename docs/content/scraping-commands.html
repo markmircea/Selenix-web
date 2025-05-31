@@ -1,0 +1,83 @@
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Number of times to scroll down the page
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Wait time in milliseconds between each scroll
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrollAndWait | 5 | 2000</code>
+                        <code>scrapeCollection | css=.infinite-scroll-item | allItems</code>
+                        <code>scrollAndWait | 10 | 1000</code>
+                        <code>storeElementCount | css=.loaded-item | totalLoaded</code>
+                    </div>
+                    <div class="example-desc">Scroll to load more content, then scrape all items</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Best Practices</h4>
+                <ul>
+                    <li>Use with social media feeds, search results, and product listings</li>
+                    <li>Combine with element counting to verify content loaded</li>
+                    <li>Adjust wait times based on site loading speed</li>
+                    <li>Use before scraping to ensure all content is visible</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Monitor Element -->
+        <div class="command-item" id="monitorElement">
+            <div class="command-header">
+                <h3><code>monitorElement</code></h3>
+                <div class="command-badge">Professional</div>
+            </div>
+            <p class="command-description">Periodically checks an element for changes to a specified attribute and performs actions when changes are detected. Perfect for monitoring dynamic content.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>monitorElement | locator | jsonConfig</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Element locator to monitor
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> JSON configuration with monitoring options
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>monitorElement | css=.stock-price | {"interval": 1000, "storeValue": "newPrice"}</code>
+                        <code>monitorElement | id=status | {"attribute": "class", "condition": "contains", "baseValue": "complete"}</code>
+                        <code>monitorElement | css=.countdown | {"interval": 500, "condition": "===", "baseValue": "00:00"}</code>
+                    </div>
+                    <div class="example-desc">Monitor stock prices, loading status, and countdown timers</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Configuration Options</h4>
+                <ul>
+                    <li><code>interval</code>: Milliseconds between checks (default: 5000)</li>
+                    <li><code>attribute</code>: What to monitor - "text", "value", "class", etc. (default: "text")</li>
+                    <li><code>condition</code>: "!==", "===", ">", "<", "contains", "matches"</li>
+                    <li><code>storeValue</code>: Variable to store the changed value</li>
+                    <li><code>maxDuration</code>: Maximum monitoring time in milliseconds</li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+</div>

@@ -57,14 +57,20 @@ const docsConfig = {
             ]
         },
         {
-            title: "Advanced Features",
+            title: "Advanced Usage",
             icon: "fa-solid fa-graduation-cap",
             pages: [
                 {
-                    id: "ai-assistant",
-                    title: "AI Assistant",
+                    id: "conditional-logic",
+                    title: "Conditional Logic",
                     icon: "fa-solid fa-brain",
-                    file: "ai-assistant.html"
+                    file: "conditional-logic.html"
+                },
+                {
+                    id: "loops",
+                    title: "Loops",
+                    icon: "fa-solid fa-repeat",
+                    file: "loops.html"
                 },
                 {
                     id: "scheduling",
@@ -73,43 +79,20 @@ const docsConfig = {
                     file: "scheduling.html"
                 },
                 {
-                    id: "data-extraction",
-                    title: "Advanced Scraping",
-                    icon: "fa-solid fa-spider",
-                    file: "data-extraction.html"
-                },
-                {
-                    id: "state-management",
-                    title: "Browser State Management",
-                    icon: "fa-solid fa-camera",
-                    file: "state-management.html"
-                }
-            ]
-        },
-        {
-            title: "Integration & Export",
-            icon: "fa-solid fa-plug",
-            pages: [
-                {
-                    id: "integrations",
-                    title: "Integrations",
-                    icon: "fa-solid fa-network-wired",
-                    file: "integrations.html"
-                },
-                {
                     id: "data-export",
                     title: "Data Export",
                     icon: "fa-solid fa-file-export",
                     file: "data-export.html"
                 },
                 {
-                    id: "api-integration",
-                    title: "API Integration",
-                    icon: "fa-solid fa-globe",
-                    file: "api-integration.html"
+                    id: "integrations",
+                    title: "Integrations",
+                    icon: "fa-solid fa-plug",
+                    file: "integrations.html"
                 }
             ]
         },
+
         {
             title: "Templates & Sharing",
             icon: "fa-solid fa-puzzle-piece",
