@@ -161,50 +161,108 @@ function showCategory(category) {
     `;
     
     // Hide the main categories view
-    const categoriesSection = document.querySelector('.command-categories')?.parentElement;
+    const categoriesSection = document.getElementById('main-categories');
     if (categoriesSection) {
         categoriesSection.style.display = 'none';
     }
     
     // Hide the search section temporarily
-    const searchSection = document.querySelector('.command-search')?.parentElement;
+    const searchSection = document.getElementById('command-search-section');
     if (searchSection) {
         searchSection.style.display = 'none';
     }
     
+    // Hide the command basics section
+    const commandBasics = document.getElementById('command-basics');
+    if (commandBasics) {
+        commandBasics.style.display = 'none';
+    }
+    
+    // Hide the element selectors section
+    const elementSelectors = document.getElementById('element-selectors');
+    if (elementSelectors) {
+        elementSelectors.style.display = 'none';
+    }
+    
+    // Hide the variables section
+    const variablesSection = document.getElementById('variables-section');
+    if (variablesSection) {
+        variablesSection.style.display = 'none';
+    }
+    
+    // Determine the file path based on the category
+    let filePath = '';
+    
+    switch(category) {
+        case 'interaction':
+            filePath = './content/interaction-commands.html';
+            break;
+        case 'scraping':
+            filePath = './content/scraping-commands.html';
+            break;
+        case 'assertion':
+            filePath = './content/assertion-commands-complete.html';
+            break;
+        case 'data':
+            filePath = './content/data-commands.html';
+            break;
+        case 'export':
+            filePath = './content/export-commands.html';
+            break;
+        case 'ai':
+            filePath = './content/ai-commands.html';
+            break;
+        case 'state':
+            filePath = './content/state-commands.html';
+            break;
+        case 'navigation':
+            filePath = './content/navigation-commands.html';
+            break;
+        default:
+            filePath = `./content/${category}-commands.html`;
+    }
+    
+    console.log(`Loading content from: ${filePath}`);
+    
     // Load the content from the corresponding HTML file
-    fetch(`./content/${category}-commands.html`)
+    fetch(filePath)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Failed to load ${category} commands`);
+                throw new Error(`Failed to load ${category} commands (Status: ${response.status})`);
             }
             return response.text();
         })
         .then(html => {
-            // Display the content
+            // Display the content with a back button
             contentContainer.innerHTML = `
                 <div class="back-to-categories">
                     <button onclick="showAllCategories()" class="back-btn">
                         <i class="fa-solid fa-arrow-left"></i> Back to All Categories
                     </button>
                 </div>
-                <div class="command-section">
+                <div class="command-section" style="display: block;">
                     ${html}
                 </div>
             `;
             
-            // Update URL hash
-            window.location.hash = `command-reference-${category}`;
+            // Update URL hash - but keep the main command-reference hash to avoid conflicts
+            if (window.location.hash !== '#command-reference') {
+                window.location.hash = 'command-reference';
+            }
             
             // Scroll to top
             window.scrollTo(0, 0);
+            
+            // Log success
+            console.log(`Successfully loaded ${category} commands`);
         })
         .catch(error => {
-            console.error(error);
+            console.error(`Error loading ${category} commands:`, error);
             contentContainer.innerHTML = `
                 <div class="error-message">
                     <h1>Error Loading Commands</h1>
                     <p>${error.message}</p>
+                    <p>Could not load content for ${category} commands.</p>
                     <button onclick="showAllCategories()" class="back-btn">
                         <i class="fa-solid fa-arrow-left"></i> Back to Categories
                     </button>
@@ -223,15 +281,33 @@ function showAllCategories() {
     }
     
     // Show the main categories view
-    const categoriesSection = document.querySelector('.command-categories')?.parentElement;
+    const categoriesSection = document.getElementById('main-categories');
     if (categoriesSection) {
         categoriesSection.style.display = 'block';
     }
     
     // Show the search section
-    const searchSection = document.querySelector('.command-search')?.parentElement;
+    const searchSection = document.getElementById('command-search-section');
     if (searchSection) {
         searchSection.style.display = 'block';
+    }
+    
+    // Show the command basics section
+    const commandBasics = document.getElementById('command-basics');
+    if (commandBasics) {
+        commandBasics.style.display = 'block';
+    }
+    
+    // Show the element selectors section
+    const elementSelectors = document.getElementById('element-selectors');
+    if (elementSelectors) {
+        elementSelectors.style.display = 'block';
+    }
+    
+    // Show the variables section
+    const variablesSection = document.getElementById('variables-section');
+    if (variablesSection) {
+        variablesSection.style.display = 'block';
     }
     
     // Update URL hash
@@ -351,9 +427,33 @@ function displaySearchResults(results, query) {
     if (!contentContainer) return;
     
     // Hide the main categories view
-    const categoriesSection = document.querySelector('.command-categories')?.parentElement;
+    const categoriesSection = document.getElementById('main-categories');
     if (categoriesSection) {
         categoriesSection.style.display = 'none';
+    }
+    
+    // Hide the search section temporarily
+    const searchSection = document.getElementById('command-search-section');
+    if (searchSection) {
+        searchSection.style.display = 'none';
+    }
+    
+    // Hide the command basics section
+    const commandBasics = document.getElementById('command-basics');
+    if (commandBasics) {
+        commandBasics.style.display = 'none';
+    }
+    
+    // Hide the element selectors section
+    const elementSelectors = document.getElementById('element-selectors');
+    if (elementSelectors) {
+        elementSelectors.style.display = 'none';
+    }
+    
+    // Hide the variables section
+    const variablesSection = document.getElementById('variables-section');
+    if (variablesSection) {
+        variablesSection.style.display = 'none';
     }
     
     if (results.length === 0) {
@@ -415,20 +515,22 @@ function displaySearchResults(results, query) {
     
     contentContainer.innerHTML = resultsHTML;
     
-    // Update URL hash
-    window.location.hash = `command-reference-search-${encodeURIComponent(query)}`;
+    // Update URL hash - but keep the main command-reference hash to avoid conflicts
+    if (window.location.hash !== '#command-reference') {
+        window.location.hash = 'command-reference';
+    }
 }
 
 function handleInitialView() {
-    // Check if there's a specific category in the URL hash
+    // Check if we're on the command reference page
     const hash = window.location.hash;
     
-    if (hash.includes('command-reference-')) {
-        const category = hash.replace('#command-reference-', '');
-        setTimeout(() => showCategory(category), 100);
-    } else {
+    if (hash === '#command-reference') {
         // Show all categories by default
         showAllCategories();
+    } else {
+        // If we're not on the command reference page, don't do anything
+        // The docs-renderer.js will handle loading the appropriate page
     }
 }
 

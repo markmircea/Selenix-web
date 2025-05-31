@@ -525,6 +525,48 @@ h3:hover .heading-anchor {
     100% { transform: rotate(360deg); }
 }
 
+.back-to-categories {
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    padding: 0.75rem 1.5rem;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #3730a3;
+}
+
+.error-message {
+    text-align: center;
+    padding: 3rem;
+    background: #fee2e2;
+    border-radius: 12px;
+    border-left: 4px solid #ef4444;
+    margin: 2rem 0;
+}
+
+.error-message h1 {
+    color: #b91c1c;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.error-message p {
+    color: #7f1d1d;
+    margin-bottom: 1.5rem;
+}
+
 .search-results-header {
     margin-bottom: 2rem;
 }
@@ -566,6 +608,189 @@ h3:hover .heading-anchor {
     justify-content: center;
     gap: 0.75rem;
     margin-bottom: 1rem;
+}
+
+/* Command documentation styles */
+.command-list {
+    margin: 2rem 0;
+}
+
+.command-item {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease;
+}
+
+.command-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.command-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.command-header h3 {
+    margin: 0;
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #4f46e5;
+    font-size: 1.5rem;
+}
+
+.command-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+}
+
+.command-item:has(.command-badge:contains("Basic")) .command-badge {
+    background: #10b981;
+}
+
+.command-item:has(.command-badge:contains("Advanced")) .command-badge {
+    background: #f59e0b;
+}
+
+.command-item:has(.command-badge:contains("Configuration")) .command-badge {
+    background: #06b6d4;
+}
+
+.command-item:has(.command-badge:contains("System")) .command-badge {
+    background: #8b5cf6;
+}
+
+.command-item:has(.command-badge:contains("Development")) .command-badge {
+    background: #ef4444;
+}
+
+.command-item:has(.command-badge:contains("Utility")) .command-badge {
+    background: #6b7280;
+}
+
+.command-item:has(.command-badge:contains("AI-Powered")) .command-badge {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+    }
+    to {
+        box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
+    }
+}
+
+.command-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.command-syntax h4,
+.command-params h4,
+.command-examples h4,
+.command-notes h4 {
+    margin: 1.5rem 0 0.75rem 0;
+    color: #333;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.command-syntax h4:before {
+    content: "⌨️";
+}
+
+.command-params h4:before {
+    content: "⚙️";
+}
+
+.command-examples h4:before {
+    content: "💡";
+}
+
+.command-notes h4:before {
+    content: "📝";
+}
+
+.command-syntax code {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    display: block;
+    margin: 0.5rem 0;
+}
+
+.param {
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #4f46e5;
+}
+
+.param strong {
+    color: #4f46e5;
+}
+
+.example {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.example-code {
+    margin-bottom: 0.5rem;
+}
+
+.example-code code {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    display: block;
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+}
+
+.example-desc {
+    color: #666;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.command-notes ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.command-notes li {
+    margin: 0.5rem 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.command-notes li code {
+    background: #e2e8f0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.9rem;
 }
 
 /* Responsive design for docs page */

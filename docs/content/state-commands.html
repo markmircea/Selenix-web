@@ -1,27 +1,37 @@
 <div class="docs-section">
-    <h2><i class="fa-solid fa-camera"></i> State & Session Management Commands</h2>
-    
-    <p>Selenix provides advanced browser state management for creating reproducible automations, handling sessions, and monitoring dynamic content changes.</p>
+    <h2><i class="fa-solid fa-hourglass-half"></i> State & Session Management Commands</h2>
+    <p>These commands help you manage the state of your automation, including waiting for elements, monitoring changes, and handling browser state.</p>
     
     <div class="command-list">
-        
-        <!-- Create Snapshot -->
-        <div class="command-item" id="createSnapshot">
+        <!-- Monitor Element Command -->
+        <div class="command-item" id="monitorElement">
             <div class="command-header">
-                <h3><code>createSnapshot</code></h3>
-                <div class="command-badge">Professional</div>
+                <h3><code>monitorElement</code></h3>
+                <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Creates a complete snapshot of the browser state including cookies, localStorage, sessionStorage, and current page state. Essential for maintaining sessions across scheduled runs.</p>
+            <p class="command-description">Periodically checks an element for changes and waits until a change is detected. Perfect for monitoring dynamic content that updates asynchronously.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>createSnapshot | snapshotName</code>
+                <code>monitorElement | locator | {"interval": 1000, "attribute": "text", "storeValue": "changedValue"}</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> Name to save the snapshot under (variable name)
+                    <strong>Target:</strong> A locator that identifies the element to monitor (e.g., <code>id=statusText</code>, <code>css=.price-display</code>)
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> A JSON object with the following properties:
+                    <ul>
+                        <li><code>interval</code>: Milliseconds between checks (default: 5000)</li>
+                        <li><code>attribute</code>: What to monitor: "text", "value", "class", "style", etc. (default: "text")</li>
+                        <li><code>storeValue</code>: Optional variable name to store the changed value</li>
+                        <li><code>condition</code>: Comparison condition: "!==", "===", ">", "<", ">=", "<=", "contains", "not contains", "matches" (default: "!==")</li>
+                        <li><code>baseValue</code>: Optional base value to compare against instead of initial value</li>
+                        <li><code>maxDuration</code>: Maximum monitoring duration in milliseconds (default: 300000 - 5 minutes)</li>
+                        <li><code>onTimeout</code>: What to do if maxDuration is reached: "continue" or "fail" (default: "continue")</li>
+                    </ul>
                 </div>
             </div>
             
@@ -29,26 +39,321 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>open | https://dashboard.example.com</code>
-                        <code>type | id=username | ${loginEmail}</code>
-                        <code>type | id=password | ${loginPassword}</code>
-                        <code>click | id=login-button</code>
-                        <code>waitForElementVisible | css=.dashboard</code>
-                        <code>createSnapshot | loggedInState</code>
-                        <code>exportToJSON | loggedInState | ./snapshots/login-session.json</code>
+                        <code>monitorElement | id=statusIndicator | {"interval": 1000, "storeValue": "newStatus"}</code>
+                        <code>echo | ${newStatus}</code>
                     </div>
-                    <div class="example-desc">Login and save the authenticated session state</div>
+                    <div class="example-desc">Check the text of an element with ID "statusIndicator" every second and store the new value in the "newStatus" variable when it changes</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>monitorElement | css=.price-display | {"attribute": "text", "condition": ">", "baseValue": "100", "storeValue": "currentPrice"}</code>
+                        <code>assert | ${currentPrice} | >100</code>
+                    </div>
+                    <div class="example-desc">Monitor the text of an element with class "price-display" and wait until the value exceeds 100</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>monitorElement | xpath=//div[@id='loading-indicator'] | {"attribute": "class", "condition": "contains", "baseValue": "complete", "maxDuration": 10000, "onTimeout": "fail"}</code>
+                    </div>
+                    <div class="example-desc">Monitor a loading indicator's class attribute and wait until it contains the text "complete". Fail if this doesn't happen within 10 seconds</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Snapshot Contents</h4>
+                <h4>When to Use</h4>
                 <ul>
-                    <li><strong>Cookies:</strong> All domain cookies for session persistence</li>
-                    <li><strong>LocalStorage:</strong> Client-side stored data</li>
-                    <li><strong>SessionStorage:</strong> Session-specific data</li>
-                    <li><strong>Page State:</strong> Current URL and basic page information</li>
-                    <li><strong>Authentication:</strong> Preserved login sessions</li>
+                    <li><strong>Wait for async content:</strong> Monitor elements that update after AJAX calls</li>
+                    <li><strong>Capture dynamic values:</strong> Store changing values for later use in the test</li>
+                    <li><strong>Verify element updates:</strong> Wait for specific conditions before proceeding</li>
+                    <li><strong>Handle timing issues:</strong> More reliable than using fixed wait times</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Wait For Element Present -->
+        <div class="command-item" id="waitForElementPresent">
+            <div class="command-header">
+                <h3><code>waitForElementPresent</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait for a target element to be present on the page.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForElementPresent | locator | timeout</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to wait for
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional timeout in milliseconds (default is 30000ms)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForElementPresent | id=results-container | 5000</code>
+                        <code>waitForElementPresent | css=.loading-complete</code>
+                    </div>
+                    <div class="example-desc">Wait for elements to appear in the DOM</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wait For Element Visible -->
+        <div class="command-item" id="waitForElementVisible">
+            <div class="command-header">
+                <h3><code>waitForElementVisible</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait for a target element to be visible on the page.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForElementVisible | locator | timeout</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to wait for
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional timeout in milliseconds (default is 30000ms)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForElementVisible | id=results-container | 5000</code>
+                        <code>waitForElementVisible | css=.loading-complete</code>
+                    </div>
+                    <div class="example-desc">Wait for elements to become visible</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wait For Element Not Present -->
+        <div class="command-item" id="waitForElementNotPresent">
+            <div class="command-header">
+                <h3><code>waitForElementNotPresent</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait for a target element to not be present on the page.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForElementNotPresent | locator | timeout</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to wait for
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional timeout in milliseconds (default is 30000ms)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForElementNotPresent | id=loading-spinner | 5000</code>
+                        <code>waitForElementNotPresent | css=.error-message</code>
+                    </div>
+                    <div class="example-desc">Wait for elements to disappear from the DOM</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wait For Element Not Visible -->
+        <div class="command-item" id="waitForElementNotVisible">
+            <div class="command-header">
+                <h3><code>waitForElementNotVisible</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait for a target element to not be visible on the page.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForElementNotVisible | locator | timeout</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to wait for
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional timeout in milliseconds (default is 30000ms)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForElementNotVisible | id=loading-spinner | 5000</code>
+                        <code>waitForElementNotVisible | css=.error-message</code>
+                    </div>
+                    <div class="example-desc">Wait for elements to become hidden</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wait For Element Editable -->
+        <div class="command-item" id="waitForElementEditable">
+            <div class="command-header">
+                <h3><code>waitForElementEditable</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait for an element to be editable.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForElementEditable | locator | timeout</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to wait for
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional timeout in milliseconds (default is 30000ms)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForElementEditable | id=comment-field | 5000</code>
+                        <code>waitForElementEditable | css=input.username</code>
+                    </div>
+                    <div class="example-desc">Wait for form fields to become editable</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wait For Element Not Editable -->
+        <div class="command-item" id="waitForElementNotEditable">
+            <div class="command-header">
+                <h3><code>waitForElementNotEditable</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait for an element to not be editable.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForElementNotEditable | locator | timeout</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to wait for
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional timeout in milliseconds (default is 30000ms)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForElementNotEditable | id=locked-field | 5000</code>
+                        <code>waitForElementNotEditable | css=input.readonly</code>
+                    </div>
+                    <div class="example-desc">Wait for form fields to become non-editable</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wait For Text -->
+        <div class="command-item" id="waitForText">
+            <div class="command-header">
+                <h3><code>waitForText</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait until the text of an element is present.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForText | locator | text</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to check
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The text to wait for
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForText | id=status | Success</code>
+                        <code>waitForText | css=.result | Operation completed</code>
+                    </div>
+                    <div class="example-desc">Wait for specific text to appear in elements</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Create Snapshot -->
+        <div class="command-item" id="createSnapshot">
+            <div class="command-header">
+                <h3><code>createSnapshot</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Creates a snapshot of the browser state with cookies, localStorage and sessionStorage, and saves it to a variable.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>createSnapshot | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Name of the variable to store the snapshot
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>createSnapshot | loginState</code>
+                        <code>exportToJSON | loginState | ./snapshots/login-state.json</code>
+                    </div>
+                    <div class="example-desc">Save browser state after login for later reuse</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Snapshots include cookies, localStorage, and sessionStorage</li>
+                    <li>Use with exportToJSON to save snapshots for future test runs</li>
+                    <li>Useful for preserving authentication state between test runs</li>
                 </ul>
             </div>
         </div>
@@ -57,198 +362,128 @@
         <div class="command-item" id="restoreSnapshot">
             <div class="command-header">
                 <h3><code>restoreSnapshot</code></h3>
-                <div class="command-badge">Professional</div>
+                <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Restores a previously saved browser state snapshot. Instantly returns the browser to the exact saved state, including authentication and user preferences.</p>
+            <p class="command-description">Restores a snapshot of the browser state from a variable saved by createSnapshot.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>restoreSnapshot | snapshotName</code>
+                <code>restoreSnapshot | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Name of the variable containing the snapshot
+                </div>
             </div>
             
             <div class="command-examples">
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>importFromJSON | ./snapshots/login-session.json | savedSession</code>
-                        <code>restoreSnapshot | savedSession</code>
-                        <code>open | https://dashboard.example.com/data</code>
-                        <code>scrapeStructured | {"_root": "css=.data-row", "name": "css=.name", "value": "css=.value"} | dashboardData</code>
+                        <code>importFromJSON | ./snapshots/login-state.json | loginState</code>
+                        <code>restoreSnapshot | loginState</code>
                     </div>
-                    <div class="example-desc">Restore login session and scrape authenticated data</div>
+                    <div class="example-desc">Restore previously saved login state to skip login process</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Use Cases</h4>
+                <h4>Usage Notes</h4>
                 <ul>
-                    <li><strong>Scheduled automations:</strong> Skip login steps in recurring runs</li>
-                    <li><strong>Multi-page workflows:</strong> Maintain state across complex navigation</li>
-                    <li><strong>A/B testing:</strong> Return to consistent starting state</li>
-                    <li><strong>Error recovery:</strong> Restore to known good state after failures</li>
+                    <li>Must be used on the same domain as the snapshot was created</li>
+                    <li>Use with importFromJSON to load snapshots from previous test runs</li>
+                    <li>Significantly speeds up tests by avoiding repetitive login steps</li>
                 </ul>
             </div>
         </div>
         
-        <!-- Store Window Handle -->
-        <div class="command-item" id="storeWindowHandle">
+        <!-- Pause -->
+        <div class="command-item" id="pause">
             <div class="command-header">
-                <h3><code>storeWindowHandle</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Gets the handle of the current page/tab for later reference. Essential for multi-window automation.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>storeWindowHandle | variableName</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>storeWindowHandle | mainWindow</code>
-                        <code>click | css=.open-popup-link</code>
-                        <code>selectWindow | handle=${popupHandle}</code>
-                        <code>scrapeText | css=.popup-content | popupData</code>
-                        <code>close</code>
-                        <code>selectWindow | handle=${mainWindow}</code>
-                    </div>
-                    <div class="example-desc">Handle popup windows and return to main window</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Select Window -->
-        <div class="command-item" id="selectWindow">
-            <div class="command-header">
-                <h3><code>selectWindow</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Selects a popup window or tab using a window handle. All subsequent commands will operate on the selected window.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>selectWindow | handle</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>selectWindow | handle=${newTabHandle}</code>
-                        <code>selectWindow | handle=0</code>
-                        <code>selectWindow | handle=popup-window</code>
-                    </div>
-                    <div class="example-desc">Switch between windows using handles or indices</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Select Frame -->
-        <div class="command-item" id="selectFrame">
-            <div class="command-header">
-                <h3><code>selectFrame</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Selects a frame within the current window for automation. Supports nested frames and relative navigation.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>selectFrame | frameLocator</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>selectFrame | id=content-frame</code>
-                        <code>click | css=.frame-button</code>
-                        <code>selectFrame | relative=parent</code>
-                        <code>selectFrame | index=0</code>
-                        <code>selectFrame | relative=top</code>
-                    </div>
-                    <div class="example-desc">Navigate through nested frames and return to parent/top</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Frame Navigation</h4>
-                <ul>
-                    <li><code>relative=parent</code>: Move to parent frame</li>
-                    <li><code>relative=top</code>: Move to top-level document</li>
-                    <li><code>index=N</code>: Select frame by zero-based index</li>
-                    <li>Use element locators for named frames</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Set Window Size -->
-        <div class="command-item" id="setWindowSize">
-            <div class="command-header">
-                <h3><code>setWindowSize</code></h3>
-                <div class="command-badge">Configuration</div>
-            </div>
-            <p class="command-description">Set the browser window size including the browser interface. Important for responsive design testing and consistent screenshots.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>setWindowSize | widthxheight</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>setWindowSize | 1920x1080</code>
-                        <code>setWindowSize | 1366x768</code>
-                        <code>setWindowSize | 375x667</code>
-                        <code>scrapeCollection | css=.responsive-element | mobileElements</code>
-                    </div>
-                    <div class="example-desc">Test different screen sizes and scrape responsive elements</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Common Resolutions</h4>
-                <ul>
-                    <li><code>1920x1080</code>: Full HD desktop</li>
-                    <li><code>1366x768</code>: Common laptop resolution</li>
-                    <li><code>375x667</code>: iPhone SE</li>
-                    <li><code>414x896</code>: iPhone 11 Pro</li>
-                    <li><code>768x1024</code>: iPad</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Close -->
-        <div class="command-item" id="close">
-            <div class="command-header">
-                <h3><code>close</code></h3>
+                <h3><code>pause</code></h3>
                 <div class="command-badge">Basic</div>
             </div>
-            <p class="command-description">Closes the current window or tab. Use for cleanup or managing multiple windows.</p>
+            <p class="command-description">Wait for the specified amount of time before continuing execution.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>close</code>
+                <code>pause | milliseconds</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Time to wait in milliseconds
+                </div>
             </div>
             
             <div class="command-examples">
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>click | css=.external-link</code>
-                        <code>storeWindowHandle | newTab</code>
-                        <code>selectWindow | handle=${newTab}</code>
-                        <code>scrapeText | css=.external-content | content</code>
-                        <code>close</code>
-                        <code>selectWindow | handle=${mainWindow}</code>
+                        <code>click | css=.load-more-button</code>
+                        <code>pause | 3000</code>
+                        <code>scrapeCollection | css=.newly-loaded-item | newItems</code>
                     </div>
-                    <div class="example-desc">Open external link, scrape content, close tab, return to main</div>
+                    <div class="example-desc">Wait for content to load after clicking a button</div>
                 </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>When to Use Pause</h4>
+                <ul>
+                    <li>After clicking load buttons to wait for new content</li>
+                    <li>Between rapid API calls to respect rate limits</li>
+                    <li>For slow-loading dynamic content</li>
+                    <li>Consider using <code>waitForElementVisible</code> instead when possible</li>
+                </ul>
             </div>
         </div>
         
+        <!-- Set Speed -->
+        <div class="command-item" id="setSpeed">
+            <div class="command-header">
+                <h3><code>setSpeed</code></h3>
+                <div class="command-badge">Configuration</div>
+            </div>
+            <p class="command-description">Set execution speed by adding delays between commands. Useful for slower websites or debugging.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>setSpeed | milliseconds</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Delay in milliseconds between commands
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>setSpeed | 1000</code>
+                        <code>open | https://slow-website.com</code>
+                        <code>click | css=.menu-item</code>
+                        <code>setSpeed | 0</code>
+                    </div>
+                    <div class="example-desc">Slow down for problematic sites, then speed up for data extraction</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Speed Settings</h4>
+                <ul>
+                    <li><code>0</code>: No delay (fastest)</li>
+                    <li><code>500-1000</code>: Good for most websites</li>
+                    <li><code>2000+</code>: For very slow or problematic sites</li>
+                    <li>Global setting affects all subsequent commands</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>

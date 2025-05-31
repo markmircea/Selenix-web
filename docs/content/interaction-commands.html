@@ -1,20 +1,25 @@
-3>
-                <div class="command-badge">Advanced</div>
+<div class="docs-section">
+    <h2><i class="fa-solid fa-hand-pointer"></i> Interaction Commands</h2>
+    <p>These commands allow you to interact with elements on the page, such as clicking, typing, and selecting options.</p>
+    
+    <div class="command-list">
+        <!-- Click -->
+        <div class="command-item" id="click">
+            <div class="command-header">
+                <h3><code>click</code></h3>
+                <div class="command-badge">Basic</div>
             </div>
-            <p class="command-description">Drags an element and drops it on another element.</p>
+            <p class="command-description">Clicks on a target element (e.g., a link, button, checkbox, or radio button).</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>dragAndDropToObject | sourceLocator | targetLocator</code>
+                <code>click | locator</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> Locator of the element to be dragged
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> Locator of the destination element
+                    <strong>Target:</strong> An element locator that identifies the element to click. Can use id, name, css selector, or xpath (e.g., "id=submitButton", "css=button.primary", "//button[contains(text(),'Submit')]")
                 </div>
             </div>
             
@@ -22,11 +27,296 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>dragAndDropToObject | id=draggable-item | id=drop-zone</code>
-                        <code>dragAndDropToObject | css=.task-card | css=.completed-column</code>
+                        <code>click | id=submit-button</code>
+                        <code>click | css=.login-button</code>
+                        <code>click | xpath=//button[contains(text(),'Sign In')]</code>
                     </div>
-                    <div class="example-desc">Drag and drop for kanban boards, file uploads, or sortable lists</div>
+                    <div class="example-desc">Click on buttons, links, checkboxes, and other interactive elements</div>
                 </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>If the click is not working as expected, try using <code>clickAtCoordinates</code> instead</li>
+                    <li>For elements that need to be visible to be clicked, ensure they are in the viewport</li>
+                    <li>Use <code>waitForElementVisible</code> before clicking if elements load dynamically</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Click At Coordinates -->
+        <div class="command-item" id="clickAtCoordinates">
+            <div class="command-header">
+                <h3><code>clickAtCoordinates</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Clicks at the specified absolute coordinates on the page. Useful for interacting with canvas elements, maps, or complex UI components.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>clickAtCoordinates | x,y</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The X and Y coordinates for the click, relative to the viewport's top-left corner (0,0), specified as "x,y" (e.g., "150,200")
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>clickAtCoordinates | 320,240</code>
+                        <code>clickAtCoordinates | 100,150</code>
+                    </div>
+                    <div class="example-desc">Click at specific coordinates on a map, chart, or canvas element</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>clickAtCoordinates | 100,150</code>
+                        <code>verifyText | id=status | Selected top section</code>
+                        <code>clickAtCoordinates | 100,250</code>
+                        <code>verifyText | id=status | Selected bottom section</code>
+                    </div>
+                    <div class="example-desc">Click on different parts of a complex UI component</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Coordinate System</h4>
+                <ul>
+                    <li>Coordinates are relative to the viewport's top-left corner (0,0)</li>
+                    <li>The x-coordinate increases from left to right</li>
+                    <li>The y-coordinate increases from top to bottom</li>
+                    <li>For example, 150,200 means 150 pixels from the left edge and 200 pixels from the top edge of the viewport</li>
+                </ul>
+                
+                <h4>Best Practices</h4>
+                <ul>
+                    <li><strong>Viewport Considerations:</strong> Remember that coordinates are relative to the current viewport. If the page scrolls or resizes, the same coordinates might point to a different element.</li>
+                    <li><strong>Responsive Design:</strong> For responsive websites, coordinates may need to be adjusted for different screen sizes.</li>
+                    <li><strong>Debugging:</strong> If your click isn't hitting the right spot, try using the coordinate selector tool again to visually confirm the location.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Double Click -->
+        <div class="command-item" id="doubleClick">
+            <div class="command-header">
+                <h3><code>doubleClick</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Double clicks on an element (e.g., a link, button, checkbox, or radio button).</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>doubleClick | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> An element locator that identifies the element to double-click
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>doubleClick | id=edit-field</code>
+                        <code>doubleClick | css=.item-row</code>
+                    </div>
+                    <div class="example-desc">Double-click to edit text or activate special functionality</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>If the double-click is not working as expected, try using <code>doubleClickAtCoordinates</code> instead</li>
+                    <li>Commonly used for text selection, opening items in file explorers, or activating special features</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Double Click At Coordinates -->
+        <div class="command-item" id="doubleClickAtCoordinates">
+            <div class="command-header">
+                <h3><code>doubleClickAtCoordinates</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Double-clicks at the specified absolute coordinates on the page. Useful for interacting with canvas elements, maps, or complex UI components.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>doubleClickAtCoordinates | x,y</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The X and Y coordinates for the double-click, relative to the viewport's top-left corner (0,0), specified as "x,y" (e.g., "150,200")
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>doubleClickAtCoordinates | 500,300</code>
+                    </div>
+                    <div class="example-desc">Double-click on a specific point on a canvas or drawing application</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>open | https://example.com/map-editor</code>
+                        <code>doubleClickAtCoordinates | 320,240</code>
+                        <code>verifyElementPresent | css=.marker</code>
+                    </div>
+                    <div class="example-desc">Double-click on a map to place a marker</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Coordinate System</h4>
+                <ul>
+                    <li>Coordinates are relative to the viewport's top-left corner (0,0)</li>
+                    <li>The x-coordinate increases from left to right</li>
+                    <li>The y-coordinate increases from top to bottom</li>
+                </ul>
+                
+                <h4>Best Practices</h4>
+                <ul>
+                    <li><strong>Viewport Considerations:</strong> Remember that coordinates are relative to the current viewport. If the page scrolls or resizes, the same coordinates might point to a different element.</li>
+                    <li><strong>Responsive Design:</strong> For responsive websites, coordinates may need to be adjusted for different screen sizes.</li>
+                    <li><strong>Maintenance:</strong> Coordinate-based commands may require more maintenance than element-based commands if the UI layout changes frequently.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Type -->
+        <div class="command-item" id="type">
+            <div class="command-header">
+                <h3><code>type</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Sets the value of an input field, as though you typed it in. Clears the field first and then enters the specified text.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>type | locator | value</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to type into (e.g., <code>id=username</code>, <code>name=password</code>, <code>css=input.search</code>)
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The text to type into the element. This can include:
+                    <ul>
+                        <li>Plain text</li>
+                        <li>Variables (e.g., <code>${username}</code>)</li>
+                        <li>Special keys using the format <code>&lt;KEY&gt;</code> (e.g., <code>&lt;ENTER&gt;</code>, <code>&lt;TAB&gt;</code>, <code>&lt;SPACE&gt;</code>)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>type | id=username | johndoe</code>
+                        <code>type | name=password | mySecurePassword123</code>
+                        <code>type | css=input.search | selenium automation</code>
+                    </div>
+                    <div class="example-desc">Type text into form fields</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>type | id=search-box | selenium automation&lt;ENTER&gt;</code>
+                        <code>type | id=comment | Line 1&lt;ENTER&gt;Line 2&lt;ENTER&gt;Line 3</code>
+                    </div>
+                    <div class="example-desc">Type text with special keys</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>store | John Doe | fullName</code>
+                        <code>type | id=name-field | ${fullName}</code>
+                    </div>
+                    <div class="example-desc">Type text using variables</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>type | css=input[type="file"] | C:/path/to/file.jpg</code>
+                    </div>
+                    <div class="example-desc">Upload a file (Chrome only)</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Special Features</h4>
+                <ul>
+                    <li><strong>File Uploads:</strong> If the target is a file input element (<code>&lt;input type="file"&gt;</code>), you can provide a file path as the value to upload a file (Chrome only). XPath locators are not supported for file uploads.</li>
+                    <li><strong>Special Keys:</strong> Use <code>&lt;KEY&gt;</code> syntax for special keys like <code>&lt;ENTER&gt;</code>, <code>&lt;TAB&gt;</code>, <code>&lt;SPACE&gt;</code>, <code>&lt;CTRL&gt;</code>, etc.</li>
+                    <li><strong>Key Combinations:</strong> Combine keys with + like <code>&lt;CTRL&gt;+&lt;A&gt;</code> to select all text.</li>
+                    <li>If type isn't working properly on JavaScript-heavy pages, try the <code>sendKeys</code> command instead.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Send Keys -->
+        <div class="command-item" id="sendKeys">
+            <div class="command-header">
+                <h3><code>sendKeys</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Simulates keystroke events on the specified element, as though you typed the value key-by-key. Unlike the type command, this does not clear the field first.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>sendKeys | locator | keySequence</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to send keys to
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The sequence of keys to send, including special keys using <code>&lt;KEY&gt;</code> syntax
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>sendKeys | id=editor | This text will be appended</code>
+                        <code>sendKeys | css=.rich-editor | &lt;CTRL&gt;+&lt;A&gt;&lt;DELETE&gt;New content</code>
+                        <code>sendKeys | id=search-input | selenium&lt;ENTER&gt;</code>
+                    </div>
+                    <div class="example-desc">Send keystrokes to elements, including special key combinations</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>When to Use sendKeys vs. type</h4>
+                <ul>
+                    <li>Use <code>sendKeys</code> when you want to append text to existing content</li>
+                    <li>Use <code>sendKeys</code> for dynamic UI widgets that require explicit key events</li>
+                    <li>Use <code>sendKeys</code> when <code>type</code> doesn't work on JavaScript-heavy pages</li>
+                    <li>Use <code>type</code> when you want to replace the existing content completely</li>
+                </ul>
             </div>
         </div>
         
@@ -119,172 +409,39 @@
             </div>
         </div>
         
+        <!-- Drag And Drop To Object -->
+        <div class="command-item" id="dragAndDropToObject">
+            <div class="command-header">
+                <h3><code>dragAndDropToObject</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Drags an element and drops it on another element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>dragAndDropToObject | sourceLocator | targetLocator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Locator of the element to be dragged
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Locator of the destination element
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>dragAndDropToObject | id=draggable-item | id=drop-zone</code>
+                        <code>dragAndDropToObject | css=.task-card | css=.completed-column</code>
+                    </div>
+                    <div class="example-desc">Drag and drop for kanban boards, file uploads, or sortable lists</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<style>
-.command-list {
-    margin: 2rem 0;
-}
-
-.command-item {
-    margin-bottom: 3rem;
-    padding: 2rem;
-    background: white;
-    border-radius: 12px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease;
-}
-
-.command-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.command-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
-
-.command-header h3 {
-    margin: 0;
-    font-family: 'Monaco', 'Menlo', monospace;
-    color: #4f46e5;
-    font-size: 1.5rem;
-}
-
-.command-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.command-badge {
-    background: #10b981;
-    color: white;
-}
-
-.command-item .command-badge:contains("Advanced") {
-    background: #f59e0b;
-}
-
-.command-description {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-}
-
-.command-syntax h4,
-.command-params h4,
-.command-examples h4,
-.command-notes h4 {
-    margin: 1.5rem 0 0.75rem 0;
-    color: #333;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.command-syntax h4:before {
-    content: "⌨️";
-}
-
-.command-params h4:before {
-    content: "⚙️";
-}
-
-.command-examples h4:before {
-    content: "💡";
-}
-
-.command-notes h4:before {
-    content: "📝";
-}
-
-.command-syntax code {
-    background: #2d3748;
-    color: #e2e8f0;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    font-family: 'Monaco', 'Menlo', monospace;
-    display: block;
-    margin: 0.5rem 0;
-}
-
-.param {
-    margin: 0.5rem 0;
-    padding: 0.75rem;
-    background: #f8f9fa;
-    border-radius: 6px;
-    border-left: 4px solid #4f46e5;
-}
-
-.param strong {
-    color: #4f46e5;
-}
-
-.example {
-    margin: 1rem 0;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-}
-
-.example-code {
-    margin-bottom: 0.5rem;
-}
-
-.example-code code {
-    background: #2d3748;
-    color: #e2e8f0;
-    padding: 0.5rem;
-    border-radius: 4px;
-    font-family: 'Monaco', 'Menlo', monospace;
-    display: block;
-    margin: 0.25rem 0;
-    font-size: 0.9rem;
-}
-
-.example-desc {
-    color: #666;
-    font-style: italic;
-    font-size: 0.9rem;
-}
-
-.command-notes ul {
-    margin: 0.5rem 0;
-    padding-left: 1.5rem;
-}
-
-.command-notes li {
-    margin: 0.5rem 0;
-    color: #666;
-    line-height: 1.4;
-}
-
-.command-notes li code {
-    background: #e2e8f0;
-    padding: 0.2rem 0.4rem;
-    border-radius: 3px;
-    font-family: 'Monaco', 'Menlo', monospace;
-    font-size: 0.9rem;
-}
-
-@media (max-width: 768px) {
-    .command-item {
-        padding: 1rem;
-        margin-bottom: 2rem;
-    }
-    
-    .command-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-}
-</style>
