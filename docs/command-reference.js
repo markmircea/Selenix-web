@@ -145,10 +145,20 @@ function createPlaceholderContent(category) {
 function showCategory(category) {
     console.log(`Showing category: ${category}`);
     
-    // Hide all sections
-    document.querySelectorAll('.command-section').forEach(section => {
-        section.style.display = 'none';
-    });
+    // Get the content container
+    const contentContainer = document.getElementById('command-content-container');
+    if (!contentContainer) {
+        console.error('Command content container not found');
+        return;
+    }
+    
+    // Show loading state
+    contentContainer.innerHTML = `
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Loading ${category} commands...</p>
+        </div>
+    `;
     
     // Hide the main categories view
     const categoriesSection = document.querySelector('.command-categories')?.parentElement;
@@ -162,40 +172,55 @@ function showCategory(category) {
         searchSection.style.display = 'none';
     }
     
-    // Show the selected category section
-    const targetSection = document.getElementById(`${category}-section`);
-    if (targetSection) {
-        targetSection.style.display = 'block';
-        
-        // Add a back button if it doesn't exist
-        if (!targetSection.querySelector('.back-to-categories')) {
-            const backButton = document.createElement('div');
-            backButton.className = 'back-to-categories';
-            backButton.innerHTML = `
-                <button onclick="showAllCategories()" class="back-btn">
-                    <i class="fa-solid fa-arrow-left"></i> Back to All Categories
-                </button>
+    // Load the content from the corresponding HTML file
+    fetch(`./content/${category}-commands.html`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load ${category} commands`);
+            }
+            return response.text();
+        })
+        .then(html => {
+            // Display the content
+            contentContainer.innerHTML = `
+                <div class="back-to-categories">
+                    <button onclick="showAllCategories()" class="back-btn">
+                        <i class="fa-solid fa-arrow-left"></i> Back to All Categories
+                    </button>
+                </div>
+                <div class="command-section">
+                    ${html}
+                </div>
             `;
-            targetSection.insertBefore(backButton, targetSection.firstChild);
-        }
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-        
-        // Update URL hash
-        window.location.hash = `command-reference-${category}`;
-    } else {
-        console.error(`Section not found: ${category}-section`);
-    }
+            
+            // Update URL hash
+            window.location.hash = `command-reference-${category}`;
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        })
+        .catch(error => {
+            console.error(error);
+            contentContainer.innerHTML = `
+                <div class="error-message">
+                    <h1>Error Loading Commands</h1>
+                    <p>${error.message}</p>
+                    <button onclick="showAllCategories()" class="back-btn">
+                        <i class="fa-solid fa-arrow-left"></i> Back to Categories
+                    </button>
+                </div>
+            `;
+        });
 }
 
 function showAllCategories() {
     console.log('Showing all categories');
     
-    // Hide all command sections
-    document.querySelectorAll('.command-section').forEach(section => {
-        section.style.display = 'none';
-    });
+    // Clear the content container
+    const contentContainer = document.getElementById('command-content-container');
+    if (contentContainer) {
+        contentContainer.innerHTML = '';
+    }
     
     // Show the main categories view
     const categoriesSection = document.querySelector('.command-categories')?.parentElement;
@@ -224,8 +249,174 @@ function filterCommands(type) {
 
 function filterCommandsBySearch(query) {
     console.log(`Searching commands for: ${query}`);
-    // Implementation for searching through commands
-    // This would show/hide commands based on search terms
+    
+    if (!query.trim()) {
+        // If search is empty, clear results
+        return;
+    }
+    
+    // Show loading state in the content container
+    const contentContainer = document.getElementById('command-content-container');
+    if (contentContainer) {
+        contentContainer.innerHTML = `
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p>Searching for "${query}" across all commands...</p>
+            </div>
+        `;
+    }
+    
+    // Perform the search across all command categories
+    searchAllCommands(query)
+        .then(results => {
+            displaySearchResults(results, query);
+        })
+        .catch(error => {
+            console.error('Error searching commands:', error);
+            if (contentContainer) {
+                contentContainer.innerHTML = `
+                    <div class="error-message">
+                        <h1>Search Error</h1>
+                        <p>${error.message}</p>
+                        <button onclick="showAllCategories()" class="back-btn">
+                            <i class="fa-solid fa-arrow-left"></i> Back to Categories
+                        </button>
+                    </div>
+                `;
+            }
+        });
+}
+
+async function searchAllCommands(query) {
+    if (!query.trim()) return [];
+    
+    const sections = {
+        'interaction': 'interaction-commands.html',
+        'scraping': 'scraping-commands.html', 
+        'assertion': 'assertion-commands-complete.html',
+        'navigation': 'navigation-commands.html',
+        'data': 'data-commands.html',
+        'export': 'export-commands.html',
+        'ai': 'ai-commands.html',
+        'state': 'state-commands.html'
+    };
+    
+    const results = [];
+    
+    // Load all command content if not already loaded
+    for (const [category, filename] of Object.entries(sections)) {
+        try {
+            const response = await fetch(`./content/${filename}`);
+            if (response.ok) {
+                const content = await response.text();
+                
+                // Create a temporary element to parse the HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = content;
+                
+                // Find all command items
+                const commandItems = tempDiv.querySelectorAll('.command-item');
+                
+                // Check each command for the search term
+                commandItems.forEach(item => {
+                    const commandName = item.querySelector('.command-header h3')?.textContent || '';
+                    const commandDesc = item.querySelector('.command-description')?.textContent || '';
+                    const commandText = item.textContent;
+                    
+                    if (
+                        commandName.toLowerCase().includes(query.toLowerCase()) ||
+                        commandDesc.toLowerCase().includes(query.toLowerCase()) ||
+                        commandText.toLowerCase().includes(query.toLowerCase())
+                    ) {
+                        results.push({
+                            name: commandName,
+                            description: commandDesc,
+                            category: category,
+                            html: item.outerHTML,
+                            id: item.id || `command-${Math.random().toString(36).substr(2, 9)}`
+                        });
+                    }
+                });
+            }
+        } catch (error) {
+            console.warn(`Error searching ${filename}:`, error);
+        }
+    }
+    
+    return results;
+}
+
+function displaySearchResults(results, query) {
+    const contentContainer = document.getElementById('command-content-container');
+    if (!contentContainer) return;
+    
+    // Hide the main categories view
+    const categoriesSection = document.querySelector('.command-categories')?.parentElement;
+    if (categoriesSection) {
+        categoriesSection.style.display = 'none';
+    }
+    
+    if (results.length === 0) {
+        contentContainer.innerHTML = `
+            <div class="back-to-categories">
+                <button onclick="showAllCategories()" class="back-btn">
+                    <i class="fa-solid fa-arrow-left"></i> Back to All Categories
+                </button>
+            </div>
+            <div class="search-results-empty">
+                <h2><i class="fa-solid fa-search"></i> Search Results</h2>
+                <p>No commands found matching "${query}"</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Group results by category
+    const groupedResults = {};
+    results.forEach(result => {
+        if (!groupedResults[result.category]) {
+            groupedResults[result.category] = [];
+        }
+        groupedResults[result.category].push(result);
+    });
+    
+    // Build the results HTML
+    let resultsHTML = `
+        <div class="back-to-categories">
+            <button onclick="showAllCategories()" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to All Categories
+            </button>
+        </div>
+        <div class="search-results-header">
+            <h2><i class="fa-solid fa-search"></i> Search Results</h2>
+            <p>Found ${results.length} commands matching "${query}"</p>
+        </div>
+    `;
+    
+    // Add results by category
+    for (const [category, categoryResults] of Object.entries(groupedResults)) {
+        const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+        
+        resultsHTML += `
+            <div class="search-results-category">
+                <h3><i class="fa-solid fa-folder"></i> ${categoryName} Commands (${categoryResults.length})</h3>
+                <div class="command-list">
+        `;
+        
+        categoryResults.forEach(result => {
+            resultsHTML += result.html;
+        });
+        
+        resultsHTML += `
+                </div>
+            </div>
+        `;
+    }
+    
+    contentContainer.innerHTML = resultsHTML;
+    
+    // Update URL hash
+    window.location.hash = `command-reference-search-${encodeURIComponent(query)}`;
 }
 
 function handleInitialView() {
