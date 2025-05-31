@@ -77,7 +77,7 @@ async function loadCommandSections() {
     const sections = {
         'interaction': 'interaction-commands.html',
         'scraping': 'scraping-commands.html', 
-        'assertion': 'assertion-commands-complete.html',
+        'assertion': 'assertion-commands.html',
         'navigation': 'navigation-commands.html',
         'data': 'data-commands.html',
         'export': 'export-commands.html',
@@ -201,7 +201,7 @@ function showCategory(category) {
             filePath = './content/scraping-commands.html';
             break;
         case 'assertion':
-            filePath = './content/assertion-commands-complete.html';
+            filePath = './content/assertion-commands.html';
             break;
         case 'data':
             filePath = './content/data-commands.html';
@@ -240,10 +240,12 @@ function showCategory(category) {
                         <i class="fa-solid fa-arrow-left"></i> Back to All Categories
                     </button>
                 </div>
-                <div class="command-section" style="display: block;">
+                <div id="command-section-wrapper" style="display: block;">
                     ${html}
                 </div>
             `;
+            
+
             
             // Update URL hash - but keep the main command-reference hash to avoid conflicts
             if (window.location.hash !== '#command-reference') {
@@ -369,7 +371,7 @@ async function searchAllCommands(query) {
     const sections = {
         'interaction': 'interaction-commands.html',
         'scraping': 'scraping-commands.html', 
-        'assertion': 'assertion-commands-complete.html',
+        'assertion': 'assertion-commands.html',
         'navigation': 'navigation-commands.html',
         'data': 'data-commands.html',
         'export': 'export-commands.html',
