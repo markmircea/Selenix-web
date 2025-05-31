@@ -1,7 +1,95 @@
-                    <li><strong>Data transformation:</strong> "Convert all prices to numbers..."</li>
-                    <li><strong>Text analysis:</strong> "Summarize this content..."</li>
-                    <li><strong>Format conversion:</strong> "Convert to JSON format..."</li>
-                    <li><strong>Data extraction:</strong> "Extract all phone numbers..."</li>
+<div class="docs-section">
+    <h2><i class="fa-solid fa-robot"></i> AI & Advanced Commands</h2>
+    <p>These commands leverage artificial intelligence and advanced system integrations to extend your automation capabilities beyond traditional web interactions.</p>
+    
+    <div class="command-list">
+        <!-- Send to AI Command -->
+        <div class="command-item" id="sendToAI">
+            <div class="command-header">
+                <h3><code>sendToAI</code></h3>
+                <div class="command-badge">AI-Powered</div>
+            </div>
+            <p class="command-description">Leverages AI capabilities to generate or manipulate data during test execution. Process existing variables or generate new content based on your instructions.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>sendToAI | instructions | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Instructions for the AI model, describing what you want it to do. These can include:
+                    <ul>
+                        <li>Data transformation instructions (e.g., "Filter this list to only include items that start with 'A'")</li>
+                        <li>Content generation requests (e.g., "Generate a blog post about automation testing")</li>
+                        <li>Data analysis directives (e.g., "Analyze this JSON and extract all email addresses")</li>
+                    </ul>
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The name of the variable to process or create:
+                    <ul>
+                        <li>If the variable already exists, the AI will process its content according to your instructions</li>
+                        <li>If the variable doesn't exist, the AI will generate new content based solely on your instructions and store it in a new variable with this name</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeJson | [{"name": "Alice", "age": 25}, {"name": "Bob", "age": 30}, {"name": "Charlie", "age": 35}] | people</code>
+                        <code>sendToAI | Filter this list to only include people over 30 years old | people</code>
+                        <code>echo | ${people}</code>
+                    </div>
+                    <div class="example-desc">Filter existing data using AI</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>sendToAI | Generate a list of 5 creative product names for a new line of eco-friendly water bottles | productNames</code>
+                        <code>echo | ${productNames}</code>
+                    </div>
+                    <div class="example-desc">Generate new content with AI</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.product-title | productTitles</code>
+                        <code>sendToAI | Convert all these product titles to uppercase and add the prefix "NEW: " to each one | productTitles</code>
+                        <code>storeJson | ${productTitles} | formattedTitles</code>
+                    </div>
+                    <div class="example-desc">Transform scraped data using AI</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>sendToAI | Generate a JSON array of 3 fictional user profiles with fields for name, email, age, and occupation | users</code>
+                        <code>exportToJSON | users | users.json</code>
+                    </div>
+                    <div class="example-desc">Generate structured data with AI and export it</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Tips and Best Practices</h4>
+                <ul>
+                    <li><strong>Be specific in your instructions:</strong> The more specific your instructions, the better the results</li>
+                    <li><strong>Consider data formats:</strong> For structured data, specify the format you want</li>
+                    <li><strong>Variable types:</strong> The command works with any variable type (strings, arrays, objects)</li>
+                    <li><strong>Error handling:</strong> If the AI encounters an error, it will return an error message that you can check</li>
+                    <li><strong>Performance:</strong> For large datasets, consider breaking them into smaller chunks</li>
+                    <li><strong>Consistency:</strong> For repeatable results, use detailed instructions with specific formatting requirements</li>
+                </ul>
+                
+                <h4>Common Use Cases</h4>
+                <ul>
+                    <li><strong>Data cleaning and transformation:</strong> Normalize data formats, fix inconsistencies</li>
+                    <li><strong>Content generation:</strong> Create test data, sample content, or placeholder text</li>
+                    <li><strong>Data extraction:</strong> Pull specific information from complex structures</li>
+                    <li><strong>Format conversion:</strong> Transform between different data formats</li>
+                    <li><strong>Text analysis:</strong> Summarize content, extract keywords, or categorize text</li>
                 </ul>
             </div>
         </div>
@@ -12,20 +100,28 @@
                 <h3><code>executePowerShell</code></h3>
                 <div class="command-badge">System Integration</div>
             </div>
-            <p class="command-description">Execute PowerShell scripts and capture results. Perfect for system operations, file processing, and advanced integrations.</p>
+            <p class="command-description">Execute PowerShell scripts from within your Selenium IDE tests. This powerful integration enables you to leverage PowerShell's capabilities for system operations, data processing, and automation tasks.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>executePowerShell | scriptPath[|arg1|arg2] | variableName</code>
+                <code>executePowerShell | scriptPath[|arg1|arg2|...] | variableName</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> Path to PowerShell script, optionally followed by arguments separated by | characters
+                    <strong>Target:</strong> Path to the PowerShell script file, optionally followed by arguments separated by pipe (|) characters.
+                    <ul>
+                        <li>Format: <code>scriptPath[|arg1|arg2|...]</code></li>
+                        <li>Example: <code>C:/scripts/process.ps1|argument1|argument2</code></li>
+                    </ul>
                 </div>
                 <div class="param">
-                    <strong>Value:</strong> Variable name to store the script's output
+                    <strong>Value:</strong> Variable name to store the script's output.
+                    <ul>
+                        <li>If provided, the script's output will be stored in this variable for later use in your test.</li>
+                        <li>If the script returns JSON or structured data, it will be automatically parsed.</li>
+                    </ul>
                 </div>
             </div>
             
@@ -33,22 +129,78 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>executePowerShell | C:/scripts/process-data.ps1|${csvFile}|outputDir | processResult</code>
-                        <code>executePowerShell | C:/scripts/get-system-info.ps1 | systemInfo</code>
-                        <code>executePowerShell | C:/scripts/send-email.ps1|${recipientEmail}|${subject}|${body} | emailResult</code>
-                        <code>echo | Script completed: ${processResult}</code>
+                        <code>executePowerShell | C:/scripts/hello.ps1 | result</code>
+                        <code>echo | ${result}</code>
                     </div>
-                    <div class="example-desc">Process data files, get system information, and send emails</div>
+                    <div class="example-desc">Basic usage - run a script and display the result</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>executePowerShell | C:/scripts/process.ps1|arg1|arg2 | result</code>
+                    </div>
+                    <div class="example-desc">Pass arguments to the PowerShell script</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>store | Hello World | myVariable</code>
+                        <code>executePowerShell | C:/scripts/process.ps1|${myVariable}|otherArg | result</code>
+                    </div>
+                    <div class="example-desc">Pass variables as arguments to the script</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>executePowerShell | C:/scripts/getData.ps1 | apiData</code>
+                        <code>verify | ${apiData.status} | success</code>
+                    </div>
+                    <div class="example-desc">Use the structured result in subsequent commands</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>PowerShell Integration</h4>
+                <h4>PowerShell Script Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code># Simple script that returns a string (hello.ps1)</code>
+                        <code>Write-Output "Hello from PowerShell!"</code>
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code># Script with arguments (process.ps1)</code>
+                        <code>$firstArg = $args[0]</code>
+                        <code>$secondArg = $args[1]</code>
+                        <code>$result = "Processed: $firstArg, $secondArg"</code>
+                        <code>return $result</code>
+                    </div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code># Script returning structured data (getData.ps1)</code>
+                        <code>$data = @{</code>
+                        <code>    "status" = "success"</code>
+                        <code>    "items" = @(</code>
+                        <code>        @{ "id" = 1; "name" = "Item 1" },</code>
+                        <code>        @{ "id" = 2; "name" = "Item 2" }</code>
+                        <code>    )</code>
+                        <code>    "count" = 2</code>
+                        <code>}</code>
+                        <code>return $data</code>
+                    </div>
+                </div>
+                
+                <h4>Best Practices</h4>
                 <ul>
-                    <li>Scripts receive arguments as <code>$args[0]</code>, <code>$args[1]</code>, etc.</li>
-                    <li>Variable interpolation: <code>${variableName}</code> is expanded before script execution</li>
-                    <li>Return structured data as JSON for easy processing in Selenix</li>
-                    <li>Cross-platform: Uses PowerShell Core on macOS/Linux</li>
+                    <li><strong>Script Path:</strong> Use absolute paths to ensure scripts are found regardless of where Selenium IDE is running from.</li>
+                    <li><strong>Variable Interpolation:</strong> Variables in the format <code>${variableName}</code> are automatically interpolated before being passed to the PowerShell script.</li>
+                    <li><strong>Error Handling:</strong> If the PowerShell script encounters an error, the error message will be stored in the result variable.</li>
+                    <li><strong>Return Values:</strong> PowerShell objects are automatically converted to JSON when returned to Selenium IDE.</li>
+                    <li><strong>Security Considerations:</strong> Scripts run with the same permissions as the Selenium IDE process.</li>
+                    <li><strong>Cross-Platform Compatibility:</strong> On Windows, the command uses PowerShell.exe. On macOS/Linux, it uses pwsh (PowerShell Core), which must be installed.</li>
                 </ul>
             </div>
         </div>
@@ -156,84 +308,66 @@
             </div>
         </div>
         
-        <!-- Set Speed -->
-        <div class="command-item" id="setSpeed">
+        <!-- Curl Request -->
+        <div class="command-item" id="curlRequest">
             <div class="command-header">
-                <h3><code>setSpeed</code></h3>
-                <div class="command-badge">Configuration</div>
+                <h3><code>curlRequest</code></h3>
+                <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Set execution speed by adding delays between commands. Useful for slower websites or debugging.</p>
+            <p class="command-description">Executes a cURL-style HTTP request and stores the response in a variable. Perfect for API testing and data retrieval.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>setSpeed | milliseconds</code>
+                <code>curlRequest | curlCommand | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A cURL command string or JSON configuration object for the request
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Variable name to store the response
+                </div>
             </div>
             
             <div class="command-examples">
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>setSpeed | 1000</code>
-                        <code>open | https://slow-website.com</code>
-                        <code>click | css=.menu-item</code>
-                        <code>setSpeed | 0</code>
-                        <code>scrapeCollection | css=.fast-content | data</code>
+                        <code>curlRequest | curl https://api.example.com/users | userData</code>
+                        <code>echo | Retrieved ${userData.length} users</code>
                     </div>
-                    <div class="example-desc">Slow down for problematic sites, then speed up for data extraction</div>
+                    <div class="example-desc">Simple GET request using cURL syntax</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>curlRequest | curl -X POST https://api.example.com/login -H "Content-Type: application/json" -d '{"username":"test","password":"password"}' | loginResponse</code>
+                        <code>storeJson | ${loginResponse} | loginData</code>
+                        <code>store | ${loginData.token} | authToken</code>
+                    </div>
+                    <div class="example-desc">POST request with JSON data and header</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>store | my-api-key | apiKey</code>
+                        <code>curlRequest | curl https://api.example.com/data -H "Authorization: Bearer ${apiKey}" | apiData</code>
+                    </div>
+                    <div class="example-desc">Using variables in the cURL command</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Speed Settings</h4>
+                <h4>Usage Notes</h4>
                 <ul>
-                    <li><code>0</code>: No delay (fastest)</li>
-                    <li><code>500-1000</code>: Good for most websites</li>
-                    <li><code>2000+</code>: For very slow or problematic sites</li>
-                    <li>Global setting affects all subsequent commands</li>
+                    <li>Supports all standard cURL options including headers, request methods, and data</li>
+                    <li>Response is automatically parsed as JSON if possible</li>
+                    <li>Variables can be interpolated in the cURL command using <code>${variableName}</code> syntax</li>
+                    <li>Useful for API testing, data retrieval, and authentication flows</li>
                 </ul>
             </div>
         </div>
-        
     </div>
 </div>
-
-<style>
-.command-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: white;
-}
-
-.command-item:has(.command-badge:contains("AI-Powered")) .command-badge {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    animation: glow 2s ease-in-out infinite alternate;
-}
-
-.command-item:has(.command-badge:contains("System Integration")) .command-badge {
-    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-}
-
-.command-item:has(.command-badge:contains("Development")) .command-badge {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-}
-
-.command-item:has(.command-badge:contains("Configuration")) .command-badge {
-    background: linear-gradient(135deg, #06b6d4, #0891b2);
-}
-
-.command-item:has(.command-badge:contains("Utility")) .command-badge {
-    background: linear-gradient(135deg, #6b7280, #4b5563);
-}
-
-@keyframes glow {
-    from {
-        box-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
-    }
-    to {
-        box-shadow: 0 0 15px rgba(245, 158, 11, 0.8);
-    }
-}
-</style>

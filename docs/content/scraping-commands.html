@@ -1,10 +1,339 @@
+<div class="docs-section">
+    <h2><i class="fa-solid fa-spider"></i> Scraping Commands</h2>
+    <p>These commands allow you to extract data from web pages, process it, and store it for later use or export.</p>
+    
+    <div class="command-list">
+        <!-- Scrape Collection -->
+        <div class="command-item" id="scrapeCollection">
+            <div class="command-header">
+                <h3><code>scrapeCollection</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Extracts data from all elements matching a single selector and stores it as an array. Perfect for scraping lists, tables, or repeated elements.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>scrapeCollection | locator | variableName</code>
+            </div>
+            
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> Number of times to scroll down the page
+                    <strong>Target:</strong> A locator that identifies the elements to scrape (e.g., <code>css=.product-card</code>, <code>xpath=//tr</code>)
                 </div>
                 <div class="param">
-                    <strong>Value:</strong> Wait time in milliseconds between each scroll
+                    <strong>Value:</strong> The name of the variable to store the scraped data array
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.product-title | productTitles</code>
+                        <code>echo | Found ${productTitles.length} products</code>
+                    </div>
+                    <div class="example-desc">Extract all product titles from a page</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=table tr | tableRows</code>
+                        <code>transformVariable | tableRows | rows => rows.filter(row => row.includes('In Stock'))</code>
+                        <code>echo | ${tableRows.length} items are in stock</code>
+                    </div>
+                    <div class="example-desc">Extract table rows and filter them</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.review-text | reviews</code>
+                        <code>sendToAI | Analyze these reviews and categorize them as positive, negative, or neutral | reviewAnalysis</code>
+                        <code>echo | Analysis complete: ${reviewAnalysis}</code>
+                    </div>
+                    <div class="example-desc">Extract reviews and analyze them with AI</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li><strong>Text Content:</strong> By default, the command extracts the text content of each matching element</li>
+                    <li><strong>Attribute Extraction:</strong> To extract an attribute instead of text, append <code>@attributeName</code> to your selector (e.g., <code>css=img.product@src</code> to get image URLs)</li>
+                    <li><strong>Empty Results:</strong> If no elements match your selector, an empty array is stored</li>
+                    <li><strong>Viewing Results:</strong> Use <code>echo | ${variableName}</code> or <code>inspectVariable | variableName</code> to view the scraped data</li>
+                    <li><strong>Processing:</strong> Use <code>transformVariable</code> to filter, map, or otherwise process the array</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Scrape Structured -->
+        <div class="command-item" id="scrapeStructured">
+            <div class="command-header">
+                <h3><code>scrapeStructured</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Extracts structured data from multiple elements using a mapping of fields to selectors. Creates an array of objects with consistent structure.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>scrapeStructured | jsonMapping | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A JSON object that maps field names to selectors. The special <code>_root</code> field defines the container elements.
+                    <ul>
+                        <li>Format: <code>{"_root": "rootSelector", "field1": "selector1", "field2": "selector2", ...}</code></li>
+                        <li>Example: <code>{"_root": "css=.product-card", "title": "css=.product-title", "price": "css=.product-price", "image": "css=img@src"}</code></li>
+                    </ul>
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The name of the variable to store the structured data array
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeStructured | {"_root": "css=.product-card", "title": "css=.product-title", "price": "css=.product-price", "image": "css=img@src"} | products</code>
+                        <code>echo | Scraped ${products.length} products</code>
+                        <code>exportToJSON | products | products.json</code>
+                    </div>
+                    <div class="example-desc">Extract product data with consistent structure</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeStructured | {"_root": "css=table tr", "name": "css=td:nth-child(1)", "email": "css=td:nth-child(2)", "role": "css=td:nth-child(3)"} | users</code>
+                        <code>transformVariable | users | users => users.filter(user => user.role === 'Admin')</code>
+                        <code>echo | Found ${users.length} admin users</code>
+                    </div>
+                    <div class="example-desc">Extract and filter table data</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeStructured | {"_root": "css=article", "title": "css=h2", "author": "css=.author", "date": "css=.date", "content": "css=.content", "tags": "css=.tag"} | articles</code>
+                        <code>exportToCSV | articles | articles.csv</code>
+                    </div>
+                    <div class="example-desc">Extract blog articles and export to CSV</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Advanced Features</h4>
+                <ul>
+                    <li><strong>Attribute Extraction:</strong> Append <code>@attributeName</code> to any selector to extract an attribute instead of text (e.g., <code>css=img@src</code>, <code>css=a@href</code>)</li>
+                    <li><strong>Nested Selectors:</strong> Selectors are relative to the <code>_root</code> element, allowing precise targeting of nested elements</li>
+                    <li><strong>Multiple Values:</strong> If a selector matches multiple elements within a root element, the field will contain an array of values</li>
+                    <li><strong>Optional Fields:</strong> If a selector doesn't match any elements, the field will be <code>null</code> in the resulting object</li>
+                    <li><strong>Selector Types:</strong> Both CSS and XPath selectors are supported (e.g., <code>css=.product-title</code> or <code>xpath=//h2[@class='product-title']</code>)</li>
+                </ul>
+                
+                <h4>Best Practices</h4>
+                <ul>
+                    <li><strong>Test Selectors:</strong> Verify your selectors match the expected elements before running a full scrape</li>
+                    <li><strong>Start Small:</strong> Begin with a few fields and add more as needed</li>
+                    <li><strong>Handle Variations:</strong> Some websites may have inconsistent structures; use <code>transformVariable</code> to clean up data after scraping</li>
+                    <li><strong>Pagination:</strong> For multi-page scraping, combine with <code>scrollAndWait</code> or navigation commands in a loop</li>
+                    <li><strong>Rate Limiting:</strong> Add <code>pause</code> commands between scrapes to avoid overloading websites</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Store Text -->
+        <div class="command-item" id="storeText">
+            <div class="command-header">
+                <h3><code>storeText</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Gets the text of an element and stores it for later use. Works for any element that contains text.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>storeText | locator | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to extract text from
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The name of the variable to store the text
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeText | id=product-title | productTitle</code>
+                        <code>echo | Product: ${productTitle}</code>
+                    </div>
+                    <div class="example-desc">Extract and use a single element's text</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeText | css=.price | price</code>
+                        <code>storeText | css=.stock-status | stockStatus</code>
+                        <code>echo | Price: ${price}, Status: ${stockStatus}</code>
+                    </div>
+                    <div class="example-desc">Extract multiple individual elements</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>storeText vs. scrapeCollection</h4>
+                <ul>
+                    <li>Use <code>storeText</code> when you need text from a single, specific element</li>
+                    <li>Use <code>scrapeCollection</code> when you need text from multiple similar elements</li>
+                    <li>If <code>storeText</code> matches multiple elements, it will only store the text from the first match</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Store Attribute -->
+        <div class="command-item" id="storeAttribute">
+            <div class="command-header">
+                <h3><code>storeAttribute</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Gets the value of an element attribute and stores it for later use.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>storeAttribute | locator@attribute | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator followed by @ and the attribute name (e.g., <code>id=profile-image@src</code>, <code>css=a.download@href</code>)
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The name of the variable to store the attribute value
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeAttribute | css=img.product@src | imageUrl</code>
+                        <code>echo | Image URL: ${imageUrl}</code>
+                    </div>
+                    <div class="example-desc">Extract an image URL</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeAttribute | css=a.download@href | downloadUrl</code>
+                        <code>storeAttribute | css=a.download@data-size | fileSize</code>
+                        <code>echo | Download: ${downloadUrl} (${fileSize})</code>
+                    </div>
+                    <div class="example-desc">Extract link attributes</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeAttribute | css=input#username@placeholder | placeholderText</code>
+                        <code>storeAttribute | css=div.error@class | errorClass</code>
+                    </div>
+                    <div class="example-desc">Extract form field attributes</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Store Element Count -->
+        <div class="command-item" id="storeElementCount">
+            <div class="command-header">
+                <h3><code>storeElementCount</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Gets the number of elements that match the specified locator and stores it as a variable.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>storeElementCount | locator | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the elements to count
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The name of the variable to store the count
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeElementCount | css=.product-card | productCount</code>
+                        <code>echo | Found ${productCount} products on this page</code>
+                    </div>
+                    <div class="example-desc">Count products on a page</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeElementCount | css=.pagination a | pageCount</code>
+                        <code>echo | This category has ${pageCount} pages</code>
+                    </div>
+                    <div class="example-desc">Count pagination links</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeElementCount | css=table tr | rowCount</code>
+                        <code>if | ${rowCount} > 10</code>
+                        <code>  echo | Table has more than 10 rows</code>
+                        <code>else</code>
+                        <code>  echo | Table has 10 or fewer rows</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Count table rows and use in conditional logic</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Returns 0 if no elements match the locator</li>
+                    <li>Useful for verifying data completeness before scraping</li>
+                    <li>Can be used in conditional logic to make decisions based on element counts</li>
+                    <li>Helps with pagination logic (e.g., determining how many pages to process)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Scroll And Wait -->
+        <div class="command-item" id="scrollAndWait">
+            <div class="command-header">
+                <h3><code>scrollAndWait</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Scrolls the page and waits for new content to load. Essential for infinite scroll pages and lazy-loaded content.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>scrollAndWait | scrollCount | waitTime</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Number of times to scroll
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Time to wait after each scroll (in milliseconds)
                 </div>
             </div>
             
@@ -13,45 +342,58 @@
                 <div class="example">
                     <div class="example-code">
                         <code>scrollAndWait | 5 | 2000</code>
-                        <code>scrapeCollection | css=.infinite-scroll-item | allItems</code>
-                        <code>scrollAndWait | 10 | 1000</code>
-                        <code>storeElementCount | css=.loaded-item | totalLoaded</code>
+                        <code>scrapeCollection | css=.product-card | products</code>
                     </div>
-                    <div class="example-desc">Scroll to load more content, then scrape all items</div>
+                    <div class="example-desc">Scroll 5 times, waiting 2 seconds after each scroll, then scrape products</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeElementCount | css=.product-card | initialCount</code>
+                        <code>scrollAndWait | 1 | 3000</code>
+                        <code>storeElementCount | css=.product-card | newCount</code>
+                        <code>while | ${newCount} > ${initialCount}</code>
+                        <code>  store | ${newCount} | initialCount</code>
+                        <code>  scrollAndWait | 1 | 3000</code>
+                        <code>  storeElementCount | css=.product-card | newCount</code>
+                        <code>end</code>
+                        <code>scrapeCollection | css=.product-card | allProducts</code>
+                    </div>
+                    <div class="example-desc">Scroll until no new products load, then scrape all products</div>
                 </div>
             </div>
             
             <div class="command-notes">
                 <h4>Best Practices</h4>
                 <ul>
-                    <li>Use with social media feeds, search results, and product listings</li>
-                    <li>Combine with element counting to verify content loaded</li>
-                    <li>Adjust wait times based on site loading speed</li>
-                    <li>Use before scraping to ensure all content is visible</li>
+                    <li><strong>Wait Time:</strong> Adjust the wait time based on page load speed and network conditions</li>
+                    <li><strong>Scroll Count:</strong> For known content, calculate the required scrolls; for unknown content, use a loop with element counting</li>
+                    <li><strong>Verification:</strong> After scrolling, verify that new content has loaded before scraping</li>
+                    <li><strong>Performance:</strong> Be mindful of memory usage when loading very large amounts of content</li>
                 </ul>
             </div>
         </div>
         
-        <!-- Monitor Element -->
-        <div class="command-item" id="monitorElement">
+        <!-- Transform Variable -->
+        <div class="command-item" id="transformVariable">
             <div class="command-header">
-                <h3><code>monitorElement</code></h3>
-                <div class="command-badge">Professional</div>
+                <h3><code>transformVariable</code></h3>
+                <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Periodically checks an element for changes to a specified attribute and performs actions when changes are detected. Perfect for monitoring dynamic content.</p>
+            <p class="command-description">Transforms a variable using a JavaScript function. Perfect for filtering, mapping, or otherwise processing scraped data.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>monitorElement | locator | jsonConfig</code>
+                <code>transformVariable | variableName | javascriptFunction</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> Element locator to monitor
+                    <strong>Target:</strong> The name of the variable to transform
                 </div>
                 <div class="param">
-                    <strong>Value:</strong> JSON configuration with monitoring options
+                    <strong>Value:</strong> A JavaScript function or expression to apply to the variable
                 </div>
             </div>
             
@@ -59,25 +401,51 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>monitorElement | css=.stock-price | {"interval": 1000, "storeValue": "newPrice"}</code>
-                        <code>monitorElement | id=status | {"attribute": "class", "condition": "contains", "baseValue": "complete"}</code>
-                        <code>monitorElement | css=.countdown | {"interval": 500, "condition": "===", "baseValue": "00:00"}</code>
+                        <code>scrapeCollection | css=.price | prices</code>
+                        <code>transformVariable | prices | prices => prices.map(p => p.replace('$', '')).map(Number)</code>
+                        <code>echo | Average price: ${prices.reduce((a, b) => a + b, 0) / prices.length}</code>
                     </div>
-                    <div class="example-desc">Monitor stock prices, loading status, and countdown timers</div>
+                    <div class="example-desc">Convert price strings to numbers and calculate average</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeStructured | {"_root": "css=.product", "name": "css=.name", "price": "css=.price", "stock": "css=.stock"} | products</code>
+                        <code>transformVariable | products | products => products.filter(p => p.stock.includes('In Stock') && parseFloat(p.price.replace('$', '')) < 50)</code>
+                        <code>echo | Found ${products.length} in-stock products under $50</code>
+                    </div>
+                    <div class="example-desc">Filter products by stock status and price</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.date | dates</code>
+                        <code>transformVariable | dates | dates => dates.map(d => new Date(d).toISOString().split('T')[0])</code>
+                        <code>echo | Standardized dates: ${dates}</code>
+                    </div>
+                    <div class="example-desc">Standardize date formats</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Configuration Options</h4>
+                <h4>Common Transformations</h4>
                 <ul>
-                    <li><code>interval</code>: Milliseconds between checks (default: 5000)</li>
-                    <li><code>attribute</code>: What to monitor - "text", "value", "class", etc. (default: "text")</li>
-                    <li><code>condition</code>: "!==", "===", ">", "<", "contains", "matches"</li>
-                    <li><code>storeValue</code>: Variable to store the changed value</li>
-                    <li><code>maxDuration</code>: Maximum monitoring time in milliseconds</li>
+                    <li><strong>Filtering:</strong> <code>array => array.filter(item => condition)</code></li>
+                    <li><strong>Mapping:</strong> <code>array => array.map(item => transformation)</code></li>
+                    <li><strong>Sorting:</strong> <code>array => array.sort((a, b) => comparison)</code></li>
+                    <li><strong>Text Cleaning:</strong> <code>text => text.trim().replace(/\s+/g, ' ')</code></li>
+                    <li><strong>Number Extraction:</strong> <code>text => parseFloat(text.replace(/[^0-9.]/g, ''))</code></li>
+                    <li><strong>URL Normalization:</strong> <code>urls => urls.map(url => new URL(url, window.location.href).href)</code></li>
+                </ul>
+                
+                <h4>Advanced Usage</h4>
+                <ul>
+                    <li>The function receives the variable's current value as its first parameter</li>
+                    <li>The function's return value becomes the new value of the variable</li>
+                    <li>You can use arrow functions or traditional function syntax</li>
+                    <li>For complex transformations, consider breaking them into multiple steps</li>
                 </ul>
             </div>
         </div>
-        
     </div>
 </div>
