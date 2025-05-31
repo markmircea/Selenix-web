@@ -1,0 +1,263 @@
+<h1 class="docs-title">Conditional Logic</h1>
+
+<p class="docs-intro">Conditional logic in Selenix allows your automations to make intelligent decisions based on page content, variable values, and dynamic conditions. Create smart workflows that adapt to different scenarios automatically.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-brain"></i>
+    <div>
+        <strong>AI-Assisted Logic</strong>
+        <p>Ask the AI assistant: "Help me create a condition to check if a product is in stock" and it will suggest the optimal logic structure.</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-code-branch"></i> Basic Conditional Statements</h2>
+    
+    <p>Selenix provides powerful conditional logic commands for creating intelligent automations:</p>
+    
+    <div class="conditional-commands">
+        <div class="conditional-command">
+            <h4><i class="fa-solid fa-question"></i> if Statement</h4>
+            <p>Execute commands only when a condition is true</p>
+            <div class="command-syntax">
+                <code>if | ${price} > 100 | </code>
+            </div>
+            <div class="command-desc">
+                Executes following commands if price variable is greater than 100
+            </div>
+        </div>
+        
+        <div class="conditional-command">
+            <h4><i class="fa-solid fa-arrow-right"></i> else Statement</h4>
+            <p>Execute alternative commands when if condition is false</p>
+            <div class="command-syntax">
+                <code>else | | </code>
+            </div>
+            <div class="command-desc">
+                Provides alternative path when if condition fails
+            </div>
+        </div>
+        
+        <div class="conditional-command">
+            <h4><i class="fa-solid fa-arrows-split-up-and-left"></i> elseIf Statement</h4>
+            <p>Test additional conditions in sequence</p>
+            <div class="command-syntax">
+                <code>elseIf | ${stock} === "available" | </code>
+            </div>
+            <div class="command-desc">
+                Tests another condition if previous conditions were false
+            </div>
+        </div>
+        
+        <div class="conditional-command">
+            <h4><i class="fa-solid fa-stop"></i> end Statement</h4>
+            <p>Close conditional blocks</p>
+            <div class="command-syntax">
+                <code>end | | </code>
+            </div>
+            <div class="command-desc">
+                Terminates if/else/elseIf blocks
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-equals"></i> Condition Types</h2>
+    
+    <p>Selenix supports various types of conditions for different scenarios:</p>
+    
+    <div class="condition-types">
+        <div class="condition-type">
+            <h4><i class="fa-solid fa-balance-scale"></i> Value Comparisons</h4>
+            <div class="condition-examples">
+                <div class="condition-example">
+                    <code>${price} > 50</code>
+                    <span>Greater than comparison</span>
+                </div>
+                <div class="condition-example">
+                    <code>${quantity} <= 10</code>
+                    <span>Less than or equal comparison</span>
+                </div>
+                <div class="condition-example">
+                    <code>${status} === "active"</code>
+                    <span>Exact equality check</span>
+                </div>
+                <div class="condition-example">
+                    <code>${category} !== "discontinued"</code>
+                    <span>Not equal comparison</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="condition-type">
+            <h4><i class="fa-solid fa-text-width"></i> Text Conditions</h4>
+            <div class="condition-examples">
+                <div class="condition-example">
+                    <code>${title}.includes("Special")</code>
+                    <span>Text contains substring</span>
+                </div>
+                <div class="condition-example">
+                    <code>${email}.endsWith("@company.com")</code>
+                    <span>Text ends with pattern</span>
+                </div>
+                <div class="condition-example">
+                    <code>${name}.startsWith("Mr.")</code>
+                    <span>Text starts with pattern</span>
+                </div>
+                <div class="condition-example">
+                    <code>${description}.length > 100</code>
+                    <span>Text length comparison</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="condition-type">
+            <h4><i class="fa-solid fa-eye"></i> Element Existence</h4>
+            <div class="condition-examples">
+                <div class="condition-example">
+                    <code>css=.add-to-cart</code>
+                    <span>Check if element exists on page</span>
+                </div>
+                <div class="condition-example">
+                    <code>xpath=//button[text()="Buy Now"]</code>
+                    <span>Check for button with specific text</span>
+                </div>
+                <div class="condition-example">
+                    <code>id=login-form</code>
+                    <span>Check if login form is present</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="condition-type">
+            <h4><i class="fa-solid fa-list"></i> Array & Object Conditions</h4>
+            <div class="condition-examples">
+                <div class="condition-example">
+                    <code>${products}.length > 0</code>
+                    <span>Check if array has items</span>
+                </div>
+                <div class="condition-example">
+                    <code>${user.role} === "admin"</code>
+                    <span>Check object property value</span>
+                </div>
+                <div class="condition-example">
+                    <code>${categories}.includes("electronics")</code>
+                    <span>Check if array contains value</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Create Smart Automations!</strong>
+            <p>Now that you understand conditional logic, explore <a href="#loops">Loops</a> to create repeating workflows, or learn about <a href="#data-export">Data Export</a> to save your conditional results.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.conditional-commands {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.conditional-command {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.conditional-command:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.conditional-command h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.command-syntax {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 3px solid #4f46e5;
+    font-family: 'Monaco', 'Menlo', monospace;
+    margin: 0.5rem 0;
+}
+
+.command-desc {
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.condition-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.condition-type {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #10b981;
+}
+
+.condition-type h4 {
+    margin: 0 0 1rem 0;
+    color: #065f46;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.condition-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.condition-example {
+    padding: 0.75rem;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #d1fae5;
+}
+
+.condition-example code {
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #1f2937;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.condition-example span {
+    font-size: 0.8rem;
+    color: #065f46;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .conditional-commands,
+    .condition-types {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

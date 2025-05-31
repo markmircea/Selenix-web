@@ -1,0 +1,795 @@
+<h1 class="docs-title">Templates & Sharing</h1>
+
+<p class="docs-intro">Selenix templates allow you to share, reuse, and distribute complete automation workflows. Create reusable templates from your successful automations, or download pre-built templates for common tasks to accelerate your automation development.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-puzzle-piece"></i>
+    <div>
+        <strong>Template System</strong>
+        <p>Selenix templates include complete tests, suites, and configurations that can be exported as JSON files and shared across teams and projects.</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-download"></i> Using Templates</h2>
+    
+    <p>Templates in Selenix are complete automation packages that include tests, test suites, and configurations. You can quickly import templates to get started with proven automation patterns.</p>
+    
+    <h3>Importing Templates</h3>
+    <ol class="docs-list">
+        <li><strong>Download template file</strong> - Get the .json template file from our library or community</li>
+        <li><strong>Open Selenix</strong> - Launch the application and open your project</li>
+        <li><strong>Import template</strong> - Go to File → Import → Import from JSON</li>
+        <li><strong>Select template file</strong> - Choose the downloaded template JSON file</li>
+        <li><strong>Review and customize</strong> - Adapt the template to your specific needs</li>
+    </ol>
+    
+    <div class="template-import-example">
+        <h4>Template Import Process</h4>
+        <div class="import-steps">
+            <div class="import-step">
+                <div class="step-icon"><i class="fa-solid fa-file-import"></i></div>
+                <div class="step-content">
+                    <h5>1. Select Import Type</h5>
+                    <p>Choose whether to import individual tests, complete suites, or entire project templates</p>
+                </div>
+            </div>
+            <div class="import-step">
+                <div class="step-icon"><i class="fa-solid fa-cog"></i></div>
+                <div class="step-content">
+                    <h5>2. Configure Settings</h5>
+                    <p>Adjust URLs, selectors, and variables to match your target website</p>
+                </div>
+            </div>
+            <div class="import-step">
+                <div class="step-icon"><i class="fa-solid fa-play"></i></div>
+                <div class="step-content">
+                    <h5>3. Test & Validate</h5>
+                    <p>Run the imported template to ensure it works with your specific environment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-plus"></i> Creating Templates</h2>
+    
+    <p>Turn your successful automations into reusable templates that can be shared with your team or the community.</p>
+    
+    <h3>Export Individual Tests</h3>
+    <p>Create templates from single automation workflows:</p>
+    
+    <div class="export-example">
+        <h4>Export Test to JSON Template</h4>
+        <ol>
+            <li>Right-click on any test in your project</li>
+            <li>Select <strong>"Export Test to JSON"</strong></li>
+            <li>Choose save location and filename</li>
+            <li>Add description and metadata (optional)</li>
+        </ol>
+        
+        <div class="code-preview">
+            <h5>Example Test Template Structure:</h5>
+            <pre><code>{
+  "id": "web-scraper-template",
+  "name": "E-commerce Product Scraper",
+  "description": "Scrapes product data from e-commerce sites",
+  "commands": [
+    {
+      "command": "open",
+      "target": "${targetUrl}",
+      "value": ""
+    },
+    {
+      "command": "scrapeStructured", 
+      "target": "{\"title\":\"css=.product-title\",\"price\":\"css=.price\"}",
+      "value": "productData"
+    },
+    {
+      "command": "exportToCSV",
+      "target": "productData", 
+      "value": "./exports/products.csv"
+    }
+  ],
+  "variables": {
+    "targetUrl": "https://example-shop.com/products"
+  }
+}</code></pre>
+        </div>
+    </div>
+    
+    <h3>Export Test Suites</h3>
+    <p>Create comprehensive templates with multiple related tests:</p>
+    
+    <div class="suite-export-options">
+        <div class="export-option">
+            <h4><i class="fa-solid fa-file-export"></i> Export Current Suite</h4>
+            <p>Export the currently active test suite with all its tests</p>
+            <ul>
+                <li>Right-click on suite name</li>
+                <li>Select "Export Suite to JSON"</li>
+                <li>Includes all tests in the suite</li>
+                <li>Preserves test execution order</li>
+            </ul>
+        </div>
+        
+        <div class="export-option">
+            <h4><i class="fa-solid fa-layer-group"></i> Export Multiple Suites</h4>
+            <p>Create large templates with multiple test suites</p>
+            <ul>
+                <li>Go to File → Export → Export Suites to JSON</li>
+                <li>Select specific suites to include</li>
+                <li>Creates comprehensive automation package</li>
+                <li>Perfect for complete workflow templates</li>
+            </ul>
+        </div>
+        
+        <div class="export-option">
+            <h4><i class="fa-solid fa-globe"></i> Export All Suites</h4>
+            <p>Export your entire project as a master template</p>
+            <ul>
+                <li>File → Export → Export All Suites to JSON</li>
+                <li>Includes complete project structure</li>
+                <li>All tests, suites, and configurations</li>
+                <li>Ideal for project-wide templates</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h3>Template Best Practices</h3>
+    <div class="best-practices">
+        <div class="practice-item">
+            <h4><i class="fa-solid fa-tag"></i> Use Variables</h4>
+            <p>Replace hardcoded values with variables to make templates flexible:</p>
+            <ul>
+                <li>URLs: <code>${baseUrl}</code></li>
+                <li>File paths: <code>${exportPath}</code></li>
+                <li>API keys: <code>${apiKey}</code></li>
+                <li>Selectors: <code>${productSelector}</code></li>
+            </ul>
+        </div>
+        
+        <div class="practice-item">
+            <h4><i class="fa-solid fa-book"></i> Document Thoroughly</h4>
+            <p>Include comprehensive documentation in your templates:</p>
+            <ul>
+                <li>Clear test and suite names</li>
+                <li>Detailed descriptions</li>
+                <li>Setup instructions</li>
+                <li>Required variables list</li>
+            </ul>
+        </div>
+        
+        <div class="practice-item">
+            <h4><i class="fa-solid fa-vial"></i> Test Before Sharing</h4>
+            <p>Ensure templates work in clean environments:</p>
+            <ul>
+                <li>Test in new project</li>
+                <li>Verify all variables work</li>
+                <li>Check error handling</li>
+                <li>Validate output formats</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-book"></i> Template Library</h2>
+    
+    <p>Explore our collection of pre-built templates for common automation scenarios:</p>
+    
+    <div class="template-categories">
+        <div class="template-category">
+            <h3><i class="fa-solid fa-spider"></i> Web Scraping Templates</h3>
+            <div class="template-list">
+                <div class="template-item">
+                    <h4>E-commerce Product Scraper</h4>
+                    <p>Scrape product titles, prices, descriptions, and images from online stores</p>
+                    <div class="template-features">
+                        <span class="feature">Pagination support</span>
+                        <span class="feature">CSV export</span>
+                        <span class="feature">Image download</span>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <h4>News Article Collector</h4>
+                    <p>Extract news articles, headlines, and metadata from news websites</p>
+                    <div class="template-features">
+                        <span class="feature">Multiple sources</span>
+                        <span class="feature">Date filtering</span>
+                        <span class="feature">JSON export</span>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <h4>Social Media Monitor</h4>
+                    <p>Monitor social media posts, engagement metrics, and trending topics</p>
+                    <div class="template-features">
+                        <span class="feature">Real-time monitoring</span>
+                        <span class="feature">Sentiment analysis</span>
+                        <span class="feature">Webhook integration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="template-category">
+            <h3><i class="fa-solid fa-chart-line"></i> Business Intelligence Templates</h3>
+            <div class="template-list">
+                <div class="template-item">
+                    <h4>Competitor Price Tracker</h4>
+                    <p>Monitor competitor pricing across multiple websites with automated alerts</p>
+                    <div class="template-features">
+                        <span class="feature">Price history</span>
+                        <span class="feature">Slack alerts</span>
+                        <span class="feature">Scheduled runs</span>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <h4>Market Research Suite</h4>
+                    <p>Comprehensive market analysis with data from multiple industry sources</p>
+                    <div class="template-features">
+                        <span class="feature">Multi-source data</span>
+                        <span class="feature">Trend analysis</span>
+                        <span class="feature">Report generation</span>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <h4>Lead Generation System</h4>
+                    <p>Extract contact information and company data for sales prospecting</p>
+                    <div class="template-features">
+                        <span class="feature">Contact enrichment</span>
+                        <span class="feature">CRM integration</span>
+                        <span class="feature">Data validation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="template-category">
+            <h3><i class="fa-solid fa-robot"></i> Automation Templates</h3>
+            <div class="template-list">
+                <div class="template-item">
+                    <h4>Form Automation Suite</h4>
+                    <p>Automate form filling across multiple websites with data validation</p>
+                    <div class="template-features">
+                        <span class="feature">Bulk processing</span>
+                        <span class="feature">Error handling</span>
+                        <span class="feature">Success tracking</span>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <h4>Content Management System</h4>
+                    <p>Automate content publishing and management across multiple platforms</p>
+                    <div class="template-features">
+                        <span class="feature">Multi-platform</span>
+                        <span class="feature">Content scheduling</span>
+                        <span class="feature">SEO optimization</span>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <h4>Website Monitoring System</h4>
+                    <p>Monitor website uptime, performance, and content changes</p>
+                    <div class="template-features">
+                        <span class="feature">Uptime monitoring</span>
+                        <span class="feature">Change detection</span>
+                        <span class="feature">Alert system</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="template-category">
+            <h3><i class="fa-solid fa-calendar-alt"></i> Scheduled Workflow Templates</h3>
+            <div class="template-list">
+                <div class="template-item">
+                    <h4>Daily Data Collection</h4>
+                    <p>Automated daily collection of market data, news, and business metrics</p>
+                    <div class="template-features">
+                        <span class="feature">Daily scheduling</span>
+                        <span class="feature">Data aggregation</span>
+                        <span class="feature">Email reports</span>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <h4>Weekly Competitive Analysis</h4>
+                    <p>Comprehensive weekly analysis of competitor activities and market changes</p>
+                    <div class="template-features">
+                        <span class="feature">Weekly reports</span>
+                        <span class="feature">Trend analysis</span>
+                        <span class="feature">Dashboard updates</span>
+                    </div>
+                </div>
+                
+                <div class="template-item">
+                    <h4>Monthly Performance Review</h4>
+                    <p>Automated monthly collection and analysis of key performance indicators</p>
+                    <div class="template-features">
+                        <span class="feature">KPI tracking</span>
+                        <span class="feature">Performance metrics</span>
+                        <span class="feature">Executive reports</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-cogs"></i> Customizing Templates</h2>
+    
+    <p>After importing a template, customize it for your specific needs:</p>
+    
+    <h3>Variable Configuration</h3>
+    <div class="customization-example">
+        <h4>Setting Up Template Variables</h4>
+        <pre><code>// Original template variable
+open | ${baseUrl}/products
+
+// Customize for your site
+open | https://mystore.com/products
+
+// Use store command to set variables
+store | https://mystore.com | baseUrl
+store | css=.my-product-title | titleSelector
+store | css=.my-price | priceSelector</code></pre>
+    </div>
+    
+    <h3>Selector Adaptation</h3>
+    <div class="selector-guide">
+        <h4>Adapting Selectors for Different Sites</h4>
+        <div class="selector-examples">
+            <div class="selector-example">
+                <h5>Original Template:</h5>
+                <code>scrapeCollection | css=.product-title | titles</code>
+            </div>
+            <div class="selector-example">
+                <h5>Adapted for Your Site:</h5>
+                <code>scrapeCollection | css=.item-name | titles</code>
+            </div>
+        </div>
+        
+        <div class="alert alert-tip">
+            <i class="fa-solid fa-lightbulb"></i>
+            <div>
+                <strong>AI Assistant Help</strong>
+                <p>Use the AI assistant to help adapt selectors: "Help me find the product title selector on this page"</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-users"></i> Sharing & Collaboration</h2>
+    
+    <h3>Team Templates</h3>
+    <p>Share templates within your organization:</p>
+    <ul>
+        <li><strong>Export team standards</strong> - Create templates for common business processes</li>
+        <li><strong>Version control</strong> - Use Git or other VCS to track template changes</li>
+        <li><strong>Documentation</strong> - Include setup guides and troubleshooting tips</li>
+        <li><strong>Testing protocols</strong> - Establish testing procedures for template updates</li>
+    </ul>
+    
+    <h3>Community Sharing</h3>
+    <p>Contribute to the Selenix community:</p>
+    <ul>
+        <li><strong>Submit templates</strong> - Share your successful automations with the community</li>
+        <li><strong>Improve existing templates</strong> - Enhance community templates with your expertise</li>
+        <li><strong>Request templates</strong> - Ask the community for specific automation solutions</li>
+        <li><strong>Rate and review</strong> - Help others find the best templates for their needs</li>
+    </ul>
+    
+    <h3>Template Management</h3>
+    <div class="management-tips">
+        <div class="tip-item">
+            <h4><i class="fa-solid fa-folder"></i> Organization</h4>
+            <ul>
+                <li>Use consistent naming conventions</li>
+                <li>Create folders by category or project</li>
+                <li>Include version numbers in filenames</li>
+                <li>Tag templates with relevant keywords</li>
+            </ul>
+        </div>
+        
+        <div class="tip-item">
+            <h4><i class="fa-solid fa-sync"></i> Maintenance</h4>
+            <ul>
+                <li>Regularly test templates for website changes</li>
+                <li>Update selectors when sites are redesigned</li>
+                <li>Improve error handling based on usage</li>
+                <li>Document known issues and workarounds</li>
+            </ul>
+        </div>
+        
+        <div class="tip-item">
+            <h4><i class="fa-solid fa-shield-alt"></i> Quality Control</h4>
+            <ul>
+                <li>Test templates in clean environments</li>
+                <li>Validate all export formats work correctly</li>
+                <li>Check performance with large datasets</li>
+                <li>Ensure error messages are helpful</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Ready to create and use templates?</strong>
+            <p>Start by exploring our <a href="#template-library">Template Library</a>, or learn more about <a href="#data-export">Data Export</a> to optimize your automation outputs!</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.template-import-example {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #4f46e5;
+}
+
+.import-steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.import-step {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.step-icon i {
+    color: white;
+    font-size: 1.2rem;
+}
+
+.step-content h5 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.step-content p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.export-example {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.code-preview {
+    margin-top: 1rem;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.code-preview h5 {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.code-preview pre {
+    margin: 0;
+    padding: 1rem;
+    background: #2d3748;
+    color: #e2e8f0;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    overflow-x: auto;
+}
+
+.suite-export-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.export-option {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.export-option h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.export-option p {
+    margin: 0 0 1rem 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.export-option ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.export-option li {
+    margin-bottom: 0.5rem;
+    color: #555;
+    position: relative;
+    padding-left: 1rem;
+}
+
+.export-option li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #4f46e5;
+    font-weight: bold;
+}
+
+.best-practices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.practice-item {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 100%);
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+}
+
+.practice-item h4 {
+    margin: 0 0 1rem 0;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.practice-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.practice-item li {
+    margin-bottom: 0.5rem;
+    color: #451a03;
+    line-height: 1.4;
+    position: relative;
+    padding-left: 1rem;
+}
+
+.practice-item li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #92400e;
+    font-weight: bold;
+}
+
+.practice-item code {
+    background: rgba(146, 64, 14, 0.2);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.template-categories {
+    margin: 2rem 0;
+}
+
+.template-category {
+    margin-bottom: 3rem;
+}
+
+.template-category h3 {
+    margin: 0 0 1.5rem 0;
+    color: #333;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #4f46e5;
+}
+
+.template-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.template-item {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.template-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.template-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.template-item p {
+    margin: 0 0 1rem 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.template-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.feature {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.customization-example {
+    margin: 2rem 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.customization-example h4 {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.selector-guide {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.selector-examples {
+    margin: 1rem 0;
+}
+
+.selector-example {
+    margin-bottom: 1rem;
+}
+
+.selector-example h5 {
+    margin: 0 0 0.5rem 0;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.selector-example code {
+    display: block;
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.85rem;
+}
+
+.alert-tip {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border-left: 4px solid #3b82f6;
+    margin-top: 1rem;
+}
+
+.management-tips {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.tip-item {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-radius: 12px;
+    border-left: 4px solid #10b981;
+}
+
+.tip-item h4 {
+    margin: 0 0 1rem 0;
+    color: #065f46;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tip-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tip-item li {
+    margin-bottom: 0.5rem;
+    color: #064e3b;
+    line-height: 1.4;
+    position: relative;
+    padding-left: 1rem;
+}
+
+.tip-item li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #10b981;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .suite-export-options,
+    .best-practices,
+    .template-list,
+    .management-tips {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

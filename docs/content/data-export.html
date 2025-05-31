@@ -1,0 +1,666 @@
+<h1 class="docs-title">Data Export</h1>
+
+<p class="docs-intro">Selenix provides powerful data export capabilities to transform your scraped data into useful formats. Export to CSV, JSON, send to APIs via HTTP requests, and integrate with external systems for comprehensive data analysis and business intelligence workflows.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-brain"></i>
+    <div>
+        <strong>AI-Powered Export Optimization</strong>
+        <p>Ask the AI assistant: "Help me format this data for Excel analysis" and it will suggest the optimal export structure and data transformations.</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-file-export"></i> Export Formats & Methods</h2>
+    
+    <p>Selenix supports multiple export formats and destinations for different use cases:</p>
+    
+    <div class="export-formats">
+        <div class="export-format">
+            <h4><i class="fa-solid fa-table"></i> CSV Export</h4>
+            <p>Perfect for spreadsheet analysis and data processing</p>
+            <div class="format-example">
+                <code>exportToCSV | productData | ./exports/products.csv</code>
+                <span class="format-desc">Exports data as comma-separated values for Excel, Google Sheets</span>
+            </div>
+        </div>
+        
+        <div class="export-format">
+            <h4><i class="fa-solid fa-code"></i> JSON Export</h4>
+            <p>Preserve complex data structures and nested objects</p>
+            <div class="format-example">
+                <code>exportToJSON | userData | ./exports/users.json</code>
+                <span class="format-desc">Maintains object relationships and nested data</span>
+            </div>
+        </div>
+        
+        <div class="export-format advanced">
+            <h4><i class="fa-solid fa-globe"></i> HTTP API Export</h4>
+            <p>Send scraped data directly to external APIs and webhooks</p>
+            <div class="format-example">
+                <code>httpRequest | {"url": "https://api.company.com/data", "method": "POST", "body": ${scrapedData}} | apiResponse</code>
+                <span class="format-desc">Real-time integration with CRMs, databases, and business systems</span>
+            </div>
+        </div>
+        
+        <div class="export-format">
+            <h4><i class="fa-solid fa-download"></i> File Downloads</h4>
+            <p>Automatically download files from URLs</p>
+            <div class="format-example">
+                <code>downloadFiles | imageUrls | ./downloads/</code>
+                <span class="format-desc">Downloads files from array of URLs to specified directory</span>
+            </div>
+        </div>
+        
+        <div class="export-format">
+            <h4><i class="fa-solid fa-database"></i> Import Capabilities</h4>
+            <p>Load external data into automations</p>
+            <div class="format-example">
+                <code>importFromJSON | ./data/config.json | settings</code>
+                <span class="format-desc">Import existing data files for processing</span>
+            </div>
+        </div>
+        
+        <div class="export-format advanced">
+            <h4><i class="fa-solid fa-terminal"></i> cURL Integration</h4>
+            <p>Use familiar cURL syntax for complex API calls</p>
+            <div class="format-example">
+                <code>curlRequest | curl -X POST https://webhook.site/xyz -d '${jsonData}' | response</code>
+                <span class="format-desc">Execute cURL commands with variable data</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-globe"></i> HTTP API Integration Examples</h2>
+    
+    <p>Send your scraped data directly to external systems using HTTP requests:</p>
+    
+    <div class="http-examples">
+        <div class="http-example">
+            <h4><i class="fa-solid fa-webhook"></i> Webhook Integration</h4>
+            <div class="example-code">
+                <pre><code>// Scrape product data
+scrapeStructured | {
+    "_root": "css=.product-item",
+    "title": "css=.product-title",
+    "price": "css=.price",
+    "availability": "css=.stock-status",
+    "url": "css=.product-link@href"
+} | products
+
+// Transform data for API
+transformVariable | products | products.map(p => ({
+    ...p,
+    price: parseFloat(p.price.replace(/[^0-9.]/g, '')),
+    scrapedAt: new Date().toISOString(),
+    source: "competitor-site"
+}))
+
+// Send to webhook immediately after scraping
+httpRequest | {
+    "url": "https://hooks.zapier.com/hooks/catch/12345/abcdef",
+    "method": "POST", 
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer your-api-key"
+    },
+    "body": {
+        "event": "products_scraped",
+        "data": ${products},
+        "metadata": {
+            "count": ${products.length},
+            "timestamp": new Date().toISOString()
+        }
+    }
+} | webhookResponse
+
+echo | Sent ${products.length} products to webhook: ${webhookResponse.status}</code></pre>
+            </div>
+        </div>
+        
+        <div class="http-example">
+            <h4><i class="fa-solid fa-database"></i> CRM Integration</h4>
+            <div class="example-code">
+                <pre><code>// Scrape contact information
+scrapeStructured | {
+    "_root": "css=.contact-card",
+    "name": "css=.contact-name",
+    "email": "css=.contact-email", 
+    "company": "css=.company-name",
+    "title": "css=.job-title",
+    "phone": "css=.phone-number"
+} | contacts
+
+// Process each contact individually for CRM
+forEach | contacts | contact
+    // Send to CRM API (e.g., HubSpot, Salesforce)
+    httpRequest | {
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts",
+        "method": "POST",
+        "headers": {
+            "Authorization": "Bearer ${env:HUBSPOT_API_KEY}",
+            "Content-Type": "application/json"
+        },
+        "body": {
+            "properties": {
+                "firstname": "${contact.name.split(' ')[0]}",
+                "lastname": "${contact.name.split(' ').slice(1).join(' ')}",
+                "email": "${contact.email}",
+                "company": "${contact.company}",
+                "jobtitle": "${contact.title}",
+                "phone": "${contact.phone}",
+                "lead_source": "web_scraping",
+                "hs_lead_status": "NEW"
+            }
+        }
+    } | crmResponse
+    
+    if | ${crmResponse.status} === 201
+        echo | Successfully added ${contact.name} to CRM
+    else
+        echo | Failed to add ${contact.name}: ${crmResponse.error}
+    end
+    
+    pause | 1000  // Rate limiting
+end</code></pre>
+            </div>
+        </div>
+        
+        <div class="http-example">
+            <h4><i class="fa-solid fa-chart-line"></i> Analytics Dashboard Integration</h4>
+            <div class="example-code">
+                <pre><code>// Scrape metrics from multiple sources
+open | https://analytics-source-1.com
+scrapeStructured | {
+    "visitors": "css=.visitor-count",
+    "pageviews": "css=.pageview-count", 
+    "bounceRate": "css=.bounce-rate"
+} | source1Data
+
+open | https://analytics-source-2.com  
+scrapeStructured | {
+    "conversions": "css=.conversion-count",
+    "revenue": "css=.revenue-total"
+} | source2Data
+
+// Combine data sources
+combineVariables | source1Data,source2Data | analyticsData
+
+// Transform for dashboard API
+executeScript | return {
+    timestamp: new Date().toISOString(),
+    metrics: {
+        ...${analyticsData}[0],
+        calculated: {
+            conversionRate: (${source2Data}[0].conversions / ${source1Data}[0].visitors * 100).toFixed(2),
+            revenuePerVisitor: (${source2Data}[0].revenue / ${source1Data}[0].visitors).toFixed(2)
+        }
+    },
+    source: "automated_scraping"
+} | dashboardPayload
+
+// Send to analytics dashboard
+httpRequest | {
+    "url": "https://api.dashboard.com/v1/metrics",
+    "method": "POST",
+    "headers": {
+        "X-API-Key": "${env:DASHBOARD_API_KEY}",
+        "Content-Type": "application/json"
+    },
+    "body": ${dashboardPayload}
+} | dashboardResponse
+
+// Also save locally as backup
+exportToJSON | dashboardPayload | ./exports/analytics-${new Date().toISOString().split('T')[0]}.json
+
+echo | Analytics data sent to dashboard and backed up locally</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-terminal"></i> cURL Integration Examples</h2>
+    
+    <p>Use familiar cURL syntax for complex API integrations:</p>
+    
+    <div class="curl-examples">
+        <div class="curl-example">
+            <h4><i class="fa-solid fa-share"></i> Slack Notification</h4>
+            <div class="example-code">
+                <pre><code>// Scrape important alerts or changes
+scrapeCollection | css=.alert-item .message | alertMessages
+
+if | ${alertMessages.length} > 0
+    // Format alerts for Slack
+    transformVariable | alertMessages | alertMessages.map(msg => `• ${msg}`).join('\n')
+    
+    // Send to Slack using cURL syntax
+    curlRequest | curl -X POST https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK \
+        -H 'Content-type: application/json' \
+        -d '{"text": "🚨 New Alerts Found:\n${alertMessages}\n\nScraped at: ' + new Date().toLocaleString() + '"}' | slackResponse
+    
+    echo | Sent ${alertMessages.length} alerts to Slack
+else
+    echo | No new alerts found
+end</code></pre>
+            </div>
+        </div>
+        
+        <div class="curl-example">
+            <h4><i class="fa-solid fa-envelope"></i> Email Alert System</h4>
+            <div class="example-code">
+                <pre><code>// Monitor price changes
+scrapeCollection | css=.product-price | currentPrices
+importFromJSON | ./data/previous-prices.json | previousPrices
+
+// Compare prices
+executeScript | return ${currentPrices}.map((price, index) => ({
+    product: index,
+    current: parseFloat(price.replace('$', '')),
+    previous: ${previousPrices}[index] || 0
+})).filter(item => Math.abs(item.current - item.previous) > 10) | priceChanges
+
+if | ${priceChanges.length} > 0
+    // Format price change report
+    transformVariable | priceChanges | priceChanges.map(change => 
+        `Product ${change.product}: $${change.previous} → $${change.current} (${change.current > change.previous ? '+' : ''}$${(change.current - change.previous).toFixed(2)})`
+    ).join('\n')
+    
+    // Send email via API using cURL
+    curlRequest | curl -X POST https://api.emailservice.com/send \
+        -H "Authorization: Bearer ${env:EMAIL_API_KEY}" \
+        -H "Content-Type: application/json" \
+        -d '{"to": "alerts@company.com", "subject": "Price Change Alert", "body": "Price changes detected:\n\n${priceChanges}"}' | emailResponse
+    
+    echo | Email alert sent for ${priceChanges.length} price changes
+end
+
+// Save current prices for next comparison
+exportToJSON | currentPrices | ./data/previous-prices.json</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-table"></i> CSV Export Examples</h2>
+    
+    <p>CSV format is ideal for data analysis and business intelligence:</p>
+    
+    <div class="csv-examples">
+        <div class="csv-example">
+            <h4><i class="fa-solid fa-shopping-cart"></i> Product Catalog Export</h4>
+            <div class="example-code">
+                <pre><code>// Scrape structured product data
+scrapeStructured | {
+    "_root": "css=.product-item",
+    "title": "css=.product-title",
+    "price": "css=.price",
+    "rating": "css=.rating@data-value",
+    "availability": "css=.stock-status",
+    "imageUrl": "css=.product-image@src",
+    "productUrl": "css=.product-link@href"
+} | products
+
+// Transform prices to numbers for analysis
+transformVariable | products | products.map(p => ({
+    ...p,
+    price: parseFloat(p.price.replace(/[^0-9.]/g, '')),
+    rating: parseFloat(p.rating),
+    scrapedAt: new Date().toISOString()
+}))
+
+// Export to CSV for spreadsheet analysis
+exportToCSV | products | ./exports/product-catalog.csv
+
+// Also send to business intelligence API
+httpRequest | {
+    "url": "https://api.bi-system.com/data/products",
+    "method": "POST",
+    "headers": {"Authorization": "Bearer ${env:BI_API_KEY}"},
+    "body": {"products": ${products}, "source": "competitor_scraping"}
+} | biResponse
+
+echo | Exported ${products.length} products to CSV and BI system</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-clock"></i> Real-time Data Streaming</h2>
+    
+    <p>Stream scraped data in real-time to external systems:</p>
+    
+    <div class="streaming-example">
+        <h4><i class="fa-solid fa-broadcast-tower"></i> Live Data Pipeline</h4>
+        <div class="example-code">
+            <pre><code>// Monitor social media mentions in real-time
+store | true | isMonitoring
+
+while | ${isMonitoring} === true | 1000
+    // Scrape latest mentions
+    scrapeCollection | css=.mention-item[data-timestamp] | newMentions
+    
+    // Filter only new mentions (last 5 minutes)
+    executeScript | return ${newMentions}.filter(mention => {
+        const timestamp = new Date(mention.timestamp);
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        return timestamp > fiveMinutesAgo;
+    }) | recentMentions
+    
+    if | ${recentMentions.length} > 0
+        echo | Found ${recentMentions.length} new mentions
+        
+        // Stream each mention to real-time API
+        forEach | recentMentions | mention
+            httpRequest | {
+                "url": "https://api.realtime-system.com/stream",
+                "method": "POST",
+                "headers": {
+                    "Authorization": "Bearer ${env:STREAM_API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "event": "mention_detected",
+                    "data": ${mention},
+                    "timestamp": new Date().toISOString()
+                }
+            } | streamResponse
+        end
+        
+        // Also append to local backup
+        exportToJSON | recentMentions | ./backups/mentions-${new Date().toISOString().split('T')[0]}.json
+    end
+    
+    // Wait before next check
+    pause | 30000  // Check every 30 seconds
+end</code></pre>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-shield-alt"></i> Export Best Practices</h2>
+    
+    <div class="best-practices">
+        <div class="practice good">
+            <h4><i class="fa-solid fa-check-circle"></i> Do: Optimize Your Exports</h4>
+            <ul>
+                <li>Clean and validate data before export</li>
+                <li>Use descriptive filenames with timestamps</li>
+                <li>Include metadata about the scraping process</li>
+                <li>Choose the right format for your use case (CSV for analysis, JSON for structure, HTTP for real-time)</li>
+                <li>Implement proper error handling for API calls</li>
+                <li>Use rate limiting to avoid overwhelming external APIs</li>
+                <li>Store API keys securely using environment variables</li>
+            </ul>
+        </div>
+        
+        <div class="practice avoid">
+            <h4><i class="fa-solid fa-times-circle"></i> Don't: Create Export Problems</h4>
+            <ul>
+                <li>Don't export without data validation</li>
+                <li>Avoid hardcoding API keys in your automations</li>
+                <li>Don't send large payloads without chunking</li>
+                <li>Avoid overwriting important files without backups</li>
+                <li>Don't forget to handle API rate limits and errors</li>
+                <li>Avoid sending sensitive data without encryption</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-tools"></i> Integration Troubleshooting</h2>
+    
+    <div class="troubleshooting-tips">
+        <div class="tip">
+            <h4><i class="fa-solid fa-exclamation-triangle"></i> API Request Failures</h4>
+            <p><strong>Solutions:</strong></p>
+            <ul>
+                <li>Check API endpoint URLs and authentication</li>
+                <li>Validate request headers and content types</li>
+                <li>Use <code>echo</code> to debug request payloads</li>
+                <li>Implement retry logic for temporary failures</li>
+                <li>Check rate limits and add appropriate delays</li>
+            </ul>
+        </div>
+        
+        <div class="tip">
+            <h4><i class="fa-solid fa-clock"></i> Timeout Issues</h4>
+            <p><strong>Solutions:</strong></p>
+            <ul>
+                <li>Break large datasets into smaller chunks</li>
+                <li>Use async processing for heavy operations</li>
+                <li>Implement progress tracking for long exports</li>
+                <li>Set appropriate timeout values for external APIs</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Transform Your Data Pipeline!</strong>
+            <p>Now that you understand data export and API integration, explore <a href="#integrations">Advanced Integrations</a> to connect with more external systems, or learn about <a href="#using-templates">Templates</a> to speed up your workflow creation.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.export-formats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.export-format {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.export-format:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.export-format.advanced {
+    border-left: 4px solid #f59e0b;
+    background: linear-gradient(135deg, #fef3c7 0%, #fff 20%);
+}
+
+.export-format h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.export-format.advanced h4 {
+    color: #92400e;
+}
+
+.format-example {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 3px solid #4f46e5;
+    margin-top: 1rem;
+}
+
+.export-format.advanced .format-example {
+    border-left-color: #f59e0b;
+}
+
+.format-example code {
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #1f2937;
+    font-weight: 600;
+    word-break: break-all;
+    font-size: 0.8rem;
+}
+
+.format-desc {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.http-examples,
+.curl-examples,
+.csv-examples {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.http-example,
+.curl-example,
+.csv-example {
+    padding: 1.5rem;
+    background: #f0f9ff;
+    border-radius: 12px;
+    border-left: 4px solid #0284c7;
+}
+
+.http-example h4,
+.curl-example h4,
+.csv-example h4 {
+    margin: 0 0 1rem 0;
+    color: #0c4a6e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.example-code {
+    background: white;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #bae6fd;
+}
+
+.streaming-example {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 100%);
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+    margin: 1.5rem 0;
+}
+
+.streaming-example h4 {
+    margin: 0 0 1rem 0;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.best-practices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.practice {
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.practice.good {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-left: 4px solid #10b981;
+}
+
+.practice.avoid {
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border-left: 4px solid #ef4444;
+}
+
+.practice h4 {
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.practice.good h4 {
+    color: #065f46;
+}
+
+.practice.avoid h4 {
+    color: #991b1b;
+}
+
+.practice ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.practice li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.troubleshooting-tips {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.tip {
+    padding: 1.5rem;
+    background: #fff7ed;
+    border-radius: 12px;
+    border-left: 4px solid #f97316;
+}
+
+.tip h4 {
+    margin: 0 0 1rem 0;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tip p {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: #9a3412;
+}
+
+.tip ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.tip li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .export-formats,
+    .best-practices,
+    .troubleshooting-tips {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

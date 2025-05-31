@@ -1,0 +1,201 @@
+<h1 class="docs-title">Loops</h1>
+
+<p class="docs-intro">Loops in Selenix enable you to repeat actions multiple times, process collections of data, and handle dynamic content like pagination. Master loops to create powerful automations that can handle any amount of data.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-brain"></i>
+    <div>
+        <strong>AI Loop Assistance</strong>
+        <p>Ask the AI assistant: "Help me create a loop to scrape all pages of products" and it will design the optimal loop structure for your use case.</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-repeat"></i> Loop Types</h2>
+    
+    <p>Selenix provides several loop types for different automation scenarios:</p>
+    
+    <div class="loop-types">
+        <div class="loop-type">
+            <h4><i class="fa-solid fa-list"></i> forEach Loop</h4>
+            <p>Iterate through arrays and collections of data</p>
+            <div class="loop-syntax">
+                <code>forEach | arrayVariable | itemVariable</code>
+            </div>
+            <div class="loop-desc">
+                Processes each item in an array, making it available as itemVariable
+            </div>
+        </div>
+        
+        <div class="loop-type">
+            <h4><i class="fa-solid fa-infinity"></i> while Loop</h4>
+            <p>Repeat while a condition remains true</p>
+            <div class="loop-syntax">
+                <code>while | ${hasMorePages} === true | maxIterations</code>
+            </div>
+            <div class="loop-desc">
+                Continues until condition becomes false or max iterations reached
+            </div>
+        </div>
+        
+        <div class="loop-type">
+            <h4><i class="fa-solid fa-hashtag"></i> times Loop</h4>
+            <p>Repeat a specific number of times</p>
+            <div class="loop-syntax">
+                <code>times | 10 | maxTime</code>
+            </div>
+            <div class="loop-desc">
+                Repeats exactly 10 times with optional timeout protection
+            </div>
+        </div>
+        
+        <div class="loop-type">
+            <h4><i class="fa-solid fa-play"></i> do...repeatIf Loop</h4>
+            <p>Execute at least once, then repeat conditionally</p>
+            <div class="loop-syntax">
+                <code>do</code> ... <code>repeatIf | ${condition} | maxIterations</code>
+            </div>
+            <div class="loop-desc">
+                Guarantees at least one execution before checking condition
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-shield-alt"></i> Loop Best Practices</h2>
+    
+    <div class="best-practices">
+        <div class="practice good">
+            <h4><i class="fa-solid fa-check-circle"></i> Do: Write Safe Loops</h4>
+            <ul>
+                <li>Always include maximum iteration limits to prevent infinite loops</li>
+                <li>Add meaningful echo statements to track progress</li>
+                <li>Use appropriate wait commands for dynamic content</li>
+                <li>Include error handling within loop bodies</li>
+                <li>Store intermediate results in case of interruption</li>
+            </ul>
+        </div>
+        
+        <div class="practice avoid">
+            <h4><i class="fa-solid fa-times-circle"></i> Don't: Create Risky Loops</h4>
+            <ul>
+                <li>Don't create loops without exit conditions</li>
+                <li>Avoid loops that depend on unreliable elements</li>
+                <li>Don't process huge datasets without progress tracking</li>
+                <li>Avoid nested loops without careful planning</li>
+                <li>Don't forget to handle empty arrays or null values</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Master Repetitive Automation!</strong>
+            <p>Now that you understand loops, explore <a href="#data-export">Data Export</a> to save your loop results, or learn about <a href="#integrations">Integrations</a> to connect with external systems.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.loop-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.loop-type {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.loop-type:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.loop-type h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.loop-syntax {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 3px solid #4f46e5;
+    font-family: 'Monaco', 'Menlo', monospace;
+    margin: 0.5rem 0;
+}
+
+.loop-desc {
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.best-practices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.practice {
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.practice.good {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-left: 4px solid #10b981;
+}
+
+.practice.avoid {
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border-left: 4px solid #ef4444;
+}
+
+.practice h4 {
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.practice.good h4 {
+    color: #065f46;
+}
+
+.practice.avoid h4 {
+    color: #991b1b;
+}
+
+.practice ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.practice li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .loop-types,
+    .best-practices {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

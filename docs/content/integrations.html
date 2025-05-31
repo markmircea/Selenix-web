@@ -1,0 +1,657 @@
+<h1 class="docs-title">Integrations & Connections</h1>
+
+<p class="docs-intro">Selenix seamlessly integrates with popular automation platforms, APIs, and business tools. Connect your browser automations to webhooks, automation platforms, and external services to create powerful end-to-end workflows.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-plug"></i>
+    <div>
+        <strong>Native Integration Commands</strong>
+        <p>Selenix includes built-in commands for HTTP requests, cURL operations, and data export that make integrations simple and reliable.</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-network-wired"></i> Automation Platform Integrations</h2>
+    
+    <p>Connect Selenix with leading automation platforms to trigger workflows, send data, and create sophisticated automation chains:</p>
+    
+    <div class="integration-grid">
+        <div class="integration-card">
+            <div class="integration-icon">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3>Zapier</h3>
+            <p>Send scraped data to 5,000+ apps through Zapier webhooks. Perfect for triggering actions in CRM, email marketing, and business tools.</p>
+            <div class="integration-features">
+                <span class="feature-tag">Webhooks</span>
+                <span class="feature-tag">Real-time triggers</span>
+                <span class="feature-tag">5,000+ apps</span>
+            </div>
+        </div>
+        
+        <div class="integration-card">
+            <div class="integration-icon">
+                <i class="fa-solid fa-cogs"></i>
+            </div>
+            <h3>Make (Integromat)</h3>
+            <p>Build complex scenarios with Make's visual automation builder. Send data from Selenix to trigger multi-step workflows.</p>
+            <div class="integration-features">
+                <span class="feature-tag">Visual builder</span>
+                <span class="feature-tag">Complex scenarios</span>
+                <span class="feature-tag">Data transformation</span>
+            </div>
+        </div>
+        
+        <div class="integration-card">
+            <div class="integration-icon">
+                <i class="fa-solid fa-code-branch"></i>
+            </div>
+            <h3>n8n</h3>
+            <p>Self-hosted automation with n8n. Send HTTP requests from Selenix to trigger open-source workflows and custom nodes.</p>
+            <div class="integration-features">
+                <span class="feature-tag">Self-hosted</span>
+                <span class="feature-tag">Open source</span>
+                <span class="feature-tag">Custom nodes</span>
+            </div>
+        </div>
+        
+        <div class="integration-card">
+            <div class="integration-icon">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <h3>Power Automate</h3>
+            <p>Microsoft Power Automate integration through HTTP connectors. Seamlessly connect to Office 365 and Microsoft ecosystem.</p>
+            <div class="integration-features">
+                <span class="feature-tag">Office 365</span>
+                <span class="feature-tag">Microsoft ecosystem</span>
+                <span class="feature-tag">Enterprise ready</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-globe"></i> HTTP Request Integration</h2>
+    
+    <p>Use Selenix's built-in HTTP request capabilities to send data to any web service, API, or webhook:</p>
+    
+    <h3>httpRequest Command</h3>
+    <p>Send structured HTTP requests with full configuration options:</p>
+    
+    <div class="code-example">
+        <h4>Basic POST Request</h4>
+        <pre><code>httpRequest | {
+  "url": "https://hooks.zapier.com/hooks/catch/123456/abcdef/",
+  "method": "POST", 
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "data": "${scrapedData}",
+    "timestamp": "${timestamp}",
+    "source": "Selenix Automation"
+  }
+} | responseData</code></pre>
+    </div>
+    
+    <div class="code-example">
+        <h4>GET Request with Authentication</h4>
+        <pre><code>httpRequest | {
+  "url": "https://api.example.com/data",
+  "method": "GET",
+  "headers": {
+    "Authorization": "Bearer ${apiToken}",
+    "Content-Type": "application/json"
+  }
+} | apiResponse</code></pre>
+    </div>
+    
+    <h3>cURL Command Integration</h3>
+    <p>Execute cURL commands directly for complex API interactions:</p>
+    
+    <div class="code-example">
+        <h4>cURL POST with Data</h4>
+        <pre><code>curlRequest | curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${token}" \
+  -d '${jsonData}' \
+  https://api.webhook.site/unique-url | curlResponse</code></pre>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-database"></i> Data Export Integrations</h2>
+    
+    <p>Export data from Selenix in various formats for use in external systems:</p>
+    
+    <h3>Real-time Data Streaming</h3>
+    <div class="integration-workflow">
+        <div class="workflow-step">
+            <h4><i class="fa-solid fa-spider"></i> Step 1: Scrape Data</h4>
+            <pre><code>scrapeStructured | {
+  "title": "css=.product-title",
+  "price": "css=.price",
+  "availability": "css=.stock-status"
+} | productData</code></pre>
+        </div>
+        
+        <div class="workflow-step">
+            <h4><i class="fa-solid fa-arrow-right"></i> Step 2: Send to Webhook</h4>
+            <pre><code>httpRequest | {
+  "url": "https://hooks.zapier.com/hooks/catch/123/abc/",
+  "method": "POST",
+  "body": "${productData}"
+} | webhookResponse</code></pre>
+        </div>
+        
+        <div class="workflow-step">
+            <h4><i class="fa-solid fa-floppy-disk"></i> Step 3: Export Backup</h4>
+            <pre><code>exportToJSON | productData | ./exports/products_${timestamp}.json</code></pre>
+        </div>
+    </div>
+    
+    <h3>Batch Data Processing</h3>
+    <div class="batch-example">
+        <h4>Collect Multiple Sources, Then Send</h4>
+        <pre><code>// Scrape from multiple sources
+scrapeCollection | css=.item-1 | source1Data
+scrapeCollection | css=.item-2 | source2Data
+
+// Combine all data
+combineVariables | source1Data,source2Data | allData
+
+// Send combined data to multiple endpoints
+httpRequest | {
+  "url": "https://api.airtable.com/v0/base/table",
+  "method": "POST",
+  "headers": {"Authorization": "Bearer ${airtableKey}"},
+  "body": "${allData}"
+} | airtableResponse
+
+httpRequest | {
+  "url": "https://hooks.slack.com/services/T00/B00/XXX",
+  "method": "POST", 
+  "body": {"text": "Data updated: ${allData.length} records"}
+} | slackResponse</code></pre>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-cloud"></i> Cloud Service Integrations</h2>
+    
+    <div class="cloud-services">
+        <div class="service-category">
+            <h3><i class="fa-solid fa-table"></i> Spreadsheets & Databases</h3>
+            <ul>
+                <li><strong>Google Sheets</strong> - Send data via Google Sheets API</li>
+                <li><strong>Airtable</strong> - Update records through REST API</li>
+                <li><strong>Microsoft Excel Online</strong> - Graph API integration</li>
+                <li><strong>Notion</strong> - Create and update database entries</li>
+            </ul>
+        </div>
+        
+        <div class="service-category">
+            <h3><i class="fa-solid fa-users"></i> CRM & Sales</h3>
+            <ul>
+                <li><strong>Salesforce</strong> - Create leads and update records</li>
+                <li><strong>HubSpot</strong> - Add contacts and track interactions</li>
+                <li><strong>Pipedrive</strong> - Manage deals and contacts</li>
+                <li><strong>Monday.com</strong> - Update project boards</li>
+            </ul>
+        </div>
+        
+        <div class="service-category">
+            <h3><i class="fa-solid fa-envelope"></i> Communication</h3>
+            <ul>
+                <li><strong>Slack</strong> - Send notifications and data updates</li>
+                <li><strong>Discord</strong> - Post to channels via webhooks</li>
+                <li><strong>Microsoft Teams</strong> - Send adaptive cards</li>
+                <li><strong>Email</strong> - SMTP integration for reports</li>
+            </ul>
+        </div>
+        
+        <div class="service-category">
+            <h3><i class="fa-solid fa-chart-line"></i> Analytics & BI</h3>
+            <ul>
+                <li><strong>Google Analytics</strong> - Send custom events</li>
+                <li><strong>Mixpanel</strong> - Track user behavior data</li>
+                <li><strong>Tableau</strong> - Update data sources</li>
+                <li><strong>Power BI</strong> - Refresh datasets via API</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-rocket"></i> Integration Examples</h2>
+    
+    <h3>E-commerce Price Monitoring → Slack Alerts</h3>
+    <div class="example-workflow">
+        <pre><code>// Monitor competitor prices
+open | https://competitor.com/products
+scrapeCollection | css=.price | currentPrices
+
+// Compare with stored prices  
+importFromJSON | ./data/previous_prices.json | previousPrices
+transformVariable | currentPrices | /* JavaScript to compare prices */
+
+// Send alert if prices changed
+httpRequest | {
+  "url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+  "method": "POST",
+  "body": {
+    "text": "🚨 Price Alert: ${changedProducts.length} products changed",
+    "attachments": [{
+      "color": "warning",
+      "fields": [
+        {"title": "Products Updated", "value": "${changedProducts.length}"},
+        {"title": "Timestamp", "value": "${timestamp}"}
+      ]
+    }]
+  }
+} | slackResponse
+
+// Save current prices for next comparison
+exportToJSON | currentPrices | ./data/previous_prices.json</code></pre>
+    </div>
+    
+    <h3>Lead Generation → CRM Integration</h3>
+    <div class="example-workflow">
+        <pre><code>// Scrape contact information
+scrapeStructured | {
+  "name": "css=.contact-name",
+  "email": "css=.contact-email", 
+  "company": "css=.company-name",
+  "title": "css=.job-title"
+} | contactData
+
+// Send to HubSpot CRM
+httpRequest | {
+  "url": "https://api.hubapi.com/contacts/v1/contact",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer ${hubspotToken}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "properties": [
+      {"property": "firstname", "value": "${contactData.name}"},
+      {"property": "email", "value": "${contactData.email}"},
+      {"property": "company", "value": "${contactData.company}"}
+    ]
+  }
+} | hubspotResponse</code></pre>
+    </div>
+    
+    <h3>Market Research → Google Sheets</h3>
+    <div class="example-workflow">
+        <pre><code>// Collect market data
+scrapeStructured | {
+  "_root": "css=.market-item",
+  "company": "css=.company",
+  "revenue": "css=.revenue",
+  "growth": "css=.growth-rate"
+} | marketData
+
+// Format for Google Sheets
+transformVariable | marketData | /* Convert to Sheets format */
+
+// Update Google Sheets
+httpRequest | {
+  "url": "https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A1:append",
+  "method": "POST",
+  "headers": {
+    "Authorization": "Bearer ${googleToken}",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "range": "Sheet1!A1",
+    "majorDimension": "ROWS",
+    "values": "${formattedData}"
+  }
+} | sheetsResponse</code></pre>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-calendar-alt"></i> Scheduled Integration Workflows</h2>
+    
+    <p>Combine Selenix's scheduling capabilities with integrations for powerful automated workflows:</p>
+    
+    <h3>Daily Market Intelligence Report</h3>
+    <div class="scheduled-example">
+        <pre><code>// Scheduled daily at 8 AM
+// Restore browser state with saved login
+restoreSnapshot | marketResearchLogin
+
+// Collect data from multiple sources
+open | https://source1.com/data
+scrapeCollection | css=.data-point | source1Data
+
+open | https://source2.com/data  
+scrapeCollection | css=.metric | source2Data
+
+// Combine and process data
+combineVariables | source1Data,source2Data | allMarketData
+sendToAI | "Analyze this market data and identify top 3 trends" | allMarketData
+
+// Send daily report via multiple channels
+httpRequest | {
+  "url": "https://hooks.slack.com/services/TEAM/CHANNEL/TOKEN",
+  "method": "POST",
+  "body": {
+    "text": "📊 Daily Market Report",
+    "attachments": [{"text": "${aiAnalysis}"}]
+  }
+} | slackResponse
+
+// Save to Google Sheets for historical tracking
+httpRequest | {
+  "url": "https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/append",
+  "method": "POST", 
+  "headers": {"Authorization": "Bearer ${token}"},
+  "body": {"values": [[new Date(), "${aiAnalysis}"]]}
+} | sheetsResponse
+
+// Export backup data
+exportToCSV | allMarketData | ./reports/market_${timestamp}.csv</code></pre>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-tools"></i> Setup & Configuration</h2>
+    
+    <h3>Setting Up Webhook Integrations</h3>
+    <ol>
+        <li><strong>Create webhook URL</strong> in your target platform (Zapier, Make, n8n, etc.)</li>
+        <li><strong>Test the webhook</strong> using a simple HTTP request</li>
+        <li><strong>Configure authentication</strong> if required (API keys, tokens)</li>
+        <li><strong>Set up error handling</strong> for failed requests</li>
+        <li><strong>Schedule regular testing</strong> to ensure reliability</li>
+    </ol>
+    
+    <h3>Best Practices for Integrations</h3>
+    <div class="best-practices-grid">
+        <div class="practice-item">
+            <h4><i class="fa-solid fa-shield-alt"></i> Security</h4>
+            <ul>
+                <li>Store API keys in environment variables</li>
+                <li>Use HTTPS endpoints only</li>
+                <li>Implement rate limiting</li>
+                <li>Validate data before sending</li>
+            </ul>
+        </div>
+        
+        <div class="practice-item">
+            <h4><i class="fa-solid fa-sync"></i> Reliability</h4>
+            <ul>
+                <li>Add retry logic for failed requests</li>
+                <li>Log all integration attempts</li>
+                <li>Set appropriate timeouts</li>
+                <li>Monitor integration health</li>
+            </ul>
+        </div>
+        
+        <div class="practice-item">
+            <h4><i class="fa-solid fa-database"></i> Data Management</h4>
+            <ul>
+                <li>Validate data format before sending</li>
+                <li>Handle large datasets efficiently</li>
+                <li>Implement data deduplication</li>
+                <li>Keep local backups</li>
+            </ul>
+        </div>
+        
+        <div class="practice-item">
+            <h4><i class="fa-solid fa-chart-line"></i> Monitoring</h4>
+            <ul>
+                <li>Track integration success rates</li>
+                <li>Set up alerting for failures</li>
+                <li>Monitor data quality</li>
+                <li>Review logs regularly</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Ready to connect your automations?</strong>
+            <p>Check out our <a href="#templates">Templates</a> section for pre-built integration workflows, or continue to <a href="#data-export">Data Export</a> to learn more about formatting and exporting your data!</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.integration-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.integration-card {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.integration-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.integration-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.integration-icon i {
+    font-size: 1.5rem;
+    color: white;
+}
+
+.integration-card h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.integration-card p {
+    margin: 0 0 1rem 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.integration-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.feature-tag {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.code-example {
+    margin: 1.5rem 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.code-example h4 {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.code-example pre {
+    margin: 0;
+    padding: 1rem;
+    background: #2d3748;
+    color: #e2e8f0;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    overflow-x: auto;
+}
+
+.integration-workflow {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.workflow-step {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #4f46e5;
+}
+
+.workflow-step h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.batch-example {
+    margin: 1.5rem 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.batch-example h4 {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.cloud-services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.service-category {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 12px;
+    border-left: 4px solid #0284c7;
+}
+
+.service-category h3 {
+    margin: 0 0 1rem 0;
+    color: #0c4a6e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.service-category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.service-category li {
+    margin-bottom: 0.5rem;
+    color: #164e63;
+    line-height: 1.4;
+}
+
+.example-workflow {
+    margin: 1.5rem 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.scheduled-example {
+    margin: 1.5rem 0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.best-practices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.practice-item {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 100%);
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+}
+
+.practice-item h4 {
+    margin: 0 0 1rem 0;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.practice-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.practice-item li {
+    margin-bottom: 0.5rem;
+    color: #451a03;
+    line-height: 1.4;
+    position: relative;
+    padding-left: 1rem;
+}
+
+.practice-item li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #92400e;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .integration-grid,
+    .cloud-services,
+    .best-practices-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

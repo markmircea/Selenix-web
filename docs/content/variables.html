@@ -1,0 +1,257 @@
+<h1 class="docs-title">Variables</h1>
+
+<p class="docs-intro">Variables in Selenix are powerful containers for storing, manipulating, and sharing data throughout your automations. From simple text storage to complex object manipulation, variables enable sophisticated data processing workflows.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-brain"></i>
+    <div>
+        <strong>AI-Powered Data Processing</strong>
+        <p>Use the <code>sendToAI</code> command to process variables with natural language instructions like "Extract only prices above $100"</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-database"></i> Variable Types</h2>
+    
+    <p>Selenix supports multiple data types for different use cases:</p>
+    
+    <div class="variable-types">
+        <div class="variable-type">
+            <h4><i class="fa-solid fa-quote-left"></i> String Variables</h4>
+            <p>Store text, URLs, names, and simple data</p>
+            <div class="type-example">
+                <code>store | Hello World | greeting</code>
+                <span class="type-desc">Creates: <code>${greeting} = "Hello World"</code></span>
+            </div>
+        </div>
+        
+        <div class="variable-type">
+            <h4><i class="fa-solid fa-hashtag"></i> Number Variables</h4>
+            <p>Store numeric values for calculations</p>
+            <div class="type-example">
+                <code>store | 42 | answer</code>
+                <span class="type-desc">Creates: <code>${answer} = 42</code></span>
+            </div>
+        </div>
+        
+        <div class="variable-type">
+            <h4><i class="fa-solid fa-list"></i> Array Variables</h4>
+            <p>Store collections of similar items</p>
+            <div class="type-example">
+                <code>scrapeCollection | css=.product-title | productTitles</code>
+                <span class="type-desc">Creates: <code>${productTitles} = ["Product 1", "Product 2", ...]</code></span>
+            </div>
+        </div>
+        
+        <div class="variable-type">
+            <h4><i class="fa-solid fa-cube"></i> Object Variables</h4>
+            <p>Store structured data with multiple fields</p>
+            <div class="type-example">
+                <code>storeJson | {"name": "John", "age": 30} | user</code>
+                <span class="type-desc">Creates: <code>${user} = {name: "John", age: 30}</code></span>
+            </div>
+        </div>
+        
+        <div class="variable-type">
+            <h4><i class="fa-solid fa-toggle-on"></i> Boolean Variables</h4>
+            <p>Store true/false values for logic</p>
+            <div class="type-example">
+                <code>store | true | isLoggedIn</code>
+                <span class="type-desc">Creates: <code>${isLoggedIn} = true</code></span>
+            </div>
+        </div>
+        
+        <div class="variable-type">
+            <h4><i class="fa-solid fa-camera"></i> Special Variables</h4>
+            <p>Browser states, snapshots, and files</p>
+            <div class="type-example">
+                <code>createSnapshot | loginState</code>
+                <span class="type-desc">Creates: Browser state variable</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-floppy-disk"></i> Storing Data in Variables</h2>
+    
+    <p>Multiple commands can store data in variables:</p>
+    
+    <div class="storage-commands">
+        <div class="storage-group">
+            <h4>Basic Storage Commands</h4>
+            <div class="command-list">
+                <div class="command-item">
+                    <code>store</code>
+                    <span>Store any text or value</span>
+                    <div class="command-syntax">store | My Value | variableName</div>
+                </div>
+                <div class="command-item">
+                    <code>storeText</code>
+                    <span>Extract and store element text</span>
+                    <div class="command-syntax">storeText | css=.price | productPrice</div>
+                </div>
+                <div class="command-item">
+                    <code>storeValue</code>
+                    <span>Get input field values</span>
+                    <div class="command-syntax">storeValue | name=quantity | currentQty</div>
+                </div>
+                <div class="command-item">
+                    <code>storeAttribute</code>
+                    <span>Extract HTML attributes</span>
+                    <div class="command-syntax">storeAttribute | css=img@src | imageUrl</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="storage-group">
+            <h4>Advanced Storage Commands</h4>
+            <div class="command-list">
+                <div class="command-item">
+                    <code>scrapeCollection</code>
+                    <span>Store arrays of similar elements</span>
+                    <div class="command-syntax">scrapeCollection | css=.item | items</div>
+                </div>
+                <div class="command-item">
+                    <code>scrapeStructured</code>
+                    <span>Store complex structured data</span>
+                    <div class="command-syntax">scrapeStructured | {"title": "css=.title"} | data</div>
+                </div>
+                <div class="command-item">
+                    <code>executeScript</code>
+                    <span>Store JavaScript execution results</span>
+                    <div class="command-syntax">executeScript | return document.title | pageTitle</div>
+                </div>
+                <div class="command-item">
+                    <code>httpRequest</code>
+                    <span>Store API response data</span>
+                    <div class="command-syntax">httpRequest | {"url": "api.com/data"} | apiData</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Master Data Management!</strong>
+            <p>Now that you understand variables, explore <a href="#conditional-logic">Conditional Logic</a> to create smart automations, or learn about <a href="#data-export">Data Export</a> for advanced analysis workflows.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.variable-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.variable-type {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.variable-type:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.variable-type h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.type-example {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 3px solid #4f46e5;
+    margin-top: 1rem;
+}
+
+.type-example code {
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.type-desc {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.storage-commands {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.storage-group {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #10b981;
+}
+
+.storage-group h4 {
+    margin: 0 0 1rem 0;
+    color: #065f46;
+}
+
+.command-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.command-item {
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.command-item code {
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #4f46e5;
+    font-weight: 600;
+}
+
+.command-item span {
+    display: block;
+    margin: 0.5rem 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.command-syntax {
+    background: #f1f3f4;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .variable-types,
+    .storage-commands {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

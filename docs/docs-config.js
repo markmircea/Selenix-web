@@ -32,45 +32,69 @@ const docsConfig = {
             pages: [
                 {
                     id: "workflows",
-                    title: "Workflows",
+                    title: "AI-Powered Workflows",
                     icon: "fa-solid fa-diagram-project",
                     file: "workflows.html"
                 },
                 {
                     id: "actions",
-                    title: "Actions",
+                    title: "Commands & Actions",
                     icon: "fa-solid fa-play",
                     file: "actions.html"
                 },
                 {
                     id: "selectors",
-                    title: "Selectors",
+                    title: "Smart Selectors",
                     icon: "fa-solid fa-crosshairs",
                     file: "selectors.html"
                 },
                 {
                     id: "variables",
-                    title: "Variables",
+                    title: "Variables & Data",
                     icon: "fa-solid fa-code",
                     file: "variables.html"
                 }
             ]
         },
         {
-            title: "Advanced Usage",
+            title: "Advanced Features",
             icon: "fa-solid fa-graduation-cap",
             pages: [
                 {
-                    id: "conditional-logic",
-                    title: "Conditional Logic",
-                    icon: "fa-solid fa-code-branch",
-                    file: "conditional-logic.html"
+                    id: "ai-assistant",
+                    title: "AI Assistant",
+                    icon: "fa-solid fa-brain",
+                    file: "ai-assistant.html"
                 },
                 {
-                    id: "loops",
-                    title: "Loops",
-                    icon: "fa-solid fa-repeat",
-                    file: "loops.html"
+                    id: "scheduling",
+                    title: "Test Scheduling",
+                    icon: "fa-solid fa-calendar-alt",
+                    file: "scheduling.html"
+                },
+                {
+                    id: "data-extraction",
+                    title: "Advanced Scraping",
+                    icon: "fa-solid fa-spider",
+                    file: "data-extraction.html"
+                },
+                {
+                    id: "state-management",
+                    title: "Browser State Management",
+                    icon: "fa-solid fa-camera",
+                    file: "state-management.html"
+                }
+            ]
+        },
+        {
+            title: "Integration & Export",
+            icon: "fa-solid fa-plug",
+            pages: [
+                {
+                    id: "integrations",
+                    title: "Integrations",
+                    icon: "fa-solid fa-network-wired",
+                    file: "integrations.html"
                 },
                 {
                     id: "data-export",
@@ -79,34 +103,58 @@ const docsConfig = {
                     file: "data-export.html"
                 },
                 {
-                    id: "integrations",
-                    title: "Integrations",
-                    icon: "fa-solid fa-plug",
-                    file: "integrations.html"
+                    id: "api-integration",
+                    title: "API Integration",
+                    icon: "fa-solid fa-globe",
+                    file: "api-integration.html"
                 }
             ]
         },
         {
-            title: "Templates",
+            title: "Templates & Sharing",
             icon: "fa-solid fa-puzzle-piece",
             pages: [
                 {
-                    id: "using-templates",
-                    title: "Using Templates",
+                    id: "templates",
+                    title: "Templates",
                     icon: "fa-solid fa-puzzle-piece",
-                    file: "using-templates.html"
-                },
-                {
-                    id: "creating-templates",
-                    title: "Creating Templates",
-                    icon: "fa-solid fa-plus",
-                    file: "creating-templates.html"
+                    file: "templates.html"
                 },
                 {
                     id: "template-library",
                     title: "Template Library",
                     icon: "fa-solid fa-book",
                     file: "template-library.html"
+                },
+                {
+                    id: "sharing",
+                    title: "Sharing & Collaboration",
+                    icon: "fa-solid fa-users",
+                    file: "sharing.html"
+                }
+            ]
+        },
+        {
+            title: "Reference",
+            icon: "fa-solid fa-book-bookmark",
+            pages: [
+                {
+                    id: "command-reference",
+                    title: "Command Reference",
+                    icon: "fa-solid fa-terminal",
+                    file: "command-reference.html"
+                },
+                {
+                    id: "troubleshooting",
+                    title: "Troubleshooting",
+                    icon: "fa-solid fa-wrench",
+                    file: "troubleshooting.html"
+                },
+                {
+                    id: "faq",
+                    title: "FAQ",
+                    icon: "fa-solid fa-circle-question",
+                    file: "faq.html"
                 }
             ]
         }
@@ -120,8 +168,8 @@ const docsConfig = {
     
     // Site information
     site: {
-        title: "Selenix Documentation",
-        description: "Complete guide to using Selenix browser automation tool",
+        title: "Selenix AI Documentation",
+        description: "Complete guide to using Selenix AI-powered browser automation and web scraping platform",
         logo: "selenix.io"
     }
 };

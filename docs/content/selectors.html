@@ -1,0 +1,637 @@
+<h1 class="docs-title">Selectors</h1>
+
+<p class="docs-intro">Selectors are how Selenix identifies elements on web pages. With AI-powered selector generation and multiple targeting strategies, you can create robust automations that work reliably even when websites change.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-brain"></i>
+    <div>
+        <strong>AI Selector Assistance</strong>
+        <p>Ask the AI assistant: "Help me find a better selector for this element" and it will analyze the page structure to suggest the most reliable options.</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-crosshairs"></i> Selector Types</h2>
+    
+    <p>Selenix supports multiple selector strategies, each with specific use cases:</p>
+    
+    <div class="selector-types">
+        <div class="selector-type">
+            <h4><i class="fa-solid fa-id-badge"></i> ID Selectors</h4>
+            <p><strong>Most Reliable</strong> - Use when elements have unique IDs</p>
+            <div class="selector-example">
+                <code>id=submit-button</code>
+                <span class="selector-desc">Finds element with <code>id="submit-button"</code></span>
+            </div>
+        </div>
+        
+        <div class="selector-type">
+            <h4><i class="fa-solid fa-tag"></i> Name Selectors</h4>
+            <p><strong>Highly Reliable</strong> - Common for form elements</p>
+            <div class="selector-example">
+                <code>name=email</code>
+                <span class="selector-desc">Finds element with <code>name="email"</code></span>
+            </div>
+        </div>
+        
+        <div class="selector-type">
+            <h4><i class="fa-solid fa-palette"></i> CSS Selectors</h4>
+            <p><strong>Very Flexible</strong> - Use CSS syntax for precise targeting</p>
+            <div class="selector-example">
+                <code>css=.product-title</code>
+                <span class="selector-desc">Finds elements with class "product-title"</span>
+            </div>
+        </div>
+        
+        <div class="selector-type">
+            <h4><i class="fa-solid fa-route"></i> XPath Selectors</h4>
+            <p><strong>Most Powerful</strong> - Complex navigation and text-based selection</p>
+            <div class="selector-example">
+                <code>xpath=//button[contains(text(), 'Submit')]</code>
+                <span class="selector-desc">Finds button containing "Submit" text</span>
+            </div>
+        </div>
+        
+        <div class="selector-type">
+            <h4><i class="fa-solid fa-link"></i> Link Text Selectors</h4>
+            <p><strong>Text-Based</strong> - Perfect for navigation links</p>
+            <div class="selector-example">
+                <code>linkText=Contact Us</code>
+                <span class="selector-desc">Finds link with exact text "Contact Us"</span>
+            </div>
+        </div>
+        
+        <div class="selector-type">
+            <h4><i class="fa-solid fa-search"></i> Partial Link Text</h4>
+            <p><strong>Flexible Text Matching</strong> - When exact text varies</p>
+            <div class="selector-example">
+                <code>partialLinkText=Download</code>
+                <span class="selector-desc">Finds link containing "Download"</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-magic-wand-sparkles"></i> AI-Powered Selector Generation</h2>
+    
+    <p>Selenix's AI assistant can analyze page structure and suggest optimal selectors:</p>
+    
+    <div class="ai-features">
+        <div class="ai-feature">
+            <h4><i class="fa-solid fa-eye"></i> Visual Analysis</h4>
+            <p>AI examines the element's position, attributes, and surrounding context to suggest the most reliable selector.</p>
+        </div>
+        
+        <div class="ai-feature">
+            <h4><i class="fa-solid fa-shield-alt"></i> Reliability Scoring</h4>
+            <p>AI rates selectors based on uniqueness, stability, and likelihood to survive website changes.</p>
+        </div>
+        
+        <div class="ai-feature">
+            <h4><i class="fa-solid fa-wrench"></i> Auto-Optimization</h4>
+            <p>When selectors fail, AI suggests alternatives and can automatically update your automations.</p>
+        </div>
+        
+        <div class="ai-feature">
+            <h4><i class="fa-solid fa-lightbulb"></i> Context Awareness</h4>
+            <p>AI understands the purpose of your automation to suggest selectors that match your intent.</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-code"></i> CSS Selector Examples</h2>
+    
+    <p>CSS selectors offer the best balance of power and readability:</p>
+    
+    <div class="css-examples">
+        <div class="css-example">
+            <h4>Class Selectors</h4>
+            <div class="example-group">
+                <code>css=.product-price</code>
+                <span class="example-desc">Single class</span>
+            </div>
+            <div class="example-group">
+                <code>css=.btn.btn-primary</code>
+                <span class="example-desc">Multiple classes</span>
+            </div>
+        </div>
+        
+        <div class="css-example">
+            <h4>Attribute Selectors</h4>
+            <div class="example-group">
+                <code>css=[data-test="submit"]</code>
+                <span class="example-desc">Exact attribute value</span>
+            </div>
+            <div class="example-group">
+                <code>css=[href*="contact"]</code>
+                <span class="example-desc">Attribute contains value</span>
+            </div>
+        </div>
+        
+        <div class="css-example">
+            <h4>Hierarchical Selectors</h4>
+            <div class="example-group">
+                <code>css=.product .price</code>
+                <span class="example-desc">Descendant selector</span>
+            </div>
+            <div class="example-group">
+                <code>css=.header > .nav</code>
+                <span class="example-desc">Direct child selector</span>
+            </div>
+        </div>
+        
+        <div class="css-example">
+            <h4>Pseudo Selectors</h4>
+            <div class="example-group">
+                <code>css=li:first-child</code>
+                <span class="example-desc">First element</span>
+            </div>
+            <div class="example-group">
+                <code>css=tr:nth-child(3)</code>
+                <span class="example-desc">Third element</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-route"></i> XPath Selector Examples</h2>
+    
+    <p>XPath provides powerful text-based and complex navigation capabilities:</p>
+    
+    <div class="xpath-examples">
+        <div class="xpath-example">
+            <h4>Text-Based Selection</h4>
+            <div class="example-group">
+                <code>xpath=//button[text()='Submit']</code>
+                <span class="example-desc">Exact text match</span>
+            </div>
+            <div class="example-group">
+                <code>xpath=//a[contains(text(), 'Download')]</code>
+                <span class="example-desc">Partial text match</span>
+            </div>
+        </div>
+        
+        <div class="xpath-example">
+            <h4>Attribute-Based Selection</h4>
+            <div class="example-group">
+                <code>xpath=//input[@placeholder='Enter email']</code>
+                <span class="example-desc">Attribute value match</span>
+            </div>
+            <div class="example-group">
+                <code>xpath=//div[@class='product' and @data-price]</code>
+                <span class="example-desc">Multiple attribute conditions</span>
+            </div>
+        </div>
+        
+        <div class="xpath-example">
+            <h4>Hierarchical Navigation</h4>
+            <div class="example-group">
+                <code>xpath=//div[@class='product']//span[@class='price']</code>
+                <span class="example-desc">Descendant navigation</span>
+            </div>
+            <div class="example-group">
+                <code>xpath=//tr[3]/td[2]</code>
+                <span class="example-desc">Position-based selection</span>
+            </div>
+        </div>
+        
+        <div class="xpath-example">
+            <h4>Advanced XPath Functions</h4>
+            <div class="example-group">
+                <code>xpath=//input[starts-with(@id, 'user_')]</code>
+                <span class="example-desc">Starts with pattern</span>
+            </div>
+            <div class="example-group">
+                <code>xpath=//div[normalize-space(text())='Total: $99.99']</code>
+                <span class="example-desc">Normalized text comparison</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-spider"></i> Selectors for Data Scraping</h2>
+    
+    <p>Special considerations when using selectors for data extraction:</p>
+    
+    <div class="scraping-patterns">
+        <div class="scraping-pattern">
+            <h4><i class="fa-solid fa-list"></i> Collection Scraping</h4>
+            <p>For <code>scrapeCollection</code> command, target the repeating element:</p>
+            <div class="pattern-example">
+                <code>css=.product-item .title</code>
+                <span class="pattern-desc">Extracts all product titles from a list</span>
+            </div>
+        </div>
+        
+        <div class="scraping-pattern">
+            <h4><i class="fa-solid fa-table"></i> Structured Scraping</h4>
+            <p>For <code>scrapeStructured</code> command, use JSON mapping:</p>
+            <div class="pattern-example">
+                <pre><code>{
+  "_root": "css=.product-item",
+  "title": "css=.title",
+  "price": "css=.price",
+  "image": "css=img@src",
+  "rating": "css=.stars@data-rating"
+}</code></pre>
+            </div>
+        </div>
+        
+        <div class="scraping-pattern">
+            <h4><i class="fa-solid fa-link"></i> Attribute Extraction</h4>
+            <p>Use @ syntax to extract attribute values:</p>
+            <div class="pattern-example">
+                <code>css=a.product-link@href</code>
+                <span class="pattern-desc">Extracts the href attribute value</span>
+            </div>
+        </div>
+        
+        <div class="scraping-pattern">
+            <h4><i class="fa-solid fa-eye"></i> Monitoring Elements</h4>
+            <p>For <code>monitorElement</code> command, select stable containers:</p>
+            <div class="pattern-example">
+                <code>css=.status-indicator</code>
+                <span class="pattern-desc">Monitors status changes in real-time</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-shield-alt"></i> Selector Best Practices</h2>
+    
+    <div class="best-practices">
+        <div class="practice good">
+            <h4><i class="fa-solid fa-check-circle"></i> Do: Use Stable Identifiers</h4>
+            <ul>
+                <li>Prefer <code>id</code> and <code>name</code> attributes when available</li>
+                <li>Use <code>data-*</code> attributes designed for testing</li>
+                <li>Target semantic HTML elements when possible</li>
+                <li>Use text content for buttons and links</li>
+            </ul>
+        </div>
+        
+        <div class="practice avoid">
+            <h4><i class="fa-solid fa-times-circle"></i> Avoid: Fragile Selectors</h4>
+            <ul>
+                <li>Don't rely on auto-generated class names (e.g., <code>.css-1a2b3c4</code>)</li>
+                <li>Avoid deep hierarchical paths that break with layout changes</li>
+                <li>Don't use position-based selectors unless necessary</li>
+                <li>Avoid styling-related classes that change frequently</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-tools"></i> Troubleshooting Selectors</h2>
+    
+    <div class="troubleshooting-guide">
+        <div class="trouble-scenario">
+            <h4><i class="fa-solid fa-exclamation-triangle"></i> Element Not Found</h4>
+            <div class="solutions">
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                    <li>Add wait commands: <code>waitForElementVisible | css=.target | 5000</code></li>
+                    <li>Check for dynamic loading with <code>waitForElementPresent</code></li>
+                    <li>Ask AI: "This element isn't found, suggest alternatives"</li>
+                    <li>Use browser dev tools to verify the selector exists</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="trouble-scenario">
+            <h4><i class="fa-solid fa-copy"></i> Multiple Elements Found</h4>
+            <div class="solutions">
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                    <li>Add more specific attributes to narrow selection</li>
+                    <li>Use index notation: <code>css=.item:nth-child(2)</code></li>
+                    <li>Add parent context: <code>css=.container .specific-item</code></li>
+                    <li>Use XPath with text content for uniqueness</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="trouble-scenario">
+            <h4><i class="fa-solid fa-exchange-alt"></i> Selector Becomes Invalid</h4>
+            <div class="solutions">
+                <p><strong>Solutions:</strong></p>
+                <ul>
+                    <li>Use more stable attributes (id, name, data-* attributes)</li>
+                    <li>Create fallback selectors with conditional logic</li>
+                    <li>Ask AI to suggest more robust alternatives</li>
+                    <li>Monitor element changes with <code>monitorElement</code></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-lightbulb"></i> Advanced Selector Techniques</h2>
+    
+    <h3>Dynamic Selector Generation</h3>
+    <p>Use variables to create dynamic selectors:</p>
+    <pre><code>// Store a dynamic ID
+storeAttribute | css=.current-user@data-user-id | userId
+
+// Use in selector with variable
+click | css=[data-user-id="${userId}"] .settings-button | </code></pre>
+    
+    <h3>Fallback Selector Strategy</h3>
+    <p>Create robust automations with multiple selector options:</p>
+    <pre><code>// Try primary selector
+if | css=#submit-btn
+    click | css=#submit-btn | 
+else
+    // Fallback to class-based selector
+    if | css=.submit-button
+        click | css=.submit-button | 
+    else
+        // Final fallback to text-based selector
+        click | xpath=//button[contains(text(), 'Submit')] | 
+    end
+end</code></pre>
+    
+    <h3>AI-Assisted Selector Optimization</h3>
+    <p>Let AI help improve your selectors:</p>
+    <pre><code>// Original selector
+click | css=body > div:nth-child(3) > div > button | 
+
+// Ask AI: "Make this selector more reliable"
+// AI suggests: css=button[data-action="submit"]
+// or: xpath=//button[text()="Submit Order"]</code></pre>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Master Element Targeting!</strong>
+            <p>Now that you understand selectors, learn about <a href="#variables">Variables</a> to store and manipulate the data you extract, or explore <a href="#conditional-logic">Conditional Logic</a> to create smart automations.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.selector-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.selector-type {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.selector-type:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.selector-type h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.selector-type p {
+    margin: 0 0 1rem 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.selector-example {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 3px solid #4f46e5;
+}
+
+.selector-example code {
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.selector-desc {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.ai-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.ai-feature {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 100%);
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+}
+
+.ai-feature h4 {
+    margin: 0 0 0.5rem 0;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.css-examples, .xpath-examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.css-example, .xpath-example {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #10b981;
+}
+
+.css-example h4, .xpath-example h4 {
+    margin: 0 0 1rem 0;
+    color: #065f46;
+}
+
+.example-group {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.example-group code {
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.example-desc {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.scraping-patterns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.scraping-pattern {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-radius: 12px;
+    border-left: 4px solid #10b981;
+}
+
+.scraping-pattern h4 {
+    margin: 0 0 0.5rem 0;
+    color: #065f46;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pattern-example {
+    background: white;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 0.75rem;
+}
+
+.pattern-example code {
+    font-family: 'Monaco', 'Menlo', monospace;
+    color: #1f2937;
+}
+
+.pattern-desc {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.best-practices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.practice {
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.practice.good {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-left: 4px solid #10b981;
+}
+
+.practice.avoid {
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border-left: 4px solid #ef4444;
+}
+
+.practice h4 {
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.practice.good h4 {
+    color: #065f46;
+}
+
+.practice.avoid h4 {
+    color: #991b1b;
+}
+
+.practice ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.practice li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.troubleshooting-guide {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.trouble-scenario {
+    padding: 1.5rem;
+    background: #fff7ed;
+    border-radius: 12px;
+    border-left: 4px solid #f97316;
+}
+
+.trouble-scenario h4 {
+    margin: 0 0 1rem 0;
+    color: #9a3412;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.solutions p {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: #9a3412;
+}
+
+.solutions ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.solutions li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .selector-types,
+    .ai-features,
+    .css-examples,
+    .xpath-examples,
+    .best-practices {
+        grid-template-columns: 1fr;
+    }
+}
+</style>

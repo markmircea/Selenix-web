@@ -1,157 +1,293 @@
 <h1 class="docs-title">Quick Start Guide</h1>
 
-<p class="docs-intro">Welcome to Selenix! This guide will help you create your first automation in just 5 minutes.</p>
+<p class="docs-intro">Welcome to Selenix! This guide will help you create your first AI-powered automation in just 5 minutes, using our intelligent assistant to guide you through the process.</p>
 
 <div class="docs-section">
-    <h2><i class="fa-solid fa-play"></i> Step 1: Launch Selenix</h2>
+    <h2><i class="fa-solid fa-download"></i> Step 1: Launch Selenix</h2>
     
     <ol class="docs-list">
         <li>Open the Selenix desktop application</li>
-        <li>Make sure your browser extension is connected (green status indicator)</li>
-        <li>Click <strong>New Workflow</strong> to start</li>
-    </ol>
-</div>
-
-<div class="docs-section">
-    <h2><i class="fa-solid fa-record-vinyl"></i> Step 2: Record Your First Action</h2>
-    
-    <p>Let's create a simple automation that searches Google:</p>
-    
-    <ol class="docs-list">
-        <li>Click the <strong>Record</strong> button in Selenix</li>
-        <li>Open your browser and go to <code>google.com</code></li>
-        <li>Click in the search box and type "Selenix automation"</li>
-        <li>Press Enter to search</li>
-        <li>Click <strong>Stop Recording</strong> in Selenix</li>
+        <li>Optionally, add your OpenRouter API key in Settings to unlock AI features</li>
+        <li>Click <strong>New Project</strong> to start</li>
+        <li>Choose <strong>Create New Test</strong> from the project menu</li>
     </ol>
     
-    <div class="alert alert-success">
-        <i class="fa-solid fa-check-circle"></i>
+    <div class="alert alert-info">
+        <i class="fa-solid fa-brain"></i>
         <div>
-            <strong>Congratulations!</strong>
-            <p>You've just recorded your first automation.</p>
+            <strong>AI Assistant Available</strong>
+            <p>Look for the AI Assistant panel on the right side of the interface. It can help you throughout the automation process!</p>
         </div>
     </div>
 </div>
 
 <div class="docs-section">
-    <h2><i class="fa-solid fa-edit"></i> Step 3: Review and Edit</h2>
+    <h2><i class="fa-solid fa-magic-wand-sparkles"></i> Step 2: Create with AI Assistance</h2>
     
-    <p>In the workflow editor, you'll see your recorded actions:</p>
+    <p>Let's create an intelligent web scraping automation:</p>
     
-    <ul class="docs-list">
-        <li><strong>Navigate</strong> to google.com</li>
-        <li><strong>Type</strong> "Selenix automation" in search box</li>
-        <li><strong>Click</strong> search button</li>
-    </ul>
+    <ol class="docs-list">
+        <li>Click the <strong>Record</strong> button in Selenix</li>
+        <li>Open your browser and navigate to any website (e.g., <code>example.com</code>)</li>
+        <li>Click on elements you want to interact with or extract data from</li>
+        <li>Ask the AI Assistant: <em>"Help me scrape all the product titles from this page"</em></li>
+        <li>The AI will analyze the page and suggest optimal commands</li>
+        <li>Click <strong>Stop Recording</strong> when done</li>
+    </ol>
     
-    <p>You can:</p>
-    <ul class="docs-list">
-        <li><strong>Edit</strong> any action by clicking on it</li>
-        <li><strong>Add delays</strong> between actions</li>
-        <li><strong>Add conditions</strong> for dynamic behavior</li>
-        <li><strong>Insert new actions</strong> anywhere in the workflow</li>
-    </ul>
+    <div class="alert alert-success">
+        <i class="fa-solid fa-robot"></i>
+        <div>
+            <strong>AI Magic!</strong>
+            <p>The AI Assistant can see your browser, understand page structure, and suggest the best automation commands.</p>
+        </div>
+    </div>
 </div>
 
 <div class="docs-section">
-    <h2><i class="fa-solid fa-play-circle"></i> Step 4: Run Your Automation</h2>
+    <h2><i class="fa-solid fa-spider"></i> Step 3: Advanced Data Extraction</h2>
+    
+    <p>Try these powerful scraping commands:</p>
+    
+    <div class="command-examples">
+        <div class="command-example">
+            <h4><i class="fa-solid fa-list"></i> Scrape Collection</h4>
+            <p>Extract multiple similar items:</p>
+            <code>scrapeCollection | css=.product-title | productTitles</code>
+            <p class="example-desc">This extracts all product titles into an array variable</p>
+        </div>
+        
+        <div class="command-example">
+            <h4><i class="fa-solid fa-table"></i> Scrape Structured</h4>
+            <p>Extract complex data structures:</p>
+            <code>scrapeStructured | {"title": "css=.title", "price": "css=.price", "image": "css=img@src"} | productData</code>
+            <p class="example-desc">This extracts structured data with multiple fields</p>
+        </div>
+        
+        <div class="command-example">
+            <h4><i class="fa-solid fa-download"></i> Export Data</h4>
+            <p>Save your scraped data:</p>
+            <code>exportToCSV | productData | ./exports/products.csv</code>
+            <p class="example-desc">This exports your data to a CSV file</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-play-circle"></i> Step 4: Run and Schedule</h2>
     
     <ol class="docs-list">
-        <li>Click the <strong>Play</strong> button to run your automation</li>
-        <li>Watch as Selenix automatically performs your recorded actions</li>
-        <li>The browser will navigate to Google and perform the search</li>
+        <li>Click the <strong>Play</strong> button to test your automation</li>
+        <li>Watch as Selenix intelligently performs your actions</li>
+        <li>Check the exported data in your specified location</li>
+        <li>Right-click on your test and select <strong>Schedule Test</strong></li>
+        <li>Set up automated runs (hourly, daily, weekly, monthly)</li>
+    </ol>
+    
+    <div class="schedule-options">
+        <div class="schedule-option">
+            <h4><i class="fa-solid fa-clock"></i> One-time Schedule</h4>
+            <p>Run once at a specific date and time</p>
+        </div>
+        <div class="schedule-option">
+            <h4><i class="fa-solid fa-repeat"></i> Recurring Schedule</h4>
+            <p>Run automatically on a recurring pattern</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-camera"></i> Step 5: Browser State Management</h2>
+    
+    <p>Save and restore browser states for consistent automation:</p>
+    
+    <ol class="docs-list">
+        <li>Add command: <code>createSnapshot | myLoginState</code></li>
+        <li>This saves cookies, localStorage, and session data</li>
+        <li>Later, use: <code>restoreSnapshot | myLoginState</code></li>
+        <li>Your browser will return to the exact saved state</li>
     </ol>
 </div>
 
 <div class="docs-section">
-    <h2><i class="fa-solid fa-save"></i> Step 5: Save Your Workflow</h2>
-    
-    <ol class="docs-list">
-        <li>Click <strong>Save</strong> in the top menu</li>
-        <li>Give your workflow a name like "Google Search Example"</li>
-        <li>Add a description (optional)</li>
-        <li>Click <strong>Save</strong></li>
-    </ol>
-</div>
-
-<div class="docs-section">
-    <h2><i class="fa-solid fa-arrow-right"></i> Next Steps</h2>
-    
-    <p>Now that you've created your first automation, explore these features:</p>
+    <h2><i class="fa-solid fa-arrow-right"></i> Next Steps: Advanced Features</h2>
     
     <div class="feature-grid">
         <div class="feature-card">
             <div class="feature-card-icon">
-                <i class="fa-solid fa-database"></i>
+                <i class="fa-solid fa-brain"></i>
             </div>
-            <h4>Data Extraction</h4>
-            <p><strong>Right-click</strong> on any element during recording and select <strong>Extract Data</strong> to capture text, links, or images.</p>
+            <h4>AI Data Processing</h4>
+            <p>Use <strong>sendToAI</strong> command to process scraped data with AI instructions like "Extract only prices above $100"</p>
         </div>
         
         <div class="feature-card">
             <div class="feature-card-icon">
-                <i class="fa-solid fa-clock"></i>
+                <i class="fa-solid fa-eye"></i>
             </div>
-            <h4>Scheduling</h4>
-            <p>Click <strong>Schedule</strong> to run your automation automatically at specific times.</p>
+            <h4>Element Monitoring</h4>
+            <p>Use <strong>monitorElement</strong> to watch for changes and react automatically when content updates</p>
         </div>
         
         <div class="feature-card">
             <div class="feature-card-icon">
-                <i class="fa-solid fa-puzzle-piece"></i>
+                <i class="fa-solid fa-merge"></i>
             </div>
-            <h4>Templates</h4>
-            <p>Browse our <strong>Template Library</strong> for pre-built automations for common tasks.</p>
+            <h4>Variable Combination</h4>
+            <p>Use <strong>combineVariables</strong> to intelligently merge data from multiple sources before export</p>
         </div>
         
         <div class="feature-card">
             <div class="feature-card-icon">
-                <i class="fa-solid fa-cogs"></i>
+                <i class="fa-solid fa-globe"></i>
             </div>
-            <h4>Advanced Features</h4>
-            <p>Add <strong>loops</strong>, <strong>conditions</strong>, and <strong>variables</strong> to create complex workflows.</p>
+            <h4>HTTP Requests</h4>
+            <p>Use <strong>httpRequest</strong> and <strong>curlRequest</strong> to integrate with APIs and web services</p>
         </div>
     </div>
 </div>
 
 <div class="docs-section">
-    <h2><i class="fa-solid fa-lightbulb"></i> Tips for Success</h2>
+    <h2><i class="fa-solid fa-lightbulb"></i> Pro Tips for AI-Powered Automation</h2>
     
     <div class="tips-grid">
         <div class="tip">
-            <h4><i class="fa-solid fa-seedling"></i> Start Simple</h4>
-            <p>Begin with basic automations and gradually add complexity</p>
+            <h4><i class="fa-solid fa-comments"></i> Talk to Your AI</h4>
+            <p>Describe what you want in natural language: "I need to scrape all product prices and export to CSV"</p>
         </div>
         
         <div class="tip">
-            <h4><i class="fa-solid fa-vial"></i> Test Frequently</h4>
-            <p>Run your automations regularly to catch issues early</p>
+            <h4><i class="fa-solid fa-camera"></i> Use Screenshots</h4>
+            <p>The AI can analyze browser screenshots to help identify elements and troubleshoot issues</p>
         </div>
         
         <div class="tip">
-            <h4><i class="fa-solid fa-tag"></i> Use Descriptive Names</h4>
-            <p>Give your workflows and actions clear, descriptive names</p>
+            <h4><i class="fa-solid fa-calendar-alt"></i> Schedule Smart</h4>
+            <p>Set up recurring schedules for data collection. Perfect for monitoring competitors or tracking changes</p>
         </div>
         
         <div class="tip">
-            <h4><i class="fa-solid fa-comments"></i> Join the Community</h4>
-            <p>Connect with other users in our <a href="https://community.selenix.io" target="_blank">forum</a></p>
+            <h4><i class="fa-solid fa-save"></i> Save States</h4>
+            <p>Create browser snapshots after logging in to avoid re-authentication in scheduled runs</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-terminal"></i> Essential Commands to Try</h2>
+    
+    <div class="commands-list">
+        <div class="command-group">
+            <h4>Data Extraction</h4>
+            <ul>
+                <li><code>scrapeCollection</code> - Extract arrays of similar elements</li>
+                <li><code>scrapeStructured</code> - Extract complex data structures</li>
+                <li><code>storeText</code> - Store text from single elements</li>
+            </ul>
+        </div>
+        
+        <div class="command-group">
+            <h4>Data Processing</h4>
+            <ul>
+                <li><code>combineVariables</code> - Merge multiple data sources</li>
+                <li><code>transformVariable</code> - Apply JavaScript transformations</li>
+                <li><code>sendToAI</code> - Process data with AI instructions</li>
+            </ul>
+        </div>
+        
+        <div class="command-group">
+            <h4>Export & Import</h4>
+            <ul>
+                <li><code>exportToCSV</code> - Export data to CSV files</li>
+                <li><code>exportToJSON</code> - Export data to JSON files</li>
+                <li><code>importFromJSON</code> - Import data from files</li>
+            </ul>
+        </div>
+        
+        <div class="command-group">
+            <h4>State Management</h4>
+            <ul>
+                <li><code>createSnapshot</code> - Save browser state</li>
+                <li><code>restoreSnapshot</code> - Restore browser state</li>
+                <li><code>monitorElement</code> - Watch for changes</li>
+            </ul>
         </div>
     </div>
 </div>
 
 <div class="next-steps">
-    <div class="alert alert-info">
+    <div class="alert alert-success">
         <i class="fa-solid fa-graduation-cap"></i>
         <div>
-            <strong>Ready for more?</strong>
-            <p>Check out our <a href="#workflows">Core Concepts</a> section to learn about workflows, actions, and selectors in detail.</p>
+            <strong>You're Ready to Automate!</strong>
+            <p>Explore the <a href="#workflows">Advanced Features</a> section to learn about complex workflows, API integrations, and professional automation techniques.</p>
         </div>
     </div>
 </div>
 
 <style>
+.command-examples {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.command-example {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #4f46e5;
+}
+
+.command-example h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.command-example code {
+    display: block;
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    margin: 0.5rem 0;
+    overflow-x: auto;
+}
+
+.example-desc {
+    margin: 0.5rem 0 0 0;
+    color: #666;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.schedule-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.schedule-option {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+    border-radius: 12px;
+    border-left: 4px solid #0288d1;
+}
+
+.schedule-option h4 {
+    margin: 0 0 0.5rem 0;
+    color: #01579b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .tips-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -187,8 +323,56 @@
     line-height: 1.4;
 }
 
+.commands-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.command-group {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 100%);
+    border-radius: 12px;
+    border-left: 4px solid #f59e0b;
+}
+
+.command-group h4 {
+    margin: 0 0 1rem 0;
+    color: #92400e;
+    font-size: 1.1rem;
+}
+
+.command-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.command-group li {
+    padding: 0.25rem 0;
+    color: #451a03;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.9rem;
+}
+
+.command-group li code {
+    background: rgba(146, 64, 14, 0.2);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
 @media (max-width: 768px) {
     .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .commands-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .schedule-options {
         grid-template-columns: 1fr;
     }
 }

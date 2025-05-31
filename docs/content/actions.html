@@ -1,0 +1,543 @@
+<h1 class="docs-title">Actions & Commands</h1>
+
+<p class="docs-intro">Actions are the building blocks of Selenix automations. With over 100 built-in commands, you can create sophisticated browser automations, web scrapers, and data processing workflows without writing code.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-brain"></i>
+    <div>
+        <strong>AI Assistant Available</strong>
+        <p>Ask the AI assistant to help you choose the right commands: "What command should I use to extract all product prices?"</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-mouse-pointer"></i> Browser Interaction Commands</h2>
+    
+    <p>Commands for interacting with web pages like a human user:</p>
+    
+    <div class="command-grid">
+        <div class="command-card">
+            <h4><code>click</code></h4>
+            <p>Click on any element (buttons, links, images)</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>click | css=.submit-button | </code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>type</code></h4>
+            <p>Enter text into input fields, supports variables and special keys</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>type | id=email | user@example.com</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>select</code></h4>
+            <p>Choose options from dropdown menus</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>select | name=country | label=United States</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>doubleClick</code></h4>
+            <p>Double-click on elements for advanced interactions</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>doubleClick | css=.file-item | </code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>clickAtCoordinates</code></h4>
+            <p>Click at precise pixel coordinates for complex UIs</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>clickAtCoordinates | 300,200 | </code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>dragAndDropToObject</code></h4>
+            <p>Drag one element and drop it onto another</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>dragAndDropToObject | css=.item | css=.dropzone</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-spider"></i> Data Extraction Commands</h2>
+    
+    <p>Powerful commands for scraping and extracting data from web pages:</p>
+    
+    <div class="command-grid">
+        <div class="command-card advanced">
+            <h4><code>scrapeCollection</code></h4>
+            <p>Extract arrays of similar elements (prices, titles, links)</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>scrapeCollection | css=.product-title | productTitles</code>
+            </div>
+            <div class="command-example">
+                Result: <code>["Product 1", "Product 2", "Product 3"]</code>
+            </div>
+        </div>
+        
+        <div class="command-card advanced">
+            <h4><code>scrapeStructured</code></h4>
+            <p>Extract complex data using JSON field mapping</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>scrapeStructured | {"title": "css=.title", "price": "css=.price", "image": "css=img@src"} | products</code>
+            </div>
+            <div class="command-example">
+                Result: Array of objects with title, price, and image fields
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>storeText</code></h4>
+            <p>Extract text from a single element</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>storeText | css=.total-price | totalPrice</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>storeValue</code></h4>
+            <p>Get the value from input fields</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>storeValue | name=quantity | currentQuantity</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>storeAttribute</code></h4>
+            <p>Extract any HTML attribute value</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>storeAttribute | css=img@src | imageUrl</code>
+            </div>
+        </div>
+        
+        <div class="command-card advanced">
+            <h4><code>monitorElement</code></h4>
+            <p>Watch elements for changes and react automatically</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>monitorElement | css=.status | {"interval": 5000, "condition": "!=="}</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-file-export"></i> Data Processing & Export Commands</h2>
+    
+    <p>Transform, combine, and export your extracted data:</p>
+    
+    <div class="command-grid">
+        <div class="command-card advanced">
+            <h4><code>combineVariables</code></h4>
+            <p>Intelligently merge multiple variables</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>combineVariables | users,products,orders | combinedData</code>
+            </div>
+        </div>
+        
+        <div class="command-card advanced">
+            <h4><code>transformVariable</code></h4>
+            <p>Apply JavaScript functions to transform data</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>transformVariable | prices | prices.map(p => parseFloat(p.replace('$', '')))</code>
+            </div>
+        </div>
+        
+        <div class="command-card advanced">
+            <h4><code>sendToAI</code></h4>
+            <p>Process data using AI with custom instructions</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>sendToAI | Extract only prices above $100 | productData</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>exportToCSV</code></h4>
+            <p>Export data to CSV files for analysis</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>exportToCSV | products | ./exports/products.csv</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>exportToJSON</code></h4>
+            <p>Export data to JSON format</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>exportToJSON | userData | ./exports/users.json</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>importFromJSON</code></h4>
+            <p>Load external data into variables</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>importFromJSON | ./data/config.json | settings</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-camera"></i> State Management Commands</h2>
+    
+    <p>Manage browser state and sessions for reliable automation:</p>
+    
+    <div class="command-grid">
+        <div class="command-card advanced">
+            <h4><code>createSnapshot</code></h4>
+            <p>Save complete browser state (cookies, localStorage, sessions)</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>createSnapshot | loginState | </code>
+            </div>
+        </div>
+        
+        <div class="command-card advanced">
+            <h4><code>restoreSnapshot</code></h4>
+            <p>Restore exact browser state from saved snapshot</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>restoreSnapshot | loginState | </code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-code-branch"></i> Control Flow Commands</h2>
+    
+    <p>Create intelligent workflows with conditional logic and loops:</p>
+    
+    <div class="command-grid">
+        <div class="command-card">
+            <h4><code>if</code></h4>
+            <p>Create conditional branches in your automation</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>if | ${price} > 100 | </code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>else</code> / <code>elseIf</code></h4>
+            <p>Alternative paths in conditional logic</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>elseIf | ${stock} > 0 | </code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>while</code></h4>
+            <p>Repeat actions while a condition is true</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>while | ${hasNextPage} === true | 1000</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>forEach</code></h4>
+            <p>Iterate over arrays and collections</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>forEach | urlList | currentUrl</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>times</code></h4>
+            <p>Repeat actions a specific number of times</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>times | 10 | 100</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>end</code></h4>
+            <p>Close control flow blocks (if, while, forEach, times)</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>end | | </code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-globe"></i> Network & Integration Commands</h2>
+    
+    <p>Integrate with APIs and external services:</p>
+    
+    <div class="command-grid">
+        <div class="command-card advanced">
+            <h4><code>httpRequest</code></h4>
+            <p>Make HTTP requests to APIs</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>httpRequest | {"url": "https://api.example.com/data", "method": "GET"} | apiResponse</code>
+            </div>
+        </div>
+        
+        <div class="command-card advanced">
+            <h4><code>curlRequest</code></h4>
+            <p>Execute cURL-style HTTP requests</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>curlRequest | curl -X POST https://api.example.com/webhook | response</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>downloadFiles</code></h4>
+            <p>Download files from URLs automatically</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>downloadFiles | fileUrls | ./downloads/</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-cog"></i> System & Advanced Commands</h2>
+    
+    <p>Advanced system integration and scripting:</p>
+    
+    <div class="command-grid">
+        <div class="command-card">
+            <h4><code>executeScript</code></h4>
+            <p>Run custom JavaScript in browser context</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>executeScript | return document.title | pageTitle</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>executeAsyncScript</code></h4>
+            <p>Execute asynchronous JavaScript operations</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>executeAsyncScript | return fetch('/api/data').then(r => r.json()) | apiData</code>
+            </div>
+        </div>
+        
+        <div class="command-card advanced">
+            <h4><code>executePowerShell</code></h4>
+            <p>Execute PowerShell scripts for system integration</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>executePowerShell | C:/scripts/process-data.ps1|arg1|arg2 | scriptResult</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>scrollAndWait</code></h4>
+            <p>Handle infinite scroll and lazy-loaded content</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>scrollAndWait | 5 | 2000</code>
+            </div>
+        </div>
+        
+        <div class="command-card">
+            <h4><code>inspectVariable</code></h4>
+            <p>Debug variables with detailed structure analysis</p>
+            <div class="command-syntax">
+                <strong>Syntax:</strong> <code>inspectVariable | userData | </code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-lightbulb"></i> Command Best Practices</h2>
+    
+    <div class="best-practices">
+        <div class="practice">
+            <h4><i class="fa-solid fa-target"></i> Use Robust Selectors</h4>
+            <p>Prefer ID and name selectors over complex CSS paths. Use the AI assistant to suggest the most reliable selectors.</p>
+        </div>
+        
+        <div class="practice">
+            <h4><i class="fa-solid fa-clock"></i> Add Appropriate Waits</h4>
+            <p>Use wait commands before interacting with dynamic content. <code>waitForElementVisible</code> is often better than fixed delays.</p>
+        </div>
+        
+        <div class="practice">
+            <h4><i class="fa-solid fa-shield-alt"></i> Handle Errors Gracefully</h4>
+            <p>Use conditional logic to check for element existence before interaction. Create fallback paths for unreliable elements.</p>
+        </div>
+        
+        <div class="practice">
+            <h4><i class="fa-solid fa-database"></i> Organize Your Data</h4>
+            <p>Use meaningful variable names and combine related data before export. Structure your data for easy analysis.</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-graduation-cap"></i> Advanced Command Patterns</h2>
+    
+    <h3>Pattern 1: Paginated Data Scraping</h3>
+    <pre><code>// Navigate to first page
+open | https://example.com/products | 
+
+// Loop through all pages
+while | ${hasNextPage} === true | 1000
+    // Scrape current page data
+    scrapeCollection | css=.product-item | currentPageProducts
+    
+    // Combine with existing data
+    combineVariables | allProducts,currentPageProducts | allProducts
+    
+    // Check for next page
+    if | css=.next-page
+        click | css=.next-page | 
+        waitForElementVisible | css=.product-item | 5000
+        store | true | hasNextPage
+    else
+        store | false | hasNextPage
+    end
+end
+
+// Export final results
+exportToCSV | allProducts | ./exports/all-products.csv</code></pre>
+
+    <h3>Pattern 2: Form Filling with Error Handling</h3>
+    <pre><code>// Check if form exists
+if | css=form#contact
+    // Fill required fields
+    type | name=email | ${userEmail}
+    type | name=message | ${userMessage}
+    
+    // Handle optional fields
+    if | css=input[name=phone]
+        type | name=phone | ${userPhone}
+    end
+    
+    // Submit and verify
+    click | css=button[type=submit] | 
+    waitForElementVisible | css=.success-message | 5000
+    
+    // Store result
+    storeText | css=.success-message | submissionResult
+else
+    echo | Form not found on this page
+end</code></pre>
+
+    <h3>Pattern 3: AI-Enhanced Data Processing</h3>
+    <pre><code>// Scrape raw data
+scrapeCollection | css=.review-text | reviews
+
+// Process with AI
+sendToAI | Extract sentiment (positive/negative/neutral) for each review | reviews
+
+// Transform results
+transformVariable | reviews | reviews.filter(r => r.sentiment === 'positive')
+
+// Export processed data
+exportToJSON | reviews | ./exports/positive-reviews.json</code></pre>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-info">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Ready to build complex automations?</strong>
+            <p>Learn about <a href="#selectors">Selectors</a> to target elements reliably, or explore <a href="#variables">Variables</a> for advanced data handling.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.command-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.command-card {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.command-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.command-card.advanced {
+    border-left: 4px solid #f59e0b;
+    background: linear-gradient(135deg, #fef3c7 0%, #fff 20%);
+}
+
+.command-card h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.command-card p {
+    margin: 0 0 1rem 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.command-syntax {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 3px solid #4f46e5;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.85rem;
+}
+
+.command-syntax strong {
+    color: #333;
+}
+
+.command-example {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #059669;
+    font-style: italic;
+}
+
+.best-practices {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.practice {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border-radius: 12px;
+    border-left: 4px solid #10b981;
+}
+
+.practice h4 {
+    margin: 0 0 0.5rem 0;
+    color: #065f46;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.practice p {
+    margin: 0;
+    color: #064e3b;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .command-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .best-practices {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
