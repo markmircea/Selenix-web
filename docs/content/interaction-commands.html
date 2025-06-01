@@ -409,6 +409,388 @@
             </div>
         </div>
         
+        <!-- Click At -->
+        <div class="command-item" id="clickAt">
+            <div class="command-header">
+                <h3><code>clickAt</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Clicks on a target element at specific coordinates relative to the element. The coordinates are relative to the target element (e.g., 0,0 is the top left corner of the element).</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>clickAt | locator | x,y</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to click
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The coordinates relative to the element, specified as "x,y" (e.g., "10,5")
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>clickAt | id=image-map | 50,30</code>
+                        <code>clickAt | css=.chart-area | 100,75</code>
+                    </div>
+                    <div class="example-desc">Click at specific points within an image map or chart</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Double Click At -->
+        <div class="command-item" id="doubleClickAt">
+            <div class="command-header">
+                <h3><code>doubleClickAt</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Double clicks on a target element at specific coordinates relative to the element. The coordinates are relative to the target element (e.g., 0,0 is the top left corner of the element).</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>doubleClickAt | locator | x,y</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to double-click
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The coordinates relative to the element, specified as "x,y" (e.g., "10,5")
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>doubleClickAt | css=.file-icon | 16,16</code>
+                        <code>doubleClickAt | css=.text-editor | 200,100</code>
+                    </div>
+                    <div class="example-desc">Double-click at specific positions for precise interactions</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mouse Down -->
+        <div class="command-item" id="mouseDown">
+            <div class="command-header">
+                <h3><code>mouseDown</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Simulates a user pressing the left mouse button (without releasing it yet) on the specified element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>mouseDown | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to press the mouse button on
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>mouseDown | css=.draggable-item</code>
+                        <code>mouseMoveAt | css=.drop-zone | 50,50</code>
+                        <code>mouseUp | css=.drop-zone</code>
+                    </div>
+                    <div class="example-desc">Simulate drag and drop operations with precise control</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mouse Down At -->
+        <div class="command-item" id="mouseDownAt">
+            <div class="command-header">
+                <h3><code>mouseDownAt</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Simulates a user pressing the left mouse button (without releasing it yet) at the specified location relative to the target element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>mouseDownAt | locator | x,y</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The coordinates relative to the element, specified as "x,y"
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>mouseDownAt | css=.canvas | 100,50</code>
+                        <code>mouseMoveAt | css=.canvas | 200,150</code>
+                        <code>mouseUpAt | css=.canvas | 200,150</code>
+                    </div>
+                    <div class="example-desc">Draw lines or perform precise mouse operations</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mouse Move At -->
+        <div class="command-item" id="mouseMoveAt">
+            <div class="command-header">
+                <h3><code>mouseMoveAt</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Simulates moving the mouse to the specified location relative to the target element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>mouseMoveAt | locator | x,y</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The coordinates relative to the element, specified as "x,y"
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>mouseDown | css=.slider-handle</code>
+                        <code>mouseMoveAt | css=.slider-track | 150,0</code>
+                        <code>mouseUp | css=.slider-track</code>
+                    </div>
+                    <div class="example-desc">Move sliders or perform drag operations</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mouse Out -->
+        <div class="command-item" id="mouseOut">
+            <div class="command-header">
+                <h3><code>mouseOut</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Simulates a user moving the mouse pointer away from the specified element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>mouseOut | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to move the mouse away from
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>mouseOver | css=.tooltip-trigger</code>
+                        <code>waitForElementVisible | css=.tooltip</code>
+                        <code>mouseOut | css=.tooltip-trigger</code>
+                        <code>waitForElementNotVisible | css=.tooltip</code>
+                    </div>
+                    <div class="example-desc">Test tooltip show/hide behavior</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mouse Over -->
+        <div class="command-item" id="mouseOver">
+            <div class="command-header">
+                <h3><code>mouseOver</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Simulates a user hovering a mouse over the specified element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>mouseOver | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to hover over
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>mouseOver | css=.help-icon</code>
+                        <code>waitForElementVisible | css=.help-tooltip</code>
+                        <code>assertText | css=.help-tooltip | Click here for help</code>
+                    </div>
+                    <div class="example-desc">Hover over elements to trigger tooltips or menus</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mouse Up -->
+        <div class="command-item" id="mouseUp">
+            <div class="command-header">
+                <h3><code>mouseUp</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Simulates the event that occurs when the user releases the mouse button (e.g., stops holding the button down) on the specified element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>mouseUp | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to release the mouse button on
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>mouseDown | css=.button</code>
+                        <code>pause | 1000</code>
+                        <code>mouseUp | css=.button</code>
+                    </div>
+                    <div class="example-desc">Simulate long press interactions</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mouse Up At -->
+        <div class="command-item" id="mouseUpAt">
+            <div class="command-header">
+                <h3><code>mouseUpAt</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Simulates the event that occurs when the user releases the mouse button (e.g., stops holding the button down) at the specified location relative to the target element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>mouseUpAt | locator | x,y</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The coordinates relative to the element, specified as "x,y"
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>mouseDownAt | css=.drawing-canvas | 50,50</code>
+                        <code>mouseMoveAt | css=.drawing-canvas | 100,100</code>
+                        <code>mouseUpAt | css=.drawing-canvas | 100,100</code>
+                    </div>
+                    <div class="example-desc">Complete drawing operations on canvas elements</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add Selection -->
+        <div class="command-item" id="addSelection">
+            <div class="command-header">
+                <h3><code>addSelection</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Add a selection to the set of options in a multi-select element.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>addSelection | locator | optionLocator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the multi-select element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> An option locator (label=, value=, id=, index=) identifying the option to add
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>addSelection | id=skills | label=JavaScript</code>
+                        <code>addSelection | id=skills | label=Python</code>
+                        <code>addSelection | id=skills | value=java</code>
+                    </div>
+                    <div class="example-desc">Select multiple options in multi-select dropdowns</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Remove Selection -->
+        <div class="command-item" id="removeSelection">
+            <div class="command-header">
+                <h3><code>removeSelection</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Remove a selection from the set of selected options in a multi-select element using an option locator.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>removeSelection | locator | optionLocator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the multi-select element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> An option locator (label=, value=, id=, index=) identifying the option to remove
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>removeSelection | id=categories | label=Books</code>
+                        <code>removeSelection | css=.multi-select | value=unwanted-option</code>
+                    </div>
+                    <div class="example-desc">Remove specific options from multi-select elements</div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Drag And Drop To Object -->
         <div class="command-item" id="dragAndDropToObject">
             <div class="command-header">
