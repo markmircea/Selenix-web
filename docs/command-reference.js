@@ -557,3 +557,9 @@ function handleInitialView() {
 window.showCategory = showCategory;
 window.showAllCategories = showAllCategories;
 window.filterCommands = filterCommands;
+
+// Also make the function available for the commands sidebar
+if (typeof window.commandsSidebar !== 'undefined') {
+    // If sidebar exists, let it know the functions are available
+    console.log('Command reference functions are now available for sidebar');
+}

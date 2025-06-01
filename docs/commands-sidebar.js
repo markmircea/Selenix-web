@@ -170,37 +170,111 @@ class CommandsSidebar {
     }
     
     scrollToCommand(commandName, category) {
-        // First, make sure the correct category is loaded
-        if (typeof showCategory === 'function') {
-            showCategory(category);
+        console.log(`Scrolling to command: ${commandName} in category: ${category}`);
+        
+        // Function to perform the actual scrolling
+        const performScroll = () => {
+            // Try multiple strategies to find the command element
+            let commandElement = null;
             
-            // Wait for content to load, then scroll to command
-            setTimeout(() => {
-                const commandElement = document.querySelector(`[data-command-name="${commandName}"], #${commandName}, .command-item h3:contains("${commandName}")`);
-                if (commandElement) {
-                    commandElement.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'center' 
-                    });
-                    
-                    // Highlight the command temporarily
-                    this.highlightCommand(commandElement);
-                } else {
-                    // Try a more general approach - find any element containing the command name
-                    const allCommandItems = document.querySelectorAll('.command-item');
-                    for (const item of allCommandItems) {
-                        const header = item.querySelector('h3');
-                        if (header && header.textContent.includes(commandName)) {
-                            item.scrollIntoView({ 
-                                behavior: 'smooth', 
-                                block: 'center' 
-                            });
-                            this.highlightCommand(item);
-                            break;
-                        }
+            // Strategy 1: Look for element with exact ID matching command name
+            commandElement = document.getElementById(commandName);
+            
+            if (!commandElement) {
+                // Strategy 2: Look for command-item with matching ID
+                commandElement = document.querySelector(`.command-item#${commandName}`);
+            }
+            
+            if (!commandElement) {
+                // Strategy 3: Look for h3 containing the command name (case insensitive)
+                const allCommandItems = document.querySelectorAll('.command-item');
+                for (const item of allCommandItems) {
+                    const header = item.querySelector('h3 code');
+                    if (header && header.textContent.toLowerCase().trim() === commandName.toLowerCase()) {
+                        commandElement = item;
+                        break;
                     }
                 }
-            }, 500);
+            }
+            
+            if (!commandElement) {
+                // Strategy 4: Look for h3 containing the command name as part of text
+                const allCommandItems = document.querySelectorAll('.command-item');
+                for (const item of allCommandItems) {
+                    const header = item.querySelector('h3');
+                    if (header && header.textContent.toLowerCase().includes(commandName.toLowerCase())) {
+                        commandElement = item;
+                        break;
+                    }
+                }
+            }
+            
+            if (commandElement) {
+                console.log(`Found command element for ${commandName}:`, commandElement);
+                
+                // Scroll to the element
+                commandElement.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center',
+                    inline: 'nearest'
+                });
+                
+                // Highlight the command temporarily
+                this.highlightCommand(commandElement);
+                
+                // Also highlight the command in the sidebar
+                this.highlightSidebarCommand(commandName);
+                
+                return true; // Successfully found and scrolled
+            } else {
+                console.warn(`Could not find command element for: ${commandName}`);
+                
+                // If we still can't find it, log all available command items for debugging
+                const allItems = document.querySelectorAll('.command-item');
+                console.log('Available command items:', Array.from(allItems).map(item => {
+                    const header = item.querySelector('h3');
+                    return {
+                        id: item.id,
+                        text: header ? header.textContent : 'No header',
+                        element: item
+                    };
+                }));
+                
+                return false; // Failed to find
+            }
+        };
+        
+        // First, make sure the correct category is loaded
+        const showCategoryFn = window.showCategory || (typeof showCategory !== 'undefined' ? showCategory : null);
+        
+        if (showCategoryFn && typeof showCategoryFn === 'function') {
+            showCategoryFn(category);
+            
+            // Wait for content to load, then scroll to command
+            // Try multiple times with increasing delays to handle slow loading
+            let attempts = 0;
+            const maxAttempts = 5;
+            
+            const tryScroll = () => {
+                attempts++;
+                const success = performScroll();
+                
+                if (!success && attempts < maxAttempts) {
+                    // Try again with a longer delay
+                    setTimeout(tryScroll, 300 + (attempts * 200));
+                }
+            };
+            
+            // Start the first attempt after a short delay
+            setTimeout(tryScroll, 500);
+        } else {
+            console.error('showCategory function not available. Available functions:', {
+                windowShowCategory: typeof window.showCategory,
+                globalShowCategory: typeof showCategory
+            });
+            
+            // If showCategory is not available, try to scroll anyway in case we're already on the right page
+            setTimeout(performScroll, 100);
         }
     }
     
@@ -287,22 +361,39 @@ document.addEventListener('DOMContentLoaded', function() {
 const style = document.createElement('style');
 style.textContent = `
     .command-highlight {
-        animation: commandHighlight 2s ease-in-out;
-        border: 2px solid var(--primary-color, #4f46e5) !important;
+        animation: commandHighlight 3s ease-in-out;
+        border: 3px solid var(--primary-color, #4f46e5) !important;
         border-radius: 8px !important;
+        box-shadow: 0 0 20px rgba(79, 70, 229, 0.3) !important;
+        position: relative;
+        z-index: 10;
     }
     
     @keyframes commandHighlight {
         0% {
-            background-color: rgba(79, 70, 229, 0.1);
-            transform: scale(1.02);
+            background-color: rgba(79, 70, 229, 0.15);
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+        }
+        25% {
+            background-color: rgba(79, 70, 229, 0.25);
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(79, 70, 229, 0.5);
         }
         50% {
             background-color: rgba(79, 70, 229, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(79, 70, 229, 0.4);
+        }
+        75% {
+            background-color: rgba(79, 70, 229, 0.1);
+            transform: scale(1.01);
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.3);
         }
         100% {
             background-color: transparent;
             transform: scale(1);
+            box-shadow: none;
         }
     }
     
@@ -310,6 +401,20 @@ style.textContent = `
         background-color: rgba(79, 70, 229, 0.15) !important;
         color: var(--primary-color) !important;
         font-weight: 600 !important;
+        border-left: 4px solid var(--primary-color, #4f46e5) !important;
+    }
+    
+    /* Ensure command items are scrollable targets */
+    .command-item {
+        scroll-margin-top: 100px;
+        transition: all 0.3s ease;
+    }
+    
+    /* Add a subtle pulse effect when a command is being targeted */
+    .command-item:target {
+        background-color: rgba(79, 70, 229, 0.05);
+        border-left: 4px solid var(--primary-color, #4f46e5);
+        padding-left: calc(2rem - 4px);
     }
 `;
 document.head.appendChild(style);
