@@ -1,12 +1,15 @@
 <h1 class="docs-title">Complete Command Reference</h1>
 
-<p class="docs-intro">Selenix provides 135+ powerful commands for browser automation, web scraping, data processing, and AI integration. This comprehensive reference covers every command with detailed descriptions, examples, and best practices.</p>
+<p class="docs-intro">Selenix provides 135+ powerful commands for browser automation, web scraping, data processing, and
+    AI integration. This comprehensive reference covers every command with detailed descriptions, examples, and best
+    practices.</p>
 
 <div class="alert alert-info">
     <i class="fa-solid fa-brain"></i>
     <div>
         <strong>AI Assistant Help</strong>
-        <p>The AI assistant can help you choose the right command and provide examples. Just ask: "What command should I use to scrape product prices?"</p>
+        <p>The AI assistant can help you choose the right command and provide examples. Just ask: "What command should I
+            use to scrape product prices?"</p>
     </div>
 </div>
 
@@ -16,26 +19,73 @@
 <!-- Command Categories Navigation -->
 <div class="docs-section" id="main-categories">
     <h2><i class="fa-solid fa-list"></i> Command Categories</h2>
-    
+
     <div class="command-categories">
-        <div class="category-card" onclick="showCategory('interaction')">
-            <div class="category-icon">
-                <i class="fa-solid fa-mouse-pointer"></i>
-            </div>
-            <h3>Interaction Commands</h3>
-            <p>Click, type, hover, and interact with web elements</p>
-            <div class="command-count">21 commands</div>
-        </div>
-        
+
         <div class="category-card" onclick="showCategory('scraping')">
             <div class="category-icon">
                 <i class="fa-solid fa-spider"></i>
             </div>
             <h3>Data Extraction & Scraping</h3>
             <p>Advanced web scraping and structured data extraction</p>
+            <div class="command-count">8 commands</div>
+        </div>
+
+        <div class="category-card" onclick="showCategory('data')">
+            <div class="category-icon">
+                <i class="fa-solid fa-database"></i>
+            </div>
+            <h3>Data Management</h3>
+            <p>Store, transform, combine, and process variables</p>
             <div class="command-count">7 commands</div>
         </div>
-        
+
+        <div class="category-card" onclick="showCategory('export')">
+            <div class="category-icon">
+                <i class="fa-solid fa-file-export"></i>
+            </div>
+            <h3>Import & Export</h3>
+            <p>Export to CSV/JSON, import data, and download files</p>
+            <div class="command-count">7 commands</div>
+        </div>
+
+        <div class="category-card" onclick="showCategory('ai')">
+            <div class="category-icon">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+            <h3>AI & Advanced Features</h3>
+            <p>AI processing, PowerShell integration, and API requests</p>
+            <div class="command-count">2 commands</div>
+        </div>
+
+        <div class="category-card" onclick="showCategory('state')">
+            <div class="category-icon">
+                <i class="fa-solid fa-camera"></i>
+            </div>
+            <h3>State & Session Management</h3>
+            <p>Browser snapshots, monitoring, and session control</p>
+            <div class="command-count">2 commands</div>
+        </div>
+
+        <div class="category-card" onclick="showCategory('interaction')">
+            <div class="category-icon">
+                <i class="fa-solid fa-mouse-pointer"></i>
+            </div>
+            <h3>Interaction Commands</h3>
+            <p>Click, type, hover, and interact with web elements</p>
+            <div class="command-count">24 commands</div>
+        </div>
+
+        <div class="category-card" onclick="showCategory('navigation')">
+            <div class="category-icon">
+                <i class="fa-solid fa-route"></i>
+            </div>
+            <h3>Navigation & Flow Control</h3>
+            <p>Navigate pages, control execution flow, and manage windows</p>
+            <div class="command-count">25 commands</div>
+        </div>
+
+
         <div class="category-card" onclick="showCategory('assertion')">
             <div class="category-icon">
                 <i class="fa-solid fa-check-circle"></i>
@@ -44,51 +94,11 @@
             <p>Validate data, check conditions, and verify results</p>
             <div class="command-count">38 commands</div>
         </div>
-        
-        <div class="category-card" onclick="showCategory('navigation')">
-            <div class="category-icon">
-                <i class="fa-solid fa-route"></i>
-            </div>
-            <h3>Navigation & Flow Control</h3>
-            <p>Navigate pages, control execution flow, and manage windows</p>
-            <div class="command-count">29 commands</div>
-        </div>
-        
-        <div class="category-card" onclick="showCategory('data')">
-            <div class="category-icon">
-                <i class="fa-solid fa-database"></i>
-            </div>
-            <h3>Data Management</h3>
-            <p>Store, transform, combine, and process variables</p>
-            <div class="command-count">18 commands</div>
-        </div>
-        
-        <div class="category-card" onclick="showCategory('export')">
-            <div class="category-icon">
-                <i class="fa-solid fa-file-export"></i>
-            </div>
-            <h3>Import & Export</h3>
-            <p>Export to CSV/JSON, import data, and download files</p>
-            <div class="command-count">8 commands</div>
-        </div>
-        
-        <div class="category-card" onclick="showCategory('ai')">
-            <div class="category-icon">
-                <i class="fa-solid fa-brain"></i>
-            </div>
-            <h3>AI & Advanced Features</h3>
-            <p>AI processing, PowerShell integration, and API requests</p>
-            <div class="command-count">6 commands</div>
-        </div>
-        
-        <div class="category-card" onclick="showCategory('state')">
-            <div class="category-icon">
-                <i class="fa-solid fa-camera"></i>
-            </div>
-            <h3>State & Session Management</h3>
-            <p>Browser snapshots, monitoring, and session control</p>
-            <div class="command-count">8 commands</div>
-        </div>
+
+
+
+
+
     </div>
 </div>
 
@@ -109,13 +119,13 @@
 <!-- Understanding Commands Section -->
 <div class="docs-section" id="command-basics">
     <h2><i class="fa-solid fa-info-circle"></i> Understanding Command Syntax</h2>
-    
+
     <p>Every Selenix command follows this structure:</p>
-    
+
     <div class="syntax-example">
         <code>command | target | value</code>
     </div>
-    
+
     <div class="syntax-explanation">
         <div class="syntax-part">
             <h4><i class="fa-solid fa-terminal"></i> Command</h4>
@@ -135,52 +145,53 @@
 <!-- Element Selectors Section -->
 <div class="docs-section" id="element-selectors">
     <h2><i class="fa-solid fa-crosshairs"></i> Element Selectors</h2>
-    
+
     <p>Selenix provides multiple ways to identify elements on web pages:</p>
-    
+
     <div class="selector-types">
         <div class="selector-type">
             <h4><code>id=elementId</code></h4>
             <p>Select by element ID (most reliable)</p>
             <div class="example">Example: <code>id=submitButton</code></div>
         </div>
-        
+
         <div class="selector-type">
             <h4><code>css=.class</code></h4>
             <p>Select using CSS selectors</p>
             <div class="example">Example: <code>css=.product-title</code></div>
         </div>
-        
+
         <div class="selector-type">
             <h4><code>xpath=//element</code></h4>
             <p>Select using XPath expressions</p>
             <div class="example">Example: <code>xpath=//button[contains(text(),'Submit')]</code></div>
         </div>
-        
+
         <div class="selector-type">
             <h4><code>name=fieldName</code></h4>
             <p>Select by name attribute</p>
             <div class="example">Example: <code>name=username</code></div>
         </div>
-        
+
         <div class="selector-type">
             <h4><code>linkText=Link Text</code></h4>
             <p>Select links by exact text</p>
             <div class="example">Example: <code>linkText=Click Here</code></div>
         </div>
-        
+
         <div class="selector-type">
             <h4><code>partialLinkText=Partial</code></h4>
             <p>Select links by partial text</p>
             <div class="example">Example: <code>partialLinkText=Click</code></div>
         </div>
     </div>
-    
+
     <div class="alert alert-tip">
         <i class="fa-solid fa-lightbulb"></i>
         <div>
             <strong>AI Selector Help</strong>
-            <p>The AI assistant can analyze your page and suggest the best selector strategy. Use the element picker or ask the AI: "What's the best way to select this element?"</p>
+            <p>The AI assistant can analyze your page and suggest the best selector strategy. Use the element picker or
+                ask the AI: "What's the best way to select this element?"</p>
         </div>
     </div>
 </div>
@@ -188,28 +199,29 @@
 <!-- Variables Section -->
 <div class="docs-section" id="variables-section">
     <h2><i class="fa-solid fa-code"></i> Working with Variables</h2>
-    
+
     <p>Selenix supports different variable types for storing and processing data:</p>
-    
+
     <div class="variable-types">
         <div class="variable-type">
             <h4><i class="fa-solid fa-text-width"></i> String Variables</h4>
             <p>Store text data: <code>${userName}</code></p>
             <div class="example">Created by: <code>store</code>, <code>storeText</code>, <code>storeValue</code></div>
         </div>
-        
+
         <div class="variable-type">
             <h4><i class="fa-solid fa-list"></i> Array Variables</h4>
             <p>Store multiple items: <code>${productList}</code></p>
             <div class="example">Created by: <code>scrapeCollection</code>, <code>importFromCSV</code></div>
         </div>
-        
+
         <div class="variable-type">
             <h4><i class="fa-solid fa-cube"></i> Object Variables</h4>
             <p>Store structured data: <code>${userProfile.email}</code></p>
-            <div class="example">Created by: <code>storeJson</code>, <code>scrapeStructured</code>, <code>httpRequest</code></div>
+            <div class="example">Created by: <code>storeJson</code>, <code>scrapeStructured</code>,
+                <code>httpRequest</code></div>
         </div>
-        
+
         <div class="variable-type">
             <h4><i class="fa-solid fa-hashtag"></i> Number Variables</h4>
             <p>Store numeric data: <code>${itemCount}</code></p>
@@ -221,280 +233,284 @@
 
 
 <style>
-.command-categories {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
-.category-card {
-    padding: 2rem;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 12px;
-    border-left: 4px solid #4f46e5;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
-    cursor: pointer;
-}
-
-.category-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
-}
-
-.category-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    border-radius: 50%;
-    margin-bottom: 1rem;
-}
-
-.category-icon i {
-    font-size: 1.5rem;
-    color: white;
-}
-
-.category-card h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.2rem;
-    color: #333;
-}
-
-.category-card p {
-    margin: 0 0 1rem 0;
-    color: #666;
-    line-height: 1.4;
-}
-
-.command-count {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: #4f46e5;
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.command-search {
-    background: #f8f9fa;
-    padding: 2rem;
-    border-radius: 12px;
-    margin: 2rem 0;
-}
-
-.command-search h3 {
-    margin: 0 0 1rem 0;
-    color: #333;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.search-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    transition: border-color 0.2s ease;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: #4f46e5;
-}
-
-.search-filters {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    padding: 0.5rem 1rem;
-    border: 2px solid #e2e8f0;
-    background: white;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-}
-
-.filter-btn:hover {
-    border-color: #4f46e5;
-    color: #4f46e5;
-}
-
-.filter-btn.active {
-    background: #4f46e5;
-    border-color: #4f46e5;
-    color: white;
-}
-
-.syntax-example {
-    text-align: center;
-    margin: 1.5rem 0;
-}
-
-.syntax-example code {
-    font-size: 1.2rem;
-    display: inline-block;
-    padding: 1rem 2rem;
-}
-
-.syntax-explanation {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin: 2rem 0;
-}
-
-.syntax-part {
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    text-align: center;
-}
-
-.syntax-part h4 {
-    margin: 0 0 0.5rem 0;
-    color: #4f46e5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-
-
-.selector-types, .variable-types {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
-    margin: 1.5rem 0;
-}
-
-.selector-type, .variable-type {
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border-left: 4px solid #10b981;
-}
-
-.selector-type h4, .variable-type h4 {
-    margin: 0 0 0.5rem 0;
-    color: #065f46;
-    font-family: 'Monaco', 'Menlo', monospace;
-}
-
-.variable-type h4 {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: inherit;
-}
-
-.example {
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-}
-
-.command-section {
-    display: none;
-    margin: 2rem 0;
-}
-
-.back-to-categories {
-    margin-bottom: 2rem;
-}
-
-.back-btn {
-    padding: 0.75rem 1.5rem;
-    background: #4f46e5;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background 0.2s ease;
-}
-
-.back-btn:hover {
-    background: #3730a3;
-}
-
-.command-section-placeholder {
-    text-align: center;
-    padding: 3rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-    margin: 2rem 0;
-}
-
-.command-section-placeholder h2 {
-    color: #f59e0b;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.alert-tip {
-    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 100%);
-    border-left: 4px solid #f59e0b;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin: 1.5rem 0;
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-}
-
-.alert-tip i {
-    font-size: 1.5rem;
-    color: #92400e;
-    margin-top: 0.25rem;
-}
-
-.alert-tip strong {
-    color: #92400e;
-}
-
-.alert-tip p {
-    color: #451a03;
-    margin: 0;
-}
-
-@media (max-width: 768px) {
     .command-categories {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
     }
-    
-    .syntax-explanation {
-        grid-template-columns: 1fr;
+
+    .category-card {
+        padding: 2rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 12px;
+        border-left: 4px solid #4f46e5;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
+        cursor: pointer;
     }
-    
-    .selector-types, .variable-types {
-        grid-template-columns: 1fr;
+
+    .category-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
     }
-    
-    .search-filters {
+
+    .category-icon {
+        display: flex;
+        align-items: center;
         justify-content: center;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        border-radius: 50%;
+        margin-bottom: 1rem;
     }
-}
+
+    .category-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .category-card h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.2rem;
+        color: #333;
+    }
+
+    .category-card p {
+        margin: 0 0 1rem 0;
+        color: #666;
+        line-height: 1.4;
+    }
+
+    .command-count {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: #4f46e5;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .command-search {
+        background: #f8f9fa;
+        padding: 2rem;
+        border-radius: 12px;
+        margin: 2rem 0;
+    }
+
+    .command-search h3 {
+        margin: 0 0 1rem 0;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        transition: border-color 0.2s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #4f46e5;
+    }
+
+    .search-filters {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1rem;
+        border: 2px solid #e2e8f0;
+        background: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+    .filter-btn:hover {
+        border-color: #4f46e5;
+        color: #4f46e5;
+    }
+
+    .filter-btn.active {
+        background: #4f46e5;
+        border-color: #4f46e5;
+        color: white;
+    }
+
+    .syntax-example {
+        text-align: center;
+        margin: 1.5rem 0;
+    }
+
+    .syntax-example code {
+        font-size: 1.2rem;
+        display: inline-block;
+        padding: 1rem 2rem;
+    }
+
+    .syntax-explanation {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .syntax-part {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .syntax-part h4 {
+        margin: 0 0 0.5rem 0;
+        color: #4f46e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+
+
+    .selector-types,
+    .variable-types {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+
+    .selector-type,
+    .variable-type {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #10b981;
+    }
+
+    .selector-type h4,
+    .variable-type h4 {
+        margin: 0 0 0.5rem 0;
+        color: #065f46;
+        font-family: 'Monaco', 'Menlo', monospace;
+    }
+
+    .variable-type h4 {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: inherit;
+    }
+
+    .example {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .command-section {
+        display: none;
+        margin: 2rem 0;
+    }
+
+    .back-to-categories {
+        margin-bottom: 2rem;
+    }
+
+    .back-btn {
+        padding: 0.75rem 1.5rem;
+        background: #4f46e5;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: background 0.2s ease;
+    }
+
+    .back-btn:hover {
+        background: #3730a3;
+    }
+
+    .command-section-placeholder {
+        text-align: center;
+        padding: 3rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        margin: 2rem 0;
+    }
+
+    .command-section-placeholder h2 {
+        color: #f59e0b;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .alert-tip {
+        background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%, #f59e0b 100%);
+        border-left: 4px solid #f59e0b;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin: 1.5rem 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .alert-tip i {
+        font-size: 1.5rem;
+        color: #92400e;
+        margin-top: 0.25rem;
+    }
+
+    .alert-tip strong {
+        color: #92400e;
+    }
+
+    .alert-tip p {
+        color: #451a03;
+        margin: 0;
+    }
+
+    @media (max-width: 768px) {
+        .command-categories {
+            grid-template-columns: 1fr;
+        }
+
+        .syntax-explanation {
+            grid-template-columns: 1fr;
+        }
+
+        .selector-types,
+        .variable-types {
+            grid-template-columns: 1fr;
+        }
+
+        .search-filters {
+            justify-content: center;
+        }
+    }
 </style>
 
 <!-- Load the command reference JavaScript -->

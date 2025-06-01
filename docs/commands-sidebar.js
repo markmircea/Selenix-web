@@ -6,7 +6,7 @@ class CommandsSidebar {
         this.commandsCount = document.getElementById('commands-count');
         this.searchInput = document.getElementById('commands-search-input');
         this.container = document.querySelector('.docs-container');
-        
+        this.categoryOrder = ['scraping', 'data', 'export', 'ai', 'state', 'interaction', 'navigation', 'assertion'];
         this.allCommands = [];
         this.filteredCommands = [];
         this.isVisible = false;
@@ -67,14 +67,14 @@ class CommandsSidebar {
     
     getCategoryDisplayName(category) {
         const categoryNames = {
-            'interaction': 'Interaction',
             'scraping': 'Data Extraction',
-            'assertion': 'Verification',
-            'navigation': 'Navigation',
             'data': 'Data Management',
             'export': 'Import & Export',
             'ai': 'AI & Advanced',
-            'state': 'State Management'
+            'state': 'State Management',
+            'interaction': 'Interaction',
+            'navigation': 'Navigation',
+            'assertion': 'Verification'
         };
         return categoryNames[category] || category.charAt(0).toUpperCase() + category.slice(1);
     }
@@ -118,7 +118,7 @@ class CommandsSidebar {
         const grouped = this.groupCommandsByCategory(this.filteredCommands);
         
         let html = '';
-        Object.entries(grouped).forEach(([category, commands]) => {
+        this.getSortedCategoryEntries(grouped).forEach(([category, commands]) => {
             // Add category divider
             html += `<li class="command-category-divider">${this.getCategoryDisplayName(category)} (${commands.length})</li>`;
             
@@ -127,12 +127,20 @@ class CommandsSidebar {
                 html += this.renderCommandItem(command);
             });
         });
+
+        
         
         this.commandsList.innerHTML = html;
         
         // Add click handlers
         this.addCommandClickHandlers();
     }
+
+    getSortedCategoryEntries(grouped) {
+    return this.categoryOrder
+        .filter(category => grouped[category] && grouped[category].length > 0)
+        .map(category => [category, grouped[category]]);
+}
     
     groupCommandsByCategory(commands) {
         return commands.reduce((groups, command) => {
