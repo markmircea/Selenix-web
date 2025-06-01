@@ -383,6 +383,60 @@
                 </div>
             </div>
         </div>
+
+         
+        <!-- Select Frame -->
+        <div class="command-item" id="selectFrame">
+            <div class="command-header">
+                <h3><code>selectFrame</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Selects a frame within the current window. You may invoke this command multiple times to select a nested frame.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>selectFrame | frameLocator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The frame to select, specified by locator, index, or relative position
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>selectFrame | index=0</code>
+                        <code>click | id=button-in-frame</code>
+                        <code>selectFrame | relative=parent</code>
+                    </div>
+                    <div class="example-desc">Select the first frame, interact with it, then return to parent</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>selectFrame | id=content-frame</code>
+                        <code>type | id=message | Hello from frame</code>
+                        <code>selectFrame | relative=top</code>
+                    </div>
+                    <div class="example-desc">Select frame by ID, interact with it, then return to top frame</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Frame Locator Types</h4>
+                <ul>
+                    <li><code>index=n</code>: Select frame by 0-based index</li>
+                    <li><code>id=frameId</code>: Select frame by ID attribute</li>
+                    <li><code>name=frameName</code>: Select frame by name attribute</li>
+                    <li><code>relative=parent</code>: Select the parent frame</li>
+                    <li><code>relative=top</code>: Select the top-level frame</li>
+                </ul>
+            </div>
+        </div>
         
         <!-- Edit Content -->
         <div class="command-item" id="editContent">
@@ -790,6 +844,7 @@
                 </div>
             </div>
         </div>
+        
         
         <!-- Drag And Drop To Object -->
         <div class="command-item" id="dragAndDropToObject">

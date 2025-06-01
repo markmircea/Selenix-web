@@ -24,7 +24,7 @@ const ALL_COMMANDS = {
         { name: 'mouseDownAt', badge: 'Advanced', description: 'Simulates a user pressing the left mouse button at the specified location' },
         { name: 'mouseUp', badge: 'Advanced', description: 'Simulates the event that occurs when the user releases the mouse button' },
         { name: 'mouseUpAt', badge: 'Advanced', description: 'Simulates the event that occurs when the user releases the mouse button at the specified location' },
-        { name: 'mouseMoveAt', badge: 'Advanced', description: 'Simulates a user pressing the mouse button on the specified element' }
+        { name: 'mouseMoveAt', badge: 'Advanced', description: 'Simulates moving the mouse to the specified location relative to the target element' }
     ],
     'scraping': [
         { name: 'scrapeCollection', badge: 'Advanced', description: 'Extracts data from all elements matching a single selector and stores as an array' },

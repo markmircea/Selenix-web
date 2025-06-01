@@ -59,116 +59,63 @@
             </div>
         </div>
         
-        <!-- Go Back -->
-        <div class="command-item" id="goBack">
+        <!-- Debugger -->
+        <div class="command-item" id="debugger">
             <div class="command-header">
-                <h3><code>goBack</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Simulates clicking the browser's back button. Navigates to the previous page in the browser history.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>goBack</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>open | https://example.com</code>
-                        <code>click | linkText=Products</code>
-                        <code>goBack</code>
-                        <code>assertTitle | Example Domain</code>
-                    </div>
-                    <div class="example-desc">Navigate to a page and then back to the previous page</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Go Forward -->
-        <div class="command-item" id="goForward">
-            <div class="command-header">
-                <h3><code>goForward</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Simulates clicking the browser's forward button. Navigates forward in the browser history.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>goForward</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>open | https://example.com</code>
-                        <code>click | linkText=Products</code>
-                        <code>goBack</code>
-                        <code>goForward</code>
-                        <code>assertTitle | Products - Example.com</code>
-                    </div>
-                    <div class="example-desc">Navigate back and then forward again</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Refresh -->
-        <div class="command-item" id="refresh">
-            <div class="command-header">
-                <h3><code>refresh</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Refreshes the current page. Equivalent to clicking the browser's refresh button.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>refresh</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>open | https://example.com</code>
-                        <code>refresh</code>
-                    </div>
-                    <div class="example-desc">Refresh the current page</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=update-data</code>
-                        <code>refresh</code>
-                        <code>assertElementPresent | css=.updated-indicator</code>
-                    </div>
-                    <div class="example-desc">Update data and refresh to see changes</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- If / Else / End -->
-        <div class="command-item" id="if">
-            <div class="command-header">
-                <h3><code>if</code></h3>
+                <h3><code>debugger</code></h3>
                 <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Begins a conditional block of commands. The commands inside the block are executed only if the condition is true.</p>
+            <p class="command-description">Breaks the execution and enters debugger mode. Useful for debugging test scripts.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>if | condition</code>
-                <code>  // commands to execute if condition is true</code>
-                <code>[else]</code>
-                <code>  // commands to execute if condition is false</code>
+                <code>debugger</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>open | https://example.com</code>
+                        <code>debugger</code>
+                        <code>click | id=submit-button</code>
+                    </div>
+                    <div class="example-desc">Pause execution to inspect the page state</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Execution will pause at this command when running in debug mode</li>
+                    <li>Use this to inspect variables, page state, or step through commands</li>
+                    <li>Remove debugger commands before running tests in production</li>
+                </ul>
+            </div>
+        </div>
+
+          <!-- Times -->
+        <div class="command-item" id="times">
+            <div class="command-header">
+                <h3><code>times</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Create a loop that executes the proceeding commands n number of times, can end with END.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>times | numberOfTimes | [loopLimit]</code>
+                <code>  // commands to execute repeatedly</code>
                 <code>end</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> The condition to evaluate (JavaScript expression)
+                    <strong>Target:</strong> The number of times to execute the loop
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional loop limit for safety (should match or exceed the target)
                 </div>
             </div>
             
@@ -176,84 +123,163 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>storeElementPresent | id=login-form | loginFormPresent</code>
-                        <code>if | ${loginFormPresent}</code>
-                        <code>  type | id=username | johndoe</code>
-                        <code>  type | id=password | password123</code>
-                        <code>  click | id=login-button</code>
-                        <code>else</code>
-                        <code>  echo | Already logged in</code>
+                        <code>times | 5</code>
+                        <code>  click | css=.next-button</code>
+                        <code>  pause | 1000</code>
+                        <code>  scrapeCollection | css=.data-item | pageData</code>
                         <code>end</code>
                     </div>
-                    <div class="example-desc">Log in only if the login form is present</div>
+                    <div class="example-desc">Click next button and scrape data exactly 5 times</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeText | id=item-count | count</code>
-                        <code>if | ${count} > 0</code>
-                        <code>  click | id=checkout</code>
-                        <code>else</code>
-                        <code>  echo | Cart is empty</code>
+                        <code>times | 3</code>
+                        <code>  click | id=refresh-button</code>
+                        <code>  waitForElementVisible | css=.updated-content</code>
+                        <code>  echo | Refresh attempt completed</code>
                         <code>end</code>
                     </div>
-                    <div class="example-desc">Proceed to checkout only if items are in the cart</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>storeEval | new Date().getHours() | currentHour</code>
-                        <code>if | ${currentHour} < 12</code>
-                        <code>  echo | Good morning!</code>
-                        <code>else</code>
-                        <code>  if | ${currentHour} < 18</code>
-                        <code>    echo | Good afternoon!</code>
-                        <code>  else</code>
-                        <code>    echo | Good evening!</code>
-                        <code>  end</code>
-                        <code>end</code>
-                    </div>
-                    <div class="example-desc">Nested if statements for time-based greeting</div>
+                    <div class="example-desc">Refresh content 3 times with status logging</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Condition Syntax</h4>
+                <h4>Usage Notes</h4>
                 <ul>
-                    <li>Conditions can use variables: <code>${varName} == "value"</code></li>
-                    <li>Comparison operators: <code>==</code>, <code>!=</code>, <code>></code>, <code><</code>, <code>>=</code>, <code><=</code></li>
-                    <li>Logical operators: <code>&&</code> (and), <code>||</code> (or), <code>!</code> (not)</li>
-                    <li>JavaScript expressions: <code>${varName}.includes("text")</code>, <code>${count} % 2 == 0</code></li>
+                    <li>Executes exactly the specified number of times</li>
+                    <li>More predictable than while loops for known iterations</li>
+                    <li>Use when you know exactly how many times to repeat</li>
+                    <li>Loop counter is available as ${index} (0-based)</li>
                 </ul>
+            </div>
+        </div>
+
+         <!-- For Each -->
+        <div class="command-item" id="forEach">
+            <div class="command-header">
+                <h3><code>forEach</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Create a loop that executes the proceeding commands for each item in a given collection. Must be terminated with an "end" command.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>forEach | arrayVariableName | iteratorVariableName</code>
+                <code>  // commands to execute for each item</code>
+                <code>end</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The name of a variable containing an array to iterate over
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The name to assign to each item during iteration
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeJson | ["page1", "page2", "page3"] | pages</code>
+                        <code>forEach | pages | page</code>
+                        <code>  open | https://example.com/${page}</code>
+                        <code>  scrapeCollection | css=.content | data</code>
+                        <code>  echo | Scraped data from ${page}</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Iterate through an array of page names</div>
+                </div>
                 
-                <h4>Structure</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>scrapeCollection | css=.product-link@href | productUrls</code>
+                        <code>forEach | productUrls | url</code>
+                        <code>  open | ${url}</code>
+                        <code>  storeText | css=.price | price</code>
+                        <code>  echo | Product price: ${price}</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Visit each product URL and extract pricing information</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
                 <ul>
-                    <li>Each <code>if</code> must have a matching <code>end</code></li>
-                    <li>The <code>else</code> block is optional</li>
-                    <li>Conditions can be nested</li>
+                    <li>The array variable must exist and contain an array</li>
+                    <li>The iterator variable (${item}) is available inside the loop</li>
+                    <li>Loop index is available as ${index} (0-based)</li>
+                    <li>Perfect for processing scraped collections of data</li>
                 </ul>
             </div>
         </div>
         
-        <!-- While / End -->
+        <!-- Do -->
+        <div class="command-item" id="do">
+            <div class="command-header">
+                <h3><code>do</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Create a loop that executes the proceeding commands at least once. Terminate the branch with the repeat if command.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>do</code>
+                <code>  // commands to execute</code>
+                <code>repeatIf | condition</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>store | 1 | page</code>
+                        <code>do</code>
+                        <code>  open | https://example.com/page/${page}</code>
+                        <code>  scrapeCollection | css=.item | items</code>
+                        <code>  storeEval | ${page} + 1 | page</code>
+                        <code>repeatIf | ${page} <= 5</code>
+                    </div>
+                    <div class="example-desc">Scrape pages 1 through 5 using a do-while loop</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>The commands inside the do block execute at least once</li>
+                    <li>Use <code>repeatIf</code> to specify the condition for continuing the loop</li>
+                    <li>Ensure the condition will eventually become false to avoid infinite loops</li>
+                </ul>
+            </div>
+        </div>
+
+         <!-- While -->
         <div class="command-item" id="while">
             <div class="command-header">
                 <h3><code>while</code></h3>
                 <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Begins a loop that executes commands repeatedly as long as the condition is true.</p>
+            <p class="command-description">Create a loop that executes the proceeding commands repeatedly for as long as the provided conditional expression is true. End with END.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>while | condition</code>
-                <code>  // commands to execute while condition is true</code>
+                <code>while | conditionalExpression | [loopLimit]</code>
+                <code>  // commands to execute repeatedly</code>
                 <code>end</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> The condition to evaluate (JavaScript expression)
+                    <strong>Target:</strong> A JavaScript expression that evaluates to true or false
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional maximum number of iterations to prevent infinite loops
                 </div>
             </div>
             
@@ -263,62 +289,57 @@
                     <div class="example-code">
                         <code>store | 1 | page</code>
                         <code>while | ${page} <= 5</code>
-                        <code>  open | https://example.com/products?page=${page}</code>
-                        <code>  scrapeCollection | css=.product-title | titles</code>
-                        <code>  echo | Scraped page ${page}</code>
+                        <code>  open | https://example.com/page/${page}</code>
+                        <code>  scrapeCollection | css=.item | items</code>
                         <code>  storeEval | ${page} + 1 | page</code>
                         <code>end</code>
                     </div>
-                    <div class="example-desc">Scrape multiple pages of products</div>
+                    <div class="example-desc">Loop through multiple pages while condition is true</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeElementCount | css=.pagination-next:not(.disabled) | hasNextPage</code>
-                        <code>while | ${hasNextPage} > 0</code>
-                        <code>  scrapeCollection | css=.product-item | products</code>
-                        <code>  click | css=.pagination-next</code>
-                        <code>  waitForPageToLoad</code>
-                        <code>  storeElementCount | css=.pagination-next:not(.disabled) | hasNextPage</code>
+                        <code>storeElementPresent | css=.load-more | hasMore</code>
+                        <code>while | ${hasMore} | 10</code>
+                        <code>  click | css=.load-more</code>
+                        <code>  pause | 2000</code>
+                        <code>  storeElementPresent | css=.load-more | hasMore</code>
                         <code>end</code>
                     </div>
-                    <div class="example-desc">Scrape all pages until there's no next page</div>
+                    <div class="example-desc">Keep clicking "load more" while it exists (max 10 times)</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Important Considerations</h4>
+                <h4>Loop Safety</h4>
                 <ul>
-                    <li>Always ensure the condition will eventually become false to avoid infinite loops</li>
-                    <li>Use a counter or timeout mechanism as a safety measure</li>
-                    <li>The condition is evaluated before each iteration</li>
-                    <li>Each <code>while</code> must have a matching <code>end</code></li>
+                    <li>Always include a loop limit to prevent infinite loops</li>
+                    <li>Ensure the condition will eventually become false</li>
+                    <li>Update variables inside the loop that affect the condition</li>
+                    <li>Use <code>echo</code> commands to monitor loop progress</li>
                 </ul>
             </div>
         </div>
-        
-        <!-- For Each / End -->
-        <div class="command-item" id="forEach">
+
+         <!-- If -->
+        <div class="command-item" id="if">
             <div class="command-header">
-                <h3><code>forEach</code></h3>
+                <h3><code>if</code></h3>
                 <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Iterates over each item in an array variable, executing the commands in the loop for each item.</p>
+            <p class="command-description">Create a conditional branch in your test. Terminate the branch with the end command.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>forEach | arrayVariable | itemVariable</code>
-                <code>  // commands to execute for each item</code>
+                <code>if | conditionalExpression</code>
+                <code>  // commands to execute if true</code>
                 <code>end</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> The name of the array variable to iterate over
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> The name to use for the current item variable
+                    <strong>Target:</strong> A JavaScript expression that evaluates to true or false
                 </div>
             </div>
             
@@ -326,62 +347,99 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>scrapeCollection | css=.product-url | productUrls</code>
-                        <code>forEach | productUrls | url</code>
-                        <code>  open | ${url}</code>
-                        <code>  storeText | css=.product-title | title</code>
-                        <code>  storeText | css=.product-price | price</code>
-                        <code>  echo | Product: ${title}, Price: ${price}</code>
+                        <code>storeElementPresent | id=login-form | isLoginPage</code>
+                        <code>if | ${isLoginPage}</code>
+                        <code>  echo | User needs to log in</code>
+                        <code>  type | id=username | testuser</code>
+                        <code>  click | id=login-button</code>
                         <code>end</code>
                     </div>
-                    <div class="example-desc">Visit each product page and extract details</div>
+                    <div class="example-desc">Conditionally perform login if login form is present</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeJson | ["apple", "banana", "cherry"] | fruits</code>
-                        <code>forEach | fruits | fruit</code>
-                        <code>  type | id=search-box | ${fruit}</code>
-                        <code>  click | id=search-button</code>
-                        <code>  waitForElementPresent | css=.results</code>
-                        <code>  storeElementCount | css=.result-item | resultCount</code>
-                        <code>  echo | Found ${resultCount} results for ${fruit}</code>
+                        <code>storeText | id=item-count | count</code>
+                        <code>if | ${count} > 10</code>
+                        <code>  echo | Many items found: ${count}</code>
+                        <code>  click | id=show-all-button</code>
                         <code>end</code>
                     </div>
-                    <div class="example-desc">Search for each item in a list</div>
+                    <div class="example-desc">Execute commands based on numeric comparison</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Usage Notes</h4>
+                <h4>Conditional Expressions</h4>
                 <ul>
-                    <li>The array variable must contain an array or array-like object</li>
-                    <li>The item variable is created automatically for each iteration</li>
-                    <li>You can access the current index using <code>${_index}</code> inside the loop</li>
-                    <li>Each <code>forEach</code> must have a matching <code>end</code></li>
+                    <li>Use JavaScript syntax: ==, !=, >, <, >=, <=</li>
+                    <li>String comparisons: ${text} == "expected"</li>
+                    <li>Boolean variables: ${isPresent} or !${isPresent}</li>
+                    <li>Combine with && (and) or || (or) operators</li>
                 </ul>
             </div>
         </div>
         
-        <!-- Times / End -->
-        <div class="command-item" id="times">
+        
+        
+        <!-- Else -->
+        <div class="command-item" id="else">
             <div class="command-header">
-                <h3><code>times</code></h3>
-                <div class="command-badge">Basic</div>
+                <h3><code>else</code></h3>
+                <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Executes a block of commands a specified number of times.</p>
+            <p class="command-description">Part of an if block. Execute the commands in this branch when an if and/or else if condition are not met. Terminate the branch with the end command.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>times | count</code>
-                <code>  // commands to repeat</code>
+                <code>if | condition</code>
+                <code>  // commands if true</code>
+                <code>else</code>
+                <code>  // commands if false</code>
+                <code>end</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeElementPresent | id=login-form | isLoginPage</code>
+                        <code>if | ${isLoginPage}</code>
+                        <code>  echo | User needs to log in</code>
+                        <code>  type | id=username | testuser</code>
+                        <code>  click | id=login-button</code>
+                        <code>else</code>
+                        <code>  echo | User is already logged in</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Handle different page states with if-else</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Else If -->
+        <div class="command-item" id="elseIf">
+            <div class="command-header">
+                <h3><code>elseIf</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Part of an if block. Execute the commands in this branch when an if condition has not been met. Terminate the branch with the end command.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>if | condition1</code>
+                <code>  // commands if condition1 is true</code>
+                <code>elseIf | condition2</code>
+                <code>  // commands if condition2 is true</code>
+                <code>else</code>
+                <code>  // commands if all conditions are false</code>
                 <code>end</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> The number of times to repeat the commands
+                    <strong>Target:</strong> The condition to evaluate (JavaScript expression)
                 </div>
             </div>
             
@@ -389,35 +447,749 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>times | 5</code>
-                        <code>  click | id=add-to-cart</code>
-                        <code>  pause | 500</code>
+                        <code>storeText | id=status | currentStatus</code>
+                        <code>if | ${currentStatus} == "pending"</code>
+                        <code>  echo | Order is pending</code>
+                        <code>elseIf | ${currentStatus} == "shipped"</code>
+                        <code>  echo | Order has been shipped</code>
+                        <code>elseIf | ${currentStatus} == "delivered"</code>
+                        <code>  echo | Order has been delivered</code>
+                        <code>else</code>
+                        <code>  echo | Unknown status: ${currentStatus}</code>
                         <code>end</code>
-                        <code>assertText | id=cart-count | 5</code>
                     </div>
-                    <div class="example-desc">Add 5 items to the cart</div>
+                    <div class="example-desc">Handle multiple conditions with if-elseIf-else</div>
                 </div>
-                
+            </div>
+        </div>
+        
+        <!-- End -->
+        <div class="command-item" id="end">
+            <div class="command-header">
+                <h3><code>end</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Terminates a control flow block for if, while, times, and forEach commands.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>end</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>store | 3 | numPages</code>
-                        <code>times | ${numPages}</code>
-                        <code>  echo | Processing page ${_index + 1} of ${numPages}</code>
-                        <code>  scrapeCollection | css=.item | items</code>
-                        <code>  click | css=.next-page</code>
-                        <code>  waitForPageToLoad</code>
+                        <code>if | ${condition}</code>
+                        <code>  // commands</code>
+                        <code>end</code>
+                        <code></code>
+                        <code>while | ${condition}</code>
+                        <code>  // commands</code>
+                        <code>end</code>
+                        <code></code>
+                        <code>times | 5</code>
+                        <code>  // commands</code>
                         <code>end</code>
                     </div>
-                    <div class="example-desc">Process a specific number of pages</div>
+                    <div class="example-desc">End different types of control flow blocks</div>
                 </div>
             </div>
             
             <div class="command-notes">
                 <h4>Usage Notes</h4>
                 <ul>
-                    <li>The current iteration index is available as <code>${_index}</code> (0-based)</li>
-                    <li>The count can be a number or a variable containing a number</li>
-                    <li>Each <code>times</code> must have a matching <code>end</code></li>
+                    <li>Every control flow command (if, while, times, forEach) must have a matching end</li>
+                    <li>Proper nesting is required - end commands close the most recent open block</li>
+                    <li>Missing end commands will cause syntax errors</li>
+                </ul>
+            </div>
+        </div>
+
+         <!-- Close -->
+        <div class="command-item" id="close">
+            <div class="command-header">
+                <h3><code>close</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Closes the current window. There is no need to close the initial window, IDE will re-use it; closing it may cause a performance penalty on the test.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>close</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=open-popup</code>
+                        <code>selectWindow | win_ser_1</code>
+                        <code>// Work with popup</code>
+                        <code>close</code>
+                        <code>selectWindow | win_ser_local</code>
+                    </div>
+                    <div class="example-desc">Close a popup window and return to main window</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Closes the currently active window or tab</li>
+                    <li>Avoid closing the main window unless necessary</li>
+                    <li>Use <code>selectWindow</code> to switch back to remaining windows</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Echo -->
+        <div class="command-item" id="echo">
+            <div class="command-header">
+                <h3><code>echo</code></h3>
+                <div class="command-badge">Utility</div>
+            </div>
+            <p class="command-description">Prints the specified message to the log. Essential for debugging and monitoring automation progress.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>echo | message</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>echo | Starting product scraping process</code>
+                        <code>echo | Found ${productCount} products on page ${currentPage}</code>
+                        <code>echo | Processing user: ${user.name} (${user.email})</code>
+                        <code>echo | Export completed: ${exportedRecords} records saved</code>
+                    </div>
+                    <div class="example-desc">Log progress, variable values, and completion status</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Debugging Tips</h4>
+                <ul>
+                    <li>Use before/after scraping commands to track progress</li>
+                    <li>Include variable values to verify data processing</li>
+                    <li>Add timestamps: <code>${new Date().toISOString()}</code></li>
+                    <li>Use in loops to monitor iteration progress</li>
+                </ul>
+            </div>
+        </div>
+
+         <!-- Pause -->
+        <div class="command-item" id="pause">
+            <div class="command-header">
+                <h3><code>pause</code></h3>
+                <div class="command-badge">Utility</div>
+            </div>
+            <p class="command-description">Wait for the specified amount of time before continuing execution.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>pause | milliseconds</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | css=.load-more-button</code>
+                        <code>pause | 3000</code>
+                        <code>scrapeCollection | css=.newly-loaded-item | newItems</code>
+                        <code>pause | 5000</code>
+                        <code>click | id=submit-form</code>
+                    </div>
+                    <div class="example-desc">Wait for content to load and forms to process</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>When to Use Pause</h4>
+                <ul>
+                    <li>After clicking load buttons to wait for new content</li>
+                    <li>Between rapid API calls to respect rate limits</li>
+                    <li>For slow-loading dynamic content</li>
+                    <li>Consider using <code>waitForElementVisible</code> instead when possible</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Execute Async Script -->
+        <div class="command-item" id="executeAsyncScript">
+            <div class="command-header">
+                <h3><code>executeAsyncScript</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Executes an async snippet of JavaScript in the context of the currently selected frame or window. The script fragment will be executed as the body of an anonymous function and must return a Promise.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>executeAsyncScript | script | [variableName]</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Async JavaScript code to execute. Must include the "callback" parameter and call it when done
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional variable name to store the Promise result
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>executeAsyncScript | const result = await fetch('/api/data'); callback(result.json()); | apiData</code>
+                        <code>echo | API response: ${apiData}</code>
+                    </div>
+                    <div class="example-desc">Fetch data from an API asynchronously</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>executeAsyncScript | return new Promise(resolve => setTimeout(() => resolve('done'), 1000)) | result</code>
+                        <code>echo | Async operation result: ${result}</code>
+                    </div>
+                    <div class="example-desc">Execute an async operation with Promise</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>The script must handle asynchronous operations properly</li>
+                    <li>Use callback parameter for traditional async patterns</li>
+                    <li>Use return Promise for modern async/await patterns</li>
+                    <li>The Promise result will be saved in the variable if specified</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Repeat If -->
+        <div class="command-item" id="repeatIf">
+            <div class="command-header">
+                <h3><code>repeatIf</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Terminate a 'do' control flow branch conditionally. If the result of the provided conditional expression is true, it starts the do loop over. Otherwise it ends the loop.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>do</code>
+                <code>  // commands to execute</code>
+                <code>repeatIf | condition | [loopLimit]</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The condition to evaluate for continuing the loop
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional maximum number of iterations to prevent infinite loops
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>store | 1 | attempts</code>
+                        <code>do</code>
+                        <code>  click | id=submit-button</code>
+                        <code>  pause | 1000</code>
+                        <code>  storeElementPresent | css=.error-message | hasError</code>
+                        <code>  storeEval | ${attempts} + 1 | attempts</code>
+                        <code>repeatIf | ${hasError} && ${attempts} < 3</code>
+                    </div>
+                    <div class="example-desc">Retry form submission up to 3 times if errors occur</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Run -->
+        <div class="command-item" id="run">
+            <div class="command-header">
+                <h3><code>run</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Runs a test case from the current project.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>run | testCaseName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The name of the test case to run
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>run | LoginTest</code>
+                        <code>run | SetupUserData</code>
+                        <code>// Continue with main test</code>
+                    </div>
+                    <div class="example-desc">Run prerequisite test cases before main test</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>The test case must exist in the current project</li>
+                    <li>Variables and state are shared between test cases</li>
+                    <li>Use this for modular test design and reusable test components</li>
+                </ul>
+            </div>
+        </div>
+
+                <!-- Run Script -->
+        <div class="command-item" id="runScript">
+            <div class="command-header">
+                <h3><code>runScript</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Creates a new "script" tag in the body of the current test window, and adds the specified text into the body of the command. Beware that JS exceptions thrown in these script tags aren't managed by Selenium, so you should probably wrap your script in try/catch blocks if there is any chance that the script will throw an exception.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>runScript | script</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> JavaScript code to inject into the page as a script tag
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>runScript | console.log('Script injected successfully');</code>
+                    </div>
+                    <div class="example-desc">Inject a simple logging script</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>runScript | try { window.myCustomFunction = function() { return 'Hello World'; }; } catch(e) { console.error(e); }</code>
+                    </div>
+                    <div class="example-desc">Inject a custom function with error handling</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Creates a permanent script tag in the page</li>
+                    <li>Script persists for the lifetime of the page</li>
+                    <li>Use try/catch blocks to handle potential exceptions</li>
+                    <li>Different from executeScript which runs immediately and returns values</li>
+                </ul>
+            </div>
+        </div>
+
+                <!-- Execute Script -->
+        <div class="command-item" id="executeScript">
+            <div class="command-header">
+                <h3><code>executeScript</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Executes a snippet of JavaScript in the context of the currently selected frame or window. The script fragment will be executed as the body of an anonymous function. To store the return value, use the 'return' keyword and provide a variable name in the value input field.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>executeScript | script | [variableName]</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> JavaScript code to execute. Can access page elements and variables
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional variable name to store the result (only needed if script returns a value)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>executeScript | return document.title | pageTitle</code>
+                        <code>echo | Page title is: ${pageTitle}</code>
+                    </div>
+                    <div class="example-desc">Get the page title and store it in a variable</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>executeScript | window.scrollTo(0, 500)</code>
+                    </div>
+                    <div class="example-desc">Scroll the page to a specific position</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>executeScript | return document.querySelector('.price').textContent | price</code>
+                        <code>echo | Product price: ${price}</code>
+                    </div>
+                    <div class="example-desc">Extract text content from an element</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Use 'return' keyword to capture values in variables</li>
+                    <li>Can access and modify page elements directly</li>
+                    <li>Useful for complex operations not available in standard commands</li>
+                    <li>Script runs in the context of the current page</li>
+                </ul>
+            </div>
+        </div>
+
+
+
+                <!-- Accept Alert -->
+        <div class="command-item" id="acceptAlert">
+            <div class="command-header">
+                <h3><code>acceptAlert</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Affects a currently showing alert. This command instructs Selenium to accept it.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>acceptAlert</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=delete-button</code>
+                        <code>acceptAlert</code>
+                    </div>
+                    <div class="example-desc">Accept a delete confirmation alert</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=submit-form</code>
+                        <code>assertAlert | Form submitted successfully!</code>
+                        <code>acceptAlert</code>
+                    </div>
+                    <div class="example-desc">Verify alert text and then accept it</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Works with JavaScript alert() dialogs</li>
+                    <li>Equivalent to clicking the "OK" button</li>
+                    <li>Use <code>assertAlert</code> first to verify the alert text</li>
+                    <li>Alert must be currently showing when this command executes</li>
+                </ul>
+            </div>
+        </div>
+
+
+         <!-- Dismiss Prompt -->
+        <div class="command-item" id="dismissPrompt">
+            <div class="command-header">
+                <h3><code>dismissPrompt</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Affects a currently showing alert prompt. This command instructs Selenium to dismiss it.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>dismissPrompt</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=rename-file</code>
+                        <code>dismissPrompt</code>
+                    </div>
+                    <div class="example-desc">Cancel a file rename prompt dialog</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=add-comment</code>
+                        <code>assertPrompt | Enter your comment:</code>
+                        <code>dismissPrompt</code>
+                        <code>echo | User cancelled comment entry</code>
+                    </div>
+                    <div class="example-desc">Verify prompt text and then dismiss it</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Works with JavaScript prompt() dialogs</li>
+                    <li>Equivalent to clicking the "Cancel" button</li>
+                    <li>Use <code>answerPrompt</code> to provide an answer instead</li>
+                    <li>Prompt dialog must be currently showing</li>
+                </ul>
+            </div>
+        </div>
+
+                <!-- Accept Confirmation -->
+        <div class="command-item" id="acceptConfirmation">
+            <div class="command-header">
+                <h3><code>acceptConfirmation</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Affects a currently showing confirmation alert. This command instructs Selenium to accept it.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>acceptConfirmation</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>N/A</code>
+                    </div>
+                    <div class="example-desc">Accept a delete account confirmation dialog</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=reset-data</code>
+                        <code>assertConfirmation | This will delete all data. Continue?</code>
+                        <code>acceptConfirmation</code>
+                    </div>
+                    <div class="example-desc">Verify confirmation text and then accept it</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Works with JavaScript confirm() dialogs</li>
+                    <li>Equivalent to clicking the "OK" button</li>
+                    <li>Use <code>dismissConfirmation</code> to click "Cancel" instead</li>
+                    <li>Use <code>assertConfirmation</code> to verify the dialog text first</li>
+                </ul>
+            </div>
+        </div>
+
+
+         <!-- Dismiss Confirmation -->
+        <div class="command-item" id="dismissConfirmation">
+            <div class="command-header">
+                <h3><code>dismissConfirmation</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Affects a currently showing confirmation alert. This command instructs Selenium to dismiss it.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>dismissConfirmation</code>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=delete-account</code>
+                        <code>dismissConfirmation</code>
+                    </div>
+                    <div class="example-desc">Cancel a delete account confirmation dialog</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=dangerous-action</code>
+                        <code>assertConfirmation | This action cannot be undone. Continue?</code>
+                        <code>dismissConfirmation</code>
+                        <code>echo | User cancelled the dangerous action</code>
+                    </div>
+                    <div class="example-desc">Verify confirmation text and then dismiss it</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Works with JavaScript confirm() dialogs</li>
+                    <li>Equivalent to clicking the "Cancel" button</li>
+                    <li>Use <code>acceptConfirmation</code> to click "OK" instead</li>
+                    <li>Confirmation dialog must be currently showing</li>
+                </ul>
+            </div>
+        </div>
+       
+        
+        <!-- Set Speed -->
+        <div class="command-item" id="setSpeed">
+            <div class="command-header">
+                <h3><code>setSpeed</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Set execution speed (e.g., set the millisecond length of a delay which will follow each Selenium operation). By default, there is no such delay.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>setSpeed | milliseconds</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The delay in milliseconds to add after each command
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>setSpeed | 1000</code>
+                        <code>click | id=button1</code>
+                        <code>click | id=button2</code>
+                        <code>setSpeed | 0</code>
+                    </div>
+                    <div class="example-desc">Add 1 second delay between commands, then reset to no delay</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>setSpeed | 500</code>
+                        <code>forEach | urls | url</code>
+                        <code>  open | ${url}</code>
+                        <code>  scrapeCollection | css=.data | data</code>
+                        <code>end</code>
+                        <code>setSpeed | 0</code>
+                    </div>
+                    <div class="example-desc">Add delay when scraping multiple pages to avoid rate limiting</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>This setting is global and affects all subsequent commands</li>
+                    <li>Use this to slow down execution for demonstration or to avoid rate limiting</li>
+                    <li>Set to 0 to remove delays and run at full speed</li>
+                    <li>The delay is added after each command execution</li>
+                </ul>
+            </div>
+        </div>
+
+                <!-- Set Window Size -->
+        <div class="command-item" id="setWindowSize">
+            <div class="command-header">
+                <h3><code>setWindowSize</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Set the browser's window size, including the browser's interface.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>setWindowSize | resolution</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The window size in format "widthxheight" (e.g., "1920x1080")
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>setWindowSize | 1920x1080</code>
+                        <code>open | https://example.com</code>
+                    </div>
+                    <div class="example-desc">Set window to full HD resolution before opening a page</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>setWindowSize | 375x667</code>
+                        <code>// Test mobile layout</code>
+                    </div>
+                    <div class="example-desc">Set window to mobile device size for responsive testing</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Common Resolutions</h4>
+                <ul>
+                    <li>Desktop: 1920x1080, 1366x768, 1440x900</li>
+                    <li>Mobile: 375x667 (iPhone), 360x640 (Android)</li>
+                    <li>Tablet: 768x1024 (iPad), 1024x768 (iPad landscape)</li>
+                </ul>
+            </div>
+        </div>
+
+
+
+         <!-- Answer Prompt -->
+        <div class="command-item" id="answerPrompt">
+            <div class="command-header">
+                <h3><code>answerPrompt</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Affects a currently showing alert prompt. This command instructs Selenium to provide the specified answer to it.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>answerPrompt | answer</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The answer to provide to the prompt dialog
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=rename-file</code>
+                        <code>answerPrompt | new-filename.txt</code>
+                    </div>
+                    <div class="example-desc">Provide an answer to a JavaScript prompt dialog</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>This command works with JavaScript prompt() dialogs</li>
+                    <li>The prompt must be currently showing when this command is executed</li>
+                    <li>Use <code>assertPrompt</code> to verify the prompt text before answering</li>
+                    <li>The command automatically clicks OK after providing the answer</li>
                 </ul>
             </div>
         </div>
@@ -478,196 +1250,6 @@
                     <li><code>title=windowTitle</code>: Select by window title</li>
                     <li><code>index=n</code>: Select by window index (0-based)</li>
                     <li><code>win_ser_n</code>: Select by window serial number (1-based, assigned in order of opening)</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Close -->
-        <div class="command-item" id="close">
-            <div class="command-header">
-                <h3><code>close</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Closes the current window or tab. If this is the last open window, the browser will remain open with a blank page.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>close</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>storeWindowHandle | mainWindow</code>
-                        <code>click | id=open-popup</code>
-                        <code>selectWindow | win_ser_1</code>
-                        <code>// Work with the popup window</code>
-                        <code>close</code>
-                        <code>selectWindow | ${mainWindow}</code>
-                    </div>
-                    <div class="example-desc">Work with a popup window and close it</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Set Timeout -->
-        <div class="command-item" id="setTimeout">
-            <div class="command-header">
-                <h3><code>setTimeout</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Sets the timeout for subsequent commands. Affects wait commands and implicit waits.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>setTimeout | milliseconds</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The timeout value in milliseconds
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>setTimeout | 10000</code>
-                        <code>open | https://slow-loading-site.com</code>
-                    </div>
-                    <div class="example-desc">Increase timeout for a slow-loading site</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>setTimeout | 30000</code>
-                        <code>waitForElementPresent | id=results-table</code>
-                        <code>setTimeout | 5000</code>
-                    </div>
-                    <div class="example-desc">Temporarily increase timeout for a specific operation</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Affected Commands</h4>
-                <ul>
-                    <li>Wait commands (<code>waitForElementPresent</code>, <code>waitForVisible</code>, etc.)</li>
-                    <li>Page load operations (<code>open</code>, <code>click</code> on links)</li>
-                    <li>Implicit waits for elements in commands like <code>click</code>, <code>type</code></li>
-                </ul>
-                
-                <h4>Default Timeouts</h4>
-                <ul>
-                    <li>Page load: 30000 ms (30 seconds)</li>
-                    <li>Element location: 10000 ms (10 seconds)</li>
-                    <li>Wait commands: 30000 ms (30 seconds)</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Pause -->
-        <div class="command-item" id="pause">
-            <div class="command-header">
-                <h3><code>pause</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Pauses execution for a specified amount of time. Use sparingly, as explicit waits are usually better.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>pause | milliseconds</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The pause duration in milliseconds
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=show-animation</code>
-                        <code>pause | 2000</code>
-                        <code>assertElementPresent | id=animation-complete</code>
-                    </div>
-                    <div class="example-desc">Wait for an animation to complete</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>forEach | urls | url</code>
-                        <code>  open | ${url}</code>
-                        <code>  scrapeCollection | css=.data | data</code>
-                        <code>  pause | 1000</code>
-                        <code>end</code>
-                    </div>
-                    <div class="example-desc">Add a delay between requests to avoid rate limiting</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Best Practices</h4>
-                <ul>
-                    <li>Avoid using <code>pause</code> when possible; use explicit wait commands instead</li>
-                    <li>Use <code>waitForElementPresent</code>, <code>waitForVisible</code>, etc. to wait for specific conditions</li>
-                    <li>Use <code>pause</code> only for cases where explicit waits won't work (animations, rate limiting)</li>
-                    <li>Keep pause times as short as possible to avoid unnecessarily slow tests</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Wait For Page To Load -->
-        <div class="command-item" id="waitForPageToLoad">
-            <div class="command-header">
-                <h3><code>waitForPageToLoad</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Waits for a page to finish loading. Useful after clicking links or submitting forms.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>waitForPageToLoad | [timeout]</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> Optional timeout in milliseconds (defaults to current timeout setting)
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | linkText=Next Page</code>
-                        <code>waitForPageToLoad</code>
-                    </div>
-                    <div class="example-desc">Wait for page to load after clicking a link</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=submit-form</code>
-                        <code>waitForPageToLoad | 60000</code>
-                    </div>
-                    <div class="example-desc">Wait up to 60 seconds for a page to load after form submission</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Usage Notes</h4>
-                <ul>
-                    <li>This command is automatically used by <code>open</code> and <code>click</code> on links</li>
-                    <li>Use this command when automatic waiting is not triggered (e.g., after JavaScript navigation)</li>
-                    <li>The command waits for the <code>document.readyState</code> to be "complete"</li>
-                    <li>For single-page applications, use <code>waitForElementPresent</code> instead to wait for specific elements</li>
                 </ul>
             </div>
         </div>
@@ -763,206 +1345,6 @@
                         <code>waitForElementNotPresent | css=.loading-indicator | 20000</code>
                     </div>
                     <div class="example-desc">Wait up to 20 seconds for a loading indicator to disappear</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Run Script -->
-        <div class="command-item" id="runScript">
-            <div class="command-header">
-                <h3><code>runScript</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Executes JavaScript in the context of the current page. Unlike executeScript, this command doesn't return a value.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>runScript | script</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The JavaScript code to execute
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>runScript | window.scrollTo(0, document.body.scrollHeight);</code>
-                    </div>
-                    <div class="example-desc">Scroll to the bottom of the page</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>runScript | localStorage.clear();</code>
-                    </div>
-                    <div class="example-desc">Clear local storage</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>runScript | document.querySelector('#hidden-button').click();</code>
-                    </div>
-                    <div class="example-desc">Click a button that might be difficult to access with regular commands</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Usage Notes</h4>
-                <ul>
-                    <li>The script runs in the context of the current page</li>
-                    <li>Use <code>executeScript</code> if you need to capture the return value</li>
-                    <li>You can access and modify the DOM, variables, and functions on the page</li>
-                    <li>Avoid using <code>alert()</code>, <code>confirm()</code>, or <code>prompt()</code> in scripts</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Execute Script -->
-        <div class="command-item" id="executeScript">
-            <div class="command-header">
-                <h3><code>executeScript</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Executes JavaScript in the context of the current page and returns the result.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>executeScript | script | [variableName]</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The JavaScript code to execute
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> Optional variable name to store the result
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>executeScript | return document.title; | pageTitle</code>
-                        <code>echo | Current page title: ${pageTitle}</code>
-                    </div>
-                    <div class="example-desc">Get the page title using JavaScript</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>executeScript | return document.querySelectorAll('.product').length; | productCount</code>
-                        <code>echo | Found ${productCount} products</code>
-                    </div>
-                    <div class="example-desc">Count elements using JavaScript</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>executeScript | return window.innerHeight; | windowHeight</code>
-                        <code>executeScript | return document.body.scrollHeight; | pageHeight</code>
-                        <code>echo | Window height: ${windowHeight}, Page height: ${pageHeight}</code>
-                    </div>
-                    <div class="example-desc">Get window and page dimensions</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Return Value Handling</h4>
-                <ul>
-                    <li>The script must include a <code>return</code> statement to return a value</li>
-                    <li>Primitive values (strings, numbers, booleans) are returned as-is</li>
-                    <li>Objects and arrays are converted to JSON strings</li>
-                    <li>DOM elements are converted to their string representation</li>
-                    <li>If no variable name is provided, the result is discarded</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Set Window Size -->
-        <div class="command-item" id="setWindowSize">
-            <div class="command-header">
-                <h3><code>setWindowSize</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Sets the size of the browser window.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>setWindowSize | widthxheight</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The desired window size in the format "widthxheight" (e.g., "1024x768")
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>setWindowSize | 1920x1080</code>
-                    </div>
-                    <div class="example-desc">Set window size to full HD resolution</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>setWindowSize | 375x667</code>
-                        <code>open | https://example.com</code>
-                        <code>// Test mobile view</code>
-                        <code>setWindowSize | 1024x768</code>
-                        <code>// Test tablet view</code>
-                    </div>
-                    <div class="example-desc">Test responsive design at different screen sizes</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Usage Notes</h4>
-                <ul>
-                    <li>Common resolutions:
-                        <ul>
-                            <li>Desktop: 1920x1080, 1366x768, 1440x900</li>
-                            <li>Tablet: 1024x768, 768x1024 (iPad)</li>
-                            <li>Mobile: 375x667 (iPhone), 360x640 (Android)</li>
-                        </ul>
-                    </li>
-                    <li>The actual viewport size may be smaller due to browser chrome (toolbars, scrollbars)</li>
-                    <li>Use <code>executeScript</code> with <code>window.innerWidth</code> and <code>window.innerHeight</code> to get the actual viewport size</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Maximize Window -->
-        <div class="command-item" id="maximizeWindow">
-            <div class="command-header">
-                <h3><code>maximizeWindow</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Maximizes the browser window to fill the screen.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>maximizeWindow</code>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>open | https://example.com</code>
-                        <code>maximizeWindow</code>
-                    </div>
-                    <div class="example-desc">Open a site and maximize the window</div>
                 </div>
             </div>
         </div>

@@ -382,69 +382,7 @@
                 </ul>
             </div>
         </div>
-        
-        <!-- HTTP Request -->
-        <div class="command-item" id="httpRequest">
-            <div class="command-header">
-                <h3><code>httpRequest</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Sends an HTTP request and stores the response in a variable. Perfect for API testing and data retrieval.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>httpRequest | requestConfig | variableName</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> JSON configuration for the HTTP request (URL, method, headers, body, etc.)
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> Optional variable name to store the result
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>httpRequest | {"url": "https://api.example.com/users", "method": "GET"} | users</code>
-                        <code>echo | Retrieved ${users.length} users</code>
-                    </div>
-                    <div class="example-desc">Simple GET request</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>httpRequest | {"url": "https://api.example.com/login", "method": "POST", "headers": {"Content-Type": "application/json"}, "body": {"username": "test", "password": "password"}} | loginResponse</code>
-                        <code>store | ${loginResponse.token} | authToken</code>
-                    </div>
-                    <div class="example-desc">POST request with JSON body</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>store | my-api-key | apiKey</code>
-                        <code>httpRequest | {"url": "https://api.example.com/data", "method": "GET", "headers": {"Authorization": "Bearer ${apiKey}"}} | apiData</code>
-                    </div>
-                    <div class="example-desc">Request with authorization header using a variable</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Request Configuration Options</h4>
-                <ul>
-                    <li><strong>url:</strong> The URL to send the request to (required)</li>
-                    <li><strong>method:</strong> HTTP method (GET, POST, PUT, DELETE, etc.)</li>
-                    <li><strong>headers:</strong> Object containing request headers</li>
-                    <li><strong>body:</strong> Request body (object for JSON, string for other formats)</li>
-                    <li><strong>params:</strong> URL parameters as an object</li>
-                    <li><strong>timeout:</strong> Request timeout in milliseconds</li>
-                    <li><strong>responseType:</strong> Expected response type (json, text, blob, etc.)</li>
-                </ul>
-            </div>
-        </div>
+
+       
     </div>
 </div>

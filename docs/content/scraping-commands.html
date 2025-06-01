@@ -373,6 +373,76 @@
                 </ul>
             </div>
         </div>
+
+
+                 <!-- Monitor Element Command -->
+        <div class="command-item" id="monitorElement">
+            <div class="command-header">
+                <h3><code>monitorElement</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Periodically checks an element for changes and waits until a change is detected. Perfect for monitoring dynamic content that updates asynchronously.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>monitorElement | locator | {"interval": 1000, "attribute": "text", "storeValue": "changedValue"}</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to monitor (e.g., <code>id=statusText</code>, <code>css=.price-display</code>)
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> A JSON object with the following properties:
+                    <ul>
+                        <li><code>interval</code>: Milliseconds between checks (default: 5000)</li>
+                        <li><code>attribute</code>: What to monitor: "text", "value", "class", "style", etc. (default: "text")</li>
+                        <li><code>storeValue</code>: Optional variable name to store the changed value</li>
+                        <li><code>condition</code>: Comparison condition: "!==", "===", ">", "<", ">=", "<=", "contains", "not contains", "matches" (default: "!==")</li>
+                        <li><code>baseValue</code>: Optional base value to compare against instead of initial value</li>
+                        <li><code>maxDuration</code>: Maximum monitoring duration in milliseconds (default: 300000 - 5 minutes)</li>
+                        <li><code>onTimeout</code>: What to do if maxDuration is reached: "continue" or "fail" (default: "continue")</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>monitorElement | id=statusIndicator | {"interval": 1000, "storeValue": "newStatus"}</code>
+                        <code>echo | ${newStatus}</code>
+                    </div>
+                    <div class="example-desc">Check the text of an element with ID "statusIndicator" every second and store the new value in the "newStatus" variable when it changes</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>monitorElement | css=.price-display | {"attribute": "text", "condition": ">", "baseValue": "100", "storeValue": "currentPrice"}</code>
+                        <code>assert | ${currentPrice} | >100</code>
+                    </div>
+                    <div class="example-desc">Monitor the text of an element with class "price-display" and wait until the value exceeds 100</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>monitorElement | xpath=//div[@id='loading-indicator'] | {"attribute": "class", "condition": "contains", "baseValue": "complete", "maxDuration": 10000, "onTimeout": "fail"}</code>
+                    </div>
+                    <div class="example-desc">Monitor a loading indicator's class attribute and wait until it contains the text "complete". Fail if this doesn't happen within 10 seconds</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>When to Use</h4>
+                <ul>
+                    <li><strong>Wait for async content:</strong> Monitor elements that update after AJAX calls</li>
+                    <li><strong>Capture dynamic values:</strong> Store changing values for later use in the test</li>
+                    <li><strong>Verify element updates:</strong> Wait for specific conditions before proceeding</li>
+                    <li><strong>Handle timing issues:</strong> More reliable than using fixed wait times</li>
+                </ul>
+            </div>
+        </div>
         
         <!-- Transform Variable -->
         <div class="command-item" id="transformVariable">

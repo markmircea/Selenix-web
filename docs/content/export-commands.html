@@ -3,6 +3,82 @@
     <p>These commands allow you to export scraped data to various file formats for further analysis or processing.</p>
     
     <div class="command-list">
+
+                <!-- Import From CSV -->
+        <div class="command-item" id="importFromCSV">
+            <div class="command-header">
+                <h3><code>importFromCSV</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Imports data from a CSV file and stores it in a variable as an array of objects. Variable will be array type.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>importFromCSV | filePath | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Absolute or relative path to the CSV file to import
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Variable name to store the imported data as an array of objects
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>importFromCSV | C:/Users/username/Downloads/customers.csv | customers</code>
+                        <code>echo | Imported ${customers.length} customer records</code>
+                    </div>
+                    <div class="example-desc">Import customer data from a CSV file</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>importFromCSV | ./data/products.csv | products</code>
+                        <code>forEach | products | product</code>
+                        <code>  if | ${product.stock} < 10</code>
+                        <code>    echo | Low stock alert: ${product.name} (${product.stock} remaining)</code>
+                        <code>  end</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Import product data and check for low stock items</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>importFromCSV | ./exports/previous_results.csv | previousData</code>
+                        <code>scrapeCollection | css=.new-data | newData</code>
+                        <code>combineVariables | previousData,newData | allData</code>
+                        <code>exportToCSV | allData | combined_results.csv</code>
+                    </div>
+                    <div class="example-desc">Import previous results, combine with new data, and export</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>CSV Format Requirements</h4>
+                <ul>
+                    <li>First row should contain column headers</li>
+                    <li>Each subsequent row becomes an object with headers as keys</li>
+                    <li>Supports standard CSV format with comma separators</li>
+                    <li>Handles quoted fields and escaped characters</li>
+                </ul>
+                
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>Variable will always be an array type containing objects</li>
+                    <li>Column headers become object property names</li>
+                    <li>Empty cells are imported as empty strings</li>
+                    <li>Perfect for loading test data, customer lists, or product catalogs</li>
+                </ul>
+            </div>
+        </div>
+
         <!-- Export to CSV -->
         <div class="command-item" id="exportToCSV">
             <div class="command-header">
@@ -92,6 +168,72 @@
                 </ul>
             </div>
         </div>
+
+                <!-- Import From JSON -->
+        <div class="command-item" id="importFromJSON">
+            <div class="command-header">
+                <h3><code>importFromJSON</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Imports data from a JSON file and stores it in a variable. Variable will be either object or array depending on file type.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>importFromJSON | filePath | variableName</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> Absolute or relative path to the JSON file to import
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Variable name to store the imported data
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>importFromJSON | C:/Users/username/Downloads/data.json | importedData</code>
+                        <code>echo | Imported ${importedData.length} records</code>
+                    </div>
+                    <div class="example-desc">Import JSON data from an absolute file path</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>importFromJSON | ./exports/products.json | products</code>
+                        <code>forEach | products | product</code>
+                        <code>  echo | Product: ${product.name} - ${product.price}</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Import and iterate through product data</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>importFromJSON | ./config/settings.json | config</code>
+                        <code>store | ${config.apiUrl} | baseUrl</code>
+                        <code>store | ${config.timeout} | requestTimeout</code>
+                    </div>
+                    <div class="example-desc">Import configuration settings and extract specific values</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>The JSON file must contain valid JSON syntax</li>
+                    <li>Variable type will be object or array depending on the JSON structure</li>
+                    <li>Use absolute paths for files outside the project directory</li>
+                    <li>Use relative paths for files within the project structure</li>
+                    <li>Perfect for loading configuration data, test data, or previously exported results</li>
+                </ul>
+            </div>
+        </div>
+
         
         <!-- Export to JSON -->
         <div class="command-item" id="exportToJSON">
@@ -166,27 +308,27 @@
                 </ul>
             </div>
         </div>
-        
-        <!-- Export to Excel -->
-        <div class="command-item" id="exportToExcel">
+
+         <!-- HTTP Request -->
+        <div class="command-item" id="httpRequest">
             <div class="command-header">
-                <h3><code>exportToExcel</code></h3>
+                <h3><code>httpRequest</code></h3>
                 <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Exports data to an Excel (.xlsx) file. Supports multiple worksheets, styling, and formatting options.</p>
+            <p class="command-description">Sends an HTTP request and stores the response in a variable. Perfect for API testing and data retrieval.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>exportToExcel | variableName | filePath</code>
+                <code>httpRequest | requestConfig | variableName</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> The name of the variable containing the data to export, or a configuration object
+                    <strong>Target:</strong> JSON configuration for the HTTP request (URL, method, headers, body, etc.)
                 </div>
                 <div class="param">
-                    <strong>Value:</strong> The file path where the Excel file should be saved (relative or absolute)
+                    <strong>Value:</strong> Optional variable name to store the result
                 </div>
             </div>
             
@@ -194,91 +336,63 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>scrapeStructured | {"_root": "css=.product", "name": "css=.name", "price": "css=.price", "stock": "css=.stock"} | products</code>
-                        <code>exportToExcel | products | products.xlsx</code>
+                        <code>httpRequest | {"url": "https://api.example.com/users", "method": "GET"} | users</code>
+                        <code>echo | Retrieved ${users.length} users</code>
                     </div>
-                    <div class="example-desc">Export product data to Excel</div>
+                    <div class="example-desc">Simple GET request</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeJson | {</code>
-                        <code>  "sheets": {</code>
-                        <code>    "Products": products,</code>
-                        <code>    "Categories": categories,</code>
-                        <code>    "Summary": summary</code>
-                        <code>  }</code>
-                        <code>} | workbook</code>
-                        <code>exportToExcel | workbook | report.xlsx</code>
+                        <code>httpRequest | {"url": "https://api.example.com/login", "method": "POST", "headers": {"Content-Type": "application/json"}, "body": {"username": "test", "password": "password"}} | loginResponse</code>
+                        <code>store | ${loginResponse.token} | authToken</code>
                     </div>
-                    <div class="example-desc">Export multiple sheets to a single Excel file</div>
+                    <div class="example-desc">POST request with JSON body</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeJson | {</code>
-                        <code>  "data": products,</code>
-                        <code>  "options": {</code>
-                        <code>    "sheetName": "Product Data",</code>
-                        <code>    "columns": [</code>
-                        <code>      { "header": "Product Name", "key": "name", "width": 30 },</code>
-                        <code>      { "header": "Price ($)", "key": "price", "width": 15 },</code>
-                        <code>      { "header": "In Stock", "key": "stock", "width": 15 }</code>
-                        <code>    ],</code>
-                        <code>    "headerStyle": {</code>
-                        <code>      "font": { "bold": true, "color": { "argb": "FFFFFFFF" } },</code>
-                        <code>      "fill": { "type": "pattern", "pattern": "solid", "fgColor": { "argb": "FF4F46E5" } }</code>
-                        <code>    }</code>
-                        <code>  }</code>
-                        <code>} | excelConfig</code>
-                        <code>exportToExcel | excelConfig | formatted-products.xlsx</code>
+                        <code>store | my-api-key | apiKey</code>
+                        <code>httpRequest | {"url": "https://api.example.com/data", "method": "GET", "headers": {"Authorization": "Bearer ${apiKey}"}} | apiData</code>
                     </div>
-                    <div class="example-desc">Export with custom formatting and styling</div>
+                    <div class="example-desc">Request with authorization header using a variable</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Advanced Features</h4>
+                <h4>Request Configuration Options</h4>
                 <ul>
-                    <li><strong>Multiple Sheets:</strong> Export different datasets to separate worksheets</li>
-                    <li><strong>Column Customization:</strong> Define headers, widths, and data mappings</li>
-                    <li><strong>Styling:</strong> Apply fonts, colors, borders, and alignment</li>
-                    <li><strong>Formulas:</strong> Include Excel formulas in cells</li>
-                    <li><strong>Cell Formatting:</strong> Format numbers, dates, and percentages</li>
-                </ul>
-                
-                <h4>Available Options</h4>
-                <ul>
-                    <li><strong>sheetName:</strong> Name of the worksheet (default: "Sheet1")</li>
-                    <li><strong>columns:</strong> Column definitions (header, key, width, style)</li>
-                    <li><strong>headerStyle:</strong> Style for the header row</li>
-                    <li><strong>rowStyle:</strong> Default style for data rows</li>
-                    <li><strong>alternateRowStyle:</strong> Style for alternate rows (zebra striping)</li>
-                    <li><strong>conditionalFormatting:</strong> Rules for applying styles based on cell values</li>
+                    <li><strong>url:</strong> The URL to send the request to (required)</li>
+                    <li><strong>method:</strong> HTTP method (GET, POST, PUT, DELETE, etc.)</li>
+                    <li><strong>headers:</strong> Object containing request headers</li>
+                    <li><strong>body:</strong> Request body (object for JSON, string for other formats)</li>
+                    <li><strong>params:</strong> URL parameters as an object</li>
+                    <li><strong>timeout:</strong> Request timeout in milliseconds</li>
+                    <li><strong>responseType:</strong> Expected response type (json, text, blob, etc.)</li>
                 </ul>
             </div>
         </div>
-        
-        <!-- Export to HTML -->
-        <div class="command-item" id="exportToHTML">
+
+                <!-- Curl Request -->
+        <div class="command-item" id="curlRequest">
             <div class="command-header">
-                <h3><code>exportToHTML</code></h3>
+                <h3><code>curlRequest</code></h3>
                 <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Exports data to an HTML file. Perfect for creating reports with rich formatting and interactive elements.</p>
+            <p class="command-description">Executes a cURL-style HTTP request and stores the response in a variable. Perfect for API testing and data retrieval.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>exportToHTML | variableName | filePath</code>
+                <code>curlRequest | curlCommand | variableName</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> The name of the variable containing the data to export, or a configuration object
+                    <strong>Target:</strong> A cURL command string or JSON configuration object for the request
                 </div>
                 <div class="param">
-                    <strong>Value:</strong> The file path where the HTML file should be saved (relative or absolute)
+                    <strong>Value:</strong> Variable name to store the response
                 </div>
             </div>
             
@@ -286,94 +400,61 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>scrapeStructured | {"_root": "css=.product", "name": "css=.name", "price": "css=.price", "image": "css=img@src"} | products</code>
-                        <code>exportToHTML | products | products.html</code>
+                        <code>curlRequest | curl https://api.example.com/users | userData</code>
+                        <code>echo | Retrieved ${userData.length} users</code>
                     </div>
-                    <div class="example-desc">Export product data to a simple HTML table</div>
+                    <div class="example-desc">Simple GET request using cURL syntax</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeJson | {</code>
-                        <code>  "data": products,</code>
-                        <code>  "options": {</code>
-                        <code>    "title": "Product Catalog",</code>
-                        <code>    "template": "table",</code>
-                        <code>    "styles": true,</code>
-                        <code>    "sortable": true,</code>
-                        <code>    "searchable": true</code>
-                        <code>  }</code>
-                        <code>} | htmlConfig</code>
-                        <code>exportToHTML | htmlConfig | interactive-products.html</code>
+                        <code>curlRequest | curl -X POST https://api.example.com/login -H "Content-Type: application/json" -d '{"username":"test","password":"password"}' | loginResponse</code>
+                        <code>storeJson | ${loginResponse} | loginData</code>
+                        <code>store | ${loginData.token} | authToken</code>
                     </div>
-                    <div class="example-desc">Export to an interactive HTML table with sorting and search</div>
+                    <div class="example-desc">POST request with JSON data and header</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeJson | {</code>
-                        <code>  "data": products,</code>
-                        <code>  "options": {</code>
-                        <code>    "title": "Product Gallery",</code>
-                        <code>    "template": "cards",</code>
-                        <code>    "imageField": "image",</code>
-                        <code>    "titleField": "name",</code>
-                        <code>    "descriptionField": "description",</code>
-                        <code>    "priceField": "price"</code>
-                        <code>  }</code>
-                        <code>} | galleryConfig</code>
-                        <code>exportToHTML | galleryConfig | product-gallery.html</code>
+                        <code>store | my-api-key | apiKey</code>
+                        <code>curlRequest | curl https://api.example.com/data -H "Authorization: Bearer ${apiKey}" | apiData</code>
                     </div>
-                    <div class="example-desc">Export to a visual product gallery with images</div>
+                    <div class="example-desc">Using variables in the cURL command</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Templates</h4>
+                <h4>Usage Notes</h4>
                 <ul>
-                    <li><strong>table:</strong> Standard HTML table with optional sorting and filtering</li>
-                    <li><strong>cards:</strong> Visual card layout for items with images</li>
-                    <li><strong>list:</strong> Simple list format</li>
-                    <li><strong>custom:</strong> Use a custom HTML template</li>
-                </ul>
-                
-                <h4>Interactive Features</h4>
-                <ul>
-                    <li><strong>sortable:</strong> Add column sorting functionality</li>
-                    <li><strong>searchable:</strong> Add search/filter functionality</li>
-                    <li><strong>pagination:</strong> Split large datasets into pages</li>
-                    <li><strong>responsive:</strong> Make the output mobile-friendly</li>
-                </ul>
-                
-                <h4>Styling Options</h4>
-                <ul>
-                    <li><strong>styles:</strong> Include default CSS styles</li>
-                    <li><strong>theme:</strong> Choose from predefined themes ("light", "dark", "colorful")</li>
-                    <li><strong>customCSS:</strong> Add your own CSS styles</li>
+                    <li>Supports all standard cURL options including headers, request methods, and data</li>
+                    <li>Response is automatically parsed as JSON if possible</li>
+                    <li>Variables can be interpolated in the cURL command using <code>${variableName}</code> syntax</li>
+                    <li>Useful for API testing, data retrieval, and authentication flows</li>
                 </ul>
             </div>
         </div>
-        
-        <!-- Export to Text -->
-        <div class="command-item" id="exportToText">
+      
+                <!-- Download Files -->
+        <div class="command-item" id="downloadFiles">
             <div class="command-header">
-                <h3><code>exportToText</code></h3>
+                <h3><code>downloadFiles</code></h3>
                 <div class="command-badge">Basic</div>
             </div>
-            <p class="command-description">Exports data to a plain text file. Useful for simple data or creating custom formatted outputs.</p>
+            <p class="command-description">Downloads files from an array of URLs to a specified directory.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>exportToText | variableName | filePath</code>
+                <code>downloadFiles | variableName | filePath</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> The name of the variable containing the data to export, or a configuration object
+                    <strong>Target:</strong> The name of the variable containing an array of URLs to download
                 </div>
                 <div class="param">
-                    <strong>Value:</strong> The file path where the text file should be saved (relative or absolute)
+                    <strong>Value:</strong> Absolute or relative path where the file(s) will be saved
                 </div>
             </div>
             
@@ -381,134 +462,41 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>scrapeCollection | css=.product-name | productNames</code>
-                        <code>exportToText | productNames | product-names.txt</code>
+                        <code>scrapeCollection | css=img@src | imageUrls</code>
+                        <code>downloadFiles | imageUrls | C:/Users/username/Downloads/</code>
                     </div>
-                    <div class="example-desc">Export a list of product names to a text file</div>
+                    <div class="example-desc">Download all images from a page to the Downloads folder</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeJson | {</code>
-                        <code>  "data": products,</code>
-                        <code>  "options": {</code>
-                        <code>    "format": "list",</code>
-                        <code>    "fields": ["name", "price"],</code>
-                        <code>    "separator": " - ",</code>
-                        <code>    "lineEnding": "\r\n"</code>
-                        <code>  }</code>
-                        <code>} | textConfig</code>
-                        <code>exportToText | textConfig | formatted-products.txt</code>
+                        <code>scrapeCollection | css=a[href$=".pdf"]@href | pdfLinks</code>
+                        <code>downloadFiles | pdfLinks | ./exports/pdfs/</code>
                     </div>
-                    <div class="example-desc">Export with custom formatting</div>
+                    <div class="example-desc">Download all PDF files to a relative directory</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>storeJson | {</code>
-                        <code>  "data": products,</code>
-                        <code>  "options": {</code>
-                        <code>    "format": "custom",</code>
-                        <code>    "template": "Product: ${name}\nPrice: ${price}\nIn Stock: ${stock}\n\n"</code>
-                        <code>  }</code>
-                        <code>} | customConfig</code>
-                        <code>exportToText | customConfig | detailed-products.txt</code>
+                        <code>storeJson | ["https://example.com/file1.zip", "https://example.com/file2.zip"] | downloadList</code>
+                        <code>downloadFiles | downloadList | C:/temp/downloads/</code>
                     </div>
-                    <div class="example-desc">Export using a custom template</div>
+                    <div class="example-desc">Download files from a predefined list of URLs</div>
                 </div>
             </div>
             
             <div class="command-notes">
-                <h4>Format Options</h4>
+                <h4>Usage Notes</h4>
                 <ul>
-                    <li><strong>list:</strong> One item per line</li>
-                    <li><strong>table:</strong> ASCII table format</li>
-                    <li><strong>custom:</strong> Use a custom template string</li>
-                </ul>
-                
-                <h4>Other Options</h4>
-                <ul>
-                    <li><strong>fields:</strong> Which fields to include in the output</li>
-                    <li><strong>separator:</strong> Character(s) to use between fields</li>
-                    <li><strong>lineEnding:</strong> Character(s) to use for line endings</li>
-                    <li><strong>template:</strong> Template string for custom format</li>
+                    <li>The variable must contain an array of valid URLs</li>
+                    <li>Files are saved with their original names from the URL</li>
+                    <li>The directory will be created if it doesn't exist</li>
+                    <li>Use absolute paths for specific locations or relative paths for project folders</li>
+                    <li>Large files may take time to download - consider using with appropriate timeouts</li>
                 </ul>
             </div>
         </div>
-        
-        <!-- Export to Screenshot -->
-        <div class="command-item" id="exportScreenshot">
-            <div class="command-header">
-                <h3><code>exportScreenshot</code></h3>
-                <div class="command-badge">Utility</div>
-            </div>
-            <p class="command-description">Captures a screenshot of the current page and saves it to a file.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>exportScreenshot | filePath | options</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The file path where the screenshot should be saved (relative or absolute)
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> Optional JSON configuration for screenshot options
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>exportScreenshot | screenshot.png</code>
-                    </div>
-                    <div class="example-desc">Capture a screenshot of the entire viewport</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>exportScreenshot | product-section.png | {"selector": "#product-list"}</code>
-                    </div>
-                    <div class="example-desc">Capture a screenshot of a specific element</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>exportScreenshot | full-page.png | {"fullPage": true}</code>
-                    </div>
-                    <div class="example-desc">Capture a screenshot of the entire page, including content outside the viewport</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>store | screenshots/page_${new Date().toISOString().replace(/:/g, '-')}.png | screenshotPath</code>
-                        <code>exportScreenshot | ${screenshotPath}</code>
-                    </div>
-                    <div class="example-desc">Save screenshot with a timestamp in the filename</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Screenshot Options</h4>
-                <ul>
-                    <li><strong>selector:</strong> CSS selector of the element to capture</li>
-                    <li><strong>fullPage:</strong> Whether to capture the full scrollable page (default: false)</li>
-                    <li><strong>quality:</strong> JPEG quality (0-100) for JPEG screenshots</li>
-                    <li><strong>omitBackground:</strong> Make background transparent for PNG screenshots</li>
-                    <li><strong>encoding:</strong> Image encoding ("binary", "base64")</li>
-                    <li><strong>clip:</strong> Clip rectangle: {x, y, width, height}</li>
-                </ul>
-                
-                <h4>Supported Formats</h4>
-                <ul>
-                    <li>PNG (.png)</li>
-                    <li>JPEG (.jpg, .jpeg)</li>
-                    <li>WebP (.webp)</li>
-                </ul>
-            </div>
-        </div>
+
+       
     </div>
 </div>

@@ -149,46 +149,6 @@
             </div>
         </div>
         
-        <!-- Assert Text Contains -->
-        <div class="command-item" id="assertTextContains">
-            <div class="command-header">
-                <h3><code>assertTextContains</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Verifies that an element's text contains the expected substring. Fails if the substring is not found.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>assertTextContains | locator | expectedSubstring</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> A locator that identifies the element to check
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> The expected substring
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>assertTextContains | id=error-message | Invalid</code>
-                    </div>
-                    <div class="example-desc">Verify error message contains "Invalid"</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>assertTextContains | css=.product-description | Waterproof</code>
-                    </div>
-                    <div class="example-desc">Verify product description mentions "Waterproof"</div>
-                </div>
-            </div>
-        </div>
         
         <!-- Assert Title -->
         <div class="command-item" id="assertTitle">
@@ -229,44 +189,7 @@
             </div>
         </div>
         
-        <!-- Assert Title Contains -->
-        <div class="command-item" id="assertTitleContains">
-            <div class="command-header">
-                <h3><code>assertTitleContains</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Verifies that the page title contains the expected substring. Fails if the substring is not found.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>assertTitleContains | expectedSubstring</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The expected substring in the page title
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>assertTitleContains | Dashboard</code>
-                    </div>
-                    <div class="example-desc">Verify the page title contains "Dashboard"</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>store | Product | productType</code>
-                        <code>assertTitleContains | ${productType}</code>
-                    </div>
-                    <div class="example-desc">Verify title contains a variable value</div>
-                </div>
-            </div>
-        </div>
+    
         
         <!-- Assert Value -->
         <div class="command-item" id="assertValue">
@@ -399,108 +322,8 @@
             </div>
         </div>
         
-        <!-- Assert Selected -->
-        <div class="command-item" id="assertSelected">
-            <div class="command-header">
-                <h3><code>assertSelected</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Verifies that a specific option in a select element is selected. Fails if the option is not selected.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>assertSelected | selectLocator | optionLocator</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> A locator that identifies the select element
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> The option to check (can be label, value, index, or id)
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>select | id=country | label=United States</code>
-                        <code>assertSelected | id=country | label=United States</code>
-                    </div>
-                    <div class="example-desc">Verify option is selected by label</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>select | id=product-size | value=M</code>
-                        <code>assertSelected | id=product-size | value=M</code>
-                    </div>
-                    <div class="example-desc">Verify option is selected by value</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>select | id=priority | index=0</code>
-                        <code>assertSelected | id=priority | index=0</code>
-                    </div>
-                    <div class="example-desc">Verify first option is selected</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Option Locator Types</h4>
-                <ul>
-                    <li><code>label=Option Text</code>: Match by visible text</li>
-                    <li><code>value=optionValue</code>: Match by option value attribute</li>
-                    <li><code>index=n</code>: Match by option index (0-based)</li>
-                    <li><code>id=optionId</code>: Match by option id attribute</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Assert Not Selected -->
-        <div class="command-item" id="assertNotSelected">
-            <div class="command-header">
-                <h3><code>assertNotSelected</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Verifies that a specific option in a select element is not selected. Fails if the option is selected.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>assertNotSelected | selectLocator | optionLocator</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> A locator that identifies the select element
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> The option to check (can be label, value, index, or id)
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>assertNotSelected | id=country | label=Germany</code>
-                    </div>
-                    <div class="example-desc">Verify Germany is not selected</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>select | id=product-size | value=S</code>
-                        <code>assertNotSelected | id=product-size | value=L</code>
-                    </div>
-                    <div class="example-desc">Verify Large size is not selected</div>
-                </div>
-            </div>
-        </div>
+
+    
         
         <!-- Assert Alert -->
         <div class="command-item" id="assertAlert">
@@ -633,26 +456,28 @@
             </div>
         </div>
         
-        <!-- Assert Attribute -->
-        <div class="command-item" id="assertAttribute">
+       
+        
+        <!-- Assert -->
+        <div class="command-item" id="assert">
             <div class="command-header">
-                <h3><code>assertAttribute</code></h3>
+                <h3><code>assert</code></h3>
                 <div class="command-badge">Basic</div>
             </div>
-            <p class="command-description">Verifies that an element's attribute has the expected value. Fails if the attribute doesn't exist or if the value doesn't match.</p>
+            <p class="command-description">Check that a variable is an expected value. The variable's value will be converted to a string for comparison. The test will stop if the assert fails.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
-                <code>assertAttribute | locator@attribute | expectedValue</code>
+                <code>assert | variableName | expectedValue</code>
             </div>
             
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> A locator followed by @ and the attribute name (e.g., <code>id=profile-image@src</code>)
+                    <strong>Target:</strong> The name of the variable to check
                 </div>
                 <div class="param">
-                    <strong>Value:</strong> The expected attribute value
+                    <strong>Value:</strong> The expected value
                 </div>
             </div>
             
@@ -660,85 +485,291 @@
                 <h4>Examples</h4>
                 <div class="example">
                     <div class="example-code">
-                        <code>assertAttribute | css=img.logo@alt | Company Logo</code>
+                        <code>storeText | id=counter | count</code>
+                        <code>assert | count | 5</code>
                     </div>
-                    <div class="example-desc">Verify image alt text</div>
+                    <div class="example-desc">Assert that a counter variable equals 5</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>click | id=disable-button</code>
-                        <code>assertAttribute | id=submit-button@disabled | true</code>
+                        <code>store | success | status</code>
+                        <code>assert | status | success</code>
                     </div>
-                    <div class="example-desc">Verify button is disabled</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>assertAttribute | css=.error-field@class | form-control error</code>
-                    </div>
-                    <div class="example-desc">Verify element has specific classes</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Assert Eval -->
-        <div class="command-item" id="assertEval">
-            <div class="command-header">
-                <h3><code>assertEval</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Verifies that the result of evaluating a JavaScript expression matches the expected value. Fails if the result doesn't match.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>assertEval | script | expectedValue</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The JavaScript expression to evaluate
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> The expected result
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>assertEval | document.title | My Dashboard</code>
-                    </div>
-                    <div class="example-desc">Verify page title using JavaScript</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>assertEval | document.querySelectorAll('.product-item').length | 10</code>
-                    </div>
-                    <div class="example-desc">Verify number of products on page</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>assertEval | window.isLoggedIn | true</code>
-                    </div>
-                    <div class="example-desc">Verify login state in JavaScript</div>
+                    <div class="example-desc">Assert that a status variable equals "success"</div>
                 </div>
             </div>
             
             <div class="command-notes">
                 <h4>Usage Notes</h4>
                 <ul>
-                    <li>The script is executed in the context of the current page</li>
-                    <li>The result is converted to a string for comparison</li>
-                    <li>Complex objects are serialized to JSON strings</li>
-                    <li>Use <code>executeScript</code> for scripts that don't need verification</li>
+                    <li>The comparison is exact and case-sensitive</li>
+                    <li>Values are converted to strings before comparison</li>
+                    <li>Use <code>verify</code> for soft assertions that don't stop execution</li>
+                    <li>The test will fail and stop if the assertion is false</li>
                 </ul>
             </div>
         </div>
+        
+        <!-- Assert Editable -->
+        <div class="command-item" id="assertEditable">
+            <div class="command-header">
+                <h3><code>assertEditable</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Confirm that the target element is editable. The test will stop if the assert fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>assertEditable | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to check
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=enable-editing</code>
+                        <code>assertEditable | id=username</code>
+                    </div>
+                    <div class="example-desc">Verify that a username field becomes editable after enabling editing mode</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>assertEditable | css=textarea.comments</code>
+                    </div>
+                    <div class="example-desc">Verify that a comments textarea is editable</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Editable Criteria</h4>
+                <ul>
+                    <li>The element must be present and visible</li>
+                    <li>The element must not have the <code>disabled</code> attribute</li>
+                    <li>The element must not have the <code>readonly</code> attribute</li>
+                    <li>Use <code>verifyEditable</code> for soft assertions</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Assert Not Editable -->
+        <div class="command-item" id="assertNotEditable">
+            <div class="command-header">
+                <h3><code>assertNotEditable</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Confirm that the target element is not editable. The test will stop if the assert fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>assertNotEditable | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to check
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=lock-form</code>
+                        <code>assertNotEditable | id=sensitive-data</code>
+                    </div>
+                    <div class="example-desc">Verify that a sensitive field becomes non-editable after locking the form</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>assertNotEditable | css=input[readonly]</code>
+                    </div>
+                    <div class="example-desc">Verify that a readonly input field is not editable</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Assert Not Selected Value -->
+        <div class="command-item" id="assertNotSelectedValue">
+            <div class="command-header">
+                <h3><code>assertNotSelectedValue</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Confirm that the value attribute of the selected option in a dropdown element does not contain the provided value. The test will stop if the assert fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>assertNotSelectedValue | selectLocator | pattern</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the select element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The value that should NOT be selected
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>select | id=country | label=United States</code>
+                        <code>assertNotSelectedValue | id=country | CA</code>
+                    </div>
+                    <div class="example-desc">Verify that Canada (CA) is not selected after selecting United States</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>assertNotSelectedValue | css=.priority-select | low</code>
+                    </div>
+                    <div class="example-desc">Verify that "low" priority is not selected</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Assert Not Text -->
+        <div class="command-item" id="assertNotText">
+            <div class="command-header">
+                <h3><code>assertNotText</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Confirm that the text of an element does not contain the provided value. The test will stop if the assert fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>assertNotText | locator | pattern</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to check
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The text that should NOT be present
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>assertNotText | id=status-message | Error</code>
+                    </div>
+                    <div class="example-desc">Verify that the status message does not contain "Error"</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=submit-form</code>
+                        <code>assertNotText | css=.validation-message | required</code>
+                    </div>
+                    <div class="example-desc">Verify that no required field validation messages appear after form submission</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Assert Selected Value -->
+        <div class="command-item" id="assertSelectedValue">
+            <div class="command-header">
+                <h3><code>assertSelectedValue</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Confirm that the value attribute of the selected option in a dropdown element contains the provided value. The test will stop if the assert fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>assertSelectedValue | selectLocator | pattern</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the select element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The expected selected value
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>select | id=country | label=United States</code>
+                        <code>assertSelectedValue | id=country | US</code>
+                    </div>
+                    <div class="example-desc">Verify that the US value is selected after selecting United States</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>select | css=.size-select | value=large</code>
+                        <code>assertSelectedValue | css=.size-select | large</code>
+                    </div>
+                    <div class="example-desc">Verify that "large" size is selected</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Assert Selected Label -->
+        <div class="command-item" id="assertSelectedLabel">
+            <div class="command-header">
+                <h3><code>assertSelectedLabel</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Confirm that the label of the selected option in a dropdown element contains the provided value. The test will stop if the assert fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>assertSelectedLabel | selectLocator | pattern</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the select element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The expected selected label text
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>select | id=country | value=US</code>
+                        <code>assertSelectedLabel | id=country | United States</code>
+                    </div>
+                    <div class="example-desc">Verify that "United States" label is selected after selecting by value</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>select | css=.priority-select | index=0</code>
+                        <code>assertSelectedLabel | css=.priority-select | High Priority</code>
+                    </div>
+                    <div class="example-desc">Verify that the first option has the expected label</div>
+                </div>
+            </div>
+        </div>
+        
+       
         
         <!-- Verify Element Present -->
         <div class="command-item" id="verifyElementPresent">
@@ -881,6 +912,86 @@
             </div>
         </div>
         
+        
+        <!-- Verify Checked -->
+        <div class="command-item" id="verifyChecked">
+            <div class="command-header">
+                <h3><code>verifyChecked</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Soft assert that a toggle-button (checkbox/radio) has been checked. The test will continue even if the verify fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>verifyChecked | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the checkbox or radio button to check
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=terms-checkbox</code>
+                        <code>verifyChecked | id=terms-checkbox</code>
+                        <code>echo | Continuing regardless of checkbox state</code>
+                    </div>
+                    <div class="example-desc">Verify checkbox is checked without stopping execution</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Verify -->
+        <div class="command-item" id="verify">
+            <div class="command-header">
+                <h3><code>verify</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Soft assert that a variable is an expected value. The variable's value will be converted to a string for comparison. The test will continue even if the verify fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>verify | variableName | expectedValue</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> The name of the variable to check
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The expected value
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>storeText | id=counter | count</code>
+                        <code>verify | count | 5</code>
+                        <code>echo | Verification complete, continuing regardless of result</code>
+                    </div>
+                    <div class="example-desc">Verify that a counter variable equals 5 without stopping execution</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Usage Notes</h4>
+                <ul>
+                    <li>The comparison is exact and case-sensitive</li>
+                    <li>Values are converted to strings before comparison</li>
+                    <li>Use <code>assert</code> for hard assertions that stop execution on failure</li>
+                    <li>The test will continue even if the verification fails</li>
+                </ul>
+            </div>
+        </div>
+        
         <!-- Verify Value -->
         <div class="command-item" id="verifyValue">
             <div class="command-header">
@@ -912,6 +1023,181 @@
                         <code>verifyValue | id=quantity | 1</code>
                     </div>
                     <div class="example-desc">Check input values without stopping execution</div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Verify Not Checked -->
+        <div class="command-item" id="verifyNotChecked">
+            <div class="command-header">
+                <h3><code>verifyNotChecked</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Soft assert that a toggle-button (checkbox/radio) has not been checked. The test will continue even if the verify fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>verifyNotChecked | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the checkbox or radio button to check
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>verifyNotChecked | id=newsletter-checkbox</code>
+                        <code>echo | Continuing regardless of checkbox state</code>
+                    </div>
+                    <div class="example-desc">Verify newsletter checkbox is unchecked by default without stopping execution</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=reset-form</code>
+                        <code>verifyNotChecked | css=input[name="premium"]</code>
+                    </div>
+                    <div class="example-desc">Verify premium option is unchecked after form reset</div>
+                </div>
+            </div>
+        </div>
+
+          <!-- Verify Not Editable -->
+        <div class="command-item" id="verifyNotEditable">
+            <div class="command-header">
+                <h3><code>verifyNotEditable</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Soft assert whether the specified input element is not editable (e.g., has been disabled). The test will continue even if the verify fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>verifyNotEditable | locator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to check
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=lock-form</code>
+                        <code>verifyNotEditable | id=sensitive-data</code>
+                        <code>echo | Continuing regardless of editable state</code>
+                    </div>
+                    <div class="example-desc">Verify that a sensitive field becomes non-editable after locking the form without stopping execution</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>verifyNotEditable | css=input[readonly]</code>
+                    </div>
+                    <div class="example-desc">Verify that a readonly input field is not editable</div>
+                </div>
+            </div>
+            
+            <div class="command-notes">
+                <h4>Non-Editable Criteria</h4>
+                <ul>
+                    <li>The element has the <code>disabled</code> attribute</li>
+                    <li>The element has the <code>readonly</code> attribute</li>
+                    <li>Use <code>assertNotEditable</code> for hard assertions that stop execution</li>
+                </ul>
+            </div>
+        </div>
+
+         <!-- Verify Not Selected Value -->
+        <div class="command-item" id="verifyNotSelectedValue">
+            <div class="command-header">
+                <h3><code>verifyNotSelectedValue</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Soft assert that the expected element has not been chosen in a select menu by its option attribute. The test will continue even if the verify fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>verifyNotSelectedValue | selectLocator | optionLocator</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the select element
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The value that should NOT be selected
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>select | id=country | label=United States</code>
+                        <code>verifyNotSelectedValue | id=country | CA</code>
+                        <code>echo | Continuing regardless of selection state</code>
+                    </div>
+                    <div class="example-desc">Verify that Canada (CA) is not selected after selecting United States without stopping execution</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>verifyNotSelectedValue | css=.priority-select | low</code>
+                    </div>
+                    <div class="example-desc">Verify that "low" priority is not selected</div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Verify Not Text -->
+        <div class="command-item" id="verifyNotText">
+            <div class="command-header">
+                <h3><code>verifyNotText</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Soft assert the text of an element is not present. The test will continue even if the verify fails.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>verifyNotText | locator | text</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to check
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> The text that should NOT be present
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>verifyNotText | id=status-message | Error</code>
+                        <code>echo | Continuing regardless of text content</code>
+                    </div>
+                    <div class="example-desc">Verify that the status message does not contain "Error" without stopping execution</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>click | id=submit-form</code>
+                        <code>verifyNotText | css=.validation-message | required</code>
+                    </div>
+                    <div class="example-desc">Verify that no required field validation messages appear after form submission</div>
                 </div>
             </div>
         </div>
@@ -1011,6 +1297,77 @@
                 </div>
             </div>
         </div>
+
+         <!-- Wait For Element Present -->
+        <div class="command-item" id="waitForElementPresent">
+            <div class="command-header">
+                <h3><code>waitForElementPresent</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait for a target element to be present on the page.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForElementPresent | locator | timeout</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to wait for
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional timeout in milliseconds (default is 30000ms)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForElementPresent | id=results-container | 5000</code>
+                        <code>waitForElementPresent | css=.loading-complete</code>
+                    </div>
+                    <div class="example-desc">Wait for elements to appear in the DOM</div>
+                </div>
+            </div>
+        </div>
+
+         
+        <!-- Wait For Element Not Present -->
+        <div class="command-item" id="waitForElementNotPresent">
+            <div class="command-header">
+                <h3><code>waitForElementNotPresent</code></h3>
+                <div class="command-badge">Basic</div>
+            </div>
+            <p class="command-description">Wait for a target element to not be present on the page.</p>
+            
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>waitForElementNotPresent | locator | timeout</code>
+            </div>
+            
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> A locator that identifies the element to wait for
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional timeout in milliseconds (default is 30000ms)
+                </div>
+            </div>
+            
+            <div class="command-examples">
+                <h4>Examples</h4>
+                <div class="example">
+                    <div class="example-code">
+                        <code>waitForElementNotPresent | id=loading-spinner | 5000</code>
+                        <code>waitForElementNotPresent | css=.error-message</code>
+                    </div>
+                    <div class="example-desc">Wait for elements to disappear from the DOM</div>
+                </div>
+            </div>
+        </div>
         
         <!-- Wait For Text -->
         <div class="command-item" id="waitForText">
@@ -1057,261 +1414,9 @@
                 </div>
             </div>
         </div>
+      
         
-        <!-- Wait For Text Present -->
-        <div class="command-item" id="waitForTextPresent">
-            <div class="command-header">
-                <h3><code>waitForTextPresent</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Waits for specific text to be present anywhere on the page.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>waitForTextPresent | text | [timeout]</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The text to wait for
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> Optional timeout in milliseconds (defaults to current timeout setting)
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=search-button</code>
-                        <code>waitForTextPresent | No results found</code>
-                    </div>
-                    <div class="example-desc">Wait for search results message to appear</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=load-data</code>
-                        <code>waitForTextPresent | Data loaded successfully | 15000</code>
-                    </div>
-                    <div class="example-desc">Wait up to 15 seconds for a success message</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Usage Notes</h4>
-                <ul>
-                    <li>This command searches the entire page text, not just a specific element</li>
-                    <li>The search is case-sensitive</li>
-                    <li>Use <code>waitForText</code> to check text in a specific element</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Wait For Title -->
-        <div class="command-item" id="waitForTitle">
-            <div class="command-header">
-                <h3><code>waitForTitle</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Waits for the page title to match the expected value.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>waitForTitle | expectedTitle | [timeout]</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The expected page title
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> Optional timeout in milliseconds (defaults to current timeout setting)
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | linkText=Dashboard</code>
-                        <code>waitForTitle | Dashboard - My App</code>
-                    </div>
-                    <div class="example-desc">Wait for the page title to change after navigation</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>store | Product Details | expectedTitle</code>
-                        <code>waitForTitle | ${expectedTitle} | 10000</code>
-                    </div>
-                    <div class="example-desc">Wait for title using a variable with custom timeout</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Wait For Value -->
-        <div class="command-item" id="waitForValue">
-            <div class="command-header">
-                <h3><code>waitForValue</code></h3>
-                <div class="command-badge">Basic</div>
-            </div>
-            <p class="command-description">Waits for an input element's value to match the expected value.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>waitForValue | locator | expectedValue | [timeout]</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> A locator that identifies the input element
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> The expected value
-                </div>
-                <div class="param">
-                    <strong>Timeout:</strong> Optional timeout in milliseconds (defaults to current timeout setting)
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=calculate-total</code>
-                        <code>waitForValue | id=total-field | 100.00</code>
-                    </div>
-                    <div class="example-desc">Wait for a calculated value to appear in an input field</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=reset-form</code>
-                        <code>waitForValue | id=username | </code>
-                    </div>
-                    <div class="example-desc">Wait for an input field to be cleared</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Wait For Attribute -->
-        <div class="command-item" id="waitForAttribute">
-            <div class="command-header">
-                <h3><code>waitForAttribute</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Waits for an element's attribute to have the expected value.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>waitForAttribute | locator@attribute | expectedValue | [timeout]</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> A locator followed by @ and the attribute name
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> The expected attribute value
-                </div>
-                <div class="param">
-                    <strong>Timeout:</strong> Optional timeout in milliseconds (defaults to current timeout setting)
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=submit-button</code>
-                        <code>waitForAttribute | id=form-status@data-status | success</code>
-                    </div>
-                    <div class="example-desc">Wait for a form status attribute to change</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=toggle-theme</code>
-                        <code>waitForAttribute | css=body@class | dark-theme</code>
-                    </div>
-                    <div class="example-desc">Wait for the body class to change to dark theme</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=disable-button</code>
-                        <code>waitForAttribute | id=submit-button@disabled | true</code>
-                    </div>
-                    <div class="example-desc">Wait for a button to become disabled</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Wait For Condition -->
-        <div class="command-item" id="waitForCondition">
-            <div class="command-header">
-                <h3><code>waitForCondition</code></h3>
-                <div class="command-badge">Advanced</div>
-            </div>
-            <p class="command-description">Waits for a JavaScript condition to evaluate to true.</p>
-            
-            <div class="command-syntax">
-                <h4>Syntax</h4>
-                <code>waitForCondition | script | [timeout]</code>
-            </div>
-            
-            <div class="command-params">
-                <h4>Parameters</h4>
-                <div class="param">
-                    <strong>Target:</strong> The JavaScript condition to evaluate
-                </div>
-                <div class="param">
-                    <strong>Value:</strong> Optional timeout in milliseconds (defaults to current timeout setting)
-                </div>
-            </div>
-            
-            <div class="command-examples">
-                <h4>Examples</h4>
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=load-data</code>
-                        <code>waitForCondition | return document.querySelectorAll('.data-row').length > 5</code>
-                    </div>
-                    <div class="example-desc">Wait for at least 5 data rows to be present</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>click | id=start-process</code>
-                        <code>waitForCondition | return window.dataLoaded === true | 60000</code>
-                    </div>
-                    <div class="example-desc">Wait up to 60 seconds for a JavaScript variable to be set</div>
-                </div>
-                
-                <div class="example">
-                    <div class="example-code">
-                        <code>waitForCondition | return document.readyState === 'complete' && !document.querySelector('.loading')</code>
-                    </div>
-                    <div class="example-desc">Wait for page to load and loading indicator to disappear</div>
-                </div>
-            </div>
-            
-            <div class="command-notes">
-                <h4>Usage Notes</h4>
-                <ul>
-                    <li>The script must return a boolean value (true or false)</li>
-                    <li>The script is executed repeatedly until it returns true or the timeout is reached</li>
-                    <li>The script must include a <code>return</code> statement</li>
-                    <li>This is one of the most powerful wait commands for complex conditions</li>
-                </ul>
-            </div>
-        </div>
+      
         
         <!-- Wait For Element Editable -->
         <div class="command-item" id="waitForElementEditable">
