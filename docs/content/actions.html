@@ -87,7 +87,7 @@
             <h4><code>scrapeStructured</code></h4>
             <p>Extract complex data using JSON field mapping</p>
             <div class="command-syntax">
-                <strong>Syntax:</strong> <code>scrapeStructured | {"title": "css=.title", "price": "css=.price", "image": "css=img@src"} | products</code>
+                <strong>Syntax:</strong> <code>scrapeStructured | { "_root":"css=article", "title": "css=.title", "price": "css=.price", "image": "css=img@src"} | products</code>
             </div>
             <div class="command-example">
                 Result: Array of objects with title, price, and image fields

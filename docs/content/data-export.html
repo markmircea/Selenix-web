@@ -38,7 +38,7 @@
             <h4><i class="fa-solid fa-globe"></i> HTTP API Export</h4>
             <p>Send scraped data directly to external APIs and webhooks</p>
             <div class="format-example">
-                <code>httpRequest | {"url": "https://api.company.com/data", "method": "POST", "body": ${scrapedData}} | apiResponse</code>
+                <code>httpRequest | {"method":"POST","url":"https://httpbin.org/post","queryParams":{},"headers":{},"body":"{ \"test\" : \"${scrapedData}\" }","contentType":"application/json","timeout":30000,"files":{"folderPaths":[],"filePaths":[]}} | apiResponse</code>
                 <span class="format-desc">Real-time integration with CRMs, databases, and business systems</span>
             </div>
         </div>
@@ -174,6 +174,7 @@ end</code></pre>
                 <pre><code>// Scrape metrics from multiple sources
 open | https://analytics-source-1.com
 scrapeStructured | {
+    "_root":"css=article"
     "visitors": "css=.visitor-count",
     "pageviews": "css=.pageview-count", 
     "bounceRate": "css=.bounce-rate"
@@ -181,6 +182,7 @@ scrapeStructured | {
 
 open | https://analytics-source-2.com  
 scrapeStructured | {
+    "_root":"css=article"
     "conversions": "css=.conversion-count",
     "revenue": "css=.revenue-total"
 } | source2Data
@@ -266,7 +268,8 @@ executeScript | return ${currentPrices}.map((price, index) => ({
 if | ${priceChanges.length} > 0
     // Format price change report
     transformVariable | priceChanges | priceChanges.map(change => 
-        `Product ${change.product}: $${change.previous} → $${change.current} (${change.current > change.previous ? '+' : ''}$${(change.current - change.previous).toFixed(2)})`
+        `Product ${change.product}: $${change.previous} → $${change.current} (${change.current > change.previous ? '+' : ''}
+       <br>$${(change.current - change.previous).toFixed(2)})`
     ).join('\n')
     
     // Send email via API using cURL

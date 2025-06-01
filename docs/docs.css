@@ -420,7 +420,7 @@ pre {
 code {
     font-family: 'Fira Code', Menlo, Monaco, Consolas, 'Courier New', monospace;
     font-size: 0.9rem;
-    color: #24292e;
+    /* color: #24292e; */
 }
 
 .copy-button {

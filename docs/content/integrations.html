@@ -129,6 +129,7 @@
         <div class="workflow-step">
             <h4><i class="fa-solid fa-spider"></i> Step 1: Scrape Data</h4>
             <pre><code>scrapeStructured | {
+                "_root":"css=article",
   "title": "css=.product-title",
   "price": "css=.price",
   "availability": "css=.stock-status"
@@ -259,6 +260,7 @@ exportToJSON | currentPrices | ./data/previous_prices.json</code></pre>
     <div class="example-workflow">
         <pre><code>// Scrape contact information
 scrapeStructured | {
+    "_root":"css=article",
   "name": "css=.contact-name",
   "email": "css=.contact-email", 
   "company": "css=.company-name",
@@ -287,7 +289,7 @@ httpRequest | {
     <div class="example-workflow">
         <pre><code>// Collect market data
 scrapeStructured | {
-  "_root": "css=.market-item",
+  "_root": "css=market-item",
   "company": "css=.company",
   "revenue": "css=.revenue",
   "growth": "css=.growth-rate"

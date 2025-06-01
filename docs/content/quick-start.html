@@ -7,9 +7,12 @@
     
     <ol class="docs-list">
         <li>Open the Selenix desktop application</li>
-        <li>Optionally, add your OpenRouter API key in Settings to unlock AI features</li>
-        <li>Click <strong>New Project</strong> to start</li>
-        <li>Choose <strong>Create New Test</strong> from the project menu</li>
+        <li>Click <strong>Create Project</strong> to start</li>
+        <li>Optionally, add your OpenRouter API key in Config to unlock AI features</li>
+        <li>Click on the Tests tab</li>
+        <li>Click the <strong>+</strong> on the project drawer to create a new test</li>
+        <li>Click the <strong>+</strong> in the commands area to add a new command</li>
+
     </ol>
     
     <div class="alert alert-info">
@@ -27,19 +30,22 @@
     <p>Let's create an intelligent web scraping automation:</p>
     
     <ol class="docs-list">
-        <li>Click the <strong>Record</strong> button in Selenix</li>
-        <li>Open your browser and navigate to any website (e.g., <code>example.com</code>)</li>
-        <li>Click on elements you want to interact with or extract data from</li>
+   
+        <li>Open the built-in browser and navigate to any website (e.g., <code>example.com</code>)</li>
         <li>Ask the AI Assistant: <em>"Help me scrape all the product titles from this page"</em></li>
         <li>The AI will analyze the page and suggest optimal commands</li>
-        <li>Click <strong>Stop Recording</strong> when done</li>
+        <li>Import the suggested commands, targets and values given by the AI and run the test</li>
+        <li><strong>*It is recommended to start with one element at a time, for example, usernames first, then after it's working continue building on the existing workflow*</strong></li>
+
+
+        
     </ol>
     
     <div class="alert alert-success">
         <i class="fa-solid fa-robot"></i>
         <div>
             <strong>AI Magic!</strong>
-            <p>The AI Assistant can see your browser, understand page structure, and suggest the best automation commands.</p>
+            <p>The AI Assistant can see your browser by using screenshots, understand page structure by accessing the underlying HTML, and access the current workspace (user projects/suites/commands and logs).</p>
         </div>
     </div>
 </div>
@@ -55,19 +61,40 @@
             <p>Extract multiple similar items:</p>
             <code>scrapeCollection | css=.product-title | productTitles</code>
             <p class="example-desc">This extracts all product titles into an array variable</p>
+            <p class="example-desc">Here is what the return format would look like for 2 articles (Array of strings)</p>
+            <code>[
+                <br>"We now have 25x brand new nodes in n8n",
+    <br>"Advice Needed : Linking Dynamic GPT SQL to API"
+    <br>]
+            </code>
         </div>
         
         <div class="command-example">
-            <h4><i class="fa-solid fa-table"></i> Scrape Structured</h4>
+            <h4><i class="fa-solid fa-table"></i> Scrape Structured (example from Reddit subreddits)</h4>
             <p>Extract complex data structures:</p>
-            <code>scrapeStructured | {"title": "css=.title", "price": "css=.price", "image": "css=img@src"} | productData</code>
+            <code>scrapeStructured | { <br>"_root": "css=article", <br>"title": "css=a[slot='title']", <br>"author":"css=a[href^='/user/']", <br>"img": "css=img.i18n-post-media-img@src", <br>"videoURL": "css=shreddit-player-2@src"} <br>| redditPosts</code>
             <p class="example-desc">This extracts structured data with multiple fields</p>
+            <p class="example-desc">Here is what the return format would look like for 2 articles (Array of objects)</p>
+            <code>[ <br>    { <br>"title": "AI Video Generator to YouTube", 
+        <br>"author": "u/snarfis",
+        <br>"img": "https://external-preview.redd.it/9zbfGleobBQjnwb3_…o=webp&s=ac84a40ca1265693a29a84d6cbf80a238fd5a36d",
+       <br>"videoURL": null
+    <br>},
+<br>{
+    <br>"title": "All of N8N workflows I could find (1000+) 😋 enjoy !",
+<br>"author": "u/elasdiadkid",
+    <br>"img": "https://external-preview.redd.it/9zbfGleobBQjnwb3_…o=webp&s=ac84a40ca1265693a29a84d6cbf80a238fd5a36d,
+    <br>"videoURL": null
+<br>}
+<br>]
+
+</code>
         </div>
         
         <div class="command-example">
             <h4><i class="fa-solid fa-download"></i> Export Data</h4>
             <p>Save your scraped data:</p>
-            <code>exportToCSV | productData | ./exports/products.csv</code>
+            <code>exportToCSV | productData | C:/exports/products.csv</code>
             <p class="example-desc">This exports your data to a CSV file</p>
         </div>
     </div>
@@ -80,8 +107,8 @@
         <li>Click the <strong>Play</strong> button to test your automation</li>
         <li>Watch as Selenix intelligently performs your actions</li>
         <li>Check the exported data in your specified location</li>
-        <li>Right-click on your test and select <strong>Schedule Test</strong></li>
-        <li>Set up automated runs (hourly, daily, weekly, monthly)</li>
+        <li>In the tests drawer, select <strong>Schedule Test (Clock Icon)</strong></li>
+        <li>Set up automated runs, Once / Recurring (hourly, daily, weekly, monthly)</li>
     </ol>
     
     <div class="schedule-options">
@@ -103,8 +130,10 @@
     
     <ol class="docs-list">
         <li>Add command: <code>createSnapshot | myLoginState</code></li>
-        <li>This saves cookies, localStorage, and session data</li>
-        <li>Later, use: <code>restoreSnapshot | myLoginState</code></li>
+        <li>This saves cookies, localStorage, and session data in the variable myLoginState</li>
+        <li>To use the session in another test you can export <br><code>Export to JSON | myLoginState | C:/projects/snapshot.json</code></li>
+        <li>Later in another test, use: <br> <code>Import from JSON | myLoginState | C:/projects/snapshot.json</code>
+        <br><code>restoreSnapshot | myLoginState</code></li>
         <li>Your browser will return to the exact saved state</li>
     </ol>
 </div>
