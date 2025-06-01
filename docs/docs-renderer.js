@@ -98,6 +98,15 @@ class DocsRenderer {
 
             // Update active navigation
             this.updateActiveNav(pageId);
+            
+            // Handle commands sidebar visibility
+            if (window.commandsSidebar) {
+                if (pageId === 'command-reference') {
+                    window.commandsSidebar.show();
+                } else {
+                    window.commandsSidebar.hide();
+                }
+            }
 
             // Load and render content
             const content = await this.loadHtmlContent(page.file);

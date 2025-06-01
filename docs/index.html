@@ -231,15 +231,31 @@
                 <p>Loading documentation...</p>
             </div>
         </div>
+        
+        <!-- Right sidebar for command list (shown only on command reference pages) -->
+        <div class="commands-sidebar" id="commands-sidebar">
+            <h3><i class="fa-solid fa-list"></i> All Commands <span class="commands-count" id="commands-count">0</span></h3>
+            
+            <div class="commands-search">
+                <input type="text" id="commands-search-input" placeholder="Filter commands...">
+                <i class="fa-solid fa-search"></i>
+            </div>
+            
+            <ul class="commands-list" id="commands-list">
+                <!-- Commands will be populated by JavaScript -->
+            </ul>
+        </div>
     </div>
 
     <!-- Footer Component -->
     <div id="footer-container"></div>
 
     <!-- Documentation System Scripts -->
+    <script src="command-data.js"></script>
     <script src="docs-config.js"></script>
     <script src="docs-renderer.js"></script>
     <script src="command-reference.js"></script>
+    <script src="commands-sidebar.js"></script>
     
     <script src="../script.js"></script>
     <script src="../components/components.js"></script>

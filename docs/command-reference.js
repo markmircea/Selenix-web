@@ -9,6 +9,18 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeCommandReference() {
     console.log('Initializing Command Reference page...');
     
+    // Show the commands sidebar
+    if (window.commandsSidebar) {
+        window.commandsSidebar.show();
+    } else {
+        // Wait for commandsSidebar to be initialized
+        setTimeout(() => {
+            if (window.commandsSidebar) {
+                window.commandsSidebar.show();
+            }
+        }, 200);
+    }
+    
     // Initialize category switching
     setupCategoryNavigation();
     
@@ -275,6 +287,11 @@ function showCategory(category) {
 
 function showAllCategories() {
     console.log('Showing all categories');
+    
+    // Ensure the commands sidebar is visible
+    if (window.commandsSidebar) {
+        window.commandsSidebar.show();
+    }
     
     // Clear the content container
     const contentContainer = document.getElementById('command-content-container');
