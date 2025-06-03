@@ -272,9 +272,9 @@
     <div class="command-grid">
         <div class="command-card advanced">
             <h4><code>httpRequest</code></h4>
-            <p>Make HTTP requests to APIs</p>
+            <p>Send HTTP requests with JSON data, file uploads, and webhook integrations (n8n, Zapier)</p>
             <div class="command-syntax">
-                <strong>Syntax:</strong> <code>httpRequest | {"url": "https://api.example.com/data", "method": "GET"} | apiResponse</code>
+                <strong>Syntax:</strong> <code>httpRequest | {"method":"POST", "url":"webhook-url", "body":"{\"data\":\"${scrapedData}\"}", "contentType":"application/json"} | response</code>
             </div>
         </div>
         

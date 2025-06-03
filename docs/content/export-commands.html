@@ -315,7 +315,7 @@
                 <h3><code>httpRequest</code></h3>
                 <div class="command-badge">Advanced</div>
             </div>
-            <p class="command-description">Sends an HTTP request and stores the response in a variable. Perfect for API testing and data retrieval.</p>
+            <p class="command-description">Sends HTTP requests with support for JSON data, file uploads, and webhook integrations. Perfect for API testing, data submission, and real-time integrations with external services like n8n, Zapier, and custom webhooks.</p>
             
             <div class="command-syntax">
                 <h4>Syntax</h4>
@@ -325,50 +325,158 @@
             <div class="command-params">
                 <h4>Parameters</h4>
                 <div class="param">
-                    <strong>Target:</strong> JSON configuration for the HTTP request (URL, method, headers, body, etc.)
+                    <strong>Target:</strong> JSON configuration for the HTTP request (URL, method, headers, body, files, etc.)
                 </div>
                 <div class="param">
-                    <strong>Value:</strong> Optional variable name to store the result
+                    <strong>Value:</strong> Optional variable name to store the response
                 </div>
             </div>
             
             <div class="command-examples">
                 <h4>Examples</h4>
+                
                 <div class="example">
                     <div class="example-code">
+                        <code>// Simple GET request</code>
                         <code>httpRequest | {"url": "https://api.example.com/users", "method": "GET"} | users</code>
                         <code>echo | Retrieved ${users.length} users</code>
                     </div>
-                    <div class="example-desc">Simple GET request</div>
+                    <div class="example-desc">Basic GET request to retrieve data from an API</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
-                        <code>httpRequest | {"url": "https://api.example.com/login", "method": "POST", "headers": {"Content-Type": "application/json"}, "body": {"username": "test", "password": "password"}} | loginResponse</code>
-                        <code>store | ${loginResponse.token} | authToken</code>
+                        <code>// n8n Webhook Integration with Scraped Data</code>
+                        <code>scrapeText | css=input[name="phone"] | phoneNumber</code>
+                        <code>store | ptest | qtest</code>
+                        <code>httpRequest | {</code>
+                        <code>  "method": "POST",</code>
+                        <code>  "url": "https://ccattest11.app.n8n.cloud/webhook-test/4fb814b6-ca40-47e9-ae98-75345a719fe5",</code>
+                        <code>  "queryParams": {"params": "ptest", "query": "${qtest}"},</code>
+                        <code>  "headers": {"header": "${ptest}", "test": "tevalue"},</code>
+                        <code>  "body": "{\n  \"bodytest\": \"${phoneNumber}\"\n}",</code>
+                        <code>  "contentType": "application/json",</code>
+                        <code>  "timeout": 30000</code>
+                        <code>} | webhookResponse</code>
+                        <code>echo | Webhook response: ${webhookResponse.status}</code>
                     </div>
-                    <div class="example-desc">POST request with JSON body</div>
+                    <div class="example-desc">Send scraped data to n8n webhook with JSON payload and variable interpolation</div>
                 </div>
                 
                 <div class="example">
                     <div class="example-code">
+                        <code>// File Upload with Multipart Form Data</code>
+                        <code>httpRequest | {</code>
+                        <code>  "method": "POST",</code>
+                        <code>  "url": "https://ccattest11.app.n8n.cloud/webhook-test/4fb814b6-ca40-47e9-ae98-75345a719fe5",</code>
+                        <code>  "queryParams": {"params": "ptest"},</code>
+                        <code>  "headers": {"header": "${ptest}", "test": "tevalue"},</code>
+                        <code>  "body": "{\n  \"bodytest\": \"${phoneNumber}\"\n}",</code>
+                        <code>  "contentType": "multipart/form-data",</code>
+                        <code>  "timeout": 30000,</code>
+                        <code>  "files": {</code>
+                        <code>    "folderPaths": [],</code>
+                        <code>    "filePaths": ["C:\\projects\\OUTPUT.CSV"]</code>
+                        <code>  }</code>
+                        <code>} | uploadResponse</code>
+                        <code>echo | File uploaded successfully: ${uploadResponse.status}</code>
+                    </div>
+                    <div class="example-desc">Upload files to webhook using multipart/form-data with JSON metadata</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>// API Authentication Flow</code>
                         <code>store | my-api-key | apiKey</code>
-                        <code>httpRequest | {"url": "https://api.example.com/data", "method": "GET", "headers": {"Authorization": "Bearer ${apiKey}"}} | apiData</code>
+                        <code>httpRequest | {</code>
+                        <code>  "url": "https://api.example.com/data",</code>
+                        <code>  "method": "GET",</code>
+                        <code>  "headers": {"Authorization": "Bearer ${apiKey}"},</code>
+                        <code>  "timeout": 15000</code>
+                        <code>} | apiData</code>
                     </div>
-                    <div class="example-desc">Request with authorization header using a variable</div>
+                    <div class="example-desc">Authenticated API request using stored credentials</div>
+                </div>
+                
+                <div class="example">
+                    <div class="example-code">
+                        <code>// Batch Data Submission</code>
+                        <code>scrapeCollection | css=.product-item | products</code>
+                        <code>transformVariable | products | products.map(p => ({</code>
+                        <code>  ...p,</code>
+                        <code>  timestamp: new Date().toISOString(),</code>
+                        <code>  source: "web-scraping"</code>
+                        <code>}))</code>
+                        <code>httpRequest | {</code>
+                        <code>  "method": "POST",</code>
+                        <code>  "url": "https://webhook.site/your-unique-id",</code>
+                        <code>  "headers": {"Content-Type": "application/json"},</code>
+                        <code>  "body": {"products": ${products}, "count": ${products.length}},</code>
+                        <code>  "timeout": 60000</code>
+                        <code>} | batchResponse</code>
+                    </div>
+                    <div class="example-desc">Submit multiple scraped items in a single batch request</div>
+                </div>
+                
+                <div class="example screenshot-example">
+                    <h4>n8n Webhook Configuration Screenshots</h4>
+                    <div class="screenshot-gallery">
+                        <div class="screenshot">
+                            <img src="images/n8n-headers-config.PNG" alt="Selenix HTTP Request Headers Configuration">
+                            <p><strong>Step 1:</strong> Configure headers and query parameters in Selenix HTTP request. Shows variable interpolation with ${ptest} and ${qtest}.</p>
+                        </div>
+                        <div class="screenshot">
+                            <img src="images/n8n-file-upload.PNG" alt="Selenix File Upload Configuration">
+                            <p><strong>Step 2:</strong> File upload configuration with multipart/form-data. Shows both JSON body and file paths for upload.</p>
+                        </div>
+                        <div class="screenshot">
+                            <img src="images/n8n-webhook-received.PNG" alt="n8n Webhook Data Received">
+                            <p><strong>Step 3:</strong> Data received in n8n webhook node showing headers, params, query, body, and webhookUrl fields.</p>
+                        </div>
+                        <div class="screenshot">
+                            <img src="images/n8n-file-received.png" alt="n8n Binary File Data Received">
+                            <p><strong>Step 4:</strong> Binary file data received as data0 (JSON metadata) and data1 (CSV file content) for further processing.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <div class="command-notes">
                 <h4>Request Configuration Options</h4>
                 <ul>
-                    <li><strong>url:</strong> The URL to send the request to (required)</li>
-                    <li><strong>method:</strong> HTTP method (GET, POST, PUT, DELETE, etc.)</li>
-                    <li><strong>headers:</strong> Object containing request headers</li>
-                    <li><strong>body:</strong> Request body (object for JSON, string for other formats)</li>
-                    <li><strong>params:</strong> URL parameters as an object</li>
-                    <li><strong>timeout:</strong> Request timeout in milliseconds</li>
-                    <li><strong>responseType:</strong> Expected response type (json, text, blob, etc.)</li>
+                    <li><strong>method:</strong> HTTP method (GET, POST, PUT, DELETE, PATCH, etc.)</li>
+                    <li><strong>url:</strong> The target URL for the request (required)</li>
+                    <li><strong>queryParams:</strong> Object containing URL query parameters</li>
+                    <li><strong>headers:</strong> Object containing custom request headers</li>
+                    <li><strong>body:</strong> Request body (string for JSON, object for form data)</li>
+                    <li><strong>contentType:</strong> Content-Type header (application/json, multipart/form-data, etc.)</li>
+                    <li><strong>timeout:</strong> Request timeout in milliseconds (default: 30000)</li>
+                    <li><strong>files:</strong> Object with folderPaths and filePaths arrays for file uploads</li>
+                </ul>
+                
+                <h4>Content Types & File Uploads</h4>
+                <ul>
+                    <li><strong>application/json:</strong> For sending JSON data with variables</li>
+                    <li><strong>multipart/form-data:</strong> For file uploads with metadata</li>
+                    <li><strong>application/x-www-form-urlencoded:</strong> For form submissions</li>
+                    <li><strong>text/plain:</strong> For raw text data</li>
+                </ul>
+                
+                <h4>Variable Interpolation</h4>
+                <ul>
+                    <li>Use <code>${variableName}</code> syntax in any string field</li>
+                    <li>Variables work in URLs, headers, body content, and query parameters</li>
+                    <li>Perfect for sending scraped data to external systems</li>
+                    <li>Supports complex nested objects and arrays</li>
+                </ul>
+                
+                <h4>Webhook Integration Best Practices</h4>
+                <ul>
+                    <li>Always include error handling and response validation</li>
+                    <li>Use appropriate timeouts for large file uploads</li>
+                    <li>Test webhook endpoints with tools like webhook.site first</li>
+                    <li>Include metadata like timestamps and source identifiers</li>
+                    <li>Consider rate limiting for batch operations</li>
                 </ul>
             </div>
         </div>
@@ -500,3 +608,308 @@
        
     </div>
 </div>
+
+<style>
+.screenshot-example {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 2px solid #0284c7;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.screenshot-example h4 {
+    color: #0c4a6e;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.screenshot-example h4::before {
+    content: "📸";
+    font-size: 1.2rem;
+}
+
+.screenshot-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.screenshot {
+    background: white;
+    border: 1px solid #e1e5e9;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.screenshot:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.screenshot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.2s ease;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.screenshot:hover img {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Image Modal Styles */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.image-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal-content {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    animation: zoomIn 0.3s ease;
+}
+
+.image-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    z-index: 10000;
+}
+
+.image-modal-close:hover {
+    color: #ccc;
+}
+
+.image-modal-caption {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 20px;
+    border-radius: 6px;
+    max-width: 80%;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.screenshot p {
+    padding: 1rem;
+    margin: 0;
+    font-size: 0.9rem;
+    color: #374151;
+    background: #f8f9fa;
+    line-height: 1.4;
+}
+
+.screenshot p strong {
+    color: #0c4a6e;
+    font-weight: 600;
+}
+
+.screenshot-placeholder {
+    padding: 2rem;
+    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 20%);
+    border: 2px dashed #f59e0b;
+    border-radius: 8px;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.screenshot-placeholder p {
+    margin: 0.5rem 0;
+    padding: 0;
+    background: transparent;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.screenshot-placeholder p:first-child {
+    font-weight: 600;
+    color: #92400e;
+    font-size: 1rem;
+}
+
+.setup-instructions {
+    background: #f0f9ff;
+    border: 1px solid #0284c7;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.setup-instructions h5 {
+    margin: 0 0 1rem 0;
+    color: #0c4a6e;
+    font-size: 1rem;
+}
+
+.setup-instructions ol {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.setup-instructions li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    color: #0c4a6e;
+}
+
+.setup-instructions code {
+    background: #e0f2fe;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .screenshot-gallery {
+        grid-template-columns: 1fr;
+    }
+    
+    .screenshot-example {
+        padding: 1rem;
+    }
+}
+</style>
+
+<script>
+// Image Modal Functionality
+(function() {
+    'use strict';
+    
+    // Create modal element
+    function createImageModal() {
+        const modal = document.createElement('div');
+        modal.className = 'image-modal';
+        modal.innerHTML = `
+            <span class="image-modal-close">&times;</span>
+            <img class="image-modal-content" alt="">
+            <div class="image-modal-caption"></div>
+        `;
+        document.body.appendChild(modal);
+        return modal;
+    }
+    
+    // Initialize modal when content loads
+    function initImageModal() {
+        let modal = document.querySelector('.image-modal');
+        if (!modal) {
+            modal = createImageModal();
+        }
+        
+        const modalImg = modal.querySelector('.image-modal-content');
+        const caption = modal.querySelector('.image-modal-caption');
+        const closeBtn = modal.querySelector('.image-modal-close');
+        
+        // Add click listeners to all screenshot images
+        const images = document.querySelectorAll('.screenshot img');
+        images.forEach(img => {
+            img.addEventListener('click', function() {
+                modal.classList.add('show');
+                modalImg.src = this.src;
+                modalImg.alt = this.alt;
+                caption.textContent = this.alt;
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // Close modal functionality
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        // Close on X button click
+        closeBtn.addEventListener('click', closeModal);
+        
+        // Close on background click
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
+        });
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initImageModal);
+    } else {
+        initImageModal();
+    }
+    
+    // Re-initialize when content changes (for dynamic loading)
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                // Check if screenshot images were added
+                const hasScreenshots = Array.from(mutation.addedNodes).some(node => 
+                    node.nodeType === 1 && node.querySelector && node.querySelector('.screenshot img')
+                );
+                if (hasScreenshots) {
+                    setTimeout(initImageModal, 100);
+                }
+            }
+        });
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    
+})();
+</script>

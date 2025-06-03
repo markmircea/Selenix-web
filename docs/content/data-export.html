@@ -35,11 +35,11 @@
         </div>
         
         <div class="export-format advanced">
-            <h4><i class="fa-solid fa-globe"></i> HTTP API Export</h4>
-            <p>Send scraped data directly to external APIs and webhooks</p>
+            <h4><i class="fa-solid fa-globe"></i> HTTP API & Webhook Export</h4>
+            <p>Send scraped data directly to external APIs, n8n workflows, and webhooks</p>
             <div class="format-example">
-                <code>httpRequest | {"method":"POST","url":"https://httpbin.org/post","queryParams":{},"headers":{},"body":"{ \"test\" : \"${scrapedData}\" }","contentType":"application/json","timeout":30000,"files":{"folderPaths":[],"filePaths":[]}} | apiResponse</code>
-                <span class="format-desc">Real-time integration with CRMs, databases, and business systems</span>
+                <code>httpRequest | {"method":"POST","url":"https://ccattest11.app.n8n.cloud/webhook-test/your-id","queryParams":{"params":"${param}"},"headers":{"header":"${variable}"},"body":"{"data":"${scrapedData}"}","contentType":"application/json","timeout":30000} | webhookResponse</code>
+                <span class="format-desc">Real-time integration with n8n, Zapier, CRMs, databases, and business systems</span>
             </div>
         </div>
         
@@ -73,9 +73,114 @@
 </div>
 
 <div class="docs-section">
-    <h2><i class="fa-solid fa-globe"></i> HTTP API Integration Examples</h2>
+    <h2><i class="fa-solid fa-globe"></i> n8n Webhook Integration Examples</h2>
     
-    <p>Send your scraped data directly to external systems using HTTP requests:</p>
+    <p>Selenix provides powerful integration with n8n workflows through HTTP webhooks. Send scraped data, upload files, and trigger automated workflows in real-time:</p>
+    
+    <div class="http-examples">
+        <div class="http-example">
+            <h4><i class="fa-solid fa-share-nodes"></i> n8n JSON Data Webhook</h4>
+            <div class="example-code">
+                <pre><code>// Scrape phone number from form input
+scrapeText | css=input[name="phone"] | phoneNumber
+
+// Store test parameters
+store | ptest | qtest
+
+// Send data to n8n webhook with variable interpolation
+httpRequest | {
+  "method": "POST",
+  "url": "https://ccattest11.app.n8n.cloud/webhook-test/4fb814b6-ca40-47e9-ae98-75345a719fe5",
+  "queryParams": {
+    "params": "ptest",
+    "query": "${qtest}"
+  },
+  "headers": {
+    "header": "${ptest}",
+    "test": "tevalue"
+  },
+  "body": "{\n  \"bodytest\": \"${phoneNumber}\"\n}",
+  "contentType": "application/json",
+  "timeout": 30000
+} | webhookResponse
+
+echo | n8n webhook received data: ${webhookResponse.status}</code></pre>
+            </div>
+            <p><strong>n8n receives:</strong> JSON payload with scraped phone number, query parameters, and custom headers. Perfect for triggering customer data processing workflows.</p>
+        </div>
+        
+        <div class="http-example">
+            <h4><i class="fa-solid fa-upload"></i> n8n File Upload with Metadata</h4>
+            <div class="example-code">
+                <pre><code>// Export scraped data to CSV first
+scrapeCollection | css=.product-item | products
+exportToCSV | products | C:\projects\OUTPUT.CSV
+
+// Upload file to n8n with multipart/form-data
+httpRequest | {
+  "method": "POST",
+  "url": "https://ccattest11.app.n8n.cloud/webhook-test/4fb814b6-ca40-47e9-ae98-75345a719fe5",
+  "queryParams": {"params": "ptest"},
+  "headers": {
+    "header": "${ptest}",
+    "test": "tevalue"
+  },
+  "body": "{\n  \"bodytest\": \"${phoneNumber}\"\n}",
+  "contentType": "multipart/form-data",
+  "timeout": 30000,
+  "files": {
+    "folderPaths": [],
+    "filePaths": ["C:\\projects\\OUTPUT.CSV"]
+  }
+} | uploadResponse
+
+echo | File uploaded to n8n: ${uploadResponse.status}</code></pre>
+            </div>
+            <p><strong>n8n receives:</strong> Binary file data (data0) and metadata (data1) as separate inputs. The CSV file becomes available for further processing in your n8n workflow.</p>
+        </div>
+        
+        <div class="http-example">
+            <h4><i class="fa-solid fa-robot"></i> Automated Workflow Triggering</h4>
+            <div class="example-code">
+                <pre><code>// Monitor competitor prices every hour
+open | https://competitor-site.com/products
+scrapeStructured | {
+  "_root": "css=.product-card",
+  "name": "css=.product-name",
+  "price": "css=.price",
+  "stock": "css=.stock-status"
+} | competitorData
+
+// Transform and enrich data
+transformVariable | competitorData | competitorData.map(item => ({
+  ...item,
+  timestamp: new Date().toISOString(),
+  source: "competitor-monitoring",
+  priceChange: item.price !== previousPrices[item.name]
+}))
+
+// Send to n8n for automated processing
+httpRequest | {
+  "method": "POST",
+  "url": "https://ccattest11.app.n8n.cloud/webhook-test/price-monitor",
+  "headers": {"Content-Type": "application/json"},
+  "body": {
+    "event": "price_update",
+    "products": ${competitorData},
+    "metadata": {
+      "scraped_at": new Date().toISOString(),
+      "product_count": ${competitorData.length}
+    }
+  },
+  "timeout": 60000
+} | n8nResponse
+
+echo | Triggered n8n workflow for ${competitorData.length} products</code></pre>
+            </div>
+            <p><strong>n8n workflow can:</strong> Compare prices with your database, send Slack alerts for significant changes, update pricing spreadsheets, or trigger email campaigns.</p>
+        </div>
+    </div>
+</div>
     
     <div class="http-examples">
         <div class="http-example">

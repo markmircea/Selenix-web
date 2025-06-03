@@ -42,16 +42,17 @@
             </div>
         </div>
         
-        <div class="integration-card">
+        <div class="integration-card featured">
             <div class="integration-icon">
                 <i class="fa-solid fa-code-branch"></i>
             </div>
             <h3>n8n</h3>
-            <p>Self-hosted automation with n8n. Send HTTP requests from Selenix to trigger open-source workflows and custom nodes.</p>
+            <p>Self-hosted automation with n8n. Send HTTP requests from Selenix to trigger open-source workflows. Supports JSON data and file uploads with multipart/form-data.</p>
             <div class="integration-features">
                 <span class="feature-tag">Self-hosted</span>
                 <span class="feature-tag">Open source</span>
-                <span class="feature-tag">Custom nodes</span>
+                <span class="feature-tag">File uploads</span>
+                <span class="feature-tag">JSON webhooks</span>
             </div>
         </div>
         
@@ -79,19 +80,47 @@
     <p>Send structured HTTP requests with full configuration options:</p>
     
     <div class="code-example">
-        <h4>Basic POST Request</h4>
-        <pre><code>httpRequest | {
-  "url": "https://hooks.zapier.com/hooks/catch/123456/abcdef/",
-  "method": "POST", 
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "body": {
-    "data": "${scrapedData}",
-    "timestamp": "${timestamp}",
-    "source": "Selenix Automation"
+        <h4>n8n Webhook - JSON Data with Variables</h4>
+        <pre><code>// Scrape data with variables
+scrapeText | css=input[name="phone"] | phoneNumber
+store | ptest | qtest
+
+// Send to n8n webhook with variable interpolation
+httpRequest | {
+  "method": "POST",
+  "url": "https://ccattest11.app.n8n.cloud/webhook-test/4fb814b6-ca40-47e9-ae98-75345a719fe5",
+  "queryParams": {"params": "ptest", "query": "${qtest}"},
+  "headers": {"header": "${ptest}", "test": "tevalue"},
+  "body": "{\n  \"bodytest\": \"${phoneNumber}\"\n}",
+  "contentType": "application/json",
+  "timeout": 30000
+} | n8nResponse
+
+echo | n8n received data: ${n8nResponse.status}</code></pre>
+    </div>
+    
+    <div class="code-example">
+        <h4>n8n File Upload with Multipart Form Data</h4>
+        <pre><code>// Export scraped data to file
+scrapeCollection | css=.product-item | products
+exportToCSV | products | C:\\projects\\OUTPUT.CSV
+
+// Upload file to n8n with metadata
+httpRequest | {
+  "method": "POST",
+  "url": "https://ccattest11.app.n8n.cloud/webhook-test/4fb814b6-ca40-47e9-ae98-75345a719fe5",
+  "queryParams": {"params": "ptest"},
+  "headers": {"header": "${ptest}", "test": "tevalue"},
+  "body": "{\n  \"metadata\": \"File upload from Selenix\"\n}",
+  "contentType": "multipart/form-data",
+  "timeout": 30000,
+  "files": {
+    "folderPaths": [],
+    "filePaths": ["C:\\projects\\OUTPUT.CSV"]
   }
-} | responseData</code></pre>
+} | uploadResponse
+
+echo | File uploaded to n8n: ${uploadResponse.status}</code></pre>
     </div>
     
     <div class="code-example">
@@ -427,6 +456,25 @@ exportToCSV | allMarketData | ./reports/market_${timestamp}.csv</code></pre>
 </div>
 
 <style>
+.integration-card.featured {
+    border: 2px solid #4f46e5;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    position: relative;
+}
+
+.integration-card.featured::before {
+    content: "⭐ Featured";
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #4f46e5;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
 .integration-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
