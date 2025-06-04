@@ -30,7 +30,7 @@ class BlogModel {
         $sql = "
             SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, p.author_name, 
                    p.author_title, p.author_avatar, p.read_time, p.published_at,
-                   COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) as published_timestamp,
+                   CAST(COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) AS INTEGER) as published_timestamp,
                    COUNT(c.id) as comment_count
             FROM posts p
             LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
@@ -84,7 +84,7 @@ class BlogModel {
             SELECT id, title, slug, content, excerpt, category, featured_image, 
                    author_name, author_title, author_avatar, read_time, 
                    meta_title, meta_description, published_at, created_at,
-                   COALESCE(DATE_PART('epoch', published_at), DATE_PART('epoch', created_at)) as published_timestamp
+                   CAST(COALESCE(DATE_PART('epoch', published_at), DATE_PART('epoch', created_at)) AS INTEGER) as published_timestamp
             FROM posts 
             WHERE slug = :slug AND is_published = true
         ";
@@ -101,7 +101,7 @@ class BlogModel {
         $sql = "
             SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
                    p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at,
-                   COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) as published_timestamp,
+                   CAST(COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) AS INTEGER) as published_timestamp,
                    COUNT(c.id) as comment_count
             FROM posts p
             LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
@@ -131,7 +131,7 @@ class BlogModel {
         $sql = "
             SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
                    p.author_name, p.read_time, p.published_at,
-                   COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) as published_timestamp,
+                   CAST(COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) AS INTEGER) as published_timestamp,
                    COUNT(c.id) as comment_count
             FROM posts p
             LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
@@ -162,11 +162,11 @@ class BlogModel {
         $sql = "
             SELECT id, title, slug, excerpt, category, featured_image, 
                    author_name, author_title, author_avatar, read_time, published_at,
-                   DATE_PART('epoch', published_at) as published_timestamp
+                   CAST(COALESCE(DATE_PART('epoch', published_at), DATE_PART('epoch', created_at)) AS INTEGER) as published_timestamp
             FROM posts 
             WHERE is_published = true 
             AND (title ILIKE :query OR content ILIKE :query OR excerpt ILIKE :query)
-            ORDER BY published_at DESC 
+            ORDER BY COALESCE(published_at, created_at) DESC 
             LIMIT :limit OFFSET :offset
         ";
         

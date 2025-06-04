@@ -27,6 +27,8 @@ function formatDate($timestamp, $format = 'F j, Y') {
     }
     
     if (is_numeric($timestamp)) {
+        // Convert to integer to avoid float-string to int conversion warnings
+        $timestamp = (int)$timestamp;
         return date($format, $timestamp);
     }
     
@@ -46,7 +48,7 @@ function timeAgo($timestamp) {
         return 'Unknown time';
     }
     
-    $time = is_numeric($timestamp) ? $timestamp : strtotime($timestamp);
+    $time = is_numeric($timestamp) ? (int)$timestamp : strtotime($timestamp);
     
     if ($time === false || $time === null) {
         return 'Invalid time';
