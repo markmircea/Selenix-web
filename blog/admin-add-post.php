@@ -9,6 +9,26 @@ $blogModel = new BlogModel();
 $isEdit = isset($_GET['id']);
 $postId = $isEdit ? intval($_GET['id']) : null;
 $post = null;
+$message = '';
+$messageType = '';
+
+// Check for messages
+if (isset($_GET['message'])) {
+    switch ($_GET['message']) {
+        case 'ai_generated':
+            $message = 'AI-generated article saved successfully! You can now edit and publish it.';
+            $messageType = 'success';
+            break;
+        case 'updated':
+            $message = 'Post updated successfully!';
+            $messageType = 'success';
+            break;
+        case 'created':
+            $message = 'Post created successfully!';
+            $messageType = 'success';
+            break;
+    }
+}
 
 if ($isEdit) {
     $post = $blogModel->getPostForEdit($postId);
@@ -217,6 +237,13 @@ global $BLOG_CATEGORIES;
                     </a>
                 </div>
             </div>
+            
+            <?php if ($message): ?>
+                <div class="admin-message <?php echo $messageType; ?>">
+                    <i class="fa-solid fa-<?php echo $messageType === 'success' ? 'check-circle' : 'exclamation-circle'; ?>"></i>
+                    <?php echo htmlspecialchars($message); ?>
+                </div>
+            <?php endif; ?>
             
             <?php if (!empty($errors)): ?>
                 <div class="admin-message error">

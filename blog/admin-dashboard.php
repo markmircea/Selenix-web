@@ -80,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <li><a href="admin-dashboard.php" class="active"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
                     <li><a href="admin-posts.php"><i class="fa-solid fa-newspaper"></i> Posts</a></li>
                     <li><a href="admin-add-post.php"><i class="fa-solid fa-plus"></i> Add New Post</a></li>
+                    <li><a href="admin-ai-generate.php"><i class="fa-solid fa-brain"></i> AI Generator</a></li>
                     <li><a href="admin-comments.php"><i class="fa-solid fa-comments"></i> Comments</a></li>
                     <li><a href="admin-subscribers.php"><i class="fa-solid fa-users"></i> Subscribers</a></li>
                     <li class="nav-divider"></li>
@@ -94,6 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="admin-header">
                 <h1>Dashboard</h1>
                 <div class="admin-actions">
+                    <a href="admin-ai-generate.php" class="btn btn-success">
+                        <i class="fa-solid fa-brain"></i>
+                        AI Generator
+                    </a>
                     <a href="admin-add-post.php" class="btn btn-primary">
                         <i class="fa-solid fa-plus"></i>
                         New Post
