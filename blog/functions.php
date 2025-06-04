@@ -22,17 +22,36 @@ function isValidEmail($email) {
  * Format date for display
  */
 function formatDate($timestamp, $format = 'F j, Y') {
+    if (empty($timestamp)) {
+        return 'Unknown date';
+    }
+    
     if (is_numeric($timestamp)) {
         return date($format, $timestamp);
     }
-    return date($format, strtotime($timestamp));
+    
+    $converted = strtotime($timestamp);
+    if ($converted === false) {
+        return 'Invalid date';
+    }
+    
+    return date($format, $converted);
 }
 
 /**
  * Format date as relative time (e.g., "2 days ago")
  */
 function timeAgo($timestamp) {
+    if (empty($timestamp)) {
+        return 'Unknown time';
+    }
+    
     $time = is_numeric($timestamp) ? $timestamp : strtotime($timestamp);
+    
+    if ($time === false || $time === null) {
+        return 'Invalid time';
+    }
+    
     $diff = time() - $time;
     
     if ($diff < 60) {

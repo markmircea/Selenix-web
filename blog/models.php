@@ -30,14 +30,14 @@ class BlogModel {
         $sql = "
             SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, p.author_name, 
                    p.author_title, p.author_avatar, p.read_time, p.published_at,
-                   DATE_PART('epoch', p.published_at) as published_timestamp,
+                   COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) as published_timestamp,
                    COUNT(c.id) as comment_count
             FROM posts p
             LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
             $where 
             GROUP BY p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
-                     p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at
-            ORDER BY p.published_at DESC 
+                     p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at, p.created_at
+            ORDER BY COALESCE(p.published_at, p.created_at) DESC 
             LIMIT :limit OFFSET :offset
         ";
         
@@ -84,7 +84,7 @@ class BlogModel {
             SELECT id, title, slug, content, excerpt, category, featured_image, 
                    author_name, author_title, author_avatar, read_time, 
                    meta_title, meta_description, published_at, created_at,
-                   DATE_PART('epoch', published_at) as published_timestamp
+                   COALESCE(DATE_PART('epoch', published_at), DATE_PART('epoch', created_at)) as published_timestamp
             FROM posts 
             WHERE slug = :slug AND is_published = true
         ";
@@ -101,14 +101,14 @@ class BlogModel {
         $sql = "
             SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
                    p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at,
-                   DATE_PART('epoch', p.published_at) as published_timestamp,
+                   COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) as published_timestamp,
                    COUNT(c.id) as comment_count
             FROM posts p
             LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
             WHERE p.is_featured = true AND p.is_published = true 
             GROUP BY p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
-                     p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at
-            ORDER BY p.published_at DESC 
+                     p.author_name, p.author_title, p.author_avatar, p.read_time, p.published_at, p.created_at
+            ORDER BY COALESCE(p.published_at, p.created_at) DESC 
             LIMIT 1
         ";
         
@@ -131,14 +131,14 @@ class BlogModel {
         $sql = "
             SELECT p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
                    p.author_name, p.read_time, p.published_at,
-                   DATE_PART('epoch', p.published_at) as published_timestamp,
+                   COALESCE(DATE_PART('epoch', p.published_at), DATE_PART('epoch', p.created_at)) as published_timestamp,
                    COUNT(c.id) as comment_count
             FROM posts p
             LEFT JOIN comments c ON p.id = c.post_id AND c.is_approved = true
             $where 
             GROUP BY p.id, p.title, p.slug, p.excerpt, p.category, p.featured_image, 
-                     p.author_name, p.read_time, p.published_at
-            ORDER BY p.published_at DESC 
+                     p.author_name, p.read_time, p.published_at, p.created_at
+            ORDER BY COALESCE(p.published_at, p.created_at) DESC 
             LIMIT :limit
         ";
         
