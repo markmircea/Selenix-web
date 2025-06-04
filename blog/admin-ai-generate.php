@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $category = sanitizeInput($_POST['category']);
             $targetWords = intval($_POST['target_words']);
             // Use hardcoded API key
-            $apiKey = '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';
+            $apiKey = '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';
             
             if (empty($topic)) {
                 $error = 'Please enter a topic for the article';
