@@ -18,12 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $topic = sanitizeInput($_POST['topic']);
             $category = sanitizeInput($_POST['category']);
             $targetWords = intval($_POST['target_words']);
-            $apiKey = sanitizeInput($_POST['api_key']);
+            // Use hardcoded API key
+            $apiKey = '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';
             
             if (empty($topic)) {
                 $error = 'Please enter a topic for the article';
-            } elseif (empty($apiKey)) {
-                $error = 'Please enter your OpenRouter API key';
             } else {
                 try {
                     $aiService = new AIService($apiKey);
@@ -160,7 +159,7 @@ global $BLOG_CATEGORIES;
             <div class="ai-generator-section">
                 <div class="ai-info-card">
                     <h3><i class="fa-solid fa-robot"></i> AI-Powered Content Creation</h3>
-                    <p>Generate engaging blog articles that resonate with your audience. Our AI creates practical, actionable content focused on real-world automation insights and business value.</p>
+                    <p>Generate engaging blog articles instantly with our integrated AI system. Create practical, actionable content focused on real-world automation insights and business value with just a topic description.</p>
                     
                     <div class="ai-features">
                         <div class="ai-feature">
@@ -184,19 +183,6 @@ global $BLOG_CATEGORIES;
                 
                 <form method="POST" class="ai-form">
                     <input type="hidden" name="action" value="generate">
-                    
-                    <div class="form-group">
-                        <label for="api_key">
-                            <i class="fa-solid fa-key"></i>
-                            OpenRouter API Key *
-                        </label>
-                        <input type="password" id="api_key" name="api_key" required 
-                               placeholder="sk-or-v1-...">
-                        <div class="form-help">
-                            Get your API key from <a href="https://openrouter.ai/keys" target="_blank">OpenRouter.ai</a>. 
-                            Your key is not stored and only used for this generation.
-                        </div>
-                    </div>
                     
                     <div class="form-group">
                         <label for="topic">

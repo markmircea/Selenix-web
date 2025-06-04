@@ -27,53 +27,139 @@ class AIService {
     }
     
     private function buildPrompt($topic, $category, $targetWords) {
-        global $AI_PROMPTS;
+        global $AI_PROMPTS, $SELENIX_KNOWLEDGE, $ARTICLE_STRUCTURE, $CONTENT_GUIDELINES;
         
         $categoryPrompt = isset($AI_PROMPTS['categories'][$category]) 
             ? $AI_PROMPTS['categories'][$category] 
             : $AI_PROMPTS['categories']['tutorials'];
         
+        // Build enhanced prompt with Selenix knowledge
+        $selenixContext = $this->buildSelenixContext();
+        $seoKeywords = $this->generateSeoKeywords($topic, $category);
+        
         return [
             [
                 'role' => 'system',
-                'content' => $AI_PROMPTS['system']
+                'content' => $AI_PROMPTS['system'] . "\n\n" . $selenixContext
             ],
             [
                 'role' => 'user',
-                'content' => "Write a {$targetWords}-word blog article about: {$topic}
+                'content' => "Write a {$targetWords}-word SEO-optimized blog article about: {$topic}
 
 Category: {$category}
-Guidelines: {$categoryPrompt}
+Content Focus: {$categoryPrompt}
 
-Requirements:
-- Create an engaging, SEO-friendly title
-- Write a compelling excerpt (150-160 characters) that makes readers want to click
-- Include practical, real-world examples that Selenix.io users can relate to
-- Provide actionable tips and best practices readers can implement immediately
-- Use proper HTML formatting with headings (h2, h3), paragraphs, and lists
-- Write in a conversational but professional tone
-- Focus on benefits, outcomes, and practical value
-- Include specific use cases for different industries (e-commerce, research, marketing, etc.)
-- End with clear next steps or call-to-action
+SEO OPTIMIZATION:
+Target Keywords: {$seoKeywords}
+Content Goals: Drive organic traffic, generate leads, showcase Selenix capabilities
+User Intent: Help users understand how Selenix solves their automation challenges
 
-Structure should include:
-1. Engaging introduction that hooks the reader
-2. 4-6 main sections with descriptive subheadings
-3. Practical examples and use cases throughout
-4. Actionable tips and best practices
-5. Conclusion with next steps
+CONTENT REQUIREMENTS:
+- Create an engaging, SEO-friendly title that includes primary keywords
+- Write a compelling meta description (150-160 characters) that drives clicks
+- Include specific Selenix commands, features, and capabilities throughout
+- Provide real-world business examples and use cases
+- Show clear ROI and efficiency benefits with specific metrics when possible
+- Include step-by-step implementation guidance
+- Add practical tips users can implement immediately
+- Demonstrate AI-powered automation advantages
+- Include integration examples (n8n, Zapier, APIs, CRMs)
+- Use proper HTML formatting with descriptive headings (h2, h3)
+- Write in a professional but accessible tone
+- Focus on business value and practical outcomes
 
-IMPORTANT: Return ONLY valid JSON with NO additional text before or after. Format your response as clean JSON:
+STRUCTURE REQUIREMENTS:
+1. Hook introduction that identifies a common business problem
+2. 5-7 main sections with SEO-optimized subheadings
+3. Specific Selenix examples and command demonstrations
+4. Real-world implementation scenarios
+5. Integration and workflow examples
+6. ROI and efficiency benefits
+7. Actionable next steps and clear call-to-action
+
+IMPORTANT: Return ONLY valid JSON with NO additional text. Format:
 {
-  \"title\": \"Engaging article title\",
-  \"excerpt\": \"Compelling description that drives clicks\",
-  \"content\": \"Full HTML content with proper formatting\",
-  \"suggestedTags\": [\"tag1\", \"tag2\", \"tag3\"],
+  \"title\": \"SEO-optimized article title with keywords\",
+  \"excerpt\": \"Compelling meta description that drives clicks (150-160 chars)\",
+  \"content\": \"Full HTML content with proper formatting and Selenix examples\",
+  \"suggestedTags\": [\"selenix\", \"automation\", \"web-scraping\", \"ai\", \"workflow\"],
   \"readTime\": estimated_minutes,
   \"keyTakeaways\": [\"takeaway1\", \"takeaway2\", \"takeaway3\"]
 }"
             ]
         ];
+    }
+    
+    private function buildSelenixContext() {
+        global $SELENIX_KNOWLEDGE;
+        
+        $context = "DETAILED SELENIX CAPABILITIES:\n\n";
+        
+        $context .= "CORE FEATURES:\n";
+        foreach ($SELENIX_KNOWLEDGE['core_features'] as $feature => $description) {
+            $context .= "- {$feature}: {$description}\n";
+        }
+        
+        $context .= "\nAI-POWERED CAPABILITIES:\n";
+        foreach ($SELENIX_KNOWLEDGE['ai_capabilities'] as $capability => $description) {
+            $context .= "- {$capability}: {$description}\n";
+        }
+        
+        $context .= "\nKEY COMMANDS & EXAMPLES:\n";
+        foreach ($SELENIX_KNOWLEDGE['scraping_commands'] as $command => $description) {
+            $context .= "- {$command}: {$description}\n";
+        }
+        
+        $context .= "\nINTEGRATION CAPABILITIES:\n";
+        foreach ($SELENIX_KNOWLEDGE['integrations'] as $integration => $description) {
+            $context .= "- {$integration}: {$description}\n";
+        }
+        
+        $context .= "\nTARGET USERS & USE CASES:\n";
+        foreach ($SELENIX_KNOWLEDGE['target_users'] as $user => $description) {
+            $context .= "- {$user}: {$description}\n";
+        }
+        
+        return $context;
+    }
+    
+    private function generateSeoKeywords($topic, $category) {
+        $baseKeywords = [
+            'browser automation',
+            'web scraping',
+            'AI automation',
+            'selenix',
+            'workflow automation',
+            'data extraction',
+            'automated data collection'
+        ];
+        
+        $categoryKeywords = [
+            'tutorials' => ['how to automate', 'step by step guide', 'automation tutorial', 'web scraping guide'],
+            'features' => ['automation features', 'scraping capabilities', 'AI assistant', 'smart automation'],
+            'case-studies' => ['automation success', 'business case study', 'ROI automation', 'efficiency gains'],
+            'automation' => ['best practices', 'automation strategy', 'workflow optimization', 'process automation'],
+            'news' => ['automation trends', 'industry news', 'AI developments', 'technology updates'],
+            'guides' => ['comprehensive guide', 'complete workflow', 'enterprise automation', 'advanced techniques']
+        ];
+        
+        $keywords = array_merge($baseKeywords, $categoryKeywords[$category] ?? []);
+        
+        // Add topic-specific keywords based on content
+        if (stripos($topic, 'e-commerce') !== false || stripos($topic, 'product') !== false) {
+            $keywords = array_merge($keywords, ['e-commerce automation', 'product data scraping', 'price monitoring']);
+        }
+        if (stripos($topic, 'lead') !== false || stripos($topic, 'crm') !== false) {
+            $keywords = array_merge($keywords, ['lead generation', 'CRM automation', 'contact extraction']);
+        }
+        if (stripos($topic, 'social') !== false || stripos($topic, 'media') !== false) {
+            $keywords = array_merge($keywords, ['social media automation', 'content monitoring', 'engagement tracking']);
+        }
+        if (stripos($topic, 'market') !== false || stripos($topic, 'research') !== false) {
+            $keywords = array_merge($keywords, ['market research automation', 'competitor analysis', 'data intelligence']);
+        }
+        
+        return implode(', ', array_unique($keywords));
     }
     
     private function callOpenRouter($messages) {
@@ -186,7 +272,7 @@ IMPORTANT: Return ONLY valid JSON with NO additional text before or after. Forma
             'title' => $article['title'] ?? 'AI Generated Article',
             'excerpt' => $article['excerpt'] ?? '',
             'content' => $article['content'] ?? '',
-            'suggestedTags' => $article['suggestedTags'] ?? ['automation', 'ai-generated'],
+            'suggestedTags' => $article['suggestedTags'] ?? ['selenix', 'automation', 'ai-powered'],
             'readTime' => $article['readTime'] ?? $this->calculateReadTime($article['content'] ?? ''),
             'keyTakeaways' => $article['keyTakeaways'] ?? []
         ];
@@ -265,7 +351,7 @@ IMPORTANT: Return ONLY valid JSON with NO additional text before or after. Forma
         }
         
         if (!$title) {
-            $title = 'AI Generated Article';
+            $title = 'AI Generated Selenix Article';
         }
         
         // Clean up the content
@@ -286,7 +372,7 @@ IMPORTANT: Return ONLY valid JSON with NO additional text before or after. Forma
             'title' => $title,
             'excerpt' => $this->generateExcerpt($content),
             'content' => $content,
-            'suggestedTags' => ['automation', 'ai-generated'],
+            'suggestedTags' => ['selenix', 'automation', 'ai-powered', 'web-scraping'],
             'readTime' => $this->calculateReadTime($content),
             'keyTakeaways' => []
         ];
