@@ -117,7 +117,7 @@ if (isset($_GET['ajax'])) {
                         <span class="read-time"><?php echo $featuredPost['read_time']; ?> min read</span>
                     </div>
                     <h2><?php echo htmlspecialchars($featuredPost['title']); ?></h2>
-                    <p><?php echo htmlspecialchars($featuredPost['excerpt']); ?></p>
+                    <p><?php echo htmlspecialchars(cleanAIContent($featuredPost['excerpt'])); ?></p>
                     <div class="post-author">
                         <?php if ($featuredPost['author_avatar']): ?>
                             <img src="<?php echo UPLOAD_URL . $featuredPost['author_avatar']; ?>" alt="<?php echo htmlspecialchars($featuredPost['author_name']); ?>" class="author-avatar">
@@ -174,7 +174,7 @@ if (isset($_GET['ajax'])) {
                                     <span class="date"><?php echo formatDate($post['published_timestamp']); ?></span>
                                 </div>
                                 <h3><a href="post.php?slug=<?php echo $post['slug']; ?>"><?php echo htmlspecialchars($post['title']); ?></a></h3>
-                                <p><?php echo htmlspecialchars($post['excerpt']); ?></p>
+                                <p><?php echo htmlspecialchars(cleanAIContent($post['excerpt'])); ?></p>
                                 <div class="post-footer">
                                     <div class="author-mini">
                                         <?php if ($post['author_avatar']): ?>

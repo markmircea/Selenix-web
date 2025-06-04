@@ -243,7 +243,7 @@ $breadcrumbs = [
             
             <!-- Post Content -->
             <div class="post-content">
-                <?php echo $post['content']; ?>
+                <?php echo cleanAIContent($post['content']); ?>
             </div>
             
             <!-- Post Footer -->

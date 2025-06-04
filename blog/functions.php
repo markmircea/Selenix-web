@@ -447,6 +447,149 @@ function logError($message, $context = []) {
 }
 
 /**
+ * Enhanced sanitizeInput function for AI-generated content
+ * This function handles different types of content appropriately
+ */
+function sanitizeInputEnhanced($data, $preserveHtml = false) {
+    if ($preserveHtml) {
+        // For HTML content, only trim and remove dangerous scripts
+        $data = trim($data);
+        
+        // Remove potentially dangerous elements but preserve formatting
+        $data = preg_replace('/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/i', '', $data);
+        $data = preg_replace('/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/i', '', $data);
+        $data = preg_replace('/on\w+="[^"]*"/i', '', $data); // Remove event handlers
+        
+        return $data;
+    } else {
+        // For regular input, use the existing method
+        return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
+    }
+}
+
+/**
+ * Clean AI-generated content for display
+ */
+function cleanAIContent($content) {
+    // First, decode any HTML entities that might have been double-encoded
+    $content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    
+    // Remove any JSON-like artifacts that might be left over
+    $content = preg_replace('/\{[^}]*"title"[^}]*\}/i', '', $content);
+    $content = preg_replace('/\{[^}]*"content"[^}]*\}/i', '', $content);
+    $content = preg_replace('/\{[^}]*"excerpt"[^}]*\}/i', '', $content);
+    
+    // Clean up any escaped quotes
+    $content = str_replace('\\"', '"', $content);
+    $content = str_replace('\\\\', '\\', $content);
+    
+    // Remove any leftover HTML entities that look malformed
+    $content = preg_replace('/&amp;&amp;&quot;/', '"', $content);
+    $content = preg_replace('/&quot;/', '"', $content);
+    $content = preg_replace('/&amp;/', '&', $content);
+    
+    // Ensure proper paragraph structure
+    if (!preg_match('/<p[^>]*>/', $content)) {
+        $content = wpautop($content);
+    }
+    
+    return $content;
+}
+
+/**
+ * WordPress-style autop function for converting line breaks to paragraphs
+ */
+function wpautop($pee, $br = true) {
+    $pre_tags = array();
+    
+    if (trim($pee) === '') {
+        return '';
+    }
+    
+    $pee = $pee . "\n";
+    
+    if (strpos($pee, '<pre') !== false) {
+        $pee_parts = explode('</pre>', $pee);
+        $last_pee = array_pop($pee_parts);
+        $pee = '';
+        $i = 0;
+        
+        foreach ($pee_parts as $pee_part) {
+            $start = strpos($pee_part, '<pre');
+            
+            if ($start === false) {
+                $pee .= $pee_part;
+                continue;
+            }
+            
+            $name = "<pre wp-pre-tag-$i></pre>";
+            $pre_tags[$name] = substr($pee_part, $start) . '</pre>';
+            
+            $pee .= substr($pee_part, 0, $start) . $name;
+            $i++;
+        }
+        
+        $pee .= $last_pee;
+    }
+    
+    $pee = preg_replace('|<br\s*/?\>\s*<br\s*/?>|', "\n\n", $pee);
+    
+    $allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|form|map|area|blockquote|address|math|style|p|h[1-6]|hr|fieldset|legend|section|article|aside|hgroup|header|footer|nav|figure|figcaption|details|menu|summary)';
+    
+    $pee = preg_replace('!(<' . $allblocks . '[^>]*>)!', "\n\n$1", $pee);
+    $pee = preg_replace('!(</' . $allblocks . '>)!', "$1\n\n", $pee);
+    $pee = str_replace(array("\r\n", "\r"), "\n", $pee);
+    
+    if (strpos($pee, '<object') !== false) {
+        $pee = preg_replace('|\s*<param([^>]*)>\s*|', "<param$1>", $pee);
+        $pee = preg_replace('|\s*</embed>\s*|', '</embed>', $pee);
+    }
+    
+    $pee = preg_replace("/\n\n+/", "\n\n", $pee);
+    $pees = preg_split('/\n\s*\n/', $pee, -1, PREG_SPLIT_NO_EMPTY);
+    $pee = '';
+    
+    foreach ($pees as $tinkle) {
+        $pee .= '<p>' . trim($tinkle, "\n") . "</p>\n";
+    }
+    
+    $pee = preg_replace('|<p>\s*</p>|', '', $pee);
+    $pee = preg_replace('!<p>([^<]+)</(div|address|form)>!', "<p>$1</p></$2>", $pee);
+    $pee = preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)\s*</p>!', "$1", $pee);
+    $pee = preg_replace("!<p>(<li.+?)</p>!", "$1", $pee);
+    $pee = preg_replace('!<p><blockquote([^>]*)>!i', "<blockquote$1><p>", $pee);
+    $pee = str_replace('</blockquote></p>', '</p></blockquote>', $pee);
+    $pee = preg_replace('!<p>\s*(</?' . $allblocks . '[^>]*>)!', "$1", $pee);
+    $pee = preg_replace('!(</?' . $allblocks . '[^>]*>)\s*</p>!', "$1", $pee);
+    
+    if ($br) {
+        $pee = preg_replace_callback('/<(script|style).*?<\/\\1>/s', function($matches) {
+            return str_replace("\n", "<WPPreserveNewline />", $matches[0]);
+        }, $pee);
+        $pee = preg_replace('|(?<!<br />)\s*\n|', "<br />\n", $pee);
+        $pee = str_replace('<WPPreserveNewline />', "\n", $pee);
+    }
+    
+    $pee = preg_replace('!(</?' . $allblocks . '[^>]*>)\s*<br />!', "$1", $pee);
+    $pee = preg_replace('!<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)!', '$1', $pee);
+    $pee = preg_replace("|\n</p>$|", '</p>', $pee);
+    
+    if (!empty($pre_tags)) {
+        $pee = str_replace(array_keys($pre_tags), array_values($pre_tags), $pee);
+    }
+    
+    return $pee;
+}
+
+/**
+ * Debug function to log AI content processing
+ */
+function debugAIContent($content, $stage = 'unknown') {
+    error_log("AI Content Debug [$stage]: " . substr($content, 0, 200) . '...');
+    error_log("AI Content Length [$stage]: " . strlen($content));
+}
+
+/**
  * Create logs directory if it doesn't exist
  */
 if (!file_exists(__DIR__ . '/logs')) {

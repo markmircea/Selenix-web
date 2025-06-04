@@ -31,11 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $success = 'Article generated successfully! Review and edit before saving.';
                 } catch (Exception $e) {
                     $error = 'Error generating article: ' . $e->getMessage();
+                    error_log('AI Generation Error: ' . $e->getMessage());
                 }
             }
         } elseif ($_POST['action'] === 'save') {
             // Save generated article as post
-            $title = sanitizeInput($_POST['title']);
+            $title = trim($_POST['title']);
+            // DO NOT sanitize HTML content - we want to preserve HTML formatting
             $content = $_POST['content'];
             $excerpt = sanitizeInput($_POST['excerpt']);
             $category = sanitizeInput($_POST['category']);
@@ -55,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $postData = [
                     'title' => $title,
                     'slug' => $slug,
-                    'content' => $content,
+                    'content' => $content, // Store content as-is with HTML
                     'excerpt' => $excerpt,
                     'category' => $category,
                     'featured_image' => '',
@@ -277,7 +279,8 @@ global $BLOG_CATEGORIES;
                     
                     <form method="POST">
                         <input type="hidden" name="action" value="save">
-                        <input type="hidden" name="content" value="<?php echo htmlspecialchars($generatedArticle['content']); ?>">
+                        <!-- Store the raw HTML content without escaping -->
+                        <textarea name="content" style="display: none;"><?php echo htmlspecialchars($generatedArticle['content']); ?></textarea>
                         <input type="hidden" name="read_time" value="<?php echo $generatedArticle['readTime'] ?? 5; ?>">
                         
                         <div class="form-group">
