@@ -1,0 +1,688 @@
+<?php
+// templates-admin.php
+// Admin panel for managing templates
+
+// Basic password protection (change this!)
+$ADMIN_PASSWORD = 'selenix2024';
+
+session_start();
+
+// Check authentication
+if (!isset($_SESSION['templates_admin_logged_in'])) {
+    if (($_POST['password'] ?? '') === $ADMIN_PASSWORD) {
+        $_SESSION['templates_admin_logged_in'] = true;
+    } else {
+        showLoginForm();
+        exit;
+    }
+}
+
+// Logout
+if (($_GET['action'] ?? '') === 'logout') {
+    session_destroy();
+    header('Location: templates-admin.php');
+    exit;
+}
+
+// Database connection
+$host = 'localhost';
+$username = 'aibrainl_selenix';
+$password = 'She-wolf11';
+$database = 'aibrainl_selenix';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Database connection failed: ' . $e->getMessage());
+}
+
+// Handle form submissions
+$message = '';
+$messageType = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action'])) {
+        switch ($_POST['action']) {
+            case 'add_template':
+                $title = trim($_POST['title']);
+                $description = trim($_POST['description']);
+                $category = $_POST['category'];
+                $icon = trim($_POST['icon']);
+                $featured = isset($_POST['featured']) ? 1 : 0;
+                $premium = isset($_POST['premium']) ? 1 : 0;
+                $badge = trim($_POST['badge']) ?: null;
+                $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
+                $file_path = trim($_POST['file_path']) ?: null;
+                $preview_url = trim($_POST['preview_url']) ?: null;
+                $status = $_POST['status'];
+                
+                $stmt = $pdo->prepare("
+                    INSERT INTO templates (title, description, category, icon, featured, premium, badge, tags, file_path, preview_url, status) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ");
+                
+                if ($stmt->execute([$title, $description, $category, $icon, $featured, $premium, $badge, $tags, $file_path, $preview_url, $status])) {
+                    $message = 'Template added successfully!';
+                    $messageType = 'success';
+                } else {
+                    $message = 'Error adding template.';
+                    $messageType = 'error';
+                }
+                break;
+                
+            case 'edit_template':
+                $id = (int)$_POST['template_id'];
+                $title = trim($_POST['title']);
+                $description = trim($_POST['description']);
+                $category = $_POST['category'];
+                $icon = trim($_POST['icon']);
+                $featured = isset($_POST['featured']) ? 1 : 0;
+                $premium = isset($_POST['premium']) ? 1 : 0;
+                $badge = trim($_POST['badge']) ?: null;
+                $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
+                $file_path = trim($_POST['file_path']) ?: null;
+                $preview_url = trim($_POST['preview_url']) ?: null;
+                $status = $_POST['status'];
+                
+                $stmt = $pdo->prepare("
+                    UPDATE templates 
+                    SET title=?, description=?, category=?, icon=?, featured=?, premium=?, badge=?, tags=?, file_path=?, preview_url=?, status=?, updated_at=NOW()
+                    WHERE id=?
+                ");
+                
+                if ($stmt->execute([$title, $description, $category, $icon, $featured, $premium, $badge, $tags, $file_path, $preview_url, $status, $id])) {
+                    $message = 'Template updated successfully!';
+                    $messageType = 'success';
+                } else {
+                    $message = 'Error updating template.';
+                    $messageType = 'error';
+                }
+                break;
+                
+            case 'delete_template':
+                $id = (int)$_POST['template_id'];
+                $stmt = $pdo->prepare("DELETE FROM templates WHERE id = ?");
+                if ($stmt->execute([$id])) {
+                    $message = 'Template deleted successfully!';
+                    $messageType = 'success';
+                } else {
+                    $message = 'Error deleting template.';
+                    $messageType = 'error';
+                }
+                break;
+                
+            case 'increment_downloads':
+                $id = (int)$_POST['template_id'];
+                $stmt = $pdo->prepare("UPDATE templates SET downloads = downloads + 1 WHERE id = ?");
+                if ($stmt->execute([$id])) {
+                    $message = 'Download count incremented!';
+                    $messageType = 'success';
+                } else {
+                    $message = 'Error incrementing downloads.';
+                    $messageType = 'error';
+                }
+                break;
+        }
+    }
+}
+
+// Handle file uploads
+if (isset($_FILES['template_file']) && $_FILES['template_file']['error'] === UPLOAD_ERR_OK) {
+    $uploadDir = 'uploads/templates/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    
+    $fileName = uniqid() . '_' . basename($_FILES['template_file']['name']);
+    $uploadPath = $uploadDir . $fileName;
+    
+    // Validate file type (JSON only)
+    $fileInfo = pathinfo($_FILES['template_file']['name']);
+    if (strtolower($fileInfo['extension']) !== 'json') {
+        $message = 'Only JSON files are allowed for templates.';
+        $messageType = 'error';
+    } else {
+        if (move_uploaded_file($_FILES['template_file']['tmp_name'], $uploadPath)) {
+            $message = 'Template file uploaded successfully: ' . $fileName;
+            $messageType = 'success';
+        } else {
+            $message = 'Error uploading template file.';
+            $messageType = 'error';
+        }
+    }/templates/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+    
+    $fileName = uniqid() . '_' . basename($_FILES['template_file']['name']);
+    $uploadPath = $uploadDir . $fileName;
+    
+    if (move_uploaded_file($_FILES['template_file']['tmp_name'], $uploadPath)) {
+        $message = 'File uploaded successfully: ' . $fileName;
+        $messageType = 'success';
+    } else {
+        $message = 'Error uploading file.';
+        $messageType = 'error';
+    }
+}
+
+function showLoginForm() {
+    ?>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Templates Admin Login - Selenix</title>
+        <style>
+            body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+            .login-form { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+            input[type="password"] { width: 200px; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; }
+            button { background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <form method="POST" class="login-form">
+            <h2>Selenix Templates Admin</h2>
+            <div>
+                <input type="password" name="password" placeholder="Admin Password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </body>
+    </html>
+    <?php
+}
+
+// Get all templates
+$templates = $pdo->query("SELECT * FROM templates ORDER BY created_at DESC")->fetchAll();
+
+// Get statistics
+$stats = $pdo->query("SELECT 
+    COUNT(*) as total_templates,
+    SUM(downloads) as total_downloads,
+    COUNT(CASE WHEN status = 'active' THEN 1 END) as active_templates,
+    COUNT(CASE WHEN featured = 1 THEN 1 END) as featured_templates,
+    COUNT(CASE WHEN premium = 1 THEN 1 END) as premium_templates
+    FROM templates")->fetch();
+
+// Get categories
+$categories = $pdo->query("SELECT category, COUNT(*) as count FROM templates GROUP BY category ORDER BY count DESC")->fetchAll();
+
+// Get template to edit if requested
+$editTemplate = null;
+if (isset($_GET['edit'])) {
+    $editId = (int)$_GET['edit'];
+    $editTemplate = $pdo->query("SELECT * FROM templates WHERE id = $editId")->fetch();
+}
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Selenix Templates Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; line-height: 1.6; }
+        .header { background: #667eea; color: white; padding: 20px; }
+        .header h1 { margin: 0; display: inline-block; }
+        .logout { float: right; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 4px; text-decoration: none; color: white; }
+        .container { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; }
+        .stat-number { font-size: 2em; font-weight: bold; color: #667eea; }
+        .stat-label { color: #666; margin-top: 5px; }
+        
+        .section { background: white; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .section-header { background: #f8f9fa; padding: 15px 20px; border-bottom: 1px solid #eee; font-weight: bold; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .section-content { padding: 20px; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-group textarea { height: 100px; resize: vertical; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        
+        .checkbox-group { display: flex; gap: 20px; margin: 10px 0; }
+        .checkbox-group label { display: flex; align-items: center; font-weight: normal; }
+        .checkbox-group input { width: auto; margin-right: 8px; }
+        
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn:hover { opacity: 0.9; }
+        
+        .templates-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        .template-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #f9f9f9; }
+        .template-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .template-meta { display: flex; gap: 10px; align-items: center; font-size: 0.9em; color: #666; }
+        .template-title { font-weight: bold; margin: 10px 0; }
+        .template-description { color: #666; margin-bottom: 10px; font-size: 0.9em; }
+        .template-tags { margin: 10px 0; }
+        .tag { background: #e9ecef; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; margin-right: 5px; }
+        .template-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .template-actions .btn { padding: 5px 10px; font-size: 0.9em; }
+        
+        .badge { padding: 2px 8px; border-radius: 12px; font-size: 0.8em; font-weight: bold; }
+        .badge-featured { background: #ffd700; color: #333; }
+        .badge-premium { background: #ff6b6b; color: white; }
+        .badge-new { background: #51cf66; color: white; }
+        
+        .message { padding: 15px; border-radius: 4px; margin-bottom: 20px; }
+        .message-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        
+        .upload-area { border: 2px dashed #ddd; border-radius: 8px; padding: 40px; text-align: center; margin: 20px 0; }
+        .upload-area:hover { border-color: #667eea; }
+        
+        .quick-actions { display: flex; gap: 10px; margin-bottom: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; font-weight: bold; }
+        .status-active { color: #28a745; }
+        .status-inactive { color: #dc3545; }
+        .status-draft { color: #ffc107; }
+        
+        /* Analytics Section */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .analytics-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .analytics-card h4 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .top-template-item,
+        .category-stat-item,
+        .recent-download-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .top-template-item:last-child,
+        .category-stat-item:last-child,
+        .recent-download-item:last-child {
+            border-bottom: none;
+        }
+        
+        .template-name {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .download-count,
+        .category-downloads {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .download-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .download-time {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .download-ip {
+            font-size: 12px;
+            color: #999;
+            font-family: monospace;
+        }
+        
+        .category-name {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><i class="fa-solid fa-cogs"></i> Selenix Templates Admin Panel</h1>
+        <a href="?action=logout" class="logout">Logout</a>
+    </div>
+    
+    <div class="container">
+        <?php if ($message): ?>
+            <div class="message message-<?php echo $messageType; ?>">
+                <?php echo htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number"><?php echo $stats['total_templates']; ?></div>
+                <div class="stat-label">Total Templates</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><?php echo $stats['active_templates']; ?></div>
+                <div class="stat-label">Active Templates</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><?php echo $stats['total_downloads']; ?></div>
+                <div class="stat-label">Total Downloads</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><?php echo $stats['featured_templates']; ?></div>
+                <div class="stat-label">Featured Templates</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><?php echo $stats['premium_templates']; ?></div>
+                <div class="stat-label">Premium Templates</div>
+            </div>
+                    </div>
+        </div>
+    </div>
+        
+        <div class="quick-actions">
+            <button class="btn btn-primary" onclick="openModal('addModal')">
+                <i class="fa-solid fa-plus"></i> Add New Template
+            </button>
+            <button class="btn btn-secondary" onclick="openModal('uploadModal')">
+                <i class="fa-solid fa-upload"></i> Upload File
+            </button>
+            <a href="product/templates/index.html" class="btn btn-success" target="_blank">
+                <i class="fa-solid fa-eye"></i> View Templates Page
+            </a>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <span>Template Download Analytics</span>
+                <span>Recent activity</span>
+            </div>
+            <div class="section-content">
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h4>Most Downloaded Templates</h4>
+                        <div class="top-templates">
+                            <?php 
+                            $topTemplates = $pdo->query("SELECT title, downloads FROM templates ORDER BY downloads DESC LIMIT 5")->fetchAll();
+                            foreach ($topTemplates as $template): 
+                            ?>
+                                <div class="top-template-item">
+                                    <span class="template-name"><?php echo htmlspecialchars($template['title']); ?></span>
+                                    <span class="download-count"><?php echo number_format($template['downloads']); ?> downloads</span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h4>Downloads by Category</h4>
+                        <div class="category-stats">
+                            <?php 
+                            $categoryStats = $pdo->query("SELECT category, SUM(downloads) as total_downloads FROM templates GROUP BY category ORDER BY total_downloads DESC")->fetchAll();
+                            foreach ($categoryStats as $stat): 
+                            ?>
+                                <div class="category-stat-item">
+                                    <span class="category-name"><?php echo ucfirst(str_replace('-', ' ', $stat['category'])); ?></span>
+                                    <span class="category-downloads"><?php echo number_format($stat['total_downloads']); ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h4>Recent Downloads</h4>
+                        <div class="recent-downloads">
+                            <?php 
+                            $recentDownloads = $pdo->query("
+                                SELECT t.title, td.download_time, td.ip_address 
+                                FROM template_downloads td 
+                                JOIN templates t ON td.template_id = t.id 
+                                ORDER BY td.download_time DESC 
+                                LIMIT 10
+                            ")->fetchAll();
+                            foreach ($recentDownloads as $download): 
+                            ?>
+                                <div class="recent-download-item">
+                                    <div class="download-info">
+                                        <span class="template-name"><?php echo htmlspecialchars($download['title']); ?></span>
+                                        <span class="download-time"><?php echo date('M j, H:i', strtotime($download['download_time'])); ?></span>
+                                    </div>
+                                    <span class="download-ip"><?php echo htmlspecialchars($download['ip_address']); ?></span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <span>All Templates</span>
+                <span><?php echo count($templates); ?> templates</span>
+            </div>
+            <div class="section-content">
+                <div class="templates-grid">
+                    <?php foreach ($templates as $template): ?>
+                        <div class="template-card">
+                            <div class="template-header">
+                                <div class="template-meta">
+                                    <i class="<?php echo htmlspecialchars($template['icon']); ?>"></i>
+                                    <span><?php echo ucfirst(str_replace('-', ' ', $template['category'])); ?></span>
+                                    <span class="status-<?php echo $template['status']; ?>">
+                                        <?php echo ucfirst($template['status']); ?>
+                                    </span>
+                                </div>
+                                <?php if ($template['badge']): ?>
+                                    <span class="badge badge-<?php echo strtolower($template['badge']); ?>">
+                                        <?php echo htmlspecialchars($template['badge']); ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <div class="template-title">
+                                <?php echo htmlspecialchars($template['title']); ?>
+                            </div>
+                            
+                            <div class="template-description">
+                                <?php echo htmlspecialchars(substr($template['description'], 0, 150)); ?>
+                                <?php echo strlen($template['description']) > 150 ? '...' : ''; ?>
+                            </div>
+                            
+                            <div class="template-meta">
+                                <span><i class="fa-solid fa-download"></i> <?php echo $template['downloads']; ?></span>
+                                <span><i class="fa-solid fa-calendar"></i> <?php echo date('M j, Y', strtotime($template['created_at'])); ?></span>
+                            </div>
+                            
+                            <?php if ($template['tags']): ?>
+                                <div class="template-tags">
+                                    <?php foreach (json_decode($template['tags']) as $tag): ?>
+                                        <span class="tag"><?php echo htmlspecialchars($tag); ?></span>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="template-actions">
+                                <a href="?edit=<?php echo $template['id']; ?>" class="btn btn-warning">
+                                    <i class="fa-solid fa-edit"></i> Edit
+                                </a>
+                                <form method="POST" style="display: inline;">
+                                    <input type="hidden" name="action" value="increment_downloads">
+                                    <input type="hidden" name="template_id" value="<?php echo $template['id']; ?>">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fa-solid fa-plus"></i> +1 Download
+                                    </button>
+                                </form>
+                                <form method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this template?')">
+                                    <input type="hidden" name="action" value="delete_template">
+                                    <input type="hidden" name="template_id" value="<?php echo $template['id']; ?>">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa-solid fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Template Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addModal')">&times;</span>
+            <h2><?php echo $editTemplate ? 'Edit Template' : 'Add New Template'; ?></h2>
+            
+            <form method="POST">
+                <input type="hidden" name="action" value="<?php echo $editTemplate ? 'edit_template' : 'add_template'; ?>">
+                <?php if ($editTemplate): ?>
+                    <input type="hidden" name="template_id" value="<?php echo $editTemplate['id']; ?>">
+                <?php endif; ?>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Template Title</label>
+                        <input type="text" name="title" required value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['title']) : ''; ?>">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" required>
+                            <option value="data-scraping" <?php echo ($editTemplate && $editTemplate['category'] == 'data-scraping') ? 'selected' : ''; ?>>Data Scraping</option>
+                            <option value="form-filling" <?php echo ($editTemplate && $editTemplate['category'] == 'form-filling') ? 'selected' : ''; ?>>Form Filling</option>
+                            <option value="social-media" <?php echo ($editTemplate && $editTemplate['category'] == 'social-media') ? 'selected' : ''; ?>>Social Media</option>
+                            <option value="e-commerce" <?php echo ($editTemplate && $editTemplate['category'] == 'e-commerce') ? 'selected' : ''; ?>>E-Commerce</option>
+                            <option value="marketing" <?php echo ($editTemplate && $editTemplate['category'] == 'marketing') ? 'selected' : ''; ?>>Marketing</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Icon (Font Awesome class)</label>
+                        <input type="text" name="icon" placeholder="fa-solid fa-cog" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['icon']) : 'fa-solid fa-cog'; ?>">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Badge (optional)</label>
+                        <input type="text" name="badge" placeholder="Featured, New, Premium" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['badge']) : ''; ?>">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>File Path (optional)</label>
+                        <input type="text" name="file_path" placeholder="/path/to/template/file.zip" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['file_path']) : ''; ?>">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Preview URL (optional)</label>
+                        <input type="text" name="preview_url" placeholder="https://example.com/preview" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['preview_url']) : ''; ?>">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Description</label>
+                        <textarea name="description" required><?php echo $editTemplate ? htmlspecialchars($editTemplate['description']) : ''; ?></textarea>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Tags (comma-separated)</label>
+                        <input type="text" name="tags" placeholder="tag1, tag2, tag3" value="<?php echo $editTemplate ? implode(', ', json_decode($editTemplate['tags'] ?: '[]')) : ''; ?>">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="active" <?php echo ($editTemplate && $editTemplate['status'] == 'active') ? 'selected' : ''; ?>>Active</option>
+                            <option value="inactive" <?php echo ($editTemplate && $editTemplate['status'] == 'inactive') ? 'selected' : ''; ?>>Inactive</option>
+                            <option value="draft" <?php echo ($editTemplate && $editTemplate['status'] == 'draft') ? 'selected' : ''; ?>>Draft</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="featured" <?php echo ($editTemplate && $editTemplate['featured']) ? 'checked' : ''; ?>>
+                                Featured Template
+                            </label>
+                            <label>
+                                <input type="checkbox" name="premium" <?php echo ($editTemplate && $editTemplate['premium']) ? 'checked' : ''; ?>>
+                                Premium Template
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <?php echo $editTemplate ? 'Update Template' : 'Add Template'; ?>
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Upload Modal -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('uploadModal')">&times;</span>
+            <h2>Upload Template File</h2>
+            
+            <form method="POST" enctype="multipart/form-data">
+                <div class="upload-area">
+                    <i class="fa-solid fa-cloud-upload" style="font-size: 3em; color: #ddd; margin-bottom: 20px;"></i>
+                    <p>Choose a template file to upload</p>
+                    <input type="file" name="template_file" accept=".zip,.json,.xml" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Upload File</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('uploadModal')">Cancel</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // Auto-open edit modal if editing
+        <?php if ($editTemplate): ?>
+            openModal('addModal');
+        <?php endif; ?>
+    </script>
+</body>
+</html>
