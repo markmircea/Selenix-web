@@ -22,8 +22,29 @@ class TemplateManager {
     
     async loadTemplates() {
         try {
+            console.log('Attempting to fetch templates from: ../../templates-api.php');
+            
+            // First, test if we can reach a simple API
+            console.log('Testing simple API first...');
+            const testResponse = await fetch('../../test-api.php');
+            console.log('Test API response status:', testResponse.status);
+            
+            if (testResponse.ok) {
+                const testData = await testResponse.json();
+                console.log('Test API data:', testData);
+            }
+            
+            // Now try the actual templates API
             const response = await fetch('../../templates-api.php');
+            console.log('Templates API response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const data = await response.json();
+            console.log('API Response:', data);
             
             if (data.success) {
                 this.templates = data.templates;
@@ -35,14 +56,25 @@ class TemplateManager {
             }
         } catch (error) {
             console.error('Error loading templates:', error);
+            console.error('Error details:', error.message);
             this.showFallbackTemplates();
         }
     }
     
     showFallbackTemplates() {
-        // Show a message or keep existing hardcoded templates as fallback
-        console.log('Using fallback templates...');
-        // Keep the existing hardcoded templates for now
+        console.log('Loading fallback templates...');
+        // For now, let's show an error message but you can add hardcoded templates here
+        const container = document.querySelector('.templates-grid');
+        if (container) {
+            container.innerHTML = `
+                <div class="no-templates">
+                    <p>⚠️ Unable to load templates from database.</p>
+                    <p>Please check the browser console for more details.</p>
+                    <p>API URL being used: <code>../../templates-api.php</code></p>
+                    <button onclick="window.templateManager.loadTemplates()" class="btn btn-primary">Retry Loading</button>
+                </div>
+            `;
+        }
     }
     
     setupEventListeners() {
@@ -685,6 +717,8 @@ let templateManager;
 
 document.addEventListener('DOMContentLoaded', function() {
     templateManager = new TemplateManager();
+    // Make it globally accessible for debugging
+    window.templateManager = templateManager;
 });
 
 // Additional CSS for modals and notifications
