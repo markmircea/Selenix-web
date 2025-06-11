@@ -185,7 +185,7 @@ class SelenixDownloader {
             exec($command . " 2>&1", $output, $returnCode);
             
             if ($returnCode === 0 && file_exists($tempZip)) {
-                $this->sendFile($tempZip, 'Selenix-with-License.zip');
+                $this->sendFile($tempZip, 'Selenix-with-LicenseBETA.zip');
                 $this->cleanup([$tempZip, $tempLicense]);
                 return true;
             }
@@ -226,7 +226,7 @@ class SelenixDownloader {
             exec($command . " 2>&1", $output, $returnCode);
             
             if ($returnCode === 0 && file_exists($tempZip)) {
-                $this->sendFile($tempZip, 'Selenix-with-License.zip');
+                $this->sendFile($tempZip, 'Selenix-with-LicenseBETA.zip');
                 $this->cleanup([$tempScript, $tempZip, $tempLicense]);
                 return true;
             }
