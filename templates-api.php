@@ -40,6 +40,13 @@ function getDbConnection() {
         $pdo = new PDO("mysql:host=$host;dbname=$database;charset=utf8mb4", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        
+        // Create upload directory if it doesn't exist
+        $uploadDir = 'uploads/templates/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        
         return $pdo;
     } catch (PDOException $e) {
         logError('Database connection failed', ['error' => $e->getMessage()]);
@@ -124,19 +131,16 @@ function handleGetRequest($pdo) {
     }
     
     if ($search) {
-        $whereConditions[] = '(title LIKE ? OR description LIKE ? OR JSON_SEARCH(tags, "one", ?) IS NOT NULL)';
+        $whereConditions[] = '(title LIKE ? OR description LIKE ?)';
         $searchTerm = '%' . $search . '%';
         $params[] = $searchTerm;
         $params[] = $searchTerm;
-        $params[] = $search;
     }
     
     $whereClause = count($whereConditions) > 0 ? 'WHERE ' . implode(' AND ', $whereConditions) : '';
     
-    // Get templates
-    $sql = "SELECT * FROM templates $whereClause ORDER BY featured DESC, downloads DESC, created_at DESC LIMIT ? OFFSET ?";
-    $params[] = $limit;
-    $params[] = $offset;
+    // Get templates with proper SQL construction
+    $sql = "SELECT * FROM templates $whereClause ORDER BY featured DESC, downloads DESC, created_at DESC LIMIT $limit OFFSET $offset";
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -166,9 +170,8 @@ function handleGetRequest($pdo) {
     
     // Get total count for pagination
     $countSql = "SELECT COUNT(*) as total FROM templates $whereClause";
-    $countParams = array_slice($params, 0, -2); // Remove limit and offset
     $countStmt = $pdo->prepare($countSql);
-    $countStmt->execute($countParams);
+    $countStmt->execute($params);
     $total = (int)$countStmt->fetch()['total'];
     
     // Get categories with counts
