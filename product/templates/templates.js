@@ -155,6 +155,16 @@ class TemplateManager {
                 ${template.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
             </div>` : '';
         
+        // Check if template has a file
+        const hasFile = template.file_path && template.file_path.trim() !== '';
+        const downloadButtonHtml = hasFile 
+            ? `<a href="#" class="template-download-btn" data-template-id="${template.id}">
+                <i class="fa-solid fa-download"></i> Download
+            </a>`
+            : `<span class="template-download-btn disabled" title="No file available">
+                <i class="fa-solid fa-ban"></i> No File
+            </span>`;
+        
         return `
             <div class="template-card" data-category="${template.category}" data-template-id="${template.id}">
                 ${badgeHtml}
@@ -173,9 +183,7 @@ class TemplateManager {
                 <p>${this.escapeHtml(template.description)}</p>
                 ${tagsHtml}
                 <div class="template-actions">
-                    <a href="#" class="template-download-btn" data-template-id="${template.id}">
-                        <i class="fa-solid fa-download"></i> Download
-                    </a>
+                    ${downloadButtonHtml}
                     <a href="#" class="template-preview-btn" data-template-id="${template.id}">
                         <i class="fa-solid fa-eye"></i> Preview
                     </a>
@@ -204,6 +212,12 @@ class TemplateManager {
         const template = this.templates.find(t => t.id === templateId);
         if (!template) return;
         
+        // Check if template has an uploaded file
+        if (!template.file_path || template.file_path.trim() === '') {
+            this.showNotification('No template file available for download. Please contact support.', 'error');
+            return;
+        }
+        
         const downloadBtn = document.querySelector(`[data-template-id="${templateId}"] .template-download-btn`);
         const originalText = downloadBtn.innerHTML;
         downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Downloading...';
@@ -212,11 +226,8 @@ class TemplateManager {
         try {
             await this.trackDownload(templateId);
             
-            if (template.file_path && template.file_path.trim() !== '') {
-                window.open(template.file_path, '_blank');
-            } else {
-                this.downloadGeneratedTemplate(template);
-            }
+            // Download the uploaded file
+            window.open(template.file_path, '_blank');
             
             this.showNotification(`Template "${template.title}" downloaded successfully!`, 'success');
             
@@ -408,50 +419,6 @@ class TemplateManager {
     
     sanitizeFilename(filename) {
         return filename.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-    }
-    
-    downloadGeneratedTemplate(template) {
-        // Import the template generator
-        import('./template-generator.js').then(module => {
-            const generator = new module.TemplateGenerator();
-            const templateData = generator.generateTemplate(template);
-            this.downloadFile(templateData, `${this.sanitizeFilename(template.title)}_template.json`);
-        }).catch(() => {
-            // Fallback if module loading fails
-            const templateData = {
-                metadata: {
-                    id: template.id,
-                    title: template.title,
-                    description: template.description,
-                    category: template.category,
-                    tags: template.tags || [],
-                    version: "1.0",
-                    created_at: template.created_at,
-                    created_by: "Selenix Team"
-                },
-                workflow: { steps: [], variables: {}, conditions: [] },
-                settings: {
-                    execution: { delay_between_steps: 1000, timeout_per_step: 30000 },
-                    browser: { headless: false, window_size: { width: 1280, height: 720 } }
-                }
-            };
-            this.downloadFile(templateData, `${this.sanitizeFilename(template.title)}_template.json`);
-        });
-    }
-    
-    downloadFile(data, filename) {
-        const jsonString = JSON.stringify(data, null, 2);
-        const blob = new Blob([jsonString], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        setTimeout(() => URL.revokeObjectURL(url), 100);
     }
 }
 

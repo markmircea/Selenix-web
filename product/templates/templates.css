@@ -339,6 +339,18 @@
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
+.template-download-btn.disabled {
+    background: #9ca3af;
+    color: #6b7280;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.template-download-btn.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
 .template-preview-btn {
     background-color: var(--light-bg);
     color: var(--text-color);

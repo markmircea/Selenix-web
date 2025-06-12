@@ -53,7 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $premium = isset($_POST['premium']) ? 1 : 0;
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
-                $file_path = trim($_POST['file_path']) ?: null;
+                $file_path = isset($_POST['file_path']) ? trim($_POST['file_path']) : null;
+                if (empty($file_path) && isset($_FILES['template_file']) && $_FILES['template_file']['error'] === UPLOAD_ERR_OK) {
+                    // File was uploaded, use the uploaded file path
+                    $file_path = $uploadPath ?? null;
+                }
                 $preview_url = trim($_POST['preview_url']) ?: null;
                 $status = $_POST['status'];
                 
@@ -81,7 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $premium = isset($_POST['premium']) ? 1 : 0;
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
-                $file_path = trim($_POST['file_path']) ?: null;
+                $file_path = isset($_POST['file_path']) ? trim($_POST['file_path']) : null;
+                if (empty($file_path) && isset($_FILES['template_file']) && $_FILES['template_file']['error'] === UPLOAD_ERR_OK) {
+                    // File was uploaded, use the uploaded file path
+                    $file_path = $uploadPath ?? null;
+                }
                 $preview_url = trim($_POST['preview_url']) ?: null;
                 $status = $_POST['status'];
                 
@@ -144,6 +152,10 @@ if (isset($_FILES['template_file']) && $_FILES['template_file']['error'] === UPL
         $messageType = 'error';
     } else {
         if (move_uploaded_file($_FILES['template_file']['tmp_name'], $uploadPath)) {
+            // If this is part of a template form submission, use the uploaded file path
+            if (isset($_POST['action']) && ($_POST['action'] === 'add_template' || $_POST['action'] === 'edit_template')) {
+                $_POST['file_path'] = $uploadPath; // Set the uploaded file path
+            }
             $message = 'Template file uploaded successfully: ' . $fileName;
             $messageType = 'success';
         } else {
@@ -355,8 +367,13 @@ if (isset($_GET['edit'])) {
                             </div>
                             
                             <div class="template-meta">
-                                <span><i class="fa-solid fa-download"></i> <?php echo $template['downloads']; ?></span>
+                                <span><i class="fa-solid fa-download"></i> <?php echo number_format($template['downloads']); ?></span>
                                 <span><i class="fa-solid fa-calendar"></i> <?php echo date('M j, Y', strtotime($template['created_at'])); ?></span>
+                                <?php if ($template['file_path']): ?>
+                                    <span style="color: #28a745;"><i class="fa-solid fa-file-check"></i> File uploaded</span>
+                                <?php else: ?>
+                                    <span style="color: #dc3545;"><i class="fa-solid fa-file-excel"></i> No file</span>
+                                <?php endif; ?>
                             </div>
                             
                             <?php if ($template['tags']): ?>
@@ -399,7 +416,7 @@ if (isset($_GET['edit'])) {
             <span class="close" onclick="closeModal('addModal')">&times;</span>
             <h2><?php echo $editTemplate ? 'Edit Template' : 'Add New Template'; ?></h2>
             
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="<?php echo $editTemplate ? 'edit_template' : 'add_template'; ?>">
                 <?php if ($editTemplate): ?>
                     <input type="hidden" name="template_id" value="<?php echo $editTemplate['id']; ?>">
@@ -432,9 +449,24 @@ if (isset($_GET['edit'])) {
                         <input type="text" name="badge" placeholder="Featured, New, Premium" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['badge']) : ''; ?>">
                     </div>
                     
+                    <div class="form-group full-width">
+                        <label>Upload Template File (JSON)</label>
+                        <div class="upload-area">
+                            <i class="fa-solid fa-cloud-upload" style="font-size: 2em; color: #ddd; margin-bottom: 10px;"></i>
+                            <p>Choose a JSON file to upload (optional)</p>
+                            <input type="file" name="template_file" accept=".json">
+                            <?php if ($editTemplate && $editTemplate['file_path']): ?>
+                                <p style="margin-top: 10px; color: #28a745;">
+                                    <i class="fa-solid fa-check"></i> Current file: <?php echo basename($editTemplate['file_path']); ?>
+                                </p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
-                        <label>File Path (optional)</label>
-                        <input type="text" name="file_path" placeholder="/path/to/template/file.zip" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['file_path']) : ''; ?>">
+                        <label>OR File Path (if not uploading)</label>
+                        <input type="text" name="file_path" placeholder="uploads/templates/file.json" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['file_path']) : ''; ?>">
+                        <small style="color: #666;">Leave empty if uploading a file above</small>
                     </div>
                     
                     <div class="form-group">
