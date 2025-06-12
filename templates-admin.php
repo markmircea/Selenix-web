@@ -54,10 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
                 $file_path = isset($_POST['file_path']) ? trim($_POST['file_path']) : null;
-                if (empty($file_path) && isset($_FILES['template_file']) && $_FILES['template_file']['error'] === UPLOAD_ERR_OK) {
-                    // File was uploaded, use the uploaded file path
-                    $file_path = $uploadPath ?? null;
-                }
                 $preview_url = trim($_POST['preview_url']) ?: null;
                 $status = $_POST['status'];
                 
@@ -86,10 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
                 $file_path = isset($_POST['file_path']) ? trim($_POST['file_path']) : null;
-                if (empty($file_path) && isset($_FILES['template_file']) && $_FILES['template_file']['error'] === UPLOAD_ERR_OK) {
-                    // File was uploaded, use the uploaded file path
-                    $file_path = $uploadPath ?? null;
-                }
                 $preview_url = trim($_POST['preview_url']) ?: null;
                 $status = $_POST['status'];
                 
@@ -135,6 +127,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Helper function to generate template filename from title
+function generateTemplateFilename($title) {
+    // Remove special characters and convert to lowercase
+    $filename = preg_replace('/[^a-zA-Z0-9\s]/', '', $title);
+    $filename = preg_replace('/\s+/', '_', trim($filename));
+    $filename = strtolower($filename);
+    return $filename . '.json';
+}
+
 // Handle file uploads
 if (isset($_FILES['template_file']) && $_FILES['template_file']['error'] === UPLOAD_ERR_OK) {
     $uploadDir = 'uploads/templates/';
@@ -142,25 +143,42 @@ if (isset($_FILES['template_file']) && $_FILES['template_file']['error'] === UPL
         mkdir($uploadDir, 0755, true);
     }
     
-    $fileName = uniqid() . '_' . basename($_FILES['template_file']['name']);
-    $uploadPath = $uploadDir . $fileName;
-    
     // Validate file type (JSON only)
     $fileInfo = pathinfo($_FILES['template_file']['name']);
     if (strtolower($fileInfo['extension']) !== 'json') {
         $message = 'Only JSON files are allowed for templates.';
         $messageType = 'error';
     } else {
-        if (move_uploaded_file($_FILES['template_file']['tmp_name'], $uploadPath)) {
-            // If this is part of a template form submission, use the uploaded file path
-            if (isset($_POST['action']) && ($_POST['action'] === 'add_template' || $_POST['action'] === 'edit_template')) {
-                $_POST['file_path'] = $uploadPath; // Set the uploaded file path
-            }
-            $message = 'Template file uploaded successfully: ' . $fileName;
-            $messageType = 'success';
-        } else {
-            $message = 'Error uploading template file.';
+        // Generate filename based on template title
+        $templateTitle = isset($_POST['title']) ? trim($_POST['title']) : '';
+        if (empty($templateTitle)) {
+            $message = 'Template title is required for file upload.';
             $messageType = 'error';
+        } else {
+            $fileName = generateTemplateFilename($templateTitle);
+            $uploadPath = $uploadDir . $fileName;
+            
+            // Check if file already exists and handle conflicts
+            $counter = 1;
+            $originalFileName = $fileName;
+            while (file_exists($uploadPath)) {
+                $fileNameWithoutExt = pathinfo($originalFileName, PATHINFO_FILENAME);
+                $fileName = $fileNameWithoutExt . '_' . $counter . '.json';
+                $uploadPath = $uploadDir . $fileName;
+                $counter++;
+            }
+            
+            if (move_uploaded_file($_FILES['template_file']['tmp_name'], $uploadPath)) {
+                // If this is part of a template form submission, use the uploaded file path
+                if (isset($_POST['action']) && ($_POST['action'] === 'add_template' || $_POST['action'] === 'edit_template')) {
+                    $_POST['file_path'] = $uploadPath; // Set the uploaded file path
+                }
+                $message = 'Template file uploaded successfully: ' . $fileName;
+                $messageType = 'success';
+            } else {
+                $message = 'Error uploading template file.';
+                $messageType = 'error';
+            }
         }
     }
 }
@@ -522,6 +540,12 @@ if (isset($_GET['edit'])) {
             <h2>Upload Template File</h2>
             
             <form method="POST" enctype="multipart/form-data">
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label>Template Title (for filename)</label>
+                    <input type="text" name="title" placeholder="Enter template title" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <small style="color: #666;">This will be used to generate the filename: template_title.json</small>
+                </div>
+                
                 <div class="upload-area">
                     <i class="fa-solid fa-cloud-upload" style="font-size: 3em; color: #ddd; margin-bottom: 20px;"></i>
                     <p>Choose a JSON template file to upload</p>

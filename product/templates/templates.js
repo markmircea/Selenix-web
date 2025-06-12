@@ -226,8 +226,11 @@ class TemplateManager {
         const template = this.templates.find(t => t.id === templateId);
         if (!template) return;
         
-        // Check if template has an uploaded file
-        if (!template.file_path || template.file_path.trim() === '' || template.file_path === null) {
+        // Get the file path (with fallback logic)
+        const filePath = this.getTemplateFilePath(template);
+        
+        // Check if we have a valid file path
+        if (!filePath || filePath.trim() === '') {
             this.showNotification('No template file available for download. Please contact support.', 'error');
             return;
         }
@@ -241,13 +244,14 @@ class TemplateManager {
             await this.trackDownload(templateId);
             
             // Create download URL - handle both relative and absolute paths
-            let downloadUrl = template.file_path;
+            let downloadUrl = filePath;
             if (!downloadUrl.startsWith('http')) {
                 // If it's a relative path, make it absolute
                 downloadUrl = window.location.origin + '/' + downloadUrl.replace(/^\//, '');
             }
             
             console.log('Downloading from URL:', downloadUrl);
+            console.log('Expected filename from title:', this.generateTemplateFilename(template.title));
             
             // Download the uploaded file
             window.open(downloadUrl, '_blank');
@@ -452,6 +456,27 @@ class TemplateManager {
     
     sanitizeFilename(filename) {
         return filename.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    }
+    
+    // Generate template filename from title (matches PHP backend logic)
+    generateTemplateFilename(title) {
+        // Remove special characters and convert to lowercase
+        let filename = title.replace(/[^a-zA-Z0-9\s]/g, '');
+        filename = filename.replace(/\s+/g, '_').trim();
+        filename = filename.toLowerCase();
+        return filename + '.json';
+    }
+    
+    // Get the expected file path for a template
+    getTemplateFilePath(template) {
+        // First, try to use the file_path from database
+        if (template.file_path && template.file_path.trim() !== '' && template.file_path !== null && template.file_path !== 'null') {
+            return template.file_path;
+        }
+        
+        // Fallback: generate expected path from template title
+        const expectedFilename = this.generateTemplateFilename(template.title);
+        return `uploads/templates/${expectedFilename}`;
     }
 }
 
