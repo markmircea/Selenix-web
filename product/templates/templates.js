@@ -245,8 +245,14 @@ class TemplateManager {
             console.log('Downloading from URL:', downloadUrl);
             console.log('Expected filename from title:', this.generateTemplateFilename(template.title));
             
-            // Download the uploaded file
-            window.open(downloadUrl, '_blank');
+            // Force download instead of opening in browser
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = this.generateTemplateFilename(template.title);
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
             
             this.showNotification(`Template "${template.title}" downloaded successfully!`, 'success');
             

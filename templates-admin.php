@@ -461,7 +461,33 @@ if (isset($_GET['edit'])) {
                     
                     <div class="form-group">
                         <label>Icon (Font Awesome class)</label>
-                        <input type="text" name="icon" placeholder="fa-solid fa-cog" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['icon']) : 'fa-solid fa-cog'; ?>">
+                        <select name="icon" required style="font-family: 'Font Awesome 6 Free', Arial, sans-serif;">
+                            <option value="fa-solid fa-cog" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-cog') ? 'selected' : ''; ?>>⚙️ Settings (fa-solid fa-cog)</option>
+                            <option value="fa-solid fa-download" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-download') ? 'selected' : ''; ?>>⬇️ Download (fa-solid fa-download)</option>
+                            <option value="fa-solid fa-database" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-database') ? 'selected' : ''; ?>>🗄️ Database (fa-solid fa-database)</option>
+                            <option value="fa-solid fa-shopping-cart" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-shopping-cart') ? 'selected' : ''; ?>>🛒 Shopping Cart (fa-solid fa-shopping-cart)</option>
+                            <option value="fa-solid fa-chart-bar" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-chart-bar') ? 'selected' : ''; ?>>📊 Chart Bar (fa-solid fa-chart-bar)</option>
+                            <option value="fa-solid fa-envelope" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-envelope') ? 'selected' : ''; ?>>✉️ Envelope (fa-solid fa-envelope)</option>
+                            <option value="fa-solid fa-users" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-users') ? 'selected' : ''; ?>>👥 Users (fa-solid fa-users)</option>
+                            <option value="fa-solid fa-globe" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-globe') ? 'selected' : ''; ?>>🌐 Globe (fa-solid fa-globe)</option>
+                            <option value="fa-solid fa-search" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-search') ? 'selected' : ''; ?>>🔍 Search (fa-solid fa-search)</option>
+                            <option value="fa-solid fa-file-text" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-file-text') ? 'selected' : ''; ?>>📄 File Text (fa-solid fa-file-text)</option>
+                            <option value="fa-solid fa-robot" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-robot') ? 'selected' : ''; ?>>🤖 Robot (fa-solid fa-robot)</option>
+                            <option value="fa-solid fa-magic" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-magic') ? 'selected' : ''; ?>>✨ Magic (fa-solid fa-magic)</option>
+                            <option value="fa-solid fa-bullhorn" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-bullhorn') ? 'selected' : ''; ?>>📢 Bullhorn (fa-solid fa-bullhorn)</option>
+                            <option value="fa-solid fa-heart" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-heart') ? 'selected' : ''; ?>>❤️ Heart (fa-solid fa-heart)</option>
+                            <option value="fa-solid fa-star" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-star') ? 'selected' : ''; ?>>⭐ Star (fa-solid fa-star)</option>
+                            <option value="fa-solid fa-thumbs-up" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-thumbs-up') ? 'selected' : ''; ?>>👍 Thumbs Up (fa-solid fa-thumbs-up)</option>
+                            <option value="fa-solid fa-rocket" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-rocket') ? 'selected' : ''; ?>>🚀 Rocket (fa-solid fa-rocket)</option>
+                            <option value="fa-solid fa-lightbulb" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-lightbulb') ? 'selected' : ''; ?>>💡 Lightbulb (fa-solid fa-lightbulb)</option>
+                            <option value="fa-solid fa-shield" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-shield') ? 'selected' : ''; ?>>🛡️ Shield (fa-solid fa-shield)</option>
+                            <option value="fa-solid fa-clock" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-clock') ? 'selected' : ''; ?>>🕐 Clock (fa-solid fa-clock)</option>
+                            <option value="fa-solid fa-money-bill" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-money-bill') ? 'selected' : ''; ?>>💵 Money Bill (fa-solid fa-money-bill)</option>
+                            <option value="fa-solid fa-camera" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-camera') ? 'selected' : ''; ?>>📷 Camera (fa-solid fa-camera)</option>
+                            <option value="fa-solid fa-mobile" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-mobile') ? 'selected' : ''; ?>>📱 Mobile (fa-solid fa-mobile)</option>
+                            <option value="fa-solid fa-laptop" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-laptop') ? 'selected' : ''; ?>>💻 Laptop (fa-solid fa-laptop)</option>
+                            <option value="fa-solid fa-code" <?php echo ($editTemplate && $editTemplate['icon'] == 'fa-solid fa-code') ? 'selected' : ''; ?>>💻 Code (fa-solid fa-code)</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
