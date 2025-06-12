@@ -486,7 +486,7 @@ if (isset($_GET['edit'])) {
                     
                     <div class="form-group">
                         <label>Preview URL (optional)</label>
-                        <input type="text" name="preview_url" placeholder="https://example.com/preview" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['preview_url']) : ''; ?>">
+                        <input type="text" name="preview_url" placeholder="https://example.com/preview" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['preview_url'] ?? '') : ''; ?>">
                     </div>
                     
                     <div class="form-group full-width">
