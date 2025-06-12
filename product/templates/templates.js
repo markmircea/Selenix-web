@@ -15,6 +15,7 @@ class TemplateManager {
     }
     
     async init() {
+        console.log('Initializing TemplateManager...');
         await this.loadTemplates();
         this.setupEventListeners();
         this.renderTemplates();
@@ -39,6 +40,12 @@ class TemplateManager {
                 this.templates = data.templates;
                 this.filteredTemplates = [...this.templates];
                 console.log('Loaded templates:', this.templates.length);
+                
+                // Log file paths for debugging
+                this.templates.forEach(template => {
+                    console.log(`Template "${template.title}" file_path:`, template.file_path);
+                });
+                
                 return true;
             } else {
                 console.error('API returned error:', data.error || 'Unknown error');
@@ -140,6 +147,7 @@ class TemplateManager {
             return;
         }
         
+        // Clear existing content and replace with dynamic content
         container.innerHTML = templatesOnPage.map(template => this.generateTemplateCard(template)).join('');
         this.setupDownloadHandlers();
     }
@@ -155,8 +163,14 @@ class TemplateManager {
                 ${template.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
             </div>` : '';
         
-        // Check if template has a file
-        const hasFile = template.file_path && template.file_path.trim() !== '';
+        // Check if template has a file - improved logic
+        const hasFile = template.file_path && 
+                       template.file_path.trim() !== '' && 
+                       template.file_path !== null && 
+                       template.file_path !== 'null';
+        
+        console.log(`Template "${template.title}" hasFile:`, hasFile, 'file_path:', template.file_path);
+        
         const downloadButtonHtml = hasFile 
             ? `<a href="#" class="template-download-btn" data-template-id="${template.id}">
                 <i class="fa-solid fa-download"></i> Download
@@ -193,7 +207,7 @@ class TemplateManager {
     }
     
     setupDownloadHandlers() {
-        document.querySelectorAll('.template-download-btn').forEach(button => {
+        document.querySelectorAll('.template-download-btn:not(.disabled)').forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.handleDownload(parseInt(button.dataset.templateId));
@@ -213,7 +227,7 @@ class TemplateManager {
         if (!template) return;
         
         // Check if template has an uploaded file
-        if (!template.file_path || template.file_path.trim() === '') {
+        if (!template.file_path || template.file_path.trim() === '' || template.file_path === null) {
             this.showNotification('No template file available for download. Please contact support.', 'error');
             return;
         }
@@ -226,8 +240,17 @@ class TemplateManager {
         try {
             await this.trackDownload(templateId);
             
+            // Create download URL - handle both relative and absolute paths
+            let downloadUrl = template.file_path;
+            if (!downloadUrl.startsWith('http')) {
+                // If it's a relative path, make it absolute
+                downloadUrl = window.location.origin + '/' + downloadUrl.replace(/^\//, '');
+            }
+            
+            console.log('Downloading from URL:', downloadUrl);
+            
             // Download the uploaded file
-            window.open(template.file_path, '_blank');
+            window.open(downloadUrl, '_blank');
             
             this.showNotification(`Template "${template.title}" downloaded successfully!`, 'success');
             
@@ -316,12 +339,22 @@ class TemplateManager {
                                 <h4>Downloads</h4>
                                 <p>${parseInt(template.downloads || 0).toLocaleString()} downloads</p>
                             </div>
+                            <div class="detail-section">
+                                <h4>File Status</h4>
+                                <p>${template.file_path ? '✅ File available for download' : '❌ No file uploaded'}</p>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn primary-button" onclick="templateManager.handleDownload(${template.id}); this.closest('.preview-modal').remove();">
-                            <i class="fa-solid fa-download"></i> Download Template
-                        </button>
+                        ${template.file_path ? `
+                            <button class="btn primary-button" onclick="templateManager.handleDownload(${template.id}); this.closest('.preview-modal').remove();">
+                                <i class="fa-solid fa-download"></i> Download Template
+                            </button>
+                        ` : `
+                            <button class="btn btn-disabled" disabled>
+                                <i class="fa-solid fa-ban"></i> No File Available
+                            </button>
+                        `}
                         <button class="btn secondary-button" onclick="this.closest('.preview-modal').remove()">
                             Close
                         </button>
@@ -426,6 +459,7 @@ class TemplateManager {
 let templateManager;
 
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing Template Manager...');
     templateManager = new TemplateManager();
     window.templateManager = templateManager; // For debugging
     console.log('Template Manager initialized');
