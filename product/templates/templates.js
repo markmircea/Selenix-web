@@ -165,8 +165,7 @@ class TemplateManager {
         
         // Always show download button - file availability will be checked when clicked
         // Frontend will generate the expected filename from template title
-        console.log(`Template "${template.title}" expected filename:`, this.generateTemplateFilename(template.title));
-        
+
         const downloadButtonHtml = `<a href="#" class="template-download-btn" data-template-id="${template.id}">
             <i class="fa-solid fa-download"></i> Download
         </a>`;
@@ -242,9 +241,7 @@ class TemplateManager {
                 downloadUrl = window.location.origin + '/' + downloadUrl.replace(/^\//, '');
             }
             
-            console.log('Downloading from URL:', downloadUrl);
-            console.log('Expected filename from title:', this.generateTemplateFilename(template.title));
-            
+
             // Force download instead of opening in browser
             const link = document.createElement('a');
             link.href = downloadUrl;
@@ -342,7 +339,7 @@ class TemplateManager {
                                 <p>${parseInt(template.downloads || 0).toLocaleString()} downloads</p>
                             </div>
                             <div class="detail-section">
-                                <h4>Expected Filename</h4>
+                                <h4>Filename</h4>
                                 <p><code>${this.generateTemplateFilename(template.title)}</code></p>
                             </div>
                         </div>

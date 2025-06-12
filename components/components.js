@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const pathParts = window.location.pathname.split('/').filter(Boolean);
         const pathDepth = pathParts.length;
         
-        console.log('Path parts:', pathParts);
-        console.log('Path depth:', pathDepth);
+        // console.log('Path parts:', pathParts);
+        // console.log('Path depth:', pathDepth);
         
         // Calculate how many levels up we need to go to reach the root
         let basePath = '';
@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const finalPath = basePath + componentName;
         
-        console.log('Calculated base path:', basePath);
-        console.log('Final component path:', finalPath);
+        // console.log('Calculated base path:', basePath);
+        // console.log('Final component path:', finalPath);
         
         return finalPath;
     }
@@ -61,13 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const docsLink = document.getElementById('nav-docs');
             if (docsLink) {
                 docsLink.classList.add('active');
-                console.log('✅ Added active class to docs link');
+                // console.log('✅ Added active class to docs link');
             }
         } else if (isProductPage) {
             const productToggle = document.querySelector('.dropdown-toggle');
             if (productToggle) {
                 productToggle.classList.add('active');
-                console.log('✅ Added active class to product dropdown');
+                // console.log('✅ Added active class to product dropdown');
             }
             
             // Check specific product pages
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const element = document.getElementById(productPages[page]);
                     if (element) {
                         element.classList.add('active');
-                        console.log('✅ Added active class to', productPages[page]);
+                        // console.log('✅ Added active class to', productPages[page]);
                     }
                 }
             });
@@ -93,31 +93,31 @@ document.addEventListener('DOMContentLoaded', function() {
             const pricingLink = document.getElementById('nav-pricing');
             if (pricingLink) {
                 pricingLink.classList.add('active');
-                console.log('✅ Added active class to pricing link');
+                // console.log('✅ Added active class to pricing link');
             }
         } else if (isSupportPage) {
             const supportLink = document.getElementById('nav-support');
             if (supportLink) {
                 supportLink.classList.add('active');
-                console.log('✅ Added active class to support link');
+                // console.log('✅ Added active class to support link');
             }
         } else if (isBlogPage) {
             const blogLink = document.getElementById('nav-blog');
             if (blogLink) {
                 blogLink.classList.add('active');
-                console.log('✅ Added active class to blog link');
+                // console.log('✅ Added active class to blog link');
             }
         }
     }
     
     // Add a debug console log
-    console.log('Components.js loaded. Current path:', window.location.pathname);
+    // console.log('Components.js loaded. Current path:', window.location.pathname);
     
     // Load Navbar Component
     const navbarContainer = document.getElementById('navbar-container');
     if (navbarContainer) {
         const navbarPath = getComponentPath('navbar/navbar.html');
-        console.log('Loading navbar from:', navbarPath);
+        // console.log('Loading navbar from:', navbarPath);
         
         fetch(navbarPath)
             .then(response => {
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(html => {
                 navbarContainer.innerHTML = html;
-                console.log('Navbar loaded successfully');
+                // console.log('Navbar loaded successfully');
                 
                 // Set active navigation after navbar is loaded and DOM is updated
                 setTimeout(() => {
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const footerContainer = document.getElementById('footer-container');
     if (footerContainer) {
         const footerPath = getComponentPath('footer/footer.html');
-        console.log('Loading footer from:', footerPath);
+        // console.log('Loading footer from:', footerPath);
         
         fetch(footerPath)
             .then(response => {
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(html => {
                 footerContainer.innerHTML = html;
-                console.log('Footer loaded successfully');
+                // console.log('Footer loaded successfully');
             })
             .catch(error => {
                 console.error('Error loading footer:', error);
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to initialize navbar functionality (mobile menu, dropdowns, etc.)
     function initializeNavbarFunctionality() {
-        console.log('Initializing navbar functionality...');
+        // console.log('Initializing navbar functionality...');
         
         // Sticky Header Effect
         const header = document.querySelector('header.navbar-header');
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                         }
                         
-                        console.log('Mobile dropdown toggled:', dropdown.classList.contains('mobile-open'));
+                        // console.log('Mobile dropdown toggled:', dropdown.classList.contains('mobile-open'));
                     }
                 });
             }
@@ -327,6 +327,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
-        console.log('Navbar functionality initialized successfully');
+        // console.log('Navbar functionality initialized successfully');
     }
 });

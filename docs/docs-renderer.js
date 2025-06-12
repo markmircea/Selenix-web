@@ -186,8 +186,30 @@ class DocsRenderer {
     }
 
     enhanceContent() {
-        // Add scroll-to-top on page change
-        window.scrollTo(0, 0);
+        // Handle section scrolling from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const scrollTo = urlParams.get('scrollTo');
+        
+        if (scrollTo) {
+            // Scroll to specific section after content loads
+            setTimeout(() => {
+                const element = document.getElementById(scrollTo);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Highlight the section briefly
+                    element.style.backgroundColor = '#fff3cd';
+                    element.style.transition = 'background-color 0.3s ease';
+                    setTimeout(() => {
+                        element.style.backgroundColor = '';
+                    }, 2000);
+                } else {
+                    console.warn(`Section with ID "${scrollTo}" not found`);
+                }
+            }, 100);
+        } else {
+            // Add scroll-to-top on page change only if no specific section requested
+            window.scrollTo(0, 0);
+        }
         
         // Enhance code blocks with copy functionality
         const codeBlocks = document.querySelectorAll('pre code');
