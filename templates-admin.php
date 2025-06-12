@@ -53,16 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $premium = isset($_POST['premium']) ? 1 : 0;
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
-                $file_path = isset($_POST['file_path']) ? trim($_POST['file_path']) : null;
                 $preview_url = trim($_POST['preview_url']) ?: null;
                 $status = $_POST['status'];
                 
                 $stmt = $pdo->prepare("
-                    INSERT INTO templates (title, description, category, icon, featured, premium, badge, tags, file_path, preview_url, status) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO templates (title, description, category, icon, featured, premium, badge, tags, preview_url, status) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ");
                 
-                if ($stmt->execute([$title, $description, $category, $icon, $featured, $premium, $badge, $tags, $file_path, $preview_url, $status])) {
+                if ($stmt->execute([$title, $description, $category, $icon, $featured, $premium, $badge, $tags, $preview_url, $status])) {
                     $message = 'Template added successfully!';
                     $messageType = 'success';
                 } else {
@@ -81,17 +80,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $premium = isset($_POST['premium']) ? 1 : 0;
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
-                $file_path = isset($_POST['file_path']) ? trim($_POST['file_path']) : null;
                 $preview_url = trim($_POST['preview_url']) ?: null;
                 $status = $_POST['status'];
                 
                 $stmt = $pdo->prepare("
                     UPDATE templates 
-                    SET title=?, description=?, category=?, icon=?, featured=?, premium=?, badge=?, tags=?, file_path=?, preview_url=?, status=?, updated_at=NOW()
+                    SET title=?, description=?, category=?, icon=?, featured=?, premium=?, badge=?, tags=?, preview_url=?, status=?, updated_at=NOW()
                     WHERE id=?
                 ");
                 
-                if ($stmt->execute([$title, $description, $category, $icon, $featured, $premium, $badge, $tags, $file_path, $preview_url, $status, $id])) {
+                if ($stmt->execute([$title, $description, $category, $icon, $featured, $premium, $badge, $tags, $preview_url, $status, $id])) {
                     $message = 'Template updated successfully!';
                     $messageType = 'success';
                 } else {
@@ -387,8 +385,12 @@ if (isset($_GET['edit'])) {
                             <div class="template-meta">
                                 <span><i class="fa-solid fa-download"></i> <?php echo number_format($template['downloads']); ?></span>
                                 <span><i class="fa-solid fa-calendar"></i> <?php echo date('M j, Y', strtotime($template['created_at'])); ?></span>
-                                <?php if ($template['file_path']): ?>
-                                    <span style="color: #28a745;"><i class="fa-solid fa-file-check"></i> File uploaded</span>
+                                <?php 
+                                $expectedFilename = generateTemplateFilename($template['title']);
+                                $expectedFilePath = 'uploads/templates/' . $expectedFilename;
+                                if (file_exists($expectedFilePath)): 
+                                ?>
+                                    <span style="color: #28a745;"><i class="fa-solid fa-file-check"></i> File available</span>
                                 <?php else: ?>
                                     <span style="color: #dc3545;"><i class="fa-solid fa-file-excel"></i> No file</span>
                                 <?php endif; ?>
@@ -481,11 +483,6 @@ if (isset($_GET['edit'])) {
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label>OR File Path (if not uploading)</label>
-                        <input type="text" name="file_path" placeholder="uploads/templates/file.json" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['file_path']) : ''; ?>">
-                        <small style="color: #666;">Leave empty if uploading a file above</small>
-                    </div>
                     
                     <div class="form-group">
                         <label>Preview URL (optional)</label>

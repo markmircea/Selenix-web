@@ -163,21 +163,13 @@ class TemplateManager {
                 ${template.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
             </div>` : '';
         
-        // Check if template has a file - improved logic
-        const hasFile = template.file_path && 
-                       template.file_path.trim() !== '' && 
-                       template.file_path !== null && 
-                       template.file_path !== 'null';
+        // Always show download button - file availability will be checked when clicked
+        // Frontend will generate the expected filename from template title
+        console.log(`Template "${template.title}" expected filename:`, this.generateTemplateFilename(template.title));
         
-        console.log(`Template "${template.title}" hasFile:`, hasFile, 'file_path:', template.file_path);
-        
-        const downloadButtonHtml = hasFile 
-            ? `<a href="#" class="template-download-btn" data-template-id="${template.id}">
-                <i class="fa-solid fa-download"></i> Download
-            </a>`
-            : `<span class="template-download-btn disabled" title="No file available">
-                <i class="fa-solid fa-ban"></i> No File
-            </span>`;
+        const downloadButtonHtml = `<a href="#" class="template-download-btn" data-template-id="${template.id}">
+            <i class="fa-solid fa-download"></i> Download
+        </a>`;
         
         return `
             <div class="template-card" data-category="${template.category}" data-template-id="${template.id}">
@@ -344,21 +336,15 @@ class TemplateManager {
                                 <p>${parseInt(template.downloads || 0).toLocaleString()} downloads</p>
                             </div>
                             <div class="detail-section">
-                                <h4>File Status</h4>
-                                <p>${template.file_path ? '✅ File available for download' : '❌ No file uploaded'}</p>
+                                <h4>Expected Filename</h4>
+                                <p><code>${this.generateTemplateFilename(template.title)}</code></p>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        ${template.file_path ? `
-                            <button class="btn primary-button" onclick="templateManager.handleDownload(${template.id}); this.closest('.preview-modal').remove();">
-                                <i class="fa-solid fa-download"></i> Download Template
-                            </button>
-                        ` : `
-                            <button class="btn btn-disabled" disabled>
-                                <i class="fa-solid fa-ban"></i> No File Available
-                            </button>
-                        `}
+                        <button class="btn primary-button" onclick="templateManager.handleDownload(${template.id}); this.closest('.preview-modal').remove();">
+                            <i class="fa-solid fa-download"></i> Download Template
+                        </button>
                         <button class="btn secondary-button" onclick="this.closest('.preview-modal').remove()">
                             Close
                         </button>
@@ -469,12 +455,7 @@ class TemplateManager {
     
     // Get the expected file path for a template
     getTemplateFilePath(template) {
-        // First, try to use the file_path from database
-        if (template.file_path && template.file_path.trim() !== '' && template.file_path !== null && template.file_path !== 'null') {
-            return template.file_path;
-        }
-        
-        // Fallback: generate expected path from template title
+        // Always generate path from template title (no database file_path dependency)
         const expectedFilename = this.generateTemplateFilename(template.title);
         return `uploads/templates/${expectedFilename}`;
     }
