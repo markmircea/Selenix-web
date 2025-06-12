@@ -1,0 +1,734 @@
+<h1 class="docs-title">Test Scheduling</h1>
+
+<p class="docs-intro">Selenix provides powerful scheduling capabilities that allow you to automate your workflows to run at specific times or on recurring schedules. Schedule tests to run in the background without interrupting your daily work.</p>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-clock"></i> Overview</h2>
+    
+    <p>Selenix scheduling supports both one-time executions and complex recurring patterns. All scheduled tests run in the background with intelligent retry logic and automatic error recovery.</p>
+    
+    <div class="alert alert-info">
+        <i class="fa-solid fa-robot"></i>
+        <div>
+            <strong>AI-Powered Scheduling</strong>
+            <p>The AI assistant can help you determine optimal scheduling patterns based on your automation needs and suggest the best times for different types of data collection tasks.</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-calendar-plus"></i> Creating Schedules in the UI</h2>
+    
+    <p>Setting up schedules through the Selenix interface is simple and intuitive:</p>
+    
+    <ol class="docs-list">
+        <li>Navigate to the <strong>Tests</strong> tab in your project</li>
+        <li>Select the test you want to schedule</li>
+        <li>Click the <strong>Clock Icon</strong> in the tests drawer to open the schedule dialog</li>
+        <li>Choose your schedule type: <strong>Once</strong> or <strong>Recurring</strong></li>
+        <li>Configure your schedule settings</li>
+        <li>Click <strong>Save Schedule</strong> to activate</li>
+    </ol>
+    
+    <div class="schedule-types">
+        <div class="schedule-type">
+            <h4><i class="fa-solid fa-clock"></i> One-time Schedule</h4>
+            <p>Perfect for running automations at a specific date and time. Ideal for:</p>
+            <ul>
+                <li>One-off data collection tasks</li>
+                <li>Scheduled reports</li>
+                <li>Time-sensitive operations</li>
+            </ul>
+        </div>
+        
+        <div class="schedule-type">
+            <h4><i class="fa-solid fa-repeat"></i> Recurring Schedule</h4>
+            <p>Set up automated recurring executions with flexible patterns:</p>
+            <ul>
+                <li><strong>Hourly:</strong> Every hour, at specific minutes</li>
+                <li><strong>Daily:</strong> Every day at a specific time</li>
+                <li><strong>Weekly:</strong> Specific days of the week</li>
+                <li><strong>Monthly:</strong> Specific days of the month</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-terminal"></i> Command Line Execution</h2>
+    
+    <p>For advanced users and system integrations, Selenix supports command-line execution with the <code>--side-file</code> parameter:</p>
+    
+    <div class="command-examples">
+        <div class="command-example">
+            <h4><i class="fa-solid fa-play"></i> Basic Command Line Execution</h4>
+            <code>Selenix.exe --side-file=C:\projects\packages\reddit-scraper.side</code>
+            <p class="example-desc">Runs the specified .side file immediately from the command line</p>
+        </div>
+        
+        <div class="command-example">
+            <h4><i class="fa-solid fa-cogs"></i> Integration with Task Scheduler</h4>
+            <p>Use Windows Task Scheduler, cron, or other system schedulers:</p>
+            <code># Windows Task Scheduler
+Selenix.exe --side-file=C:\automations\daily-scrape.side
+
+# Linux/macOS cron example (daily at 9 AM)
+0 9 * * * /usr/local/bin/Selenix --side-file=/home/user/automations/daily-scrape.side</code>
+            <p class="example-desc">Perfect for enterprise environments or custom scheduling requirements</p>
+        </div>
+    </div>
+    
+    <div class="alert alert-success">
+        <i class="fa-solid fa-magic-wand-sparkles"></i>
+        <div>
+            <strong>Automatic Schedule Detection</strong>
+            <p>When you run Selenix with a .side file, any workflows with schedules configured in the app will automatically run at their designated times!</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-cog"></i> Schedule Configuration Options</h2>
+    
+    <div class="config-grid">
+        <div class="config-option">
+            <h4><i class="fa-solid fa-clock"></i> Time Settings</h4>
+            <ul>
+                <li><strong>Start Date:</strong> When the schedule begins</li>
+                <li><strong>End Date:</strong> Optional schedule expiration</li>
+                <li><strong>Time Zone:</strong> Automatic local time detection</li>
+                <li><strong>Execution Time:</strong> Precise hour and minute control</li>
+            </ul>
+        </div>
+        
+        <div class="config-option">
+            <h4><i class="fa-solid fa-repeat"></i> Recurring Patterns</h4>
+            <ul>
+                <li><strong>Interval:</strong> Every N hours/days/weeks/months</li>
+                <li><strong>Days of Week:</strong> Monday through Sunday selection</li>
+                <li><strong>Days of Month:</strong> 1st through 31st selection</li>
+                <li><strong>Advanced Patterns:</strong> Custom cron-like expressions</li>
+            </ul>
+        </div>
+        
+        <div class="config-option">
+            <h4><i class="fa-solid fa-shield-halved"></i> Execution Settings</h4>
+            <ul>
+                <li><strong>Retry Logic:</strong> Automatic retry on failures</li>
+                <li><strong>Timeout:</strong> Maximum execution time</li>
+                <li><strong>Priority:</strong> High/Normal/Low execution priority</li>
+                <li><strong>Dependencies:</strong> Wait for other schedules</li>
+            </ul>
+        </div>
+        
+        <div class="config-option">
+            <h4><i class="fa-solid fa-bell"></i> Notifications</h4>
+            <ul>
+                <li><strong>Success Alerts:</strong> Notify on completion</li>
+                <li><strong>Failure Alerts:</strong> Immediate error notifications</li>
+                <li><strong>Email Reports:</strong> Scheduled execution summaries</li>
+                <li><strong>Webhook Integration:</strong> Custom notification endpoints</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-chart-line"></i> Common Scheduling Patterns</h2>
+    
+    <div class="patterns-grid">
+        <div class="pattern-card">
+            <div class="pattern-icon">
+                <i class="fa-solid fa-store"></i>
+            </div>
+            <h4>E-commerce Monitoring</h4>
+            <div class="pattern-schedule">
+                <strong>Schedule:</strong> Every 4 hours
+            </div>
+            <p>Monitor competitor prices, inventory levels, and product changes throughout the day</p>
+            <div class="pattern-commands">
+                <strong>Key Commands:</strong>
+                <code>scrapeStructured</code>, <code>monitorElement</code>, <code>exportToCSV</code>
+            </div>
+        </div>
+        
+        <div class="pattern-card">
+            <div class="pattern-icon">
+                <i class="fa-solid fa-newspaper"></i>
+            </div>
+            <h4>News & Content Monitoring</h4>
+            <div class="pattern-schedule">
+                <strong>Schedule:</strong> Daily at 6:00 AM
+            </div>
+            <p>Collect daily news, blog posts, and industry updates for analysis and reporting</p>
+            <div class="pattern-commands">
+                <strong>Key Commands:</strong>
+                <code>scrapeCollection</code>, <code>sendToAI</code>, <code>exportToJSON</code>
+            </div>
+        </div>
+        
+        <div class="pattern-card">
+            <div class="pattern-icon">
+                <i class="fa-solid fa-chart-simple"></i>
+            </div>
+            <h4>Market Research</h4>
+            <div class="pattern-schedule">
+                <strong>Schedule:</strong> Weekly on Monday at 9:00 AM
+            </div>
+            <p>Weekly market analysis, trend tracking, and competitive intelligence gathering</p>
+            <div class="pattern-commands">
+                <strong>Key Commands:</strong>
+                <code>scrapeStructured</code>, <code>combineVariables</code>, <code>httpRequest</code>
+            </div>
+        </div>
+        
+        <div class="pattern-card">
+            <div class="pattern-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <h4>Social Media Monitoring</h4>
+            <div class="pattern-schedule">
+                <strong>Schedule:</strong> Every 2 hours
+            </div>
+            <p>Track social media mentions, engagement metrics, and trending topics</p>
+            <div class="pattern-commands">
+                <strong>Key Commands:</strong>
+                <code>scrapeCollection</code>, <code>monitorElement</code>, <code>transformVariable</code>
+            </div>
+        </div>
+        
+        <div class="pattern-card">
+            <div class="pattern-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+            <h4>Lead Generation</h4>
+            <div class="pattern-schedule">
+                <strong>Schedule:</strong> Daily at 10:00 PM
+            </div>
+            <p>Automated lead collection from directories, job boards, and business listings</p>
+            <div class="pattern-commands">
+                <strong>Key Commands:</strong>
+                <code>scrapeStructured</code>, <code>exportToCSV</code>, <code>httpRequest</code>
+            </div>
+        </div>
+        
+        <div class="pattern-card">
+            <div class="pattern-icon">
+                <i class="fa-solid fa-server"></i>
+            </div>
+            <h4>System Monitoring</h4>
+            <div class="pattern-schedule">
+                <strong>Schedule:</strong> Every 15 minutes
+            </div>
+            <p>Monitor application status, server health, and system performance metrics</p>
+            <div class="pattern-commands">
+                <strong>Key Commands:</strong>
+                <code>httpRequest</code>, <code>assertText</code>, <code>sendToAI</code>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-save"></i> Best Practices for Scheduled Automation</h2>
+    
+    <div class="best-practices">
+        <div class="practice">
+            <h4><i class="fa-solid fa-camera"></i> Use Browser Snapshots</h4>
+            <p>Save authenticated browser states to avoid re-login during scheduled runs:</p>
+            <div class="code-block-wrapper">
+                <code>createSnapshot | authenticatedState
+exportToJSON | authenticatedState | C:/snapshots/auth.json</code>
+            </div>
+            <p class="practice-desc">Then restore the state in your scheduled workflow:</p>
+            <div class="code-block-wrapper">
+                <code>importFromJSON | authenticatedState | C:/snapshots/auth.json
+restoreSnapshot | authenticatedState</code>
+            </div>
+        </div>
+        
+        <div class="practice">
+            <h4><i class="fa-solid fa-clock-rotate-left"></i> Configure Intelligent Retry Logic</h4>
+            <p>Set up automatic retries for failed executions with exponential backoff:</p>
+            <ul>
+                <li>Start with 5-minute delays between retries</li>
+                <li>Increase delay time for subsequent failures</li>
+                <li>Set maximum retry attempts (recommended: 3-5)</li>
+                <li>Configure different retry strategies for different error types</li>
+            </ul>
+        </div>
+        
+        <div class="practice">
+            <h4><i class="fa-solid fa-eye"></i> Monitor Element Changes</h4>
+            <p>Use element monitoring for dynamic content:</p>
+            <div class="code-block-wrapper">
+                <code>monitorElement | css=.price | priceElement | 30 | 1000</code>
+            </div>
+            <p class="practice-desc">This watches for price changes every 30 seconds for up to 1000 iterations</p>
+        </div>
+        
+        <div class="practice">
+            <h4><i class="fa-solid fa-database"></i> Optimize Data Storage</h4>
+            <p>Use efficient data formats and incremental exports:</p>
+            <ul>
+                <li>Export to JSON for structured data with nested objects</li>
+                <li>Use CSV for simple tabular data and Excel compatibility</li>
+                <li>Implement timestamp-based file naming for historical tracking</li>
+                <li>Consider data deduplication for frequently updated sources</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-exclamation-triangle"></i> Troubleshooting Scheduled Executions</h2>
+    
+    <div class="troubleshooting-grid">
+        <div class="troubleshoot-item">
+            <h4><i class="fa-solid fa-wifi"></i> Network Connectivity Issues</h4>
+            <ul>
+                <li>Add timeout commands with generous delays</li>
+                <li>Implement retry logic for network-dependent operations</li>
+                <li>Use <code>waitForElement</code> commands for loading states</li>
+                <li>Consider schedule adjustments for peak traffic times</li>
+            </ul>
+        </div>
+        
+        <div class="troubleshoot-item">
+            <h4><i class="fa-solid fa-key"></i> Authentication Failures</h4>
+            <ul>
+                <li>Use browser snapshots to maintain logged-in states</li>
+                <li>Implement session validation before critical operations</li>
+                <li>Set up authentication refresh workflows</li>
+                <li>Monitor for login page redirects with assertions</li>
+            </ul>
+        </div>
+        
+        <div class="troubleshoot-item">
+            <h4><i class="fa-solid fa-code"></i> Element Detection Issues</h4>
+            <ul>
+                <li>Use multiple selector strategies (CSS, XPath, text)</li>
+                <li>Implement dynamic waits for page loading</li>
+                <li>Add visual verification with screenshot analysis</li>
+                <li>Use AI Assistant for element troubleshooting</li>
+            </ul>
+        </div>
+        
+        <div class="troubleshoot-item">
+            <h4><i class="fa-solid fa-memory"></i> Performance Issues</h4>
+            <ul>
+                <li>Optimize selector specificity for faster execution</li>
+                <li>Use efficient data extraction patterns</li>
+                <li>Implement resource cleanup after execution</li>
+                <li>Monitor memory usage for long-running schedules</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-chart-bar"></i> Schedule Monitoring & Analytics</h2>
+    
+    <p>Selenix provides comprehensive monitoring and analytics for scheduled executions:</p>
+    
+    <div class="monitoring-features">
+        <div class="feature">
+            <h4><i class="fa-solid fa-chart-line"></i> Execution History</h4>
+            <p>Track success rates, execution times, and error patterns over time</p>
+        </div>
+        
+        <div class="feature">
+            <h4><i class="fa-solid fa-bell"></i> Real-time Alerts</h4>
+            <p>Immediate notifications for failed executions, timeouts, and data anomalies</p>
+        </div>
+        
+        <div class="feature">
+            <h4><i class="fa-solid fa-file-text"></i> Detailed Logs</h4>
+            <p>Comprehensive execution logs with step-by-step command results and error details</p>
+        </div>
+        
+        <div class="feature">
+            <h4><i class="fa-solid fa-tachometer-alt"></i> Performance Metrics</h4>
+            <p>Execution time analysis, resource usage tracking, and optimization recommendations</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-rocket"></i> Advanced Scheduling Scenarios</h2>
+    
+    <div class="advanced-scenarios">
+        <div class="scenario">
+            <h4><i class="fa-solid fa-link"></i> Chain Scheduling</h4>
+            <p>Execute multiple tests in sequence with dependencies:</p>
+            <ol>
+                <li>Data collection test runs first</li>
+                <li>Data processing test waits for completion</li>
+                <li>Report generation test runs after processing</li>
+                <li>Notification test sends final results</li>
+            </ol>
+        </div>
+        
+        <div class="scenario">
+            <h4><i class="fa-solid fa-code-branch"></i> Conditional Scheduling</h4>
+            <p>Use AI to determine if scheduling should continue:</p>
+            <div class="code-block-wrapper">
+                <code>sendToAI | Check if data has changed since last run | ${lastRunData} | shouldContinue
+if | ${shouldContinue} == "yes"
+  scrapeStructured | {...} | newData
+  exportToCSV | newData | results.csv
+end</code>
+            </div>
+        </div>
+        
+        <div class="scenario">
+            <h4><i class="fa-solid fa-globe"></i> Multi-timezone Scheduling</h4>
+            <p>Coordinate schedules across different time zones for global data collection</p>
+        </div>
+        
+        <div class="scenario">
+            <h4><i class="fa-solid fa-balance-scale"></i> Load-balanced Execution</h4>
+            <p>Distribute heavy workloads across multiple scheduled instances</p>
+        </div>
+    </div>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-clock"></i>
+        <div>
+            <strong>Ready to Schedule!</strong>
+            <p>Start with simple daily or weekly schedules, then gradually implement more complex patterns. Check out <a href="#data-export">Data Export</a> to learn how to effectively save and process your scheduled automation results.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.schedule-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.schedule-type {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+    border-radius: 12px;
+    border-left: 4px solid #4caf50;
+}
+
+.schedule-type h4 {
+    margin: 0 0 1rem 0;
+    color: #2e7d32;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.schedule-type ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.2rem;
+}
+
+.schedule-type li {
+    margin: 0.25rem 0;
+    color: #1b5e20;
+}
+
+.command-examples {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.command-example {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #4f46e5;
+}
+
+.command-example h4 {
+    margin: 0 0 0.5rem 0;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.example-desc {
+    margin: 0.5rem 0 0 0;
+    color: #666;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.config-option {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 20%, #ff9800 100%);
+    border-radius: 12px;
+    border-left: 4px solid #ff9800;
+}
+
+.config-option h4 {
+    margin: 0 0 1rem 0;
+    color: #e65100;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.config-option ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.config-option li {
+    padding: 0.25rem 0;
+    color: #bf360c;
+    font-size: 0.9rem;
+}
+
+.config-option strong {
+    color: #d84315;
+}
+
+.patterns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.pattern-card {
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pattern-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+}
+
+.pattern-icon {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.pattern-icon i {
+    font-size: 2rem;
+    color: #4f46e5;
+}
+
+.pattern-card h4 {
+    margin: 0 0 0.5rem 0;
+    color: #1f2937;
+    text-align: center;
+}
+
+.pattern-schedule {
+    text-align: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: #f3f4f6;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.pattern-schedule strong {
+    color: #4f46e5;
+}
+
+.pattern-card p {
+    margin: 0 0 1rem 0;
+    color: #6b7280;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.pattern-commands {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.pattern-commands strong {
+    color: #4f46e5;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.pattern-commands code {
+    background: none;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+.best-practices {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.practice {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 12px;
+    border-left: 4px solid #0288d1;
+}
+
+.practice h4 {
+    margin: 0 0 1rem 0;
+    color: #01579b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.practice-desc {
+    margin: 0.5rem 0 0 0;
+    color: #0277bd;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.code-block-wrapper {
+    position: relative;
+    margin: 1rem 0;
+}
+
+.troubleshooting-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.troubleshoot-item {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+    border-radius: 12px;
+    border-left: 4px solid #ef4444;
+}
+
+.troubleshoot-item h4 {
+    margin: 0 0 1rem 0;
+    color: #dc2626;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.troubleshoot-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.troubleshoot-item li {
+    padding: 0.25rem 0;
+    color: #b91c1c;
+    font-size: 0.9rem;
+    position: relative;
+    padding-left: 1rem;
+}
+
+.troubleshoot-item li:before {
+    content: "•";
+    color: #ef4444;
+    position: absolute;
+    left: 0;
+}
+
+.monitoring-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.feature {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f3e8ff 0%, #ddd6fe 100%);
+    border-radius: 12px;
+    border-left: 4px solid #8b5cf6;
+    text-align: center;
+}
+
+.feature h4 {
+    margin: 0 0 1rem 0;
+    color: #6d28d9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.feature p {
+    margin: 0;
+    color: #5b21b6;
+    line-height: 1.4;
+}
+
+.advanced-scenarios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.scenario {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border-radius: 12px;
+    border-left: 4px solid #6b7280;
+}
+
+.scenario h4 {
+    margin: 0 0 1rem 0;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.scenario ol {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.2rem;
+}
+
+.scenario li {
+    margin: 0.25rem 0;
+    color: #4b5563;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .schedule-types,
+    .config-grid,
+    .patterns-grid,
+    .troubleshooting-grid,
+    .monitoring-features,
+    .advanced-scenarios {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
