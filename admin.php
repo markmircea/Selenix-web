@@ -63,28 +63,70 @@ function showLoginForm() {
     <?php
 }
 
-// Get statistics
+// Handle date filtering
+$dateFilter = $_GET['date_filter'] ?? '30';
+$startDate = date('Y-m-d', strtotime("-{$dateFilter} days"));
+
+// Get software download statistics
 $stats = $pdo->query("SELECT COUNT(*) as total_downloads FROM downloads")->fetch();
 $totalDownloads = $stats['total_downloads'];
 
 $stats = $pdo->query("SELECT COUNT(DISTINCT email) as unique_emails FROM downloads")->fetch();
 $uniqueEmails = $stats['unique_emails'];
 
-// Get recent downloads
+// Get template download statistics
+$templateStats = $pdo->query("SELECT COUNT(*) as total_downloads FROM template_downloads")->fetch();
+$totalTemplateDownloads = $templateStats['total_downloads'];
+
+$templateStats = $pdo->query("SELECT COUNT(DISTINCT email) as unique_emails FROM template_downloads WHERE email IS NOT NULL")->fetch();
+$uniqueTemplateEmails = $templateStats['unique_emails'];
+
+// Get recent software downloads
 $recentDownloads = $pdo->query("
     SELECT email, download_time, ip_address 
     FROM downloads 
+    WHERE DATE(download_time) >= '$startDate'
     ORDER BY download_time DESC 
     LIMIT 50
 ")->fetchAll();
 
-// Get downloads by date
+// Get recent template downloads
+$recentTemplateDownloads = $pdo->query("
+    SELECT t.title, td.email, td.download_time, td.ip_address 
+    FROM template_downloads td 
+    JOIN templates t ON td.template_id = t.id 
+    WHERE DATE(td.download_time) >= '$startDate'
+    ORDER BY td.download_time DESC 
+    LIMIT 50
+")->fetchAll();
+
+// Get software downloads by date
 $downloadsByDate = $pdo->query("
     SELECT DATE(download_time) as date, COUNT(*) as count 
     FROM downloads 
+    WHERE DATE(download_time) >= '$startDate'
     GROUP BY DATE(download_time) 
-    ORDER BY date DESC 
-    LIMIT 30
+    ORDER BY date ASC
+")->fetchAll();
+
+// Get template downloads by date
+$templateDownloadsByDate = $pdo->query("
+    SELECT DATE(download_time) as date, COUNT(*) as count 
+    FROM template_downloads 
+    WHERE DATE(download_time) >= '$startDate'
+    GROUP BY DATE(download_time) 
+    ORDER BY date ASC
+")->fetchAll();
+
+// Get top downloaded templates
+$topTemplates = $pdo->query("
+    SELECT t.title, COUNT(td.id) as download_count 
+    FROM templates t 
+    LEFT JOIN template_downloads td ON t.id = td.template_id 
+    WHERE DATE(td.download_time) >= '$startDate' OR td.download_time IS NULL
+    GROUP BY t.id, t.title 
+    ORDER BY download_count DESC 
+    LIMIT 10
 ")->fetchAll();
 
 ?>
@@ -118,30 +160,103 @@ $downloadsByDate = $pdo->query("
     </div>
     
     <div class="container">
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number"><?php echo $totalDownloads; ?></div>
-                <div class="stat-label">Total Downloads</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number"><?php echo $uniqueEmails; ?></div>
-                <div class="stat-label">Unique Users</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number"><?php echo $totalDownloads > 0 ? round($totalDownloads / max($uniqueEmails, 1), 1) : 0; ?></div>
-                <div class="stat-label">Avg Downloads/User</div>
-            </div>
-        </div>
-        
+        <!-- Date Filter -->
         <div class="section">
-            <div class="section-header">Downloads by Day</div>
+            <div class="section-header">Date Filter</div>
             <div class="section-content">
-                <canvas id="downloadsChart" class="chart"></canvas>
+                <form method="GET" style="display: flex; gap: 10px; align-items: center;">
+                    <label for="date_filter">Show data for last:</label>
+                    <select name="date_filter" id="date_filter" onchange="this.form.submit()" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="7" <?php echo $dateFilter == '7' ? 'selected' : ''; ?>>7 days</option>
+                        <option value="30" <?php echo $dateFilter == '30' ? 'selected' : ''; ?>>30 days</option>
+                        <option value="90" <?php echo $dateFilter == '90' ? 'selected' : ''; ?>>90 days</option>
+                        <option value="365" <?php echo $dateFilter == '365' ? 'selected' : ''; ?>>1 year</option>
+                        <option value="9999" <?php echo $dateFilter == '9999' ? 'selected' : ''; ?>>All time</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <!-- Software Downloads Stats -->
+        <div style="margin-bottom: 30px;">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📥 Software Downloads</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number"><?php echo $totalDownloads; ?></div>
+                    <div class="stat-label">Total Software Downloads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number"><?php echo $uniqueEmails; ?></div>
+                    <div class="stat-label">Unique Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number"><?php echo $totalDownloads > 0 ? round($totalDownloads / max($uniqueEmails, 1), 1) : 0; ?></div>
+                    <div class="stat-label">Avg Downloads/User</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Template Downloads Stats -->
+        <div style="margin-bottom: 30px;">
+            <h2 style="color: #28a745; margin-bottom: 20px;">📋 Template Downloads</h2>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number"><?php echo $totalTemplateDownloads; ?></div>
+                    <div class="stat-label">Total Template Downloads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number"><?php echo $uniqueTemplateEmails; ?></div>
+                    <div class="stat-label">Unique Template Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number"><?php echo $totalTemplateDownloads > 0 ? round($totalTemplateDownloads / max($uniqueTemplateEmails, 1), 1) : 0; ?></div>
+                    <div class="stat-label">Avg Template Downloads/User</div>
+                </div>
             </div>
         </div>
         
+        <!-- Software Downloads Chart -->
         <div class="section">
-            <div class="section-header">Recent Downloads</div>
+            <div class="section-header">📥 Software Downloads by Day</div>
+            <div class="section-content">
+                <canvas id="softwareDownloadsChart" class="chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Template Downloads Chart -->
+        <div class="section">
+            <div class="section-header">📋 Template Downloads by Day</div>
+            <div class="section-content">
+                <canvas id="templateDownloadsChart" class="chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Top Downloaded Templates -->
+        <div class="section">
+            <div class="section-header">🏆 Top Downloaded Templates</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Template Name</th>
+                            <th>Downloads</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($topTemplates as $template): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($template['title']); ?></td>
+                            <td><?php echo number_format($template['download_count']); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Recent Software Downloads -->
+        <div class="section">
+            <div class="section-header">📥 Recent Software Downloads</div>
             <div class="section-content">
                 <table>
                     <thead>
@@ -163,18 +278,45 @@ $downloadsByDate = $pdo->query("
                 </table>
             </div>
         </div>
+
+        <!-- Recent Template Downloads -->
+        <div class="section">
+            <div class="section-header">📋 Recent Template Downloads</div>
+            <div class="section-content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Template</th>
+                            <th>Email</th>
+                            <th>Date/Time</th>
+                            <th>IP Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($recentTemplateDownloads as $download): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($download['title']); ?></td>
+                            <td><?php echo htmlspecialchars($download['email'] ?? 'Anonymous'); ?></td>
+                            <td><?php echo date('M j, Y g:i A', strtotime($download['download_time'])); ?></td>
+                            <td><?php echo htmlspecialchars($download['ip_address']); ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     
     <script>
-        // Downloads chart
-        const ctx = document.getElementById('downloadsChart').getContext('2d');
-        const chart = new Chart(ctx, {
+        // Software Downloads Chart
+        const softwareCtx = document.getElementById('softwareDownloadsChart').getContext('2d');
+        const softwareChart = new Chart(softwareCtx, {
             type: 'line',
             data: {
-                labels: [<?php echo implode(',', array_map(function($d) { return '"' . date('M j', strtotime($d['date'])) . '"'; }, array_reverse($downloadsByDate))); ?>],
+                labels: [<?php echo implode(',', array_map(function($d) { return '"' . date('M j', strtotime($d['date'])) . '"'; }, $downloadsByDate)); ?>],
                 datasets: [{
-                    label: 'Downloads',
-                    data: [<?php echo implode(',', array_map(function($d) { return $d['count']; }, array_reverse($downloadsByDate))); ?>],
+                    label: 'Software Downloads',
+                    data: [<?php echo implode(',', array_map(function($d) { return $d['count']; }, $downloadsByDate)); ?>],
                     borderColor: '#667eea',
                     backgroundColor: 'rgba(102, 126, 234, 0.1)',
                     tension: 0.4,
@@ -190,6 +332,47 @@ $downloadsByDate = $pdo->query("
                         ticks: {
                             stepSize: 1
                         }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Software Downloads Over Time'
+                    }
+                }
+            }
+        });
+
+        // Template Downloads Chart
+        const templateCtx = document.getElementById('templateDownloadsChart').getContext('2d');
+        const templateChart = new Chart(templateCtx, {
+            type: 'line',
+            data: {
+                labels: [<?php echo implode(',', array_map(function($d) { return '"' . date('M j', strtotime($d['date'])) . '"'; }, $templateDownloadsByDate)); ?>],
+                datasets: [{
+                    label: 'Template Downloads',
+                    data: [<?php echo implode(',', array_map(function($d) { return $d['count']; }, $templateDownloadsByDate)); ?>],
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Template Downloads Over Time'
                     }
                 }
             }

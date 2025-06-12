@@ -287,8 +287,8 @@ if (isset($_GET['edit'])) {
         
         <div class="section">
             <div class="section-header">
-                <span>Template Download Analytics</span>
-                <span>Recent activity</span>
+                <span>Template Analytics</span>
+                <span>Quick overview</span>
             </div>
             <div class="section-content">
                 <div class="analytics-grid">
@@ -323,26 +323,17 @@ if (isset($_GET['edit'])) {
                     </div>
                     
                     <div class="analytics-card">
-                        <h4>Recent Downloads</h4>
-                        <div class="recent-downloads">
-                            <?php 
-                            $recentDownloads = $pdo->query("
-                                SELECT t.title, td.download_time, td.ip_address 
-                                FROM template_downloads td 
-                                JOIN templates t ON td.template_id = t.id 
-                                ORDER BY td.download_time DESC 
-                                LIMIT 10
-                            ")->fetchAll();
-                            foreach ($recentDownloads as $download): 
-                            ?>
-                                <div class="recent-download-item">
-                                    <div class="download-info">
-                                        <span class="template-name"><?php echo htmlspecialchars($download['title']); ?></span>
-                                        <span class="download-time"><?php echo date('M j, H:i', strtotime($download['download_time'])); ?></span>
-                                    </div>
-                                    <span class="download-ip"><?php echo htmlspecialchars($download['ip_address']); ?></span>
-                                </div>
-                            <?php endforeach; ?>
+                        <h4>Quick Actions</h4>
+                        <div class="quick-actions-list">
+                            <a href="admin.php" class="action-link" target="_blank">
+                                <i class="fa-solid fa-chart-line"></i> View Detailed Analytics
+                            </a>
+                            <a href="product/templates/index.html" class="action-link" target="_blank">
+                                <i class="fa-solid fa-eye"></i> View Templates Page
+                            </a>
+                            <button class="action-link" onclick="openModal('uploadModal')">
+                                <i class="fa-solid fa-upload"></i> Upload New Template
+                            </button>
                         </div>
                     </div>
                 </div>
