@@ -72,6 +72,13 @@ class DocsRenderer {
                 e.preventDefault();
                 const link = e.target.classList.contains('nav-link') ? e.target : e.target.closest('.nav-link');
                 const pageId = link.dataset.page;
+                
+                // Handle special case for template library - redirect to external page
+                if (pageId === 'template-library') {
+                    window.location.href = 'https://selenix.io/product/templates/index.html#templates-library';
+                    return;
+                }
+                
                 this.loadPage(pageId, true);
             }
         });
