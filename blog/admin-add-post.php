@@ -119,7 +119,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Auto-generate excerpt if empty
         if (empty($excerpt)) {
-            $excerpt = generateExcerpt($content);
+            // If meta description is provided, use it as excerpt
+            if (!empty($metaDescription)) {
+                $excerpt = $metaDescription;
+            } else {
+                $excerpt = generateExcerpt($content);
+            }
         }
         
         // Auto-generate meta title if empty
@@ -290,7 +295,7 @@ global $BLOG_CATEGORIES;
                                 <label>
                                     <input type="checkbox" name="is_published" 
                                            <?php echo ($isEdit && $post['is_published'] === 't') || (!$isEdit) ? 'checked' : ''; ?>>
-                                    Publish immediately
+                                    <?php echo $isEdit ? 'Published' : 'Publish immediately'; ?>
                                 </label>
                             </div>
                             
@@ -322,8 +327,8 @@ global $BLOG_CATEGORIES;
                             <div class="form-group">
                                 <label for="read_time">Reading Time (minutes)</label>
                                 <input type="number" id="read_time" name="read_time" min="1" max="120"
-                                       value="<?php echo $isEdit ? $post['read_time'] : '5'; ?>"
-                                       placeholder="5">
+                                       value="<?php echo $isEdit ? $post['read_time'] : ''; ?>"
+                                       placeholder="Auto-calculate">
                                 <div class="form-help">Leave empty to auto-calculate.</div>
                             </div>
                         </div>
