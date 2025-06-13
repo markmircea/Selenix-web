@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $readTime = intval($_POST['read_time']);
     $metaTitle = sanitizeInput($_POST['meta_title']);
     $metaDescription = sanitizeInput($_POST['meta_description']);
-    $isFeatured = isset($_POST['is_featured']) ? 't' : 'f';
-    $isPublished = isset($_POST['is_published']) ? 't' : 'f';
+    $isFeatured = isset($_POST['is_featured']) ? true : false;
+    $isPublished = isset($_POST['is_published']) ? true : false;
     
     $errors = [];
     
@@ -138,8 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         $publishedAt = null;
-        if ($isPublished === 't') {
-            if ($isEdit && $post['is_published'] === 'f') {
+        if ($isPublished === true) {
+            if ($isEdit && $post['is_published'] === false) {
                 // Publishing for the first time
                 $publishedAt = date('Y-m-d H:i:s');
             } elseif ($isEdit) {
@@ -294,7 +294,7 @@ global $BLOG_CATEGORIES;
                             <div class="form-group">
                                 <label>
                                     <input type="checkbox" name="is_published" 
-                                           <?php echo ($isEdit && $post['is_published'] === 't') || (!$isEdit) ? 'checked' : ''; ?>>
+                                           <?php echo ($isEdit && $post['is_published'] === true) ? 'checked' : (!$isEdit ? 'checked' : ''); ?>>
                                     <?php echo $isEdit ? 'Published' : 'Publish immediately'; ?>
                                 </label>
                             </div>
@@ -302,7 +302,7 @@ global $BLOG_CATEGORIES;
                             <div class="form-group">
                                 <label>
                                     <input type="checkbox" name="is_featured" 
-                                           <?php echo ($isEdit && $post['is_featured'] === 't') ? 'checked' : ''; ?>>
+                                           <?php echo ($isEdit && $post['is_featured'] === true) ? 'checked' : ''; ?>>
                                     Featured post
                                 </label>
                             </div>

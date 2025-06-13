@@ -25,8 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         case 'toggle_publish':
             $post = $blogModel->getPostForEdit($postId);
             if ($post) {
-                $newStatus = $post['is_published'] === 't' ? 'f' : 't';
-                $publishedAt = $newStatus === 't' ? date('Y-m-d H:i:s') : null;
+                $newStatus = $post['is_published'] === true ? false : true;
+                $publishedAt = $newStatus === true ? date('Y-m-d H:i:s') : null;
                 
                 $updateData = [
                     'title' => $post['title'],
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 ];
                 
                 if ($blogModel->updatePost($postId, $updateData)) {
-                    $message = $newStatus === 't' ? 'Post published successfully' : 'Post unpublished successfully';
+                    $message = $newStatus === true ? 'Post published successfully' : 'Post unpublished successfully';
                     $messageType = 'success';
                 } else {
                     $message = 'Error updating post status';
@@ -144,7 +144,7 @@ $totalPages = ceil($totalPosts / ADMIN_POSTS_PER_PAGE);
                                     <td>
                                         <div class="post-title-cell">
                                             <strong><?php echo htmlspecialchars($post['title']); ?></strong>
-                                            <?php if ($post['is_featured'] === 't'): ?>
+                                            <?php if ($post['is_featured'] === true): ?>
                                                 <span class="badge featured">Featured</span>
                                             <?php endif; ?>
                                         </div>
@@ -156,8 +156,8 @@ $totalPages = ceil($totalPosts / ADMIN_POSTS_PER_PAGE);
                                     </td>
                                     <td><?php echo htmlspecialchars($post['author_name']); ?></td>
                                     <td>
-                                        <span class="status <?php echo $post['is_published'] === 't' ? 'published' : 'draft'; ?>">
-                                            <?php echo $post['is_published'] === 't' ? 'Published' : 'Draft'; ?>
+                                        <span class="status <?php echo $post['is_published'] === true ? 'published' : 'draft'; ?>">
+                                            <?php echo $post['is_published'] === true ? 'Published' : 'Draft'; ?>
                                         </span>
                                     </td>
                                     <td><?php echo formatDate(strtotime($post['created_at']), 'M j, Y'); ?></td>
@@ -168,7 +168,7 @@ $totalPages = ceil($totalPosts / ADMIN_POSTS_PER_PAGE);
                                                 <i class="fa-solid fa-edit"></i>
                                             </a>
                                             
-                                            <?php if ($post['is_published'] === 't'): ?>
+                                            <?php if ($post['is_published'] === true): ?>
                                                 <a href="post.php?slug=<?php echo $post['slug']; ?>" 
                                                    target="_blank" class="btn btn-sm btn-info" title="View">
                                                     <i class="fa-solid fa-external-link-alt"></i>
@@ -179,9 +179,9 @@ $totalPages = ceil($totalPosts / ADMIN_POSTS_PER_PAGE);
                                                 <input type="hidden" name="action" value="toggle_publish">
                                                 <input type="hidden" name="post_id" value="<?php echo $post['id']; ?>">
                                                 <button type="submit" 
-                                                        class="btn btn-sm <?php echo $post['is_published'] === 't' ? 'btn-warning' : 'btn-success'; ?>" 
-                                                        title="<?php echo $post['is_published'] === 't' ? 'Unpublish' : 'Publish'; ?>">
-                                                    <i class="fa-solid fa-<?php echo $post['is_published'] === 't' ? 'eye-slash' : 'eye'; ?>"></i>
+                                                        class="btn btn-sm <?php echo $post['is_published'] === true ? 'btn-warning' : 'btn-success'; ?>" 
+                                                        title="<?php echo $post['is_published'] === true ? 'Unpublish' : 'Publish'; ?>">
+                                                    <i class="fa-solid fa-<?php echo $post['is_published'] === true ? 'eye-slash' : 'eye'; ?>"></i>
                                                 </button>
                                             </form>
                                             
