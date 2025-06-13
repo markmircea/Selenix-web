@@ -611,6 +611,58 @@ function debugAIContent($content, $stage = 'unknown') {
 }
 
 /**
+ * Generate avatar URL with initials if no avatar is provided
+ */
+function generateAvatarUrl($authorName, $authorAvatar = null, $size = 50) {
+    if ($authorAvatar && !empty($authorAvatar)) {
+        return UPLOAD_URL . $authorAvatar;
+    }
+    
+    // Generate initials from name
+    $nameParts = explode(' ', trim($authorName));
+    $initials = '';
+    
+    // Get first letter of first name
+    if (isset($nameParts[0]) && !empty($nameParts[0])) {
+        $initials .= strtoupper(substr($nameParts[0], 0, 1));
+    }
+    
+    // Get first letter of last name if exists
+    if (isset($nameParts[1]) && !empty($nameParts[1])) {
+        $initials .= strtoupper(substr($nameParts[1], 0, 1));
+    } elseif (strlen($initials) === 1 && strlen($nameParts[0]) > 1) {
+        // If only one name part, try to get second letter
+        $initials .= strtoupper(substr($nameParts[0], 1, 1));
+    }
+    
+    // Ensure we have at least one character
+    if (empty($initials)) {
+        $initials = 'U'; // Default to 'U' for Unknown
+    }
+    
+    // Generate a consistent color based on the name
+    $colors = [
+        '4f46e5', // Purple
+        '059669', // Green
+        'dc2626', // Red
+        'ea580c', // Orange
+        '0284c7', // Blue
+        '7c2d12', // Brown
+        '701a75', // Purple variant
+        '166534', // Green variant
+        'b91c1c', // Red variant
+        'c2410c', // Orange variant
+    ];
+    
+    $colorIndex = ord(strtolower($authorName[0])) % count($colors);
+    $backgroundColor = $colors[$colorIndex];
+    
+    // Create avatar URL with initials
+    return "https://ui-avatars.com/api/?name=" . urlencode($initials) . 
+           "&size={$size}&background={$backgroundColor}&color=ffffff&bold=true&format=png";
+}
+
+/**
  * Create logs directory if it doesn't exist
  */
 if (!file_exists(__DIR__ . '/logs')) {

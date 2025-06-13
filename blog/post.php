@@ -195,11 +195,7 @@ $breadcrumbs = [
                 
                 <div class="post-author-card">
                     <div class="author-avatar-large">
-                        <?php if ($post['author_avatar']): ?>
-                            <img src="<?php echo UPLOAD_URL . $post['author_avatar']; ?>" alt="<?php echo htmlspecialchars($post['author_name']); ?>">
-                        <?php else: ?>
-                            <img src="https://via.placeholder.com/80x80/6b7280/ffffff?text=<?php echo strtoupper(substr($post['author_name'], 0, 2)); ?>" alt="<?php echo htmlspecialchars($post['author_name']); ?>">
-                        <?php endif; ?>
+                        <img src="<?php echo generateAvatarUrl($post['author_name'], $post['author_avatar'], 80); ?>" alt="<?php echo htmlspecialchars($post['author_name']); ?>">
                     </div>
                     <div class="author-info">
                         <h3 class="author-name"><?php echo htmlspecialchars($post['author_name']); ?></h3>

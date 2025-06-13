@@ -119,11 +119,7 @@ if (isset($_GET['ajax'])) {
                     <h2><?php echo htmlspecialchars($featuredPost['title']); ?></h2>
                     <p><?php echo htmlspecialchars(strip_tags(cleanAIContent($featuredPost['excerpt']))); ?></p>
                     <div class="post-author">
-                        <?php if ($featuredPost['author_avatar']): ?>
-                            <img src="<?php echo UPLOAD_URL . $featuredPost['author_avatar']; ?>" alt="<?php echo htmlspecialchars($featuredPost['author_name']); ?>" class="author-avatar">
-                        <?php else: ?>
-                            <img src="https://via.placeholder.com/50x50/6b7280/ffffff?text=<?php echo strtoupper(substr($featuredPost['author_name'], 0, 2)); ?>" alt="<?php echo htmlspecialchars($featuredPost['author_name']); ?>" class="author-avatar">
-                        <?php endif; ?>
+                        <img src="<?php echo generateAvatarUrl($featuredPost['author_name'], $featuredPost['author_avatar'], 50); ?>" alt="<?php echo htmlspecialchars($featuredPost['author_name']); ?>" class="author-avatar">
                         <div class="author-info">
                             <span class="author-name"><?php echo htmlspecialchars($featuredPost['author_name']); ?></span>
                             <?php if ($featuredPost['author_title']): ?>
@@ -177,11 +173,7 @@ if (isset($_GET['ajax'])) {
                                 <p><?php echo htmlspecialchars(strip_tags(cleanAIContent($post['excerpt']))); ?></p>
                                 <div class="post-footer">
                                     <div class="author-mini">
-                                        <?php if ($post['author_avatar']): ?>
-                                            <img src="<?php echo UPLOAD_URL . $post['author_avatar']; ?>" alt="<?php echo htmlspecialchars($post['author_name']); ?>">
-                                        <?php else: ?>
-                                            <img src="https://via.placeholder.com/30x30/6b7280/ffffff?text=<?php echo strtoupper(substr($post['author_name'], 0, 2)); ?>" alt="<?php echo htmlspecialchars($post['author_name']); ?>">
-                                        <?php endif; ?>
+                                        <img src="<?php echo generateAvatarUrl($post['author_name'], $post['author_avatar'], 30); ?>" alt="<?php echo htmlspecialchars($post['author_name']); ?>">
                                         <span><?php echo htmlspecialchars($post['author_name']); ?></span>
                                     </div>
                                     <div class="post-stats">
