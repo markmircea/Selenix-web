@@ -302,6 +302,15 @@ class BlogModel {
      * Create new post
      */
     public function createPost($data) {
+        // Ensure boolean fields are properly typed
+        $data['is_featured'] = (bool)$data['is_featured'];
+        $data['is_published'] = (bool)$data['is_published'];
+        
+        // Handle null published_at
+        if (empty($data['published_at'])) {
+            $data['published_at'] = null;
+        }
+        
         $sql = "
             INSERT INTO posts (title, slug, content, excerpt, category, featured_image, 
                              is_featured, is_published, author_name, author_title, author_avatar, 
@@ -313,7 +322,25 @@ class BlogModel {
         ";
         
         $stmt = $this->db->prepare($sql);
-        $stmt->execute($data);
+        
+        // Bind parameters with explicit types
+        $stmt->bindValue(':title', $data['title'], PDO::PARAM_STR);
+        $stmt->bindValue(':slug', $data['slug'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $data['content'], PDO::PARAM_STR);
+        $stmt->bindValue(':excerpt', $data['excerpt'], PDO::PARAM_STR);
+        $stmt->bindValue(':category', $data['category'], PDO::PARAM_STR);
+        $stmt->bindValue(':featured_image', $data['featured_image'], PDO::PARAM_STR);
+        $stmt->bindValue(':is_featured', $data['is_featured'], PDO::PARAM_BOOL);
+        $stmt->bindValue(':is_published', $data['is_published'], PDO::PARAM_BOOL);
+        $stmt->bindValue(':author_name', $data['author_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':author_title', $data['author_title'], PDO::PARAM_STR);
+        $stmt->bindValue(':author_avatar', $data['author_avatar'], PDO::PARAM_STR);
+        $stmt->bindValue(':read_time', $data['read_time'], PDO::PARAM_INT);
+        $stmt->bindValue(':meta_title', $data['meta_title'], PDO::PARAM_STR);
+        $stmt->bindValue(':meta_description', $data['meta_description'], PDO::PARAM_STR);
+        $stmt->bindValue(':published_at', $data['published_at'], $data['published_at'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        
+        $stmt->execute();
         return $stmt->fetchColumn();
     }
     
@@ -323,6 +350,15 @@ class BlogModel {
     public function updatePost($id, $data) {
         $data['id'] = $id;
         $data['updated_at'] = date('Y-m-d H:i:s');
+        
+        // Ensure boolean fields are properly typed
+        $data['is_featured'] = (bool)$data['is_featured'];
+        $data['is_published'] = (bool)$data['is_published'];
+        
+        // Handle null published_at
+        if (empty($data['published_at'])) {
+            $data['published_at'] = null;
+        }
         
         $sql = "
             UPDATE posts SET 
@@ -335,7 +371,27 @@ class BlogModel {
         ";
         
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute($data);
+        
+        // Bind boolean parameters explicitly
+        $stmt->bindValue(':id', $data['id'], PDO::PARAM_INT);
+        $stmt->bindValue(':title', $data['title'], PDO::PARAM_STR);
+        $stmt->bindValue(':slug', $data['slug'], PDO::PARAM_STR);
+        $stmt->bindValue(':content', $data['content'], PDO::PARAM_STR);
+        $stmt->bindValue(':excerpt', $data['excerpt'], PDO::PARAM_STR);
+        $stmt->bindValue(':category', $data['category'], PDO::PARAM_STR);
+        $stmt->bindValue(':featured_image', $data['featured_image'], PDO::PARAM_STR);
+        $stmt->bindValue(':is_featured', $data['is_featured'], PDO::PARAM_BOOL);
+        $stmt->bindValue(':is_published', $data['is_published'], PDO::PARAM_BOOL);
+        $stmt->bindValue(':author_name', $data['author_name'], PDO::PARAM_STR);
+        $stmt->bindValue(':author_title', $data['author_title'], PDO::PARAM_STR);
+        $stmt->bindValue(':author_avatar', $data['author_avatar'], PDO::PARAM_STR);
+        $stmt->bindValue(':read_time', $data['read_time'], PDO::PARAM_INT);
+        $stmt->bindValue(':meta_title', $data['meta_title'], PDO::PARAM_STR);
+        $stmt->bindValue(':meta_description', $data['meta_description'], PDO::PARAM_STR);
+        $stmt->bindValue(':published_at', $data['published_at'], $data['published_at'] === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        $stmt->bindValue(':updated_at', $data['updated_at'], PDO::PARAM_STR);
+        
+        return $stmt->execute();
     }
     
     /**
