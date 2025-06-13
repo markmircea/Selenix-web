@@ -385,6 +385,55 @@ if __name__ == "__main__":
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Download Selenix - Browser Automation Tool</title>
+            
+            <!-- SEO Meta Tags -->
+            <meta name="description" content="Download Selenix browser automation tool with free 1-year license. No-code browser automation for Windows. Get automatic web scraping, data extraction, and workflow automation with AI assistance.">
+            <meta name="keywords" content="download selenix, browser automation tool, web scraping software, free automation tool, windows automation, no-code automation">
+            <meta name="author" content="Selenix.io">
+            <meta name="robots" content="index, follow">
+            
+            <!-- Open Graph Meta Tags -->
+            <meta property="og:title" content="Download Selenix - Browser Automation Tool with Free License">
+            <meta property="og:description" content="Download Selenix browser automation tool with free 1-year license. No-code browser automation for Windows. Get automatic web scraping, data extraction, and workflow automation with AI assistance.">
+            <meta property="og:image" content="https://selenix.io/selenixlogo.png">
+            <meta property="og:url" content="https://selenix.io/download.php">
+            <meta property="og:type" content="website">
+            <meta property="og:site_name" content="Selenix.io">
+            
+            <!-- Twitter Card Meta Tags -->
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="Download Selenix - Browser Automation Tool">
+            <meta name="twitter:description" content="Download Selenix browser automation tool with free 1-year license. No-code browser automation for Windows with AI assistance.">
+            <meta name="twitter:image" content="https://selenix.io/selenixlogo.png">
+            
+            <!-- Additional SEO Meta Tags -->
+            <meta name="theme-color" content="#667eea">
+            <link rel="canonical" href="https://selenix.io/download.php">
+            
+            <!-- Structured Data for SEO -->
+            <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "DownloadAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://selenix.io/download.php",
+                    "actionPlatform": ["http://schema.org/DesktopWebPlatform"]
+                },
+                "object": {
+                    "@type": "SoftwareApplication",
+                    "name": "Selenix",
+                    "description": "Browser automation tool with AI assistance and free 1-year license",
+                    "operatingSystem": "Windows",
+                    "applicationCategory": "DeveloperApplication",
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD"
+                    }
+                }
+            }
+            </script>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
             <style>
                 * {
