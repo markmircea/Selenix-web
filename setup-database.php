@@ -72,6 +72,7 @@ $database = 'aibrainl_selenix';
                 download_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 ip_address VARCHAR(45),
                 user_agent TEXT,
+                platform VARCHAR(10) DEFAULT 'windows',
                 INDEX idx_email (email),
                 INDEX idx_download_time (download_time)
             )";
@@ -84,12 +85,38 @@ $database = 'aibrainl_selenix';
                 echo "<div class='success'>✅ Table 'downloads' created successfully</div>";
             }
             
+            // Check and add platform column if it doesn't exist
+            echo "<div class='step'><strong>Step 3.1:</strong> Checking for 'platform' column...</div>";
+            
+            $platformColumnExists = false;
+            try {
+                $result = $pdo->query("SHOW COLUMNS FROM downloads LIKE 'platform'");
+                if ($result->rowCount() > 0) {
+                    $platformColumnExists = true;
+                    echo "<div class='success'>✅ Column 'platform' already exists</div>";
+                } else {
+                    echo "<div class='info'>ℹ️ Column 'platform' does not exist - will add it</div>";
+                }
+            } catch (PDOException $e) {
+                echo "<div class='warning'>⚠️ Could not check platform column: " . $e->getMessage() . "</div>";
+            }
+            
+            // Add platform column if it doesn't exist
+            if (!$platformColumnExists) {
+                try {
+                    $pdo->exec("ALTER TABLE downloads ADD COLUMN platform VARCHAR(10) DEFAULT 'windows'");
+                    echo "<div class='success'>✅ Added 'platform' column successfully</div>";
+                } catch (PDOException $e) {
+                    echo "<div class='error'>❌ Failed to add platform column: " . $e->getMessage() . "</div>";
+                }
+            }
+            
             // Test permissions
             echo "<div class='step'><strong>Step 4:</strong> Testing database permissions...</div>";
             
             // Test INSERT
-            $testStmt = $pdo->prepare("INSERT INTO downloads (email, license_key, ip_address, user_agent) VALUES (?, ?, ?, ?)");
-            $testResult = $testStmt->execute(['setup-test@selenix.io', 'test_license_key_' . time(), $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', 'Setup Test']);
+            $testStmt = $pdo->prepare("INSERT INTO downloads (email, license_key, ip_address, user_agent, platform) VALUES (?, ?, ?, ?, ?)");
+            $testResult = $testStmt->execute(['setup-test@selenix.io', 'test_license_key_' . time(), $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1', 'Setup Test', 'windows']);
             
             if ($testResult) {
                 echo "<div class='success'>✅ INSERT permission confirmed</div>";
@@ -111,6 +138,28 @@ $database = 'aibrainl_selenix';
             
             $stats = $pdo->query("SELECT COUNT(*) as total FROM downloads")->fetch();
             echo "<div class='info'>📊 Current downloads in database: " . $stats['total'] . "</div>";
+            
+            // Platform statistics
+            try {
+                $platformStats = $pdo->query("
+                    SELECT 
+                        COALESCE(platform, 'windows') as platform, 
+                        COUNT(*) as count 
+                    FROM downloads 
+                    GROUP BY COALESCE(platform, 'windows')
+                    ORDER BY count DESC
+                ")->fetchAll();
+                
+                if (count($platformStats) > 0) {
+                    echo "<div class='info'>📊 Downloads by platform:</div>";
+                    foreach ($platformStats as $stat) {
+                        $icon = $stat['platform'] === 'mac' ? '🍎' : '🪟';
+                        echo "<div class='info'>   $icon " . ucfirst($stat['platform']) . ": " . $stat['count'] . "</div>";
+                    }
+                }
+            } catch (PDOException $e) {
+                echo "<div class='warning'>⚠️ Could not get platform statistics: " . $e->getMessage() . "</div>";
+            }
             
             if ($stats['total'] > 0) {
                 $recent = $pdo->query("SELECT email, download_time FROM downloads ORDER BY download_time DESC LIMIT 1")->fetch();
@@ -164,7 +213,8 @@ $database = 'aibrainl_selenix';
             'download.php' => 'Download system with email registration',
             'admin.php' => 'Admin panel for statistics',
             'index.html' => 'Main website homepage',
-            'Selenix-win-unpackedBETA.zip' => 'Application download file'
+            'Selenix-win-unpackedBETA.zip' => 'Windows application download file',
+            'Selenix-mac-universalBETA.zip' => 'Mac application download file (Universal)'
         ];
         
         foreach ($requiredFiles as $file => $description) {

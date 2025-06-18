@@ -456,7 +456,7 @@ if __name__ == "__main__":
                     border-radius: 16px;
                     padding: 40px;
                     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-                    max-width: 500px;
+                    max-width: 700px;
                     width: 100%;
                     text-align: center;
                 }
@@ -674,6 +674,141 @@ if __name__ == "__main__":
                     color: #666;
                     font-size: 12px;
                 }
+                
+                .platform-details {
+                    margin-top: 8px;
+                    font-size: 11px;
+                    color: #888;
+                    line-height: 1.3;
+                    opacity: 0;
+                    max-height: 0;
+                    transition: all 0.3s ease;
+                    overflow: hidden;
+                }
+                
+                .platform-option input[type="radio"]:checked + .platform-card .platform-details {
+                    opacity: 1;
+                    max-height: 50px;
+                }
+                
+                .system-requirements {
+                    background: #f8f9ff;
+                    border-radius: 12px;
+                    padding: 25px;
+                    margin-bottom: 30px;
+                    border: 1px solid #e1e5e9;
+                }
+                
+                .system-requirements h3 {
+                    color: #333;
+                    margin: 0 0 20px 0;
+                    font-size: 20px;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+                
+                .system-requirements h3 i {
+                    color: #667eea;
+                }
+                
+                .requirements-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 20px;
+                    margin-bottom: 20px;
+                }
+                
+                @media (max-width: 768px) {
+                    .requirements-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                
+                .req-card {
+                    background: white;
+                    border-radius: 8px;
+                    border: 2px solid #e1e5e9;
+                    overflow: hidden;
+                    transition: transform 0.3s, box-shadow 0.3s;
+                }
+                
+                .req-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+                }
+                
+                .windows-req {
+                    border-left: 4px solid #0078D4;
+                }
+                
+                .mac-req {
+                    border-left: 4px solid #007AFF;
+                }
+                
+                .req-header {
+                    padding: 15px 20px;
+                    background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+                    border-bottom: 1px solid #e1e5e9;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-weight: 600;
+                    color: #333;
+                }
+                
+                .req-header i {
+                    font-size: 20px;
+                }
+                
+                .windows-req .req-header i {
+                    color: #0078D4;
+                }
+                
+                .mac-req .req-header i {
+                    color: #007AFF;
+                }
+                
+                .req-content {
+                    padding: 20px;
+                }
+                
+                .req-item {
+                    margin-bottom: 12px;
+                    line-height: 1.5;
+                    color: #555;
+                    font-size: 14px;
+                }
+                
+                .req-item:last-child {
+                    margin-bottom: 0;
+                }
+                
+                .req-item strong {
+                    color: #333;
+                    font-weight: 600;
+                    display: inline-block;
+                    min-width: 90px;
+                }
+                
+                .compatibility-note {
+                    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+                    border: 1px solid #ffeaa7;
+                    border-radius: 8px;
+                    padding: 15px;
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 10px;
+                    font-size: 14px;
+                    line-height: 1.5;
+                    color: #856404;
+                }
+                
+                .compatibility-note i {
+                    color: #f39c12;
+                    margin-top: 2px;
+                    flex-shrink: 0;
+                }
             </style>
         </head>
         <body>
@@ -689,15 +824,74 @@ if __name__ == "__main__":
                     </div>
                     <div class="feature">
                         <i class="fas fa-robot"></i>
-                        <span>No-code browser automation</span>
+                        <span>No-code browser automation with AI assistance</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-download"></i>
-                        <span>Available for Windows x64 & Mac Universal (Beta)</span>
+                        <span>Available for Windows & Mac (Beta versions)</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-file-archive"></i>
-                        <span>Ready to run - no installation needed</span>
+                        <span>Portable - no installation required</span>
+                    </div>
+                </div>
+                
+                <!-- System Requirements Section -->
+                <div class="system-requirements">
+                    <h3><i class="fas fa-laptop"></i> System Requirements</h3>
+                    <div class="requirements-grid">
+                        <div class="req-card windows-req">
+                            <div class="req-header">
+                                <i class="fab fa-windows"></i>
+                                <span>Windows</span>
+                            </div>
+                            <div class="req-content">
+                                <div class="req-item">
+                                    <strong>OS:</strong> Windows 10 (64-bit) or Windows 11
+                                </div>
+                                <div class="req-item">
+                                    <strong>Architecture:</strong> x64 (Intel/AMD 64-bit)
+                                </div>
+                                <div class="req-item">
+                                    <strong>RAM:</strong> 4GB minimum, 8GB recommended
+                                </div>
+                                <div class="req-item">
+                                    <strong>Storage:</strong> 200MB free space
+                                </div>
+                                <div class="req-item">
+                                    <strong>Browser:</strong> Chrome, Edge, or Firefox
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="req-card mac-req">
+                            <div class="req-header">
+                                <i class="fab fa-apple"></i>
+                                <span>Mac</span>
+                            </div>
+                            <div class="req-content">
+                                <div class="req-item">
+                                    <strong>OS:</strong> macOS 10.15 (Catalina) or later
+                                </div>
+                                <div class="req-item">
+                                    <strong>Architecture:</strong> Universal (Intel & Apple Silicon)
+                                </div>
+                                <div class="req-item">
+                                    <strong>RAM:</strong> 4GB minimum, 8GB recommended
+                                </div>
+                                <div class="req-item">
+                                    <strong>Storage:</strong> 300MB free space
+                                </div>
+                                <div class="req-item">
+                                    <strong>Browser:</strong> Chrome, Safari, or Firefox
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="compatibility-note">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Compatibility Note:</strong> Both versions are currently in Beta. The Mac Universal build supports both Intel Macs and Apple Silicon (M1/M2/M3) natively for optimal performance.
                     </div>
                 </div>
                 
@@ -718,7 +912,7 @@ if __name__ == "__main__":
                     
                     <div class="form-group">
                         <label for="platform">
-                            <i class="fas fa-desktop"></i> Platform
+                            <i class="fas fa-desktop"></i> Choose Your Platform
                         </label>
                         <div class="platform-selector">
                             <label class="platform-option">
@@ -726,7 +920,10 @@ if __name__ == "__main__":
                                 <div class="platform-card">
                                     <i class="fab fa-windows"></i>
                                     <span>Windows</span>
-                                    <small>x64 (Beta)</small>
+                                    <small>x64 - Windows 10/11</small>
+                                    <div class="platform-details">
+                                        Supports Intel & AMD 64-bit processors
+                                    </div>
                                 </div>
                             </label>
                             <label class="platform-option">
@@ -734,7 +931,10 @@ if __name__ == "__main__":
                                 <div class="platform-card">
                                     <i class="fab fa-apple"></i>
                                     <span>Mac</span>
-                                    <small>Universal (Beta)</small>
+                                    <small>Universal - macOS 10.15+</small>
+                                    <div class="platform-details">
+                                        Intel & Apple Silicon (M1/M2/M3)
+                                    </div>
                                 </div>
                             </label>
                         </div>
@@ -754,8 +954,7 @@ if __name__ == "__main__":
                 
                 <p class="privacy-note">
                     <i class="fas fa-lock"></i>
-                    Your email is only used to provide you with updates and support. 
-                    We never share your information with third parties.
+                    Your email is only used to provide you with updates and support. Both Windows and Mac versions include the same features and 1-year license. We never share your information with third parties.
                 </p>
             </div>
             
