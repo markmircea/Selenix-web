@@ -853,6 +853,296 @@ if __name__ == "__main__":
                     margin-top: 2px;
                     flex-shrink: 0;
                 }
+                
+                /* Mobile Responsive Styles */
+                @media (max-width: 768px) {
+                    body {
+                        padding: 10px;
+                    }
+                    
+                    .download-container {
+                        padding: 25px 20px;
+                        margin: 10px 0;
+                        border-radius: 12px;
+                        max-width: 100%;
+                    }
+                    
+                    .logo {
+                        font-size: 1.4rem;
+                        margin-bottom: 15px;
+                    }
+                    
+                    h1 {
+                        font-size: 24px;
+                        margin-bottom: 8px;
+                    }
+                    
+                    .subtitle {
+                        font-size: 15px;
+                        margin-bottom: 25px;
+                    }
+                    
+                    .features {
+                        padding: 15px;
+                        margin-bottom: 25px;
+                    }
+                    
+                    .feature {
+                        margin-bottom: 10px;
+                        font-size: 14px;
+                    }
+                    
+                    .feature.highlight {
+                        margin: 6px -10px;
+                        padding: 6px 10px;
+                    }
+                    
+                    .system-requirements {
+                        padding: 20px 15px;
+                        margin-bottom: 25px;
+                    }
+                    
+                    .system-requirements h3 {
+                        font-size: 18px;
+                        margin-bottom: 15px;
+                        flex-direction: column;
+                        text-align: center;
+                        gap: 5px;
+                    }
+                    
+                    .requirements-grid {
+                        grid-template-columns: 1fr;
+                        gap: 15px;
+                        margin-bottom: 15px;
+                    }
+                    
+                    .req-card {
+                        border-radius: 6px;
+                    }
+                    
+                    .req-header {
+                        padding: 12px 15px;
+                        font-size: 14px;
+                    }
+                    
+                    .req-header i {
+                        font-size: 18px;
+                    }
+                    
+                    .req-content {
+                        padding: 15px;
+                    }
+                    
+                    .req-item {
+                        font-size: 13px;
+                        margin-bottom: 10px;
+                    }
+                    
+                    .req-item strong {
+                        min-width: 85px;
+                        font-size: 13px;
+                    }
+                    
+                    .compatibility-note {
+                        padding: 12px;
+                        font-size: 13px;
+                        flex-direction: column;
+                        text-align: center;
+                        gap: 8px;
+                    }
+                    
+                    .compatibility-note i {
+                        margin-top: 0;
+                    }
+                    
+                    .platform-selector {
+                        flex-direction: column;
+                        gap: 12px;
+                    }
+                    
+                    .platform-card {
+                        padding: 14px;
+                    }
+                    
+                    .platform-card i {
+                        font-size: 22px;
+                    }
+                    
+                    .platform-card span {
+                        font-size: 15px;
+                    }
+                    
+                    .platform-card small {
+                        font-size: 11px;
+                    }
+                    
+                    .platform-details {
+                        font-size: 10px;
+                        margin-top: 6px;
+                    }
+                    
+                    .download-btn {
+                        padding: 14px 24px;
+                        font-size: 16px;
+                    }
+                    
+                    .privacy-note {
+                        font-size: 11px;
+                        margin-top: 12px;
+                        text-align: center;
+                    }
+                    
+                    .processing-card {
+                        padding: 25px 20px;
+                        margin: 15px;
+                        max-width: 90%;
+                    }
+                    
+                    .processing-text {
+                        font-size: 16px;
+                    }
+                    
+                    .processing-subtext {
+                        font-size: 13px;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    body {
+                        padding: 5px;
+                    }
+                    
+                    .download-container {
+                        padding: 20px 15px;
+                        border-radius: 10px;
+                    }
+                    
+                    .logo {
+                        font-size: 1.3rem;
+                    }
+                    
+                    h1 {
+                        font-size: 22px;
+                    }
+                    
+                    .subtitle {
+                        font-size: 14px;
+                    }
+                    
+                    .features {
+                        padding: 12px;
+                    }
+                    
+                    .feature {
+                        font-size: 13px;
+                        margin-bottom: 8px;
+                    }
+                    
+                    .feature i {
+                        width: 18px;
+                        margin-right: 10px;
+                        font-size: 14px;
+                    }
+                    
+                    .system-requirements {
+                        padding: 15px 12px;
+                    }
+                    
+                    .system-requirements h3 {
+                        font-size: 16px;
+                    }
+                    
+                    .req-header {
+                        padding: 10px 12px;
+                        font-size: 13px;
+                    }
+                    
+                    .req-content {
+                        padding: 12px;
+                    }
+                    
+                    .req-item {
+                        font-size: 12px;
+                        margin-bottom: 8px;
+                    }
+                    
+                    .req-item strong {
+                        min-width: 75px;
+                        font-size: 12px;
+                    }
+                    
+                    .platform-card {
+                        padding: 12px;
+                    }
+                    
+                    .platform-card i {
+                        font-size: 20px;
+                    }
+                    
+                    .platform-card span {
+                        font-size: 14px;
+                    }
+                    
+                    .platform-details {
+                        font-size: 9px;
+                    }
+                    
+                    .download-btn {
+                        padding: 12px 20px;
+                        font-size: 15px;
+                    }
+                    
+                    input[type="email"] {
+                        padding: 10px 14px;
+                        font-size: 15px;
+                    }
+                    
+                    label {
+                        font-size: 14px;
+                        margin-bottom: 6px;
+                    }
+                    
+                    .compatibility-note {
+                        padding: 10px;
+                        font-size: 12px;
+                    }
+                    
+                    .privacy-note {
+                        font-size: 10px;
+                    }
+                }
+                
+                @media (max-width: 360px) {
+                    .download-container {
+                        padding: 15px 12px;
+                    }
+                    
+                    h1 {
+                        font-size: 20px;
+                    }
+                    
+                    .logo {
+                        font-size: 1.2rem;
+                    }
+                    
+                    .req-item strong {
+                        min-width: 65px;
+                        display: block;
+                        margin-bottom: 2px;
+                    }
+                    
+                    .platform-selector {
+                        gap: 10px;
+                    }
+                    
+                    .platform-card {
+                        padding: 10px;
+                    }
+                    
+                    .system-requirements {
+                        padding: 12px 10px;
+                    }
+                }
             </style>
         </head>
         <body>
