@@ -9,22 +9,28 @@ $username = 'aibrainl_selenix';
 $password = 'She-wolf11';
 $database = 'aibrainl_selenix';
 
+// NOTE: You may need to add a 'platform' column to your downloads table:
+// ALTER TABLE downloads ADD COLUMN platform VARCHAR(10) DEFAULT 'windows';
+
 // Generated encryption keys - keep these secret!
 $SECRET_KEY = 'b53190786ae9a82abf52f8d9094012ee1bd1900bd48682a3c3806cc380258ce6';
 $IV = '2ba22e6c427fff9073c4b1cecd75c6b3';
 $HMAC_KEY = '74518ca45f74fe5fc2dfa8f5e235a14142b8ed07e41d9d65476622d54ce1753f';
 
-// File to download
-$DOWNLOAD_FILE = 'Selenix-win-unpackedBETA.zip';
+// Files to download
+$DOWNLOAD_FILES = [
+    'windows' => 'Selenix-win-unpackedBETA.zip',
+    'mac' => 'Selenix-mac-universalBETA.zip'
+];
 
 class SelenixDownloader {
     private $pdo;
     private $secretKey;
     private $iv;
     private $hmacKey;
-    private $downloadFile;
+    private $downloadFiles;
     
-    public function __construct($host, $username, $password, $database, $secretKey, $iv, $hmacKey, $downloadFile) {
+    public function __construct($host, $username, $password, $database, $secretKey, $iv, $hmacKey, $downloadFiles) {
         // Connect to database
         try {
             $this->pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
@@ -37,7 +43,7 @@ class SelenixDownloader {
         $this->secretKey = hex2bin($secretKey);
         $this->iv = hex2bin($iv);
         $this->hmacKey = hex2bin($hmacKey);
-        $this->downloadFile = $downloadFile;
+        $this->downloadFiles = $downloadFiles;
     }
     
     /**
@@ -50,11 +56,31 @@ class SelenixDownloader {
     /**
      * Check if download file exists
      */
-    private function checkDownloadFile() {
-        if (!file_exists($this->downloadFile)) {
-            throw new Exception("Download file not found: {$this->downloadFile}");
+    private function checkDownloadFile($platform) {
+        $downloadFile = $this->downloadFiles[$platform] ?? null;
+        if (!$downloadFile || !file_exists($downloadFile)) {
+            throw new Exception("Download file not found for platform: {$platform}");
         }
-        return true;
+        return $downloadFile;
+    }
+    
+    /**
+     * Detect platform from user agent or form input
+     */
+    private function detectPlatform() {
+        // Check if platform is explicitly provided in POST data
+        if (isset($_POST['platform']) && in_array($_POST['platform'], ['windows', 'mac'])) {
+            return $_POST['platform'];
+        }
+        
+        // Auto-detect from user agent
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        if (stripos($userAgent, 'mac') !== false || stripos($userAgent, 'darwin') !== false) {
+            return 'mac';
+        }
+        
+        // Default to Windows
+        return 'windows';
     }
     
     /**
@@ -97,15 +123,15 @@ class SelenixDownloader {
     /**
      * Store email and license in database
      */
-    private function storeDownload($email, $licenseKey) {
+    private function storeDownload($email, $licenseKey, $platform) {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO downloads (email, license_key, ip_address, user_agent) VALUES (?, ?, ?, ?)"
+            "INSERT INTO downloads (email, license_key, ip_address, user_agent, platform) VALUES (?, ?, ?, ?, ?)"
         );
         
         $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
         
-        return $stmt->execute([$email, $licenseKey, $ipAddress, $userAgent]);
+        return $stmt->execute([$email, $licenseKey, $ipAddress, $userAgent, $platform]);
     }
     
     /**
@@ -125,19 +151,22 @@ class SelenixDownloader {
                 throw new Exception('Please enter a valid email address');
             }
             
-            // Check if download file exists
-            $this->checkDownloadFile();
+            // Detect platform
+            $platform = $this->detectPlatform();
+            
+            // Check if download file exists for platform
+            $downloadFile = $this->checkDownloadFile($platform);
             
             // Generate license
             $licenseKey = $this->generateLicense();
             
             // Store in database
-            if (!$this->storeDownload($email, $licenseKey)) {
+            if (!$this->storeDownload($email, $licenseKey, $platform)) {
                 throw new Exception('Failed to store download information');
             }
             
             // Create and send the download with license
-            $this->createDownloadWithLicense($licenseKey);
+            $this->createDownloadWithLicense($licenseKey, $platform, $downloadFile);
             
         } catch (Exception $e) {
             $this->showError($e->getMessage());
@@ -147,22 +176,24 @@ class SelenixDownloader {
     /**
      * Create download with license using multiple methods
      */
-    private function createDownloadWithLicense($licenseKey) {
+    private function createDownloadWithLicense($licenseKey, $platform, $downloadFile) {
+        $downloadName = $platform === 'mac' ? 'Selenix-mac-with-LicenseBETA.zip' : 'Selenix-win-with-LicenseBETA.zip';
+        
         // Try different methods in order of preference
-        if ($this->addLicenseWithPython($licenseKey)) {
+        if ($this->addLicenseWithPython($licenseKey, $downloadFile, $downloadName)) {
             return;
-        } elseif ($this->addLicenseWithSystemZip($licenseKey)) {
+        } elseif ($this->addLicenseWithSystemZip($licenseKey, $downloadFile, $downloadName)) {
             return;
         } else {
             // Fallback: send original file
-            $this->sendFile($this->downloadFile, basename($this->downloadFile));
+            $this->sendFile($downloadFile, basename($downloadFile));
         }
     }
     
     /**
      * Method 1: Use system zip command
      */
-    private function addLicenseWithSystemZip($licenseKey) {
+    private function addLicenseWithSystemZip($licenseKey, $downloadFile, $downloadName) {
         if (!$this->commandExists('zip')) {
             return false;
         }
@@ -175,7 +206,7 @@ class SelenixDownloader {
             file_put_contents($tempLicense, $licenseKey);
             
             // Copy original ZIP
-            copy($this->downloadFile, $tempZip);
+            copy($downloadFile, $tempZip);
             
             // Add license to ZIP using system command
             $command = "zip -j " . escapeshellarg($tempZip) . " " . escapeshellarg($tempLicense);
@@ -185,7 +216,7 @@ class SelenixDownloader {
             exec($command . " 2>&1", $output, $returnCode);
             
             if ($returnCode === 0 && file_exists($tempZip)) {
-                $this->sendFile($tempZip, 'Selenix-with-LicenseBETA.zip');
+                $this->sendFile($tempZip, $downloadName);
                 $this->cleanup([$tempZip, $tempLicense]);
                 return true;
             }
@@ -201,7 +232,7 @@ class SelenixDownloader {
     /**
      * Method 2: Use Python script to add license to ZIP
      */
-    private function addLicenseWithPython($licenseKey) {
+    private function addLicenseWithPython($licenseKey, $downloadFile, $downloadName) {
         if (!$this->commandExists('python3') && !$this->commandExists('python')) {
             return false;
         }
@@ -215,7 +246,7 @@ class SelenixDownloader {
             // Write files
             file_put_contents($tempScript, $pythonScript);
             file_put_contents($tempLicense, $licenseKey);
-            copy($this->downloadFile, $tempZip);
+            copy($downloadFile, $tempZip);
             
             // Execute Python script
             $command = $this->getPythonCommand() . " " . escapeshellarg($tempScript) . " " . 
@@ -226,7 +257,7 @@ class SelenixDownloader {
             exec($command . " 2>&1", $output, $returnCode);
             
             if ($returnCode === 0 && file_exists($tempZip)) {
-                $this->sendFile($tempZip, 'Selenix-with-LicenseBETA.zip');
+                $this->sendFile($tempZip, $downloadName);
                 $this->cleanup([$tempScript, $tempZip, $tempLicense]);
                 return true;
             }
@@ -239,39 +270,7 @@ class SelenixDownloader {
         return false;
     }
     
-    /**
-     * Method 3: Use ZipArchive if available
-     */
-    private function addLicenseWithZipArchive($licenseKey) {
-        $tempZip = tempnam(sys_get_temp_dir(), 'selenix_download_') . '.zip';
-        
-        try {
-            // Copy original ZIP
-            copy($this->downloadFile, $tempZip);
-            
-            // Open and modify ZIP
-            $zip = new ZipArchive();
-            if ($zip->open($tempZip) === TRUE) {
-                $zip->addFromString('license.txt', $licenseKey);
-                $zip->close();
-                
-                $this->sendFile($tempZip, 'Selenix-with-License.zip');
-                unlink($tempZip);
-                return true;
-            }
-            
-        } catch (Exception $e) {
-            // Fallback to original file
-        }
-        
-        if (file_exists($tempZip)) {
-            unlink($tempZip);
-        }
-        
-        // Send original file as fallback
-        $this->sendFile($this->downloadFile, basename($this->downloadFile));
-    }
-    
+
     /**
      * Create Python script for adding license to ZIP
      */
@@ -366,8 +365,8 @@ if __name__ == "__main__":
         // Output the file
         readfile($filePath);
         
-        // Clean up temp file if it's not the original
-        if ($filePath !== $this->downloadFile) {
+        // Clean up temp file if it's not one of the original files
+        if (!in_array($filePath, $this->downloadFiles)) {
             unlink($filePath);
         }
         
@@ -623,6 +622,58 @@ if __name__ == "__main__":
                     margin-top: 15px;
                     line-height: 1.4;
                 }
+                
+                .platform-selector {
+                    display: flex;
+                    gap: 15px;
+                    margin-top: 8px;
+                }
+                
+                .platform-option {
+                    flex: 1;
+                    cursor: pointer;
+                }
+                
+                .platform-option input[type="radio"] {
+                    display: none;
+                }
+                
+                .platform-card {
+                    border: 2px solid #e1e5e9;
+                    border-radius: 8px;
+                    padding: 16px;
+                    text-align: center;
+                    transition: all 0.3s;
+                    background: white;
+                }
+                
+                .platform-option input[type="radio"]:checked + .platform-card {
+                    border-color: #667eea;
+                    background: #f8f9ff;
+                }
+                
+                .platform-card:hover {
+                    border-color: #667eea;
+                }
+                
+                .platform-card i {
+                    font-size: 24px;
+                    color: #667eea;
+                    margin-bottom: 8px;
+                    display: block;
+                }
+                
+                .platform-card span {
+                    display: block;
+                    font-weight: 600;
+                    color: #333;
+                    margin-bottom: 4px;
+                }
+                
+                .platform-card small {
+                    color: #666;
+                    font-size: 12px;
+                }
             </style>
         </head>
         <body>
@@ -642,7 +693,7 @@ if __name__ == "__main__":
                     </div>
                     <div class="feature">
                         <i class="fas fa-download"></i>
-                        <span>Windows version x64 (Beta)</span>
+                        <span>Available for Windows x64 & Mac Universal (Beta)</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-file-archive"></i>
@@ -663,6 +714,30 @@ if __name__ == "__main__":
                             placeholder="your@email.com"
                             value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
                         >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="platform">
+                            <i class="fas fa-desktop"></i> Platform
+                        </label>
+                        <div class="platform-selector">
+                            <label class="platform-option">
+                                <input type="radio" name="platform" value="windows" checked>
+                                <div class="platform-card">
+                                    <i class="fab fa-windows"></i>
+                                    <span>Windows</span>
+                                    <small>x64 (Beta)</small>
+                                </div>
+                            </label>
+                            <label class="platform-option">
+                                <input type="radio" name="platform" value="mac">
+                                <div class="platform-card">
+                                    <i class="fab fa-apple"></i>
+                                    <span>Mac</span>
+                                    <small>Universal (Beta)</small>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                     
                     <button type="submit" class="download-btn" id="downloadBtn">
@@ -702,6 +777,22 @@ if __name__ == "__main__":
                     const btnContent = downloadBtn.querySelector('.btn-content');
                     const btnLoading = downloadBtn.querySelector('.btn-loading');
                     const processingOverlay = document.getElementById('processingOverlay');
+                    const platformOptions = document.querySelectorAll('input[name="platform"]');
+                    
+                    // Update button text based on platform selection
+                    function updateButtonText() {
+                        const selectedPlatform = document.querySelector('input[name="platform"]:checked').value;
+                        const platformName = selectedPlatform === 'mac' ? 'Mac' : 'Windows';
+                        btnContent.innerHTML = '<i class="fas fa-download"></i> Download Selenix for ' + platformName + ' + License';
+                    }
+                    
+                    // Listen for platform changes
+                    platformOptions.forEach(option => {
+                        option.addEventListener('change', updateButtonText);
+                    });
+                    
+                    // Initialize button text
+                    updateButtonText();
                     
                     form.addEventListener('submit', function(e) {
                         // Show loading state
@@ -720,6 +811,7 @@ if __name__ == "__main__":
                             downloadBtn.disabled = false;
                             btnContent.style.opacity = '1';
                             btnLoading.style.display = 'none';
+                            updateButtonText(); // Restore correct button text
                         }, 10000); // 10 seconds should be enough
                     });
                 });
@@ -784,7 +876,7 @@ if __name__ == "__main__":
 
 // Handle the request
 try {
-    $downloader = new SelenixDownloader($host, $username, $password, $database, $SECRET_KEY, $IV, $HMAC_KEY, $DOWNLOAD_FILE);
+    $downloader = new SelenixDownloader($host, $username, $password, $database, $SECRET_KEY, $IV, $HMAC_KEY, $DOWNLOAD_FILES);
     
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $downloader->processDownload();

@@ -74,6 +74,26 @@ $totalDownloads = $stats['total_downloads'];
 $stats = $pdo->query("SELECT COUNT(DISTINCT email) as unique_emails FROM downloads")->fetch();
 $uniqueEmails = $stats['unique_emails'];
 
+// Get platform statistics
+$platformStats = $pdo->query("
+    SELECT 
+        COALESCE(platform, 'windows') as platform, 
+        COUNT(*) as count 
+    FROM downloads 
+    GROUP BY COALESCE(platform, 'windows')
+    ORDER BY count DESC
+")->fetchAll();
+
+$windowsDownloads = 0;
+$macDownloads = 0;
+foreach ($platformStats as $stat) {
+    if ($stat['platform'] === 'windows') {
+        $windowsDownloads = $stat['count'];
+    } elseif ($stat['platform'] === 'mac') {
+        $macDownloads = $stat['count'];
+    }
+}
+
 // Get template download statistics
 $templateStats = $pdo->query("SELECT COUNT(*) as total_downloads FROM template_downloads")->fetch();
 $totalTemplateDownloads = $templateStats['total_downloads'];
@@ -83,7 +103,7 @@ $uniqueTemplateEmails = $templateStats['unique_emails'];
 
 // Get recent software downloads
 $recentDownloads = $pdo->query("
-    SELECT email, download_time, ip_address 
+    SELECT email, download_time, ip_address, COALESCE(platform, 'windows') as platform
     FROM downloads 
     WHERE DATE(download_time) >= '$startDate'
     ORDER BY download_time DESC 
@@ -193,6 +213,14 @@ $topTemplates = $pdo->query("
                     <div class="stat-number"><?php echo $totalDownloads > 0 ? round($totalDownloads / max($uniqueEmails, 1), 1) : 0; ?></div>
                     <div class="stat-label">Avg Downloads/User</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-number"><?php echo $windowsDownloads; ?></div>
+                    <div class="stat-label">Windows Downloads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number"><?php echo $macDownloads; ?></div>
+                    <div class="stat-label">Mac Downloads</div>
+                </div>
             </div>
         </div>
 
@@ -212,6 +240,14 @@ $topTemplates = $pdo->query("
                     <div class="stat-number"><?php echo $totalTemplateDownloads > 0 ? round($totalTemplateDownloads / max($uniqueTemplateEmails, 1), 1) : 0; ?></div>
                     <div class="stat-label">Avg Template Downloads/User</div>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Platform Distribution Chart -->
+        <div class="section">
+            <div class="section-header">💻 Platform Distribution</div>
+            <div class="section-content">
+                <canvas id="platformChart" class="chart"></canvas>
             </div>
         </div>
         
@@ -262,6 +298,7 @@ $topTemplates = $pdo->query("
                     <thead>
                         <tr>
                             <th>Email</th>
+                            <th>Platform</th>
                             <th>Date/Time</th>
                             <th>IP Address</th>
                         </tr>
@@ -270,6 +307,13 @@ $topTemplates = $pdo->query("
                         <?php foreach ($recentDownloads as $download): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($download['email']); ?></td>
+                            <td>
+                                <?php if ($download['platform'] === 'mac'): ?>
+                                    <span style="color: #007AFF;">🍎 Mac</span>
+                                <?php else: ?>
+                                    <span style="color: #0078D4;">🪟 Windows</span>
+                                <?php endif; ?>
+                            </td>
                             <td><?php echo date('M j, Y g:i A', strtotime($download['download_time'])); ?></td>
                             <td><?php echo htmlspecialchars($download['ip_address']); ?></td>
                         </tr>
@@ -308,6 +352,34 @@ $topTemplates = $pdo->query("
     </div>
     
     <script>
+        // Platform Distribution Chart
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        const platformChart = new Chart(platformCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Windows', 'Mac'],
+                datasets: [{
+                    data: [<?php echo $windowsDownloads; ?>, <?php echo $macDownloads; ?>],
+                    backgroundColor: ['#0078D4', '#007AFF'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Downloads by Platform'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
         // Software Downloads Chart
         const softwareCtx = document.getElementById('softwareDownloadsChart').getContext('2d');
         const softwareChart = new Chart(softwareCtx, {
