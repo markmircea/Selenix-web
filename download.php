@@ -463,13 +463,29 @@ if __name__ == "__main__":
                 
                 .logo {
                     font-size: 32px;
-                    font-weight: bold;
+                    font-weight: 800;
                     color: #333;
                     margin-bottom: 10px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    transition: transform 0.3s ease;
+                }
+                
+                .logo:hover {
+                    transform: scale(1.05);
+                }
+                
+                .logo-text {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 }
                 
                 .logo-dot {
-                    color: #667eea;
+                    color: #764ba2;
+                    -webkit-text-fill-color: #764ba2;
                 }
                 
                 h1 {
@@ -510,6 +526,23 @@ if __name__ == "__main__":
                     color: #667eea;
                     margin-right: 12px;
                     width: 20px;
+                }
+                
+                .feature.highlight {
+                    background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+                    border: 1px solid #c8e6c9;
+                    border-radius: 6px;
+                    padding: 8px 12px;
+                    margin: 8px -12px;
+                }
+                
+                .feature.highlight i {
+                    color: #2e7d32;
+                }
+                
+                .feature.highlight span {
+                    color: #1b5e20;
+                    font-weight: 600;
                 }
                 
                 .form-group {
@@ -735,6 +768,7 @@ if __name__ == "__main__":
                     border: 2px solid #e1e5e9;
                     overflow: hidden;
                     transition: transform 0.3s, box-shadow 0.3s;
+                    text-align: left;
                 }
                 
                 .req-card:hover {
@@ -759,6 +793,7 @@ if __name__ == "__main__":
                     gap: 10px;
                     font-weight: 600;
                     color: #333;
+                    text-align: left;
                 }
                 
                 .req-header i {
@@ -775,6 +810,7 @@ if __name__ == "__main__":
                 
                 .req-content {
                     padding: 20px;
+                    text-align: left;
                 }
                 
                 .req-item {
@@ -818,7 +854,9 @@ if __name__ == "__main__":
         </head>
         <body>
             <div class="download-container">
-                <div class="logo">selenix<span class="logo-dot">.</span>io</div>
+                <div class="logo">
+                    <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
+                </div>
                 <h1>Download Selenix</h1>
                 <p class="subtitle">Browser automation made simple</p>
                 
@@ -834,6 +872,10 @@ if __name__ == "__main__":
                     <div class="feature">
                         <i class="fas fa-download"></i>
                         <span>135+ automation commands with zero-code creation</span>
+                    </div>
+                    <div class="feature highlight">
+                        <i class="fas fa-templates"></i>
+                        <span>Ready-to-use templates for popular websites</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-file-archive"></i>
