@@ -491,6 +491,10 @@ if __name__ == "__main__":
                     margin-bottom: 30px;
                     text-align: left;
                 }
+
+                .fa-download {
+                    margin-right: 20px;
+                }
                 
                 .feature {
                     display: flex;
@@ -788,7 +792,8 @@ if __name__ == "__main__":
                     color: #333;
                     font-weight: 600;
                     display: inline-block;
-                    min-width: 90px;
+                    min-width: 100px;
+                    vertical-align: top;
                 }
                 
                 .compatibility-note {
@@ -824,11 +829,11 @@ if __name__ == "__main__":
                     </div>
                     <div class="feature">
                         <i class="fas fa-robot"></i>
-                        <span>No-code browser automation with AI assistance</span>
+                        <span>AI-powered browser automation & web scraping</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-download"></i>
-                        <span>Available for Windows & Mac (Beta versions)</span>
+                        <span>135+ automation commands with zero-code creation</span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-file-archive"></i>
@@ -923,6 +928,7 @@ if __name__ == "__main__":
                                     <small>x64 - Windows 10/11</small>
                                     <div class="platform-details">
                                         Supports Intel & AMD 64-bit processors
+                                        Professional web scraping & automation
                                     </div>
                                 </div>
                             </label>
@@ -933,7 +939,7 @@ if __name__ == "__main__":
                                     <span>Mac</span>
                                     <small>Universal - macOS 10.15+</small>
                                     <div class="platform-details">
-                                        Intel & Apple Silicon (M1/M2/M3)
+                                        Native Intel & Apple Silicon support
                                     </div>
                                 </div>
                             </label>
@@ -954,7 +960,7 @@ if __name__ == "__main__":
                 
                 <p class="privacy-note">
                     <i class="fas fa-lock"></i>
-                    Your email is only used to provide you with updates and support. Both Windows and Mac versions include the same features and 1-year license. We never share your information with third parties.
+                    Your email is only used to provide updates and support. Both platforms include the same 135+ automation commands and AI-powered web scraping features. We never share your information.
                 </p>
             </div>
             
