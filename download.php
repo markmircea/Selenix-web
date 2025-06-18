@@ -877,7 +877,7 @@ if __name__ == "__main__":
                         <span>135+ automation commands with zero-code creation</span>
                     </div>
                     <div class="feature">
-                        <i class="fas fa-templates"></i>
+                        <i class="fas fa-puzzle-piece"></i>
                         <span>Ready-to-use templates for popular websites</span>
                     </div>
                     <div class="feature">
