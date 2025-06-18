@@ -462,15 +462,18 @@ if __name__ == "__main__":
                 }
                 
                 .logo {
-                    font-size: 32px;
+                    font-size: 1.5rem;
                     font-weight: 800;
-                    color: #333;
-                    margin-bottom: 10px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    text-decoration: none;
+                    background: linear-gradient(90deg, #4f46e5, #7c3aed);
                     -webkit-background-clip: text;
                     background-clip: text;
                     -webkit-text-fill-color: transparent;
+                    position: relative;
                     transition: transform 0.3s ease;
+                    display: inline-block;
+                    cursor: pointer;
+                    margin-bottom: 10px;
                 }
                 
                 .logo:hover {
@@ -484,8 +487,8 @@ if __name__ == "__main__":
                 }
                 
                 .logo-dot {
-                    color: #764ba2;
-                    -webkit-text-fill-color: #764ba2;
+                    color: #06b6d4;
+                    -webkit-text-fill-color: #06b6d4;
                 }
                 
                 h1 {
@@ -854,11 +857,11 @@ if __name__ == "__main__":
         </head>
         <body>
             <div class="download-container">
-                <div class="logo">
+                <a href="/" class="logo">
                     <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
-                </div>
+                </a>
                 <h1>Download Selenix</h1>
-                <p class="subtitle">Browser automation made simple</p>
+                <p class="subtitle">Browser scraping and automation made simple</p>
                 
                 <div class="features">
                     <div class="feature">
@@ -873,7 +876,7 @@ if __name__ == "__main__":
                         <i class="fas fa-download"></i>
                         <span>135+ automation commands with zero-code creation</span>
                     </div>
-                    <div class="feature highlight">
+                    <div class="feature">
                         <i class="fas fa-templates"></i>
                         <span>Ready-to-use templates for popular websites</span>
                     </div>
