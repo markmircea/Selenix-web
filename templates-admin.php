@@ -461,7 +461,7 @@ if (isset($_GET['edit'])) {
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Template Title</label>
-                        <input type="text" name="title" required value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['title']) : ''; ?>">
+                        <input type="text" name="title" required value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['title'] ?? '') : ''; ?>">
                     </div>
                     
                     <div class="form-group">
@@ -477,18 +477,18 @@ if (isset($_GET['edit'])) {
                     
                     <div class="form-group">
                         <label>Icon (Font Awesome class)</label>
-                        <input type="text" name="icon" placeholder="fa-solid fa-cog" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['icon']) : 'fa-solid fa-cog'; ?>">
+                        <input type="text" name="icon" placeholder="fa-solid fa-cog" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['icon'] ?? 'fa-solid fa-cog') : 'fa-solid fa-cog'; ?>">
                     </div>
                     
                     <div class="form-group">
                         <label>Badge (optional)</label>
-                        <input type="text" name="badge" placeholder="Featured, New, Premium" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['badge']) : ''; ?>">
+                        <input type="text" name="badge" placeholder="Featured, New, Premium" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['badge'] ?? '') : ''; ?>">
                     </div>
                     
                     <div class="form-group full-width">
                         <label>Description (shows on index page)</label>
                         <div id="description-editor" style="height: 200px;"></div>
-                        <textarea id="description" name="description" style="display: none;" required><?php echo $editTemplate ? htmlspecialchars($editTemplate['description']) : ''; ?></textarea>
+                        <textarea id="description" name="description" style="display: none;" required><?php echo $editTemplate ? htmlspecialchars($editTemplate['description'] ?? '') : ''; ?></textarea>
                         <small>This appears on the main templates page. Keep it concise and engaging (recommended: under 150 characters).</small>
                     </div>
                     
@@ -500,7 +500,7 @@ if (isset($_GET['edit'])) {
                             </button>
                         </div>
                         <div id="long-description-editor" style="height: 300px;"></div>
-                        <textarea id="long-description" name="long_description" style="display: none; height: 300px; width: 100%; font-family: 'Courier New', monospace; font-size: 14px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description']) : ''; ?></textarea>
+                        <textarea id="long-description" name="long_description" style="display: none; height: 300px; width: 100%; font-family: 'Courier New', monospace; font-size: 14px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description'] ?? '') : ''; ?></textarea>
                         <small>This appears in the preview modal and supports rich text formatting.</small>
                     </div>
                     
