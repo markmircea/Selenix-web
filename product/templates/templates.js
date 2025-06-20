@@ -20,6 +20,7 @@ class TemplateManager {
         this.setupEventListeners();
         this.renderTemplates();
         this.setupPagination();
+        this.setupHashNavigation();
     }
     
     async loadTemplates() {
@@ -179,12 +180,15 @@ class TemplateManager {
             </div>`;
         }
         
+        // Generate hash ID from template title
+        const hashId = this.generateHashId(template.title);
+        
         const downloadButtonHtml = `<a href="#" class="template-download-btn" data-template-id="${template.id}">
             <i class="fa-solid fa-download"></i> Download
         </a>`;
         
         return `
-            <div class="template-card" data-category="${template.category}" data-template-id="${template.id}">
+            <div class="template-card" data-category="${template.category}" data-template-id="${template.id}" id="${hashId}">
                 ${badgeHtml}
                 <div class="template-header">
                     <div class="template-icon">
@@ -202,7 +206,7 @@ class TemplateManager {
                 ${tagsHtml}
                 <div class="template-actions">
                     ${downloadButtonHtml}
-                    <a href="#" class="template-preview-btn" data-template-id="${template.id}">
+                    <a href="#${hashId}" class="template-preview-btn" data-template-id="${template.id}">
                         <i class="fa-solid fa-eye"></i> Preview
                     </a>
                 </div>
@@ -235,6 +239,36 @@ class TemplateManager {
             // Add hover effect
             title.style.cursor = 'pointer';
         });
+    }
+    
+    setupHashNavigation() {
+        // Handle hash changes
+        const handleHash = () => {
+            const hash = window.location.hash.substring(1); // Remove the # symbol
+            if (hash) {
+                // Find template by hash ID
+                const template = this.templates.find(t => this.generateHashId(t.title) === hash);
+                if (template) {
+                    // Wait a bit for the page to render if needed
+                    setTimeout(() => {
+                        this.handlePreview(template.id);
+                        // Scroll to the template card
+                        const element = document.getElementById(hash);
+                        if (element) {
+                            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 100);
+                }
+            }
+        };
+        
+        // Listen for hash changes
+        window.addEventListener('hashchange', handleHash);
+        
+        // Check initial hash on page load
+        if (window.location.hash) {
+            handleHash();
+        }
     }
     
     async handleDownload(templateId) {
@@ -339,6 +373,12 @@ class TemplateManager {
         const template = this.templates.find(t => t.id === templateId);
         if (!template) return;
         
+        // Update URL hash to reflect the current template
+        const hashId = this.generateHashId(template.title);
+        if (window.location.hash !== `#${hashId}`) {
+            window.history.pushState(null, null, `#${hashId}`);
+        }
+        
         if (template.preview_url && template.preview_url.trim() !== '') {
             window.open(template.preview_url, '_blank');
         } else {
@@ -365,11 +405,11 @@ class TemplateManager {
             </div>` : '';
         
         modal.innerHTML = `
-            <div class="modal-overlay" onclick="this.closest('.preview-modal').remove()">
+            <div class="modal-overlay" onclick="this.closest('.preview-modal').remove(); this.clearHash?.();">
                 <div class="modal-content modal-large" onclick="event.stopPropagation()">
                     <div class="modal-header">
                         <h3>${this.escapeHtml(template.title)}</h3>
-                        <button class="close-btn" onclick="this.closest('.preview-modal').remove()">×</button>
+                        <button class="close-btn" onclick="this.closest('.preview-modal').remove(); templateManager.clearHash();">×</button>
                     </div>
                     <div class="modal-body">
                         <div class="template-details">
@@ -401,10 +441,10 @@ class TemplateManager {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn primary-button" onclick="templateManager.handleDownload(${template.id}); this.closest('.preview-modal').remove();">
+                        <button class="btn primary-button" onclick="templateManager.handleDownload(${template.id}); this.closest('.preview-modal').remove(); templateManager.clearHash();">
                             <i class="fa-solid fa-download"></i> Download Template
                         </button>
-                        <button class="btn secondary-button" onclick="this.closest('.preview-modal').remove()">
+                        <button class="btn secondary-button" onclick="this.closest('.preview-modal').remove(); templateManager.clearHash();">
                             Close
                         </button>
                     </div>
@@ -491,6 +531,21 @@ class TemplateManager {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+    
+    // Generate hash ID from template title
+    generateHashId(title) {
+        return title.toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+            .replace(/\s+/g, '-') // Replace spaces with hyphens
+            .trim();
+    }
+    
+    // Clear URL hash
+    clearHash() {
+        if (window.location.hash) {
+            window.history.pushState(null, null, window.location.pathname + window.location.search);
+        }
     }
     
     formatCategory(category) {
