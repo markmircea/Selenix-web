@@ -487,7 +487,8 @@ if (isset($_GET['edit'])) {
                     
                     <div class="form-group full-width">
                         <label>Description (shows on index page)</label>
-                        <textarea name="description" required placeholder="Brief description for the template cards" rows="3"><?php echo $editTemplate ? htmlspecialchars($editTemplate['description']) : ''; ?></textarea>
+                        <div id="description-editor" style="height: 200px;"></div>
+                        <textarea id="description" name="description" style="display: none;" required><?php echo $editTemplate ? htmlspecialchars($editTemplate['description']) : ''; ?></textarea>
                         <small>This appears on the main templates page. Keep it concise and engaging (recommended: under 150 characters).</small>
                     </div>
                     
@@ -610,8 +611,24 @@ if (isset($_GET['edit'])) {
             openModal('addModal');
         <?php endif; ?>
         
-        // Initialize Quill.js for rich text editing (free alternative to TinyMCE)
-        var quill = new Quill('#long-description-editor', {
+        // Initialize Quill.js editors for rich text editing
+        
+        // Description editor (shorter toolbar for brief descriptions)
+        var descriptionQuill = new Quill('#description-editor', {
+            theme: 'snow',
+            placeholder: 'Enter brief description for template cards...',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'color': [] }],
+                    ['link'],
+                    ['clean']
+                ]
+            }
+        });
+        
+        // Long description editor (full toolbar)
+        var longDescriptionQuill = new Quill('#long-description-editor', {
             theme: 'snow',
             placeholder: 'Enter detailed description with formatting...',
             modules: {
@@ -628,19 +645,29 @@ if (isset($_GET['edit'])) {
         });
         
         // Load existing content if editing
-        var existingContent = document.getElementById('long-description').value;
-        if (existingContent) {
-            quill.root.innerHTML = existingContent;
+        var existingDescription = document.getElementById('description').value;
+        if (existingDescription) {
+            descriptionQuill.root.innerHTML = existingDescription;
         }
         
-        // Update hidden textarea when content changes
-        quill.on('text-change', function() {
-            document.getElementById('long-description').value = quill.root.innerHTML;
+        var existingLongDescription = document.getElementById('long-description').value;
+        if (existingLongDescription) {
+            longDescriptionQuill.root.innerHTML = existingLongDescription;
+        }
+        
+        // Update hidden textareas when content changes
+        descriptionQuill.on('text-change', function() {
+            document.getElementById('description').value = descriptionQuill.root.innerHTML;
         });
         
-        // Update hidden textarea before form submission
+        longDescriptionQuill.on('text-change', function() {
+            document.getElementById('long-description').value = longDescriptionQuill.root.innerHTML;
+        });
+        
+        // Update hidden textareas before form submission
         document.querySelector('form').addEventListener('submit', function() {
-            document.getElementById('long-description').value = quill.root.innerHTML;
+            document.getElementById('description').value = descriptionQuill.root.innerHTML;
+            document.getElementById('long-description').value = longDescriptionQuill.root.innerHTML;
         });
     </script>
 </body>

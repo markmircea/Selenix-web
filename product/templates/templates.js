@@ -182,7 +182,7 @@ class TemplateManager {
                     </div>
                 </div>
                 <h3>${this.escapeHtml(template.title)}</h3>
-                <p>${this.escapeHtml(template.description)}</p>
+                <div class="template-description-html">${template.description}</div>
                 ${tagsHtml}
                 <div class="template-actions">
                     ${downloadButtonHtml}
