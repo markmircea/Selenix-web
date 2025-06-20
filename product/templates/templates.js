@@ -400,7 +400,11 @@ class TemplateManager {
                 <div class="preview-image-container" style="text-align: center; margin: 20px 0;">
                     <img src="${this.escapeHtml(template.preview_image)}" 
                          alt="${this.escapeHtml(template.image_alt || template.title)}" 
-                         style="max-width: 100%; max-height: 400px; width: auto; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: contain; background: #f8f9fa;">
+                         class="preview-image-clickable"
+                         onclick="openImageModal(this.src, this.alt)"
+                         style="max-width: 100%; max-height: 400px; width: auto; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: contain; background: #f8f9fa; cursor: pointer; transition: transform 0.2s ease;"
+                         onmouseover="this.style.transform='scale(1.02)'"
+                         onmouseout="this.style.transform='scale(1)'">
                 </div>
             </div>` : '';
         
@@ -577,6 +581,38 @@ class TemplateManager {
 
 // Initialize when DOM is ready
 let templateManager;
+
+// Global function for image modal (accessible from inline onclick)
+function openImageModal(imageSrc, imageAlt) {
+    const imageModal = document.createElement('div');
+    imageModal.className = 'image-modal';
+    imageModal.innerHTML = `
+        <div class="image-modal-overlay" onclick="this.closest('.image-modal').remove()">
+            <div class="image-modal-content" onclick="event.stopPropagation()">
+                <button class="image-modal-close" onclick="this.closest('.image-modal').remove()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+                <img src="${templateManager.escapeHtml(imageSrc)}" 
+                     alt="${templateManager.escapeHtml(imageAlt)}" 
+                     style="max-width: 95vw; max-height: 95vh; width: auto; height: auto; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+                <div class="image-modal-caption">
+                    ${templateManager.escapeHtml(imageAlt)}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(imageModal);
+    
+    // Add escape key listener
+    const escapeHandler = (e) => {
+        if (e.key === 'Escape') {
+            imageModal.remove();
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    };
+    document.addEventListener('keydown', escapeHandler);
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing Template Manager...');
