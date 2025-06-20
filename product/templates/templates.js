@@ -163,9 +163,6 @@ class TemplateManager {
                 ${template.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
             </div>` : '';
         
-        // Always show download button - file availability will be checked when clicked
-        // Frontend will generate the expected filename from template title
-
         const downloadButtonHtml = `<a href="#" class="template-download-btn" data-template-id="${template.id}">
             <i class="fa-solid fa-download"></i> Download
         </a>`;
@@ -309,18 +306,32 @@ class TemplateManager {
     showTemplateDetails(template) {
         const modal = document.createElement('div');
         modal.className = 'preview-modal';
+        
+        // Use long description if available, otherwise fall back to regular description
+        const detailedDescription = template.long_description || template.description;
+        
+        // Create preview image HTML if available
+        const previewImageHtml = template.preview_image ? 
+            `<div class="detail-section">
+                <h4>Preview</h4>
+                <img src="${this.escapeHtml(template.preview_image)}" 
+                     alt="${this.escapeHtml(template.image_alt || template.title)}" 
+                     style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            </div>` : '';
+        
         modal.innerHTML = `
             <div class="modal-overlay" onclick="this.closest('.preview-modal').remove()">
-                <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-content modal-large" onclick="event.stopPropagation()">
                     <div class="modal-header">
                         <h3>${this.escapeHtml(template.title)}</h3>
                         <button class="close-btn" onclick="this.closest('.preview-modal').remove()">×</button>
                     </div>
                     <div class="modal-body">
                         <div class="template-details">
+                            ${previewImageHtml}
                             <div class="detail-section">
                                 <h4>Description</h4>
-                                <p>${this.escapeHtml(template.description)}</p>
+                                <div class="formatted-description">${detailedDescription}</div>
                             </div>
                             <div class="detail-section">
                                 <h4>Category</h4>

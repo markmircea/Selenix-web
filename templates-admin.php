@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'add_template':
                 $title = trim($_POST['title']);
                 $description = trim($_POST['description']);
+                $long_description = trim($_POST['long_description']);
                 $category = $_POST['category'];
                 $icon = trim($_POST['icon']);
                 $featured = isset($_POST['featured']) ? 1 : 0;
@@ -54,14 +55,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
                 $preview_url = trim($_POST['preview_url']) ?: null;
+                $preview_image = trim($_POST['preview_image']) ?: null;
+                $image_alt = trim($_POST['image_alt']) ?: null;
                 $status = $_POST['status'];
                 
                 $stmt = $pdo->prepare("
-                    INSERT INTO templates (title, description, category, icon, featured, premium, badge, tags, preview_url, status) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO templates (title, description, long_description, category, icon, featured, premium, badge, tags, preview_url, preview_image, image_alt, status) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ");
                 
-                if ($stmt->execute([$title, $description, $category, $icon, $featured, $premium, $badge, $tags, $preview_url, $status])) {
+                if ($stmt->execute([$title, $description, $long_description, $category, $icon, $featured, $premium, $badge, $tags, $preview_url, $preview_image, $image_alt, $status])) {
                     $message = 'Template added successfully!';
                     $messageType = 'success';
                 } else {
@@ -74,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id = (int)$_POST['template_id'];
                 $title = trim($_POST['title']);
                 $description = trim($_POST['description']);
+                $long_description = trim($_POST['long_description']);
                 $category = $_POST['category'];
                 $icon = trim($_POST['icon']);
                 $featured = isset($_POST['featured']) ? 1 : 0;
@@ -81,15 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
                 $preview_url = trim($_POST['preview_url']) ?: null;
+                $preview_image = trim($_POST['preview_image']) ?: null;
+                $image_alt = trim($_POST['image_alt']) ?: null;
                 $status = $_POST['status'];
                 
                 $stmt = $pdo->prepare("
                     UPDATE templates 
-                    SET title=?, description=?, category=?, icon=?, featured=?, premium=?, badge=?, tags=?, preview_url=?, status=?, updated_at=NOW()
+                    SET title=?, description=?, long_description=?, category=?, icon=?, featured=?, premium=?, badge=?, tags=?, preview_url=?, preview_image=?, image_alt=?, status=?, updated_at=NOW()
                     WHERE id=?
                 ");
                 
-                if ($stmt->execute([$title, $description, $category, $icon, $featured, $premium, $badge, $tags, $preview_url, $status, $id])) {
+                if ($stmt->execute([$title, $description, $long_description, $category, $icon, $featured, $premium, $badge, $tags, $preview_url, $preview_image, $image_alt, $status, $id])) {
                     $message = 'Template updated successfully!';
                     $messageType = 'success';
                 } else {
@@ -236,6 +242,8 @@ if (isset($_GET['edit'])) {
     <title>Selenix Templates Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="templates-admin.css">
+    <!-- Include TinyMCE for rich text editing -->
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 <body>
     <div class="header">
@@ -364,14 +372,30 @@ if (isset($_GET['edit'])) {
                                 <?php endif; ?>
                             </div>
                             
+                            <?php if ($template['preview_image']): ?>
+                                <div class="template-image">
+                                    <img src="<?php echo htmlspecialchars($template['preview_image']); ?>" 
+                                         alt="<?php echo htmlspecialchars($template['image_alt'] ?: $template['title']); ?>" 
+                                         style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px;">
+                                </div>
+                            <?php endif; ?>
+                            
                             <div class="template-title">
                                 <?php echo htmlspecialchars($template['title']); ?>
                             </div>
                             
                             <div class="template-description">
-                                <?php echo htmlspecialchars(substr($template['description'], 0, 150)); ?>
-                                <?php echo strlen($template['description']) > 150 ? '...' : ''; ?>
+                                <?php 
+                                echo htmlspecialchars(substr($template['description'], 0, 100)); 
+                                echo strlen($template['description']) > 100 ? '...' : ''; 
+                                ?>
                             </div>
+                            
+                            <?php if ($template['long_description'] && strlen($template['long_description']) > strlen($template['description'])): ?>
+                                <div class="has-long-description">
+                                    <i class="fa-solid fa-file-text"></i> Has detailed description
+                                </div>
+                            <?php endif; ?>
                             
                             <div class="template-meta">
                                 <span><i class="fa-solid fa-download"></i> <?php echo number_format($template['downloads']); ?></span>
@@ -423,7 +447,7 @@ if (isset($_GET['edit'])) {
     
     <!-- Add Template Modal -->
     <div id="addModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content modal-wide">
             <span class="close" onclick="closeModal('addModal')">&times;</span>
             <h2><?php echo $editTemplate ? 'Edit Template' : 'Add New Template'; ?></h2>
             
@@ -458,6 +482,30 @@ if (isset($_GET['edit'])) {
                     <div class="form-group">
                         <label>Badge (optional)</label>
                         <input type="text" name="badge" placeholder="Featured, New, Premium" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['badge']) : ''; ?>">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Description (shows on index page)</label>
+                        <textarea name="description" required placeholder="Brief description for the template cards" rows="3"><?php echo $editTemplate ? htmlspecialchars($editTemplate['description']) : ''; ?></textarea>
+                        <small>This appears on the main templates page. Keep it concise and engaging (recommended: under 150 characters).</small>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Long Description (shows in preview with formatting)</label>
+                        <textarea id="long-description" name="long_description" placeholder="Detailed description with formatting, features, instructions, etc."><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description']) : ''; ?></textarea>
+                        <small>This appears in the preview modal and supports rich text formatting.</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Preview Image URL</label>
+                        <input type="url" name="preview_image" placeholder="https://example.com/image.jpg" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['preview_image'] ?? '') : ''; ?>">
+                        <small>Image that shows in the preview modal (recommended: 600x400px)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Image Alt Text</label>
+                        <input type="text" name="image_alt" placeholder="Descriptive text for the image" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['image_alt'] ?? '') : ''; ?>">
+                        <small>Accessibility description for the preview image</small>
                     </div>
                     
                     <div class="form-group full-width">
@@ -569,6 +617,25 @@ if (isset($_GET['edit'])) {
         <?php if ($editTemplate): ?>
             openModal('addModal');
         <?php endif; ?>
+        
+        // Initialize TinyMCE for rich text editing
+        tinymce.init({
+            selector: '#long-description',
+            height: 300,
+            menubar: false,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'removeformat | help',
+            content_style: 'body { font-family:Inter,Arial,sans-serif; font-size:14px }',
+            branding: false,
+            promotion: false
+        });
     </script>
 </body>
 </html>

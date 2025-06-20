@@ -62,13 +62,14 @@ $database = 'aibrainl_selenix';
             }
             
             // Create templates table
-            echo "<div class='step'><strong>Step 3:</strong> Creating 'templates' table...</div>";
+            echo "<div class='step'><strong>Step 3:</strong> Creating/updating 'templates' table...</div>";
             
             $createTemplateTable = "
             CREATE TABLE IF NOT EXISTS templates (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 description TEXT NOT NULL,
+                long_description LONGTEXT DEFAULT NULL,
                 category VARCHAR(100) NOT NULL,
                 icon VARCHAR(100) DEFAULT 'fa-solid fa-cog',
                 downloads INT DEFAULT 0,
@@ -78,6 +79,8 @@ $database = 'aibrainl_selenix';
                 tags JSON DEFAULT NULL,
                 file_path VARCHAR(500) DEFAULT NULL,
                 preview_url VARCHAR(500) DEFAULT NULL,
+                preview_image VARCHAR(500) DEFAULT NULL,
+                image_alt TEXT DEFAULT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 status ENUM('active', 'inactive', 'draft') DEFAULT 'active',
@@ -90,9 +93,33 @@ $database = 'aibrainl_selenix';
             $pdo->exec($createTemplateTable);
             
             if ($tableExists) {
-                echo "<div class='success'>✅ Table 'templates' verified and updated</div>";
+                echo "<div class='success'>✅ Table 'templates' verified and structure updated</div>";
+                
+                // Add new columns if they don't exist
+                echo "<div class='step'><strong>Step 3b:</strong> Adding new columns if missing...</div>";
+                
+                $columnsToAdd = [
+                    'long_description' => 'ADD COLUMN long_description LONGTEXT AFTER description',
+                    'preview_image' => 'ADD COLUMN preview_image VARCHAR(500) AFTER preview_url',
+                    'image_alt' => 'ADD COLUMN image_alt TEXT AFTER preview_image'
+                ];
+                
+                foreach ($columnsToAdd as $columnName => $alterSQL) {
+                    try {
+                        // Check if column exists
+                        $checkColumn = $pdo->query("SHOW COLUMNS FROM templates LIKE '$columnName'");
+                        if ($checkColumn->rowCount() == 0) {
+                            $pdo->exec("ALTER TABLE templates $alterSQL");
+                            echo "<div class='success'>✅ Added column '$columnName'</div>";
+                        } else {
+                            echo "<div class='info'>ℹ️ Column '$columnName' already exists</div>";
+                        }
+                    } catch (PDOException $e) {
+                        echo "<div class='warning'>⚠️ Could not add column '$columnName': " . $e->getMessage() . "</div>";
+                    }
+                }
             } else {
-                echo "<div class='success'>✅ Table 'templates' created successfully</div>";
+                echo "<div class='success'>✅ Table 'templates' created successfully with all new columns</div>";
             }
             
             // Create template_downloads table for tracking

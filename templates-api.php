@@ -159,6 +159,11 @@ function handleGetRequest($pdo) {
         $template['id'] = (int)$template['id'];
         $template['downloads'] = (int)$template['downloads'];
         
+        // Ensure new fields exist even if NULL in database
+        $template['long_description'] = $template['long_description'] ?? null;
+        $template['preview_image'] = $template['preview_image'] ?? null;
+        $template['image_alt'] = $template['image_alt'] ?? null;
+        
         // Clean up file paths for security
         if ($template['file_path'] && !filter_var($template['file_path'], FILTER_VALIDATE_URL)) {
             // If it's a local file, ensure it starts with uploads/
