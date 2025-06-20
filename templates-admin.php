@@ -489,12 +489,12 @@ if (isset($_GET['edit'])) {
                     <div class="form-group full-width">
                         <label>Long Description (shows in preview with formatting)</label>
                         <div class="editor-toggle">
-                            <button type="button" id="toggle-editor" class="btn btn-secondary" style="margin-bottom: 10px;">
-                                <i class="fa-solid fa-code"></i> Switch to HTML Mode
+                            <button type="button" id="toggle-editor" class="btn btn-warning" style="margin-bottom: 10px;">
+                                <i class="fa-solid fa-eye"></i> Switch to Visual Mode
                             </button>
                         </div>
-                        <div id="long-description-editor" style="height: 300px;"></div>
-                        <textarea id="long-description" name="long_description" style="display: none; height: 300px; width: 100%; font-family: 'Courier New', monospace; font-size: 14px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description'] ?? '') : ''; ?></textarea>
+                        <div id="long-description-editor" style="height: 300px; display: none;"></div>
+                        <textarea id="long-description" name="long_description" style="height: 300px; width: 100%; font-family: 'Courier New', monospace; font-size: 14px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description'] ?? '') : ''; ?></textarea>
                         <small>This appears in the preview modal and supports rich text formatting.</small>
                     </div>
                     
@@ -644,10 +644,16 @@ if (isset($_GET['edit'])) {
         });
         
         // Toggle functionality for long description editor
-        var isHtmlMode = true;
+        var isHtmlMode = true; // Start in HTML mode by default
         var toggleButton = document.getElementById('toggle-editor');
         var quillContainer = document.getElementById('long-description-editor');
         var textareaElement = document.getElementById('long-description');
+        
+        // Initialize in HTML mode
+        toggleButton.innerHTML = '<i class="fa-solid fa-eye"></i> Switch to Visual Mode';
+        toggleButton.className = 'btn btn-warning';
+        quillContainer.style.display = 'none';
+        textareaElement.style.display = 'block';
         
         toggleButton.addEventListener('click', function() {
             if (isHtmlMode) {
