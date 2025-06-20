@@ -584,31 +584,54 @@ let templateManager;
 
 // Global function for image modal (accessible from inline onclick)
 function openImageModal(imageSrc, imageAlt) {
+    // Ensure we have access to escapeHtml function
+    const escapeHtml = (text) => {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    };
+    
     const imageModal = document.createElement('div');
     imageModal.className = 'image-modal';
+    imageModal.style.zIndex = '99999'; // Higher than any other modal
     imageModal.innerHTML = `
         <div class="image-modal-overlay" onclick="this.closest('.image-modal').remove()">
             <div class="image-modal-content" onclick="event.stopPropagation()">
                 <button class="image-modal-close" onclick="this.closest('.image-modal').remove()">
                     <i class="fa-solid fa-times"></i>
                 </button>
-                <img src="${templateManager.escapeHtml(imageSrc)}" 
-                     alt="${templateManager.escapeHtml(imageAlt)}" 
-                     style="max-width: 95vw; max-height: 95vh; width: auto; height: auto; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+                <img src="${escapeHtml(imageSrc)}" 
+                     alt="${escapeHtml(imageAlt)}" 
+                     style="max-width: 90vw; max-height: 90vh; width: auto; height: auto; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
                 <div class="image-modal-caption">
-                    ${templateManager.escapeHtml(imageAlt)}
+                    ${escapeHtml(imageAlt)}
                 </div>
             </div>
         </div>
     `;
     
+    // Append to body (not inside the preview modal)
     document.body.appendChild(imageModal);
+    
+    // Prevent body scroll while modal is open
+    document.body.style.overflow = 'hidden';
+    
+    // Function to close modal and restore scroll
+    const closeModal = () => {
+        imageModal.remove();
+        document.body.style.overflow = '';
+        document.removeEventListener('keydown', escapeHandler);
+    };
+    
+    // Update close buttons to use the closeModal function
+    imageModal.querySelectorAll('[onclick*="remove"]').forEach(btn => {
+        btn.onclick = closeModal;
+    });
     
     // Add escape key listener
     const escapeHandler = (e) => {
         if (e.key === 'Escape') {
-            imageModal.remove();
-            document.removeEventListener('keydown', escapeHandler);
+            closeModal();
         }
     };
     document.addEventListener('keydown', escapeHandler);
