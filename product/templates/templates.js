@@ -401,7 +401,6 @@ class TemplateManager {
                     <img src="${this.escapeHtml(template.preview_image)}" 
                          alt="${this.escapeHtml(template.image_alt || template.title)}" 
                          class="preview-image-clickable"
-                         onclick="openImageModal(this.src, this.alt)"
                          style="max-width: 100%; max-height: 400px; width: auto; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: contain; background: #f8f9fa; cursor: pointer; transition: transform 0.2s ease;"
                          onmouseover="this.style.transform='scale(1.02)'"
                          onmouseout="this.style.transform='scale(1)'">
@@ -457,6 +456,17 @@ class TemplateManager {
         `;
         
         document.body.appendChild(modal);
+        
+        // Add click handler for preview image after modal is added to DOM
+        const previewImage = modal.querySelector('.preview-image-clickable');
+        if (previewImage) {
+            previewImage.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Image clicked, opening full size modal');
+                openImageModal(this.src, this.alt);
+            });
+        }
     }
     
     showNotification(message, type = 'success') {
@@ -584,6 +594,8 @@ let templateManager;
 
 // Global function for image modal (accessible from inline onclick)
 function openImageModal(imageSrc, imageAlt) {
+    console.log('openImageModal called with:', imageSrc, imageAlt);
+    
     // Ensure we have access to escapeHtml function
     const escapeHtml = (text) => {
         const div = document.createElement('div');
