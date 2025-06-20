@@ -47,16 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'add_template':
                 $title = trim($_POST['title']);
                 $description = trim($_POST['description']);
-                $long_description = trim($_POST['long_description']);
+                $long_description = trim($_POST['long_description'] ?? '');
                 $category = $_POST['category'];
                 $icon = trim($_POST['icon']);
                 $featured = isset($_POST['featured']) ? 1 : 0;
                 $premium = isset($_POST['premium']) ? 1 : 0;
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
-                $preview_url = trim($_POST['preview_url']) ?: null;
-                $preview_image = trim($_POST['preview_image']) ?: null;
-                $image_alt = trim($_POST['image_alt']) ?: null;
+                $preview_url = trim($_POST['preview_url'] ?? '') ?: null;
+                $preview_image = trim($_POST['preview_image'] ?? '') ?: null;
+                $image_alt = trim($_POST['image_alt'] ?? '') ?: null;
                 $status = $_POST['status'];
                 
                 $stmt = $pdo->prepare("
@@ -77,16 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id = (int)$_POST['template_id'];
                 $title = trim($_POST['title']);
                 $description = trim($_POST['description']);
-                $long_description = trim($_POST['long_description']);
+                $long_description = trim($_POST['long_description'] ?? '');
                 $category = $_POST['category'];
                 $icon = trim($_POST['icon']);
                 $featured = isset($_POST['featured']) ? 1 : 0;
                 $premium = isset($_POST['premium']) ? 1 : 0;
                 $badge = trim($_POST['badge']) ?: null;
                 $tags = $_POST['tags'] ? json_encode(array_map('trim', explode(',', $_POST['tags']))) : null;
-                $preview_url = trim($_POST['preview_url']) ?: null;
-                $preview_image = trim($_POST['preview_image']) ?: null;
-                $image_alt = trim($_POST['image_alt']) ?: null;
+                $preview_url = trim($_POST['preview_url'] ?? '') ?: null;
+                $preview_image = trim($_POST['preview_image'] ?? '') ?: null;
+                $image_alt = trim($_POST['image_alt'] ?? '') ?: null;
                 $status = $_POST['status'];
                 
                 $stmt = $pdo->prepare("
@@ -242,8 +242,9 @@ if (isset($_GET['edit'])) {
     <title>Selenix Templates Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="templates-admin.css">
-    <!-- Include TinyMCE for rich text editing -->
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <!-- Include Quill.js for rich text editing (free alternative to TinyMCE) -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -376,7 +377,7 @@ if (isset($_GET['edit'])) {
                                 <div class="template-image">
                                     <img src="<?php echo htmlspecialchars($template['preview_image']); ?>" 
                                          alt="<?php echo htmlspecialchars($template['image_alt'] ?: $template['title']); ?>" 
-                                         style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px;">
+                                         style="width: 100%; height: 120px; object-fit: cover; object-position: center; border-radius: 4px; background: #f8f9fa;">
                                 </div>
                             <?php endif; ?>
                             
@@ -447,7 +448,7 @@ if (isset($_GET['edit'])) {
     
     <!-- Add Template Modal -->
     <div id="addModal" class="modal">
-        <div class="modal-content modal-wide">
+        <div class="modal-content modal-wide" onclick="event.stopPropagation();">
             <span class="close" onclick="closeModal('addModal')">&times;</span>
             <h2><?php echo $editTemplate ? 'Edit Template' : 'Add New Template'; ?></h2>
             
@@ -492,7 +493,8 @@ if (isset($_GET['edit'])) {
                     
                     <div class="form-group full-width">
                         <label>Long Description (shows in preview with formatting)</label>
-                        <textarea id="long-description" name="long_description" placeholder="Detailed description with formatting, features, instructions, etc."><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description']) : ''; ?></textarea>
+                        <div id="long-description-editor" style="height: 300px;"></div>
+                        <textarea id="long-description" name="long_description" style="display: none;"><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description']) : ''; ?></textarea>
                         <small>This appears in the preview modal and supports rich text formatting.</small>
                     </div>
                     
@@ -571,7 +573,7 @@ if (isset($_GET['edit'])) {
     
     <!-- Upload Modal -->
     <div id="uploadModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" onclick="event.stopPropagation();">
             <span class="close" onclick="closeModal('uploadModal')">&times;</span>
             <h2>Upload Template File</h2>
             
@@ -603,38 +605,42 @@ if (isset($_GET['edit'])) {
             document.getElementById(modalId).style.display = 'none';
         }
         
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
-        }
-        
         // Auto-open edit modal if editing
         <?php if ($editTemplate): ?>
             openModal('addModal');
         <?php endif; ?>
         
-        // Initialize TinyMCE for rich text editing
-        tinymce.init({
-            selector: '#long-description',
-            height: 300,
-            menubar: false,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | blocks | ' +
-                'bold italic backcolor | alignleft aligncenter ' +
-                'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help',
-            content_style: 'body { font-family:Inter,Arial,sans-serif; font-size:14px }',
-            branding: false,
-            promotion: false
+        // Initialize Quill.js for rich text editing (free alternative to TinyMCE)
+        var quill = new Quill('#long-description-editor', {
+            theme: 'snow',
+            placeholder: 'Enter detailed description with formatting...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['link'],
+                    ['clean']
+                ]
+            }
+        });
+        
+        // Load existing content if editing
+        var existingContent = document.getElementById('long-description').value;
+        if (existingContent) {
+            quill.root.innerHTML = existingContent;
+        }
+        
+        // Update hidden textarea when content changes
+        quill.on('text-change', function() {
+            document.getElementById('long-description').value = quill.root.innerHTML;
+        });
+        
+        // Update hidden textarea before form submission
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('long-description').value = quill.root.innerHTML;
         });
     </script>
 </body>

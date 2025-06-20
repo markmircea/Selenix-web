@@ -314,9 +314,11 @@ class TemplateManager {
         const previewImageHtml = template.preview_image ? 
             `<div class="detail-section">
                 <h4>Preview</h4>
-                <img src="${this.escapeHtml(template.preview_image)}" 
-                     alt="${this.escapeHtml(template.image_alt || template.title)}" 
-                     style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <div class="preview-image-container" style="text-align: center; margin: 20px 0;">
+                    <img src="${this.escapeHtml(template.preview_image)}" 
+                         alt="${this.escapeHtml(template.image_alt || template.title)}" 
+                         style="max-width: 100%; max-height: 400px; width: auto; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: contain; background: #f8f9fa;">
+                </div>
             </div>` : '';
         
         modal.innerHTML = `
