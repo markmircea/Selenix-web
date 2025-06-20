@@ -158,10 +158,26 @@ class TemplateManager {
                 <span>${template.badge}</span>
             </div>` : '';
         
-        const tagsHtml = template.tags && template.tags.length > 0 ?
-            `<div class="template-tags">
-                ${template.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
-            </div>` : '';
+        // Generate tags with expand/collapse functionality
+        let tagsHtml = '';
+        if (template.tags && template.tags.length > 0) {
+            const maxTagsToShow = 6; // Approximately 2 rows
+            const visibleTags = template.tags.slice(0, maxTagsToShow);
+            const hiddenTags = template.tags.slice(maxTagsToShow);
+            
+            tagsHtml = `<div class="template-tags">
+                ${visibleTags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
+                ${hiddenTags.length > 0 ? `
+                    <span class="hidden-tags" style="display: none;">
+                        ${hiddenTags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
+                    </span>
+                    <span class="expand-tags-btn" onclick="this.closest('.template-tags').classList.toggle('expanded'); event.stopPropagation();">
+                        <span class="expand-text">+${hiddenTags.length} more</span>
+                        <span class="collapse-text" style="display: none;">Show less</span>
+                    </span>
+                ` : ''}
+            </div>`;
+        }
         
         const downloadButtonHtml = `<a href="#" class="template-download-btn" data-template-id="${template.id}">
             <i class="fa-solid fa-download"></i> Download
@@ -181,7 +197,7 @@ class TemplateManager {
                         </span>
                     </div>
                 </div>
-                <h3>${this.escapeHtml(template.title)}</h3>
+                <h3 class="template-title-clickable" data-template-id="${template.id}">${this.escapeHtml(template.title)}</h3>
                 <div class="template-description-html">${template.description}</div>
                 ${tagsHtml}
                 <div class="template-actions">
@@ -195,7 +211,7 @@ class TemplateManager {
     }
     
     setupDownloadHandlers() {
-        document.querySelectorAll('.template-download-btn:not(.disabled)').forEach(button => {
+        document.querySelectorAll('.template-download-btn:not(.disabled):not(.downloaded)').forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.handleDownload(parseInt(button.dataset.templateId));
@@ -207,6 +223,17 @@ class TemplateManager {
                 e.preventDefault();
                 this.handlePreview(parseInt(button.dataset.templateId));
             });
+        });
+        
+        // Add click handler for template titles
+        document.querySelectorAll('.template-title-clickable').forEach(title => {
+            title.addEventListener('click', (e) => {
+                e.preventDefault();
+                title.style.cursor = 'pointer';
+                this.handlePreview(parseInt(title.dataset.templateId));
+            });
+            // Add hover effect
+            title.style.cursor = 'pointer';
         });
     }
     
@@ -224,6 +251,13 @@ class TemplateManager {
         }
         
         const downloadBtn = document.querySelector(`[data-template-id="${templateId}"] .template-download-btn`);
+        
+        // Check if already downloaded
+        if (downloadBtn.classList.contains('downloaded')) {
+            this.showNotification('Template already downloaded!', 'info');
+            return;
+        }
+        
         const originalText = downloadBtn.innerHTML;
         downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Downloading...';
         downloadBtn.style.pointerEvents = 'none';
@@ -250,10 +284,19 @@ class TemplateManager {
             
             this.showNotification(`Template "${template.title}" downloaded successfully!`, 'success');
             
+            // Mark as downloaded permanently
+            downloadBtn.innerHTML = '<i class="fa-solid fa-check"></i> Downloaded';
+            downloadBtn.classList.add('downloaded');
+            downloadBtn.style.pointerEvents = 'none';
+            downloadBtn.style.background = '#28a745';
+            downloadBtn.style.cursor = 'not-allowed';
+            downloadBtn.style.opacity = '0.8';
+            
         } catch (error) {
             console.error('Download error:', error);
             this.showNotification('Failed to download template. Please try again.', 'error');
-        } finally {
+            
+            // Reset button on error only
             setTimeout(() => {
                 downloadBtn.innerHTML = originalText;
                 downloadBtn.style.pointerEvents = 'auto';
