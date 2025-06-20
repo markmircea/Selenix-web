@@ -605,40 +605,56 @@ function openImageModal(imageSrc, imageAlt) {
     
     const imageModal = document.createElement('div');
     imageModal.className = 'image-modal';
-    imageModal.style.zIndex = '99999'; // Higher than any other modal
+    imageModal.style.cssText = `
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 999999 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+    `;
+    
     imageModal.innerHTML = `
-        <div class="image-modal-overlay" onclick="this.closest('.image-modal').remove()">
-            <div class="image-modal-content" onclick="event.stopPropagation()">
-                <button class="image-modal-close" onclick="this.closest('.image-modal').remove()">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-                <img src="${escapeHtml(imageSrc)}" 
-                     alt="${escapeHtml(imageAlt)}" 
-                     style="max-width: 90vw; max-height: 90vh; width: auto; height: auto; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-                <div class="image-modal-caption">
-                    ${escapeHtml(imageAlt)}
-                </div>
+        <div class="image-modal-content" style="position: relative !important; cursor: default !important; max-width: 90vw !important; max-height: 90vh !important;">
+            <button class="image-modal-close" style="position: absolute !important; top: -15px !important; right: -15px !important; background: white !important; border: none !important; border-radius: 50% !important; width: 40px !important; height: 40px !important; font-size: 18px !important; cursor: pointer !important; z-index: 1000000 !important; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important; color: #333 !important;">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <img src="${escapeHtml(imageSrc)}" 
+                 alt="${escapeHtml(imageAlt)}" 
+                 style="max-width: 90vw !important; max-height: 90vh !important; width: auto !important; height: auto !important; border-radius: 8px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important; display: block !important;">
+            <div class="image-modal-caption" style="position: absolute !important; bottom: -50px !important; left: 0 !important; right: 0 !important; color: white !important; text-align: center !important; padding: 12px !important; font-size: 14px !important; background: rgba(0, 0, 0, 0.8) !important; border-radius: 6px !important; margin: 0 20px !important;">
+                ${escapeHtml(imageAlt)}
             </div>
         </div>
     `;
     
     // Append to body (not inside the preview modal)
     document.body.appendChild(imageModal);
+    console.log('Image modal added to DOM:', imageModal);
     
     // Prevent body scroll while modal is open
     document.body.style.overflow = 'hidden';
     
     // Function to close modal and restore scroll
     const closeModal = () => {
+        console.log('Closing image modal');
         imageModal.remove();
         document.body.style.overflow = '';
         document.removeEventListener('keydown', escapeHandler);
     };
     
-    // Update close buttons to use the closeModal function
-    imageModal.querySelectorAll('[onclick*="remove"]').forEach(btn => {
-        btn.onclick = closeModal;
-    });
+    // Add click handlers
+    imageModal.addEventListener('click', closeModal);
+    const imageContent = imageModal.querySelector('.image-modal-content');
+    imageContent.addEventListener('click', (e) => e.stopPropagation());
+    
+    const closeButton = imageModal.querySelector('.image-modal-close');
+    closeButton.addEventListener('click', closeModal);
     
     // Add escape key listener
     const escapeHandler = (e) => {
