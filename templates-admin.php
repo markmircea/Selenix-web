@@ -494,8 +494,13 @@ if (isset($_GET['edit'])) {
                     
                     <div class="form-group full-width">
                         <label>Long Description (shows in preview with formatting)</label>
+                        <div class="editor-toggle">
+                            <button type="button" id="toggle-editor" class="btn btn-secondary" style="margin-bottom: 10px;">
+                                <i class="fa-solid fa-code"></i> Switch to HTML Mode
+                            </button>
+                        </div>
                         <div id="long-description-editor" style="height: 300px;"></div>
-                        <textarea id="long-description" name="long_description" style="display: none;"><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description']) : ''; ?></textarea>
+                        <textarea id="long-description" name="long_description" style="display: none; height: 300px; width: 100%; font-family: 'Courier New', monospace; font-size: 14px; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"><?php echo $editTemplate ? htmlspecialchars($editTemplate['long_description']) : ''; ?></textarea>
                         <small>This appears in the preview modal and supports rich text formatting.</small>
                     </div>
                     
@@ -627,7 +632,7 @@ if (isset($_GET['edit'])) {
             }
         });
         
-        // Long description editor (full toolbar)
+        // Long description editor (full toolbar) - with toggle functionality
         var longDescriptionQuill = new Quill('#long-description-editor', {
             theme: 'snow',
             placeholder: 'Enter detailed description with formatting...',
@@ -641,6 +646,41 @@ if (isset($_GET['edit'])) {
                     ['link'],
                     ['clean']
                 ]
+            }
+        });
+        
+        // Toggle functionality for long description editor
+        var isHtmlMode = false;
+        var toggleButton = document.getElementById('toggle-editor');
+        var quillContainer = document.getElementById('long-description-editor');
+        var textareaElement = document.getElementById('long-description');
+        
+        toggleButton.addEventListener('click', function() {
+            if (isHtmlMode) {
+                // Switch to Quill mode
+                isHtmlMode = false;
+                toggleButton.innerHTML = '<i class="fa-solid fa-code"></i> Switch to HTML Mode';
+                toggleButton.className = 'btn btn-secondary';
+                
+                // Get content from textarea and put it in Quill
+                var htmlContent = textareaElement.value;
+                longDescriptionQuill.root.innerHTML = htmlContent;
+                
+                // Show Quill, hide textarea
+                quillContainer.style.display = 'block';
+                textareaElement.style.display = 'none';
+            } else {
+                // Switch to HTML mode
+                isHtmlMode = true;
+                toggleButton.innerHTML = '<i class="fa-solid fa-eye"></i> Switch to Visual Mode';
+                toggleButton.className = 'btn btn-warning';
+                
+                // Get content from Quill and put it in textarea
+                textareaElement.value = longDescriptionQuill.root.innerHTML;
+                
+                // Hide Quill, show textarea
+                quillContainer.style.display = 'none';
+                textareaElement.style.display = 'block';
             }
         });
         
