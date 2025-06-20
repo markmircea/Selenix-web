@@ -485,13 +485,7 @@ if (isset($_GET['edit'])) {
                         <input type="text" name="badge" placeholder="Featured, New, Premium" value="<?php echo $editTemplate ? htmlspecialchars($editTemplate['badge'] ?? '') : ''; ?>">
                     </div>
                     
-                    <div class="form-group full-width">
-                        <label>Description (shows on index page)</label>
-                        <div id="description-editor" style="height: 200px;"></div>
-                        <textarea id="description" name="description" style="display: none;" required><?php echo $editTemplate ? htmlspecialchars($editTemplate['description'] ?? '') : ''; ?></textarea>
-                        <small>This appears on the main templates page. Keep it concise and engaging (recommended: under 150 characters).</small>
-                    </div>
-                    
+                   
                     <div class="form-group full-width">
                         <label>Long Description (shows in preview with formatting)</label>
                         <div class="editor-toggle">
@@ -650,7 +644,7 @@ if (isset($_GET['edit'])) {
         });
         
         // Toggle functionality for long description editor
-        var isHtmlMode = false;
+        var isHtmlMode = true;
         var toggleButton = document.getElementById('toggle-editor');
         var quillContainer = document.getElementById('long-description-editor');
         var textareaElement = document.getElementById('long-description');

@@ -160,9 +160,9 @@ function handleGetRequest($pdo) {
         $template['downloads'] = (int)$template['downloads'];
         
         // Ensure new fields exist even if NULL in database
-        $template['long_description'] = $template['long_description'] ?? null;
-        $template['preview_image'] = $template['preview_image'] ?? null;
-        $template['image_alt'] = $template['image_alt'] ?? null;
+        $template['long_description'] = $template['long_description'] ?? '';
+        $template['preview_image'] = $template['preview_image'] ?? '';
+        $template['image_alt'] = $template['image_alt'] ?? '';
         
         // Clean up file paths for security
         if ($template['file_path'] && !filter_var($template['file_path'], FILTER_VALIDATE_URL)) {
