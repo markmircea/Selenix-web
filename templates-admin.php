@@ -98,6 +98,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($stmt->execute([$title, $description, $long_description, $category, $icon, $featured, $premium, $badge, $tags, $preview_url, $preview_image, $image_alt, $status, $id])) {
                     $message = 'Template updated successfully!';
                     $messageType = 'success';
+                    
+                    // Redirect to clean URL without edit parameter
+                    header('Location: templates-admin.php');
+                    exit;
                 } else {
                     $message = 'Error updating template.';
                     $messageType = 'error';
@@ -563,7 +567,7 @@ if (isset($_GET['edit'])) {
                     </div>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" onclick="submitFormAndCleanURL(event)">
                     <?php echo $editTemplate ? 'Update Template' : 'Add Template'; ?>
                 </button>
                 <button type="button" class="btn btn-secondary" onclick="closeModal('addModal')">Cancel</button>
@@ -608,6 +612,30 @@ if (isset($_GET['edit'])) {
         // Auto-open edit modal if editing
         <?php if ($editTemplate): ?>
             openModal('addModal');
+            
+            // Remove edit parameter from URL when modal is closed
+            function removeEditParam() {
+                const url = new URL(window.location);
+                url.searchParams.delete('edit');
+                window.history.replaceState({}, '', url);
+            }
+            
+            // Override close functions to clean URL
+            const originalCloseModal = window.closeModal;
+            window.closeModal = function(modalId) {
+                if (modalId === 'addModal') {
+                    removeEditParam();
+                }
+                originalCloseModal(modalId);
+            };
+            
+            // Also handle clicking outside modal or X button
+            document.querySelector('#addModal .close').addEventListener('click', removeEditParam);
+            document.querySelector('#addModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    removeEditParam();
+                }
+            });
         <?php endif; ?>
         
         // Initialize Quill.js editors for rich text editing
@@ -709,6 +737,17 @@ if (isset($_GET['edit'])) {
             document.getElementById('description').value = descriptionQuill.root.innerHTML;
             document.getElementById('long-description').value = longDescriptionQuill.root.innerHTML;
         });
+        
+        // Function to handle form submission and clean URL
+        function submitFormAndCleanURL(event) {
+            // Update textareas before submission
+            if (!isHtmlMode) {
+                document.getElementById('long-description').value = longDescriptionQuill.root.innerHTML;
+            }
+            
+            // Don't prevent default - let form submit normally
+            // URL will be cleaned after successful submission
+        }
     </script>
 </body>
 </html>

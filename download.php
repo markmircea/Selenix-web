@@ -854,6 +854,15 @@ if __name__ == "__main__":
                     flex-shrink: 0;
                 }
                 
+                .compatibility-note code {
+                    background: rgba(0, 0, 0, 0.1);
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+                    font-size: 13px;
+                    color: #2c3e50;
+                }
+                
                 /* Mobile Responsive Styles */
                 @media (max-width: 768px) {
                     body {
@@ -1168,7 +1177,7 @@ if __name__ == "__main__":
                     </div>
                     <div class="feature">
                         <i class="fas fa-puzzle-piece"></i>
-                        <span>Ready-to-use templates for popular websites</span>
+                        <span><a href="product/templates/" style="color: inherit; text-decoration: none;">Ready-to-use templates for popular websites</a></span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-file-archive"></i>
@@ -1225,13 +1234,20 @@ if __name__ == "__main__":
                                 <div class="req-item">
                                     <strong>Browser:</strong> Chrome, Safari, or Firefox
                                 </div>
+                                <div class="req-item" style="color: #007AFF; font-weight: 600; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e1e5e9;">
+                                    <strong style="color: #007AFF;">Setup:</strong> Copy license.txt from ZIP to Documents/Selenix/
+                                </div>
                             </div>
                         </div>
                     </div>
                     
                     <div class="compatibility-note">
                         <i class="fas fa-info-circle"></i>
-                        <strong>Compatibility Note:</strong> Both versions are currently in Beta. The Mac Universal build supports both Intel Macs and Apple Silicon (M1/M2/M3) natively for optimal performance.
+                        <div>
+                            <strong>Setup Instructions:</strong> Both versions are currently in Beta. The Mac Universal build supports both Intel Macs and Apple Silicon (M1/M2/M3) natively for optimal performance.
+                            <br><br>
+                            <strong>Mac Users:</strong> After extracting the ZIP file, copy the <code>license.txt</code> file to <code>~/Documents/Selenix/license.txt</code> for the application to work properly.
+                        </div>
                     </div>
                 </div>
                 
