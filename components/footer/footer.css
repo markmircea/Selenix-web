@@ -94,6 +94,31 @@ footer {
     border-top: 1px solid var(--border-color);
 }
 
+.copyright p {
+    margin-bottom: 0.5rem;
+}
+
+.copyright p:last-child {
+    margin-bottom: 0;
+}
+
+.created-by {
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.created-by a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.created-by a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
 /* Responsive styles */
 @media (max-width: 1024px) {
     .footer-content {
