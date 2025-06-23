@@ -421,53 +421,10 @@ $breadcrumbs = [
         </div>
     </section>
 
-    <!-- Footer Component -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>selenix.io</h3>
-                    <p class="footer-description">Modern browser automation tool that helps you save time and increase productivity without writing a single line of code.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-                        <a href="#"><i class="fa-brands fa-github"></i></a>
-                        <a href="#"><i class="fa-brands fa-discord"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Product</h3>
-                    <ul>
-                        <li><a href="../docs/index.html"><i class="fa-solid fa-file-lines"></i> Documentation</a></li>
-                        <li><a href="../product/no-code-builder/index.html"><i class="fa-solid fa-cubes"></i> No-code builder</a></li>
-                        <li><a href="../product/no-code-steps/index.html"><i class="fa-solid fa-list-check"></i> No-code steps</a></li>
-                        <li><a href="../pricing/index.html"><i class="fa-solid fa-tag"></i> Pricing</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Web automation</h3>
-                    <ul>
-                        <li><a href="#"><i class="fa-solid fa-robot"></i> Automate website actions</a></li>
-                        <li><a href="#"><i class="fa-solid fa-keyboard"></i> Automate Data Entry</a></li>
-                        <li><a href="#"><i class="fa-solid fa-pen-to-square"></i> Automate Form Filling</a></li>
-                        <li><a href="../product/templates/index.html"><i class="fa-solid fa-puzzle-piece"></i> Automation templates</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Blog</h3>
-                    <ul>
-                        <li><a href="blog.php?category=tutorials"><i class="fa-solid fa-graduation-cap"></i> Tutorials</a></li>
-                        <li><a href="blog.php?category=features"><i class="fa-solid fa-star"></i> Features</a></li>
-                        <li><a href="blog.php?category=case-studies"><i class="fa-solid fa-chart-line"></i> Case Studies</a></li>
-                        <li><a href="blog.php?category=automation"><i class="fa-solid fa-lightbulb"></i> Automation tips</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; <?php echo date('Y'); ?> selenix.io. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+
+
+        <!-- Footer Component -->
+    <div id="footer-container"></div>
 
     <script src="../script.js"></script>
     <script src="../components/components.js"></script>
@@ -539,6 +496,18 @@ $breadcrumbs = [
                     }
                 });
             });
+
+             // Hide newsletter message after 5 seconds
+            const newsletterMessage = document.querySelector('.newsletter-message');
+            if (newsletterMessage) {
+                setTimeout(() => {
+                    newsletterMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        newsletterMessage.style.display = 'none';
+                    }, 300);
+                }, 5000);
+            }
+        
         });
     </script>
 </body>
