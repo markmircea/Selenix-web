@@ -168,37 +168,151 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = createConnection($config['host'], $config['username'], $config['password'], $config['database']);
         echo "<div class='step success'>✅ Connected to database '{$config['database']}'</div>";
         
-        // Step 4: Create contact_submissions table
-        echo "<div class='step'>📋 Creating contact_submissions table...</div>";
+        // Step 4: Create/Update contact_submissions table
+        echo "<div class='step'>📋 Creating/updating contact_submissions table...</div>";
         flush();
         
-        $pdo->exec("
-            CREATE TABLE IF NOT EXISTS contact_submissions (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                ticket_number VARCHAR(20) UNIQUE NOT NULL,
-                name VARCHAR(255) NOT NULL,
-                email VARCHAR(255) NOT NULL,
-                subject VARCHAR(500) NOT NULL,
-                message TEXT NOT NULL,
-                ip_address VARCHAR(45),
-                user_agent TEXT,
-                status ENUM('new', 'in_progress', 'resolved', 'closed') DEFAULT 'new',
-                priority ENUM('low', 'medium', 'high', 'urgent') DEFAULT 'medium',
-                assigned_to VARCHAR(255) NULL,
-                notes TEXT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                
-                INDEX idx_ticket_number (ticket_number),
-                INDEX idx_email (email),
-                INDEX idx_status (status),
-                INDEX idx_created_at (created_at),
-                INDEX idx_priority (priority)
-            ) ENGINE=InnoDB
-        ");
-        echo "<div class='step success'>✅ Table 'contact_submissions' created successfully</div>";
+        // Check if table exists
+        $tableExists = $pdo->query("SHOW TABLES LIKE 'contact_submissions'")->rowCount() > 0;
         
-        // Step 5: Create support_users table
+        if (!$tableExists) {
+            // Create new table with all columns
+            echo "<div class='step'>📋 Creating new contact_submissions table...</div>";
+            $pdo->exec("
+                CREATE TABLE contact_submissions (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    ticket_number VARCHAR(20) UNIQUE NOT NULL,
+                    name VARCHAR(255) NOT NULL,
+                    email VARCHAR(255) NOT NULL,
+                    subject VARCHAR(500) NOT NULL,
+                    message TEXT NOT NULL,
+                    ip_address VARCHAR(45),
+                    user_agent TEXT,
+                    status ENUM('new', 'in_progress', 'resolved', 'closed') DEFAULT 'new',
+                    priority ENUM('low', 'medium', 'high', 'urgent') DEFAULT 'medium',
+                    assigned_to VARCHAR(255) NULL,
+                    notes TEXT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    
+                    INDEX idx_ticket_number (ticket_number),
+                    INDEX idx_email (email),
+                    INDEX idx_status (status),
+                    INDEX idx_created_at (created_at),
+                    INDEX idx_priority (priority)
+                ) ENGINE=InnoDB
+            ");
+            echo "<div class='step success'>✅ New contact_submissions table created successfully</div>";
+        } else {
+            // Table exists, check for missing columns and add them
+            echo "<div class='step'>🔍 Table exists, checking for missing columns...</div>";
+            
+            // Get existing columns
+            $existingColumns = $pdo->query("SHOW COLUMNS FROM contact_submissions")->fetchAll(PDO::FETCH_COLUMN);
+            
+            // Define required columns with their definitions
+            $requiredColumns = [
+                'ticket_number' => 'VARCHAR(20) UNIQUE',
+                'name' => 'VARCHAR(255) NOT NULL',
+                'email' => 'VARCHAR(255) NOT NULL', 
+                'subject' => 'VARCHAR(500) NOT NULL',
+                'message' => 'TEXT NOT NULL',
+                'ip_address' => 'VARCHAR(45)',
+                'user_agent' => 'TEXT',
+                'status' => "ENUM('new', 'in_progress', 'resolved', 'closed') DEFAULT 'new'",
+                'priority' => "ENUM('low', 'medium', 'high', 'urgent') DEFAULT 'medium'",
+                'assigned_to' => 'VARCHAR(255) NULL',
+                'notes' => 'TEXT NULL',
+                'created_at' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
+                'updated_at' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
+            ];
+            
+            $columnsAdded = 0;
+            
+            foreach ($requiredColumns as $columnName => $columnDef) {
+                if (!in_array($columnName, $existingColumns)) {
+                    echo "<div class='step'>📋 Adding missing column: $columnName...</div>";
+                    
+                    // Special handling for ticket_number to add it after id
+                    if ($columnName === 'ticket_number') {
+                        $pdo->exec("ALTER TABLE contact_submissions ADD COLUMN $columnName $columnDef AFTER id");
+                    } else {
+                        $pdo->exec("ALTER TABLE contact_submissions ADD COLUMN $columnName $columnDef");
+                    }
+                    
+                    echo "<div class='step success'>✅ Added column: $columnName</div>";
+                    $columnsAdded++;
+                }
+            }
+            
+            // Check and add missing indexes
+            $existingIndexes = [];
+            $indexResult = $pdo->query("SHOW INDEX FROM contact_submissions")->fetchAll();
+            foreach ($indexResult as $index) {
+                $existingIndexes[] = $index['Key_name'];
+            }
+            
+            $requiredIndexes = [
+                'idx_ticket_number' => 'ticket_number',
+                'idx_email' => 'email',
+                'idx_status' => 'status', 
+                'idx_created_at' => 'created_at',
+                'idx_priority' => 'priority'
+            ];
+            
+            foreach ($requiredIndexes as $indexName => $columnName) {
+                if (!in_array($indexName, $existingIndexes) && in_array($columnName, $existingColumns)) {
+                    echo "<div class='step'>📋 Adding missing index: $indexName...</div>";
+                    $pdo->exec("ALTER TABLE contact_submissions ADD INDEX $indexName ($columnName)");
+                    echo "<div class='step success'>✅ Added index: $indexName</div>";
+                }
+            }
+            
+            if ($columnsAdded > 0) {
+                echo "<div class='step success'>✅ Table updated successfully ($columnsAdded columns added)</div>";
+                
+                // Generate ticket numbers for existing submissions that don't have them
+                if (in_array('ticket_number', array_keys($requiredColumns))) {
+                    echo "<div class='step'>🎫 Generating ticket numbers for existing submissions...</div>";
+                    
+                    $existingSubmissions = $pdo->query("
+                        SELECT id, created_at 
+                        FROM contact_submissions 
+                        WHERE ticket_number IS NULL OR ticket_number = ''
+                        ORDER BY created_at ASC
+                    ")->fetchAll();
+                    
+                    if (!empty($existingSubmissions)) {
+                        $ticketCounts = []; // Track daily counts
+                        
+                        foreach ($existingSubmissions as $submission) {
+                            $date = date('Ymd', strtotime($submission['created_at']));
+                            
+                            // Increment count for this date
+                            if (!isset($ticketCounts[$date])) {
+                                $ticketCounts[$date] = 0;
+                            }
+                            $ticketCounts[$date]++;
+                            
+                            // Generate ticket number
+                            $ticketNumber = $date . '-' . str_pad($ticketCounts[$date], 3, '0', STR_PAD_LEFT);
+                            
+                            // Update the submission
+                            $stmt = $pdo->prepare("UPDATE contact_submissions SET ticket_number = ? WHERE id = ?");
+                            $stmt->execute([$ticketNumber, $submission['id']]);
+                        }
+                        
+                        echo "<div class='step success'>✅ Generated " . count($existingSubmissions) . " ticket numbers for existing submissions</div>";
+                    } else {
+                        echo "<div class='step success'>✅ No existing submissions need ticket numbers</div>";
+                    }
+                }
+            } else {
+                echo "<div class='step success'>✅ Table is already up to date</div>";
+            }
+        }
+        
+        // Step 5: Create/Update support_users table
         echo "<div class='step'>👥 Creating support_users table...</div>";
         flush();
         
