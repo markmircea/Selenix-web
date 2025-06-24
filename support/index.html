@@ -44,16 +44,7 @@
                     </div>
                     <h3>Documentation</h3>
                     <p>Comprehensive guides, tutorials, and API documentation to help you master Selenix.</p>
-                    <a href="docs/index.html" class="support-link">Browse Docs</a>
-                </div>
-
-                <div class="support-card">
-                    <div class="support-icon">
-                        <i class="fa-solid fa-comments"></i>
-                    </div>
-                    <h3>Community Forum</h3>
-                    <p>Connect with other Selenix users, share tips, and get help from the community.</p>
-                    <a href="#" class="support-link">Join Forum</a>
+                    <a href="../docs/index.html" class="support-link">Browse Docs</a>
                 </div>
 
                 <div class="support-card">
@@ -62,16 +53,7 @@
                     </div>
                     <h3>Video Tutorials</h3>
                     <p>Step-by-step video guides for beginners to advanced users.</p>
-                    <a href="product/video-guides/index.html" class="support-link">Watch Videos</a>
-                </div>
-
-                <div class="support-card">
-                    <div class="support-icon">
-                        <i class="fa-solid fa-envelope"></i>
-                    </div>
-                    <h3>Email Support</h3>
-                    <p>Get personalized help from our support team via email.</p>
-                    <a href="#contact-form" class="support-link">Send Email</a>
+                    <a href="https://www.youtube.com/@MarkITSRL" target="_blank" class="support-link">Watch Videos</a>
                 </div>
 
                 <div class="support-card">
@@ -80,16 +62,7 @@
                     </div>
                     <h3>Templates Library</h3>
                     <p>Ready-made automations to help you get started quickly.</p>
-                    <a href="product/templates/index.html" class="support-link">Browse Templates</a>
-                </div>
-
-                <div class="support-card priority">
-                    <div class="support-icon">
-                        <i class="fa-solid fa-headset"></i>
-                    </div>
-                    <h3>Priority Support</h3>
-                    <p>Direct access to our expert support team for Pro and Enterprise users.</p>
-                    <a href="#" class="support-link">Contact Support</a>
+                    <a href="../product/templates/index.html" class="support-link">Browse Templates</a>
                 </div>
             </div>
         </div>
@@ -122,7 +95,9 @@
                 </div>
 
                 <div class="contact-form">
-                    <form>
+                    <form id="contact-form">
+                        <div id="form-messages" class="form-messages" style="display: none;"></div>
+                        
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" id="name" name="name" required>
@@ -143,9 +118,9 @@
                             <textarea id="message" name="message" rows="6" required placeholder="Please provide as much detail as possible..."></textarea>
                         </div>
                         
-                        <button type="submit" class="submit-button">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            Send Message
+                        <button type="submit" class="submit-button" id="submit-btn">
+                            <i class="fa-solid fa-paper-plane" id="submit-icon"></i>
+                            <span id="submit-text">Send Message</span>
                         </button>
                     </form>
                 </div>
@@ -158,6 +133,87 @@
 
     <script src="../script.js"></script>
     <script src="../components/components.js"></script>
+    
+    <script>
+        // Contact form functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('contact-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            const submitIcon = document.getElementById('submit-icon');
+            const messagesDiv = document.getElementById('form-messages');
+
+            // Add loading spinner HTML
+            submitBtn.innerHTML = `
+                <i class="fa-solid fa-paper-plane" id="submit-icon"></i>
+                <i class="fa-solid fa-spinner loading-spinner"></i>
+                <span id="submit-text">Send Message</span>
+            `;
+
+            function showMessage(message, type) {
+                messagesDiv.textContent = message;
+                messagesDiv.className = `form-messages ${type}`;
+                messagesDiv.style.display = 'block';
+                
+                // Scroll to the message
+                messagesDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // Auto-hide success messages after 5 seconds
+                if (type === 'success') {
+                    setTimeout(() => {
+                        messagesDiv.style.display = 'none';
+                    }, 5000);
+                }
+            }
+
+            function setLoading(loading) {
+                if (loading) {
+                    submitBtn.classList.add('loading');
+                    submitBtn.disabled = true;
+                    document.getElementById('submit-text').textContent = 'Sending...';
+                } else {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                    document.getElementById('submit-text').textContent = 'Send Message';
+                }
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Hide any previous messages
+                messagesDiv.style.display = 'none';
+                
+                // Show loading state
+                setLoading(true);
+                
+                // Collect form data
+                const formData = new FormData(form);
+                
+                // Send form data
+                fetch('contact-handler.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    setLoading(false);
+                    
+                    if (data.success) {
+                        showMessage(data.message, 'success');
+                        form.reset(); // Clear the form
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    setLoading(false);
+                    console.error('Error:', error);
+                    showMessage('An error occurred while sending your message. Please try again.', 'error');
+                });
+            });
+        });
+    </script>
 
     <style>
         .hero-search {
@@ -202,9 +258,12 @@
 
         .support-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             margin: 3rem 0;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .support-card {
@@ -355,14 +414,60 @@
             transform: translateY(-2px);
         }
 
+        .submit-button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-messages {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .form-messages.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .form-messages.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .submit-button .loading-spinner {
+            display: none;
+            animation: spin 1s linear infinite;
+        }
+
+        .submit-button.loading .loading-spinner {
+            display: inline-block;
+        }
+
+        .submit-button.loading #submit-icon {
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 968px) {
+            .support-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+        }
+
         @media (max-width: 768px) {
             .contact-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
-            }
-            
-            .support-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
