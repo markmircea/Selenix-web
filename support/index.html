@@ -139,16 +139,23 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('contact-form');
             const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const submitIcon = document.getElementById('submit-icon');
             const messagesDiv = document.getElementById('form-messages');
 
+            // Verify form element exists
+            if (!form) {
+                console.error('Contact form not found');
+                return;
+            }
+
             // Add loading spinner HTML
-            submitBtn.innerHTML = `
-                <i class="fa-solid fa-paper-plane" id="submit-icon"></i>
-                <i class="fa-solid fa-spinner loading-spinner"></i>
-                <span id="submit-text">Send Message</span>
-            `;
+            const submitIcon = submitBtn.querySelector('#submit-icon');
+            const submitText = submitBtn.querySelector('#submit-text');
+            
+            // Create spinner element
+            const spinner = document.createElement('i');
+            spinner.className = 'fa-solid fa-spinner loading-spinner';
+            spinner.style.display = 'none';
+            submitBtn.insertBefore(spinner, submitText);
 
             function showMessage(message, type) {
                 messagesDiv.textContent = message;
@@ -170,11 +177,15 @@
                 if (loading) {
                     submitBtn.classList.add('loading');
                     submitBtn.disabled = true;
-                    document.getElementById('submit-text').textContent = 'Sending...';
+                    submitText.textContent = 'Sending...';
+                    submitIcon.style.display = 'none';
+                    spinner.style.display = 'inline-block';
                 } else {
                     submitBtn.classList.remove('loading');
                     submitBtn.disabled = false;
-                    document.getElementById('submit-text').textContent = 'Send Message';
+                    submitText.textContent = 'Send Message';
+                    submitIcon.style.display = 'inline-block';
+                    spinner.style.display = 'none';
                 }
             }
 
@@ -187,7 +198,7 @@
                 // Show loading state
                 setLoading(true);
                 
-                // Collect form data
+                // Collect form data - make sure we're passing the form element
                 const formData = new FormData(form);
                 
                 // Send form data
@@ -195,7 +206,12 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     setLoading(false);
                     
@@ -209,7 +225,7 @@
                 .catch(error => {
                     setLoading(false);
                     console.error('Error:', error);
-                    showMessage('An error occurred while sending your message. Please try again.', 'error');
+                    showMessage('An error occurred while sending your message. Please try again or contact us directly at support@selenix.io', 'error');
                 });
             });
         });
