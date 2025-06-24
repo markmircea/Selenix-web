@@ -35,12 +35,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Scroll to the message
         messagesDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         
-        // Auto-hide success messages after 5 seconds
-        if (type === 'success') {
+        // Only auto-hide error messages after 10 seconds, keep success messages visible
+        if (type === 'error') {
             setTimeout(() => {
                 messagesDiv.style.display = 'none';
-            }, 5000);
+            }, 10000);
         }
+        // Success messages stay visible until user manually dismisses or page reload
     }
 
     function setLoading(loading) {
@@ -105,6 +106,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     showMessage(data.message, 'success');
                     form.reset(); // Clear the form
+                    
+                    // Disable submit button permanently after successful submission
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('success-sent');
+                    submitText.textContent = 'Message Sent Successfully!';
+                    submitIcon.className = 'fa-solid fa-check';
+                    submitBtn.title = 'Your message has been sent successfully';
+                    
                 } else {
                     showMessage(data.message, 'error');
                 }

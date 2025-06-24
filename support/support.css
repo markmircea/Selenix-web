@@ -209,6 +209,17 @@
     transform: none;
 }
 
+.submit-button.success-sent {
+    background: #28a745 !important;
+    cursor: default !important;
+    transform: none !important;
+}
+
+.submit-button.success-sent:hover {
+    background: #28a745 !important;
+    transform: none !important;
+}
+
 .form-messages {
     padding: 1rem;
     border-radius: 8px;
