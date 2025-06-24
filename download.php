@@ -383,7 +383,7 @@ if __name__ == "__main__":
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Download Selenix - Browser Automation Tool</title>
+            <title>Download Selenix BETA - Browser Automation Tool</title>
             
             <!-- SEO Meta Tags -->
             <meta name="description" content="Download Selenix browser automation tool with free 1-year license. No-code browser automation for Windows. Get automatic web scraping, data extraction, and workflow automation with AI assistance.">
@@ -1159,7 +1159,7 @@ if __name__ == "__main__":
                 <a href="/" class="logo">
                     <span class="logo-text">selenix<span class="logo-dot">.</span>io</span>
                 </a>
-                <h1>Download Selenix</h1>
+                <h1>Download Selenix BETA</h1>
                 <p class="subtitle">Browser scraping and automation made simple</p>
                 
                 <div class="features">
