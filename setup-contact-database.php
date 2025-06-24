@@ -175,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS contact_submissions (
                 id INT AUTO_INCREMENT PRIMARY KEY,
+                ticket_number VARCHAR(20) UNIQUE NOT NULL,
                 name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL,
                 subject VARCHAR(500) NOT NULL,
@@ -188,6 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 
+                INDEX idx_ticket_number (ticket_number),
                 INDEX idx_email (email),
                 INDEX idx_status (status),
                 INDEX idx_created_at (created_at),
@@ -252,6 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             CREATE OR REPLACE VIEW contact_submissions_summary AS
             SELECT 
                 id,
+                ticket_number,
                 name,
                 email,
                 subject,

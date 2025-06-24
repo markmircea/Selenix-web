@@ -125,13 +125,27 @@ try {
         exit;
     }
     
-    // Insert into database
+    // Generate date-based ticket number
+    $today = date('Ymd'); // Format: 20240624
+    
+    // Get count of submissions today to determine sequence number
+    $todayCount = $pdo->prepare("
+        SELECT COUNT(*) FROM contact_submissions 
+        WHERE DATE(created_at) = CURDATE()
+    ");
+    $todayCount->execute();
+    $sequenceNumber = $todayCount->fetchColumn() + 1;
+    
+    // Format: YYYYMMDD-XXX (e.g., 20240624-001)
+    $ticketNumber = $today . '-' . str_pad($sequenceNumber, 3, '0', STR_PAD_LEFT);
+    
+    // Insert into database with ticket number
     $stmt = $pdo->prepare("
-        INSERT INTO contact_submissions (name, email, subject, message, ip_address, user_agent) 
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO contact_submissions (ticket_number, name, email, subject, message, ip_address, user_agent) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     ");
     
-    $dbInserted = $stmt->execute([$name, $email, $subject, $message, $ip_address, $user_agent]);
+    $dbInserted = $stmt->execute([$ticketNumber, $name, $email, $subject, $message, $ip_address, $user_agent]);
     $submissionId = $pdo->lastInsertId();
     
     if (!$dbInserted) {
@@ -139,10 +153,11 @@ try {
     }
     
     // Prepare email content
-    $email_subject = 'Support Request #' . $submissionId . ': ' . $subject;
+    $email_subject = 'Support Request #' . $ticketNumber . ': ' . $subject;
     $email_body = "
 New support request from Selenix website:
 
+Ticket Number: #$ticketNumber
 Submission ID: #$submissionId
 Name: $name
 Email: $email
@@ -168,7 +183,8 @@ Manage this submission: " . SITE_URL . "/support/admin.php?id=$submissionId
         'Reply-To' => $email,
         'X-Mailer' => 'PHP/' . phpversion(),
         'Content-Type' => 'text/plain; charset=UTF-8',
-        'X-Submission-ID' => $submissionId
+        'X-Submission-ID' => $submissionId,
+        'X-Ticket-Number' => $ticketNumber
     );
     
     // Convert headers array to string
@@ -186,21 +202,21 @@ Manage this submission: " . SITE_URL . "/support/admin.php?id=$submissionId
         ->execute(["Email notification: $emailStatus", $submissionId]);
     
     // Log the submission
-    $log_entry = date('Y-m-d H:i:s') . " - ID: #$submissionId - $name ($email) - Subject: $subject - Email: $emailStatus\n";
+    $log_entry = date('Y-m-d H:i:s') . " - Ticket: #$ticketNumber - ID: #$submissionId - $name ($email) - Subject: $subject - Email: $emailStatus\n";
     file_put_contents('support_submissions.log', $log_entry, FILE_APPEND | LOCK_EX);
     
     // Send auto-reply to user
-    $autoReplySubject = "We received your message - Support Request #$submissionId";
+    $autoReplySubject = "We received your message - Support Request #$ticketNumber";
     $autoReplyBody = "
 Dear $name,
 
-Thank you for contacting Selenix support! We have received your message and assigned it ticket number #$submissionId.
+Thank you for contacting Selenix support! We have received your message and assigned it ticket number #$ticketNumber.
 
 Your message:
 Subject: $subject
 Submitted: " . date('Y-m-d H:i:s') . "
 
-Our support team will review your request and respond within 24 hours. If you need to reference this ticket, please include the ticket number #$submissionId in your communication.
+Our support team will review your request and respond according to the SLA. If you need to reference this ticket, please include the ticket number #$ticketNumber in your communication.
 
 Best regards,
 Selenix Support Team
@@ -215,8 +231,9 @@ Selenix Support Team
     // Return success response
     echo json_encode([
         'success' => true, 
-        'message' => "Thank you for your message! We've received your support request (Ticket #$submissionId) and will get back to you within 24 hours.",
-        'ticket_id' => $submissionId
+        'message' => "Thank you for your message! We've received your support request (Ticket #$ticketNumber) and will get back to you within the SLA window.",
+        'ticket_id' => $submissionId,
+        'ticket_number' => $ticketNumber
     ]);
     
 } catch (Exception $e) {

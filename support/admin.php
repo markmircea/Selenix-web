@@ -202,12 +202,23 @@ if (isset($submission) && $submission) {
     </head>
     <body>
         <div class="header">
-            <h1>Submission #<?php echo $submission['id']; ?></h1>
+            <h1>Submission #<?php echo htmlspecialchars($submission['ticket_number'] ?? $submission['id']); ?></h1>
             <a href="admin.php">← Back to All Submissions</a>
         </div>
 
         <div class="container">
             <div class="submission-detail">
+                <?php if (!empty($submission['ticket_number'])): ?>
+                <div class="field-group">
+                    <div class="field-label">Ticket Number:</div>
+                    <div class="field-value">#<?php echo htmlspecialchars($submission['ticket_number']); ?></div>
+                </div>
+                <?php endif; ?>
+
+                <div class="field-group">
+                    <div class="field-label">Internal ID:</div>
+                    <div class="field-value">#<?php echo $submission['id']; ?></div>
+                </div>
                 <div class="field-group">
                     <div class="field-label">Status:</div>
                     <div class="field-value">
@@ -422,7 +433,7 @@ if (isset($submission) && $submission) {
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Ticket #</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Subject</th>
@@ -445,7 +456,7 @@ if (isset($submission) && $submission) {
                     <?php else: ?>
                         <?php foreach ($submissions as $submission): ?>
                             <tr>
-                                <td>#<?php echo $submission['id']; ?></td>
+                                <td>#<?php echo htmlspecialchars($submission['ticket_number'] ?? $submission['id']); ?></td>
                                 <td><?php echo htmlspecialchars($submission['name']); ?></td>
                                 <td>
                                     <a href="mailto:<?php echo htmlspecialchars($submission['email']); ?>">
