@@ -105,6 +105,156 @@ function renderPayPalButtons() {
             }
         }).render('#paypal-button-container-yearly');
     }
+
+    // Monthly Custom Development PayPal button ($149/month)
+    if (document.getElementById('paypal-button-container-custom-monthly')) {
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                color: 'blue',
+                layout: 'vertical',
+                label: 'subscribe',
+                height: 45
+            },
+            createSubscription: function(data, actions) {
+                return actions.subscription.create({
+                    plan_id: 'P-6EV4008043995652SNBN75HY' // Monthly Custom Development plan ID
+                });
+            },
+            onApprove: function(data, actions) {
+                handleCustomDevSubscriptionSuccess(data.subscriptionID, 'Monthly Custom Development');
+            },
+            onError: function(err) {
+                handleSubscriptionError('Custom Development subscription failed. Please try again.');
+            },
+            onCancel: function(data) {
+                showMessage('Subscription cancelled. You can try again anytime.', 'error');
+            }
+        }).render('#paypal-button-container-custom-monthly');
+    }
+
+    // Yearly Custom Development PayPal button ($119/month billed yearly)
+    if (document.getElementById('paypal-button-container-custom-yearly')) {
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                color: 'blue',
+                layout: 'vertical',
+                label: 'subscribe',
+                height: 45
+            },
+            createSubscription: function(data, actions) {
+                return actions.subscription.create({
+                    plan_id: 'P-2DW308816B555052NNBN76VA' // Yearly Custom Development plan ID
+                });
+            },
+            onApprove: function(data, actions) {
+                handleCustomDevSubscriptionSuccess(data.subscriptionID, 'Yearly Custom Development');
+            },
+            onError: function(err) {
+                handleSubscriptionError('Custom Development subscription failed. Please try again.');
+            },
+            onCancel: function(data) {
+                showMessage('Subscription cancelled. You can try again anytime.', 'error');
+            }
+        }).render('#paypal-button-container-custom-yearly');
+    }
+}
+
+function handleCustomDevSubscriptionSuccess(subscriptionID, planType) {
+    // Show success message
+    showMessage(`🎉 Custom Development subscription successful! Your subscription ID is: ${subscriptionID}`, 'success');
+    
+    // Send notification email for the subscription
+    sendSubscriptionNotification(subscriptionID, planType);
+    
+    // Show the custom development form modal
+    showCustomDevModal(subscriptionID);
+    
+    console.log('Custom Development subscription successful:', subscriptionID, planType);
+}
+
+function showCustomDevModal(subscriptionID) {
+    const modal = document.getElementById('custom-dev-modal');
+    const subscriptionInput = document.getElementById('subscription-id');
+    
+    if (modal && subscriptionInput) {
+        subscriptionInput.value = subscriptionID;
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.add('visible');
+        }, 100);
+        
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeCustomDevModal() {
+    const modal = document.getElementById('custom-dev-modal');
+    
+    if (modal) {
+        modal.classList.remove('visible');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}
+
+// Initialize custom development form handling
+document.addEventListener('DOMContentLoaded', function() {
+    const customDevForm = document.getElementById('custom-dev-form');
+    
+    if (customDevForm) {
+        customDevForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleCustomDevFormSubmission();
+        });
+    }
+});
+
+function handleCustomDevFormSubmission() {
+    const form = document.getElementById('custom-dev-form');
+    const submitButton = form.querySelector('.submit-button');
+    const formData = new FormData(form);
+    
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+    
+    // Convert form data to object
+    const formObject = {};
+    formData.forEach((value, key) => {
+        formObject[key] = value;
+    });
+    
+    // Send form data
+    fetch('./submit-custom-dev-form.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formObject)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showMessage('🎉 Project details submitted successfully! We\'ll contact you within 24 hours to get started.', 'success');
+            closeCustomDevModal();
+        } else {
+            showMessage('❌ Failed to submit project details. Please try again or contact support.', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting form:', error);
+        showMessage('❌ Network error. Please check your connection and try again.', 'error');
+    })
+    .finally(() => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Project Details';
+    });
 }
 
 function handleSubscriptionSuccess(subscriptionID, planType) {

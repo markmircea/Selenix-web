@@ -232,10 +232,12 @@
                         </table>
                     </div>
                     <div class="plan-cta">
-                        <a href="#contact" class="plan-button enterprise-button">
-                            <i class="fa-solid fa-comments"></i>
-                            Contact for Custom Development
-                        </a>
+                        <div id="paypal-button-container-custom-monthly" class="paypal-container monthly">
+                            <!-- Monthly Custom Development PayPal button will be rendered here -->
+                        </div>
+                        <div id="paypal-button-container-custom-yearly" class="paypal-container yearly hidden">
+                            <!-- Yearly Custom Development PayPal button will be rendered here -->
+                        </div>
                         <p class="support-note">30-day satisfaction guarantee</p>
                     </div>
                 </div>
@@ -415,6 +417,72 @@
 
     <!-- Footer Component -->
     <div id="footer-container"></div>
+
+    <!-- Custom Development Contact Form Modal -->
+    <div id="custom-dev-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="closeCustomDevModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome to Custom Development!</h3>
+                <button class="modal-close" onclick="closeCustomDevModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Thank you for subscribing to our Custom Development plan! Please fill out the form below so we can get started on your project.</p>
+                
+                <form id="custom-dev-form">
+                    <div class="form-group">
+                        <label for="contact-name">Full Name *</label>
+                        <input type="text" id="contact-name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-email">Email Address *</label>
+                        <input type="email" id="contact-email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-company">Company/Organization</label>
+                        <input type="text" id="contact-company" name="company">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-phone">Phone Number</label>
+                        <input type="tel" id="contact-phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-description">Project Description *</label>
+                        <textarea id="project-description" name="description" rows="4" placeholder="Please describe what you'd like us to build for you. Include details about the websites you want to automate, the type of data you need to extract, or any specific workflows you have in mind." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="project-timeline">Preferred Timeline</label>
+                        <select id="project-timeline" name="timeline">
+                            <option value="">Select timeline</option>
+                            <option value="asap">ASAP (Rush - within 1 week)</option>
+                            <option value="2-weeks">2 weeks</option>
+                            <option value="1-month">1 month</option>
+                            <option value="flexible">Flexible</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="additional-notes">Additional Notes</label>
+                        <textarea id="additional-notes" name="notes" rows="3" placeholder="Any additional information that would help us understand your needs better."></textarea>
+                    </div>
+                    
+                    <input type="hidden" id="subscription-id" name="subscriptionId">
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="submit-button">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Submit Project Details
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="../script.js"></script>
     <script src="../components/components.js"></script>
