@@ -8,6 +8,78 @@
     font-weight: 800;
 }
 
+.pricing-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.toggle-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 30px;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+}
+
+.discount-badge {
+    background: var(--secondary-color, #10b981);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
 .app-status-banner {
     display: flex;
     justify-content: center;
@@ -177,32 +249,37 @@
     flex-direction: column;
 }
 
-.plan-features ul {
-    list-style: none;
-    padding: 0;
+.features-table {
+    width: 100%;
+    border-collapse: collapse;
     margin: 0;
-    flex: 1;
+    padding: 0;
 }
 
-.plan-features li {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
+.features-table tr {
+    border: none;
+}
+
+.features-table td {
     padding: 0.5rem 0;
+    vertical-align: top;
+    border: none;
     font-size: 0.95rem;
     line-height: 1.4;
 }
 
-.plan-features .fa-check {
-    color: #10b981;
-    margin-top: 0.2rem;
-    flex-shrink: 0;
+.icon-cell {
+    width: 20px;
+    text-align: center;
+    padding-right: 0.75rem !important;
 }
 
-.plan-features .fa-times {
+.icon-cell .fa-check {
+    color: #10b981;
+}
+
+.icon-cell .fa-times {
     color: #e5e7eb;
-    margin-top: 0.2rem;
-    flex-shrink: 0;
 }
 
 .plan-button {

@@ -3,7 +3,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all pricing page functionality
     initializePricingPage();
+    
+    // Initialize pricing toggle functionality
+    initializePricingToggle();
 });
+
+function initializePricingToggle() {
+    const toggle = document.getElementById('pricing-toggle');
+    const monthlyPrices = document.querySelectorAll('.price.monthly, .period.monthly');
+    const yearlyPrices = document.querySelectorAll('.price.yearly, .period.yearly');
+
+    if (toggle) {
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                // Show yearly prices
+                monthlyPrices.forEach(el => el.classList.add('hidden'));
+                yearlyPrices.forEach(el => el.classList.remove('hidden'));
+            } else {
+                // Show monthly prices
+                yearlyPrices.forEach(el => el.classList.add('hidden'));
+                monthlyPrices.forEach(el => el.classList.remove('hidden'));
+            }
+        });
+    }
+}
 
 function initializePricingPage() {
     // Initialize smooth scrolling for anchor links

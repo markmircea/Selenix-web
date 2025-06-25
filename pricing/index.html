@@ -89,6 +89,7 @@
             <div class="hero-content">
                 <h1>Selenix is <span class="highlight">100% Free</span></h1>
                 <p>The complete browser automation tool with AI assistance, unlimited usage, and all features included. Choose optional support plans for professional assistance when you need it.</p>
+          
                 <div class="app-status-banner">
                     <div class="status-item">
                         <i class="fa-solid fa-check"></i>
@@ -107,13 +108,7 @@
                         <span>No Limitations</span>
                     </div>
                 </div>
-                <div class="hero-cta">
-                    <a href="#download" class="primary-button-large">
-                        <i class="fa-solid fa-download"></i>
-                        Download Selenix Free
-                    </a>
-                    <p class="free-note">Includes 1-year license key • No registration required</p>
-                </div>
+                
             </div>
         </div>
     </section>
@@ -123,8 +118,16 @@
             <div class="section-header">
                 <h2>Optional Support Plans</h2>
                 <p>Get professional help when you need it. Perfect for businesses and users who want hands-on assistance.</p>
-            </div>
+            </div><br>
 
+                  <div class="pricing-toggle">
+                    <span class="toggle-label">Monthly</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="pricing-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label">Yearly <span class="discount-badge">Save 20%</span></span>
+                </div>
             <div class="plans-grid">
                 <!-- Community Plan -->
                 <div class="plan-card community">
@@ -139,18 +142,18 @@
                         <p class="plan-description">Perfect for individuals and hobbyists getting started with automation</p>
                     </div>
                     <div class="plan-features">
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> <strong>Complete Selenix app</strong> - All features included</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>AI Assistant</strong> - Full access to automation AI</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Template Library</strong> - Access to community templates</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Community Forums</strong> - Get help from other users</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Documentation</strong> - Comprehensive guides & tutorials</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Video Tutorials</strong> - Step-by-step learning content</li>
-                            <li><i class="fa-solid fa-times"></i> Priority email support</li>
-                            <li><i class="fa-solid fa-times"></i> Template installation help</li>
-                            <li><i class="fa-solid fa-times"></i> Custom template development</li>
-                            <li><i class="fa-solid fa-times"></i> Advanced integrations</li>
-                        </ul>
+                        <table class="features-table">
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Complete Selenix app</strong> - All features included</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>AI Assistant</strong> - Full access to automation AI</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Template Library</strong> - Access to community templates</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Community Forums</strong> - Get help from other users</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Documentation</strong> - Comprehensive guides & tutorials</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Video Tutorials</strong> - Step-by-step learning content</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-times"></i></td><td>Priority email support</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-times"></i></td><td>Template installation help</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-times"></i></td><td>Custom template development</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-times"></i></td><td>Advanced integrations</td></tr>
+                        </table>
                     </div>
                     <div class="plan-cta">
                         <a href="#download" class="plan-button community-button">
@@ -170,23 +173,25 @@
                         </div>
                         <h3>Professional Support</h3>
                         <div class="plan-price">
-                            <span class="price">$49</span>
-                            <span class="period">/month</span>
+                            <span class="price monthly">$49</span>
+                            <span class="price yearly hidden">$39</span>
+                            <span class="period monthly">/month</span>
+                            <span class="period yearly hidden">/month</span>
                         </div>
                         <p class="plan-description">For professionals who need reliable support and template assistance</p>
                     </div>
                     <div class="plan-features">
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> <strong>Everything in Community</strong> - All free features</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Priority Email Support</strong> - 24-hour response time</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Template Installation Help</strong> - We'll install templates for you</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Basic Customization</strong> - Minor template modifications</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Setup Assistance</strong> - Help configuring complex automations</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Troubleshooting Support</strong> - Debug automation issues</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Best Practices Guidance</strong> - Optimization recommendations</li>
-                            <li><i class="fa-solid fa-times"></i> Custom template development</li>
-                            <li><i class="fa-solid fa-times"></i> Advanced integrations</li>
-                        </ul>
+                        <table class="features-table">
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Everything in Community</strong> - All free features</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Priority Email Support</strong> - 24-hour response time</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Template Installation Help</strong> - We'll install templates for you</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Basic Customization</strong> - Minor template modifications</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Setup Assistance</strong> - Help configuring complex automations</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Troubleshooting Support</strong> - Debug automation issues</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Best Practices Guidance</strong> - Optimization recommendations</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-times"></i></td><td>Custom template development</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-times"></i></td><td>Advanced integrations</td></tr>
+                        </table>
                     </div>
                     <div class="plan-cta">
                         <a href="#contact" class="plan-button professional-button">
@@ -205,22 +210,24 @@
                         </div>
                         <h3>Custom Development</h3>
                         <div class="plan-price">
-                            <span class="price">$149</span>
-                            <span class="period">/month</span>
+                            <span class="price monthly">~$149</span>
+                            <span class="price yearly hidden">~$119</span>
+                            <span class="period monthly">/month</span>
+                            <span class="period yearly hidden">/month</span>
                         </div>
                         <p class="plan-description">For businesses needing custom templates and advanced automation solutions</p>
                     </div>
                     <div class="plan-features">
-                        <ul>
-                            <li><i class="fa-solid fa-check"></i> <strong>Everything in Professional</strong> - All support features</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Custom Template Development</strong> - Built specifically for you</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Advanced Customization</strong> - Complex workflow modifications</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>API Integrations</strong> - Connect with your existing tools</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Dedicated Support Manager</strong> - Direct access to expert</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Screen Sharing Sessions</strong> - Live troubleshooting & training</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Implementation Planning</strong> - Strategic automation roadmap</li>
-                            <li><i class="fa-solid fa-check"></i> <strong>Priority Development</strong> - Fast-track custom solutions</li>
-                        </ul>
+                        <table class="features-table">
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Everything in Professional</strong> - All support features</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Custom Template Development</strong> - Built specifically for you</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Advanced Customization</strong> - Complex workflow modifications</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>API Integrations</strong> - Connect with your existing tools</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Dedicated Support Manager</strong> - Direct access to expert</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Screen Sharing Sessions</strong> - Live troubleshooting & training</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Implementation Planning</strong> - Strategic automation roadmap</td></tr>
+                            <tr><td class="icon-cell"><i class="fa-solid fa-check"></i></td><td><strong>Priority Development</strong> - Fast-track custom solutions</td></tr>
+                        </table>
                     </div>
                     <div class="plan-cta">
                         <a href="#contact" class="plan-button enterprise-button">
@@ -233,7 +240,7 @@
             </div>
         </div>
     </section>
-
+<br><br>
     <section class="support-comparison">
         <div class="container">
             <div class="section-header">
@@ -329,7 +336,7 @@
             </div>
         </div>
     </section>
-
+<br><br>
     <section class="support-faq">
         <div class="container">
             <div class="section-header">
