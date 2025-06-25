@@ -6,25 +6,176 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize pricing toggle functionality
     initializePricingToggle();
+    
+    // Initialize PayPal buttons
+    initializePayPalButtons();
 });
 
 function initializePricingToggle() {
     const toggle = document.getElementById('pricing-toggle');
     const monthlyPrices = document.querySelectorAll('.price.monthly, .period.monthly');
     const yearlyPrices = document.querySelectorAll('.price.yearly, .period.yearly');
+    const monthlyPayPal = document.querySelectorAll('.paypal-container.monthly');
+    const yearlyPayPal = document.querySelectorAll('.paypal-container.yearly');
 
     if (toggle) {
         toggle.addEventListener('change', function() {
             if (this.checked) {
-                // Show yearly prices
+                // Show yearly prices and PayPal buttons
                 monthlyPrices.forEach(el => el.classList.add('hidden'));
                 yearlyPrices.forEach(el => el.classList.remove('hidden'));
+                monthlyPayPal.forEach(el => el.classList.add('hidden'));
+                yearlyPayPal.forEach(el => el.classList.remove('hidden'));
             } else {
-                // Show monthly prices
+                // Show monthly prices and PayPal buttons
                 yearlyPrices.forEach(el => el.classList.add('hidden'));
                 monthlyPrices.forEach(el => el.classList.remove('hidden'));
+                yearlyPayPal.forEach(el => el.classList.add('hidden'));
+                monthlyPayPal.forEach(el => el.classList.remove('hidden'));
             }
         });
+    }
+}
+
+function initializePayPalButtons() {
+    // Load PayPal SDK
+    if (!window.paypal) {
+        const script = document.createElement('script');
+        script.src = 'https://www.paypal.com/sdk/js?client-id=AT1AN3A-SZTy0CoeQzjZO-LMKVYZju4ABAIXr62BrXZ99Xt3bqkbuhXlTA5gj_sM1vskMxjKngLpqcyK&vault=true&intent=subscription';
+        script.onload = function() {
+            renderPayPalButtons();
+        };
+        document.head.appendChild(script);
+    } else {
+        renderPayPalButtons();
+    }
+}
+
+function renderPayPalButtons() {
+    // Monthly PayPal button (Professional Support - $49/month)
+    if (document.getElementById('paypal-button-container-monthly')) {
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                color: 'blue',
+                layout: 'vertical',
+                label: 'subscribe',
+                height: 45
+            },
+            createSubscription: function(data, actions) {
+                return actions.subscription.create({
+                    plan_id: 'P-7G1214552U8556355NBN65EI' // Monthly plan ID
+                });
+            },
+            onApprove: function(data, actions) {
+                handleSubscriptionSuccess(data.subscriptionID, 'Monthly Professional Support');
+            },
+            onError: function(err) {
+                handleSubscriptionError('Monthly subscription failed. Please try again.');
+            },
+            onCancel: function(data) {
+                showMessage('Subscription cancelled. You can try again anytime.', 'error');
+            }
+        }).render('#paypal-button-container-monthly');
+    }
+
+    // Yearly PayPal button (Professional Support - $39/month billed yearly)
+    if (document.getElementById('paypal-button-container-yearly')) {
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                color: 'blue',
+                layout: 'vertical',
+                label: 'subscribe',
+                height: 45
+            },
+            createSubscription: function(data, actions) {
+                return actions.subscription.create({
+                    plan_id: 'P-1TS66068XW105472GNBN67HA' // Yearly plan ID
+                });
+            },
+            onApprove: function(data, actions) {
+                handleSubscriptionSuccess(data.subscriptionID, 'Yearly Professional Support');
+            },
+            onError: function(err) {
+                handleSubscriptionError('Yearly subscription failed. Please try again.');
+            },
+            onCancel: function(data) {
+                showMessage('Subscription cancelled. You can try again anytime.', 'error');
+            }
+        }).render('#paypal-button-container-yearly');
+    }
+}
+
+function handleSubscriptionSuccess(subscriptionID, planType) {
+    // Show success message to user
+    showMessage(`🎉 Subscription successful! Your subscription ID is: ${subscriptionID}. Welcome to Selenix Professional Support!`, 'success');
+    
+    // Send notification email
+    sendSubscriptionNotification(subscriptionID, planType);
+    
+    // Optional: Track the conversion
+    console.log('Subscription successful:', subscriptionID, planType);
+}
+
+function handleSubscriptionError(message) {
+    showMessage(`❌ ${message}`, 'error');
+}
+
+function sendSubscriptionNotification(subscriptionID, planType) {
+    const data = {
+        subscriptionID: subscriptionID,
+        planType: planType,
+        userEmail: 'subscriber@example.com', // You might want to collect this in a form
+        userName: 'New Subscriber',
+        timestamp: new Date().toISOString()
+    };
+
+    fetch('./notify-subscription.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Notification email sent successfully');
+        } else {
+            console.error('Failed to send notification email:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error sending notification:', error);
+    });
+}
+
+function showMessage(message, type) {
+    // Remove any existing message
+    const existingMessage = document.querySelector('.subscription-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    // Create new message element
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `subscription-message ${type}`;
+    messageDiv.innerHTML = message;
+    
+    // Insert message after the professional support plan
+    const professionalCard = document.querySelector('.plan-card.professional');
+    if (professionalCard) {
+        professionalCard.parentNode.insertBefore(messageDiv, professionalCard.nextSibling);
+    }
+    
+    // Auto-hide success messages after 10 seconds
+    if (type === 'success') {
+        setTimeout(() => {
+            if (messageDiv.parentNode) {
+                messageDiv.remove();
+            }
+        }, 10000);
     }
 }
 
