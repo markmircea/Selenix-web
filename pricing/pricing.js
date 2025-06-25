@@ -41,7 +41,7 @@ function initializePayPalButtons() {
     // Load PayPal SDK
     if (!window.paypal) {
         const script = document.createElement('script');
-        script.src = 'https://www.paypal.com/sdk/js?client-id=AT1AN3A-SZTy0CoeQzjZO-LMKVYZju4ABAIXr62BrXZ99Xt3bqkbuhXlTA5gj_sM1vskMxjKngLpqcyK&vault=true&intent=subscription';
+        script.src = 'https://www.paypal.com/sdk/js?client-id=ATA0shTucKNvmh8k-rIzJ-oYBYnTZYDR08ESwYSGMMoPla1o_zjCC4GkXuqYHkbg8x1hQSLn-09wB26W&vault=true&intent=subscription';
         script.onload = function() {
             renderPayPalButtons();
         };
@@ -161,21 +161,33 @@ function showMessage(message, type) {
     // Create new message element
     const messageDiv = document.createElement('div');
     messageDiv.className = `subscription-message ${type}`;
-    messageDiv.innerHTML = message;
+    messageDiv.innerHTML = `
+        <div class="message-content">
+            <span class="message-text">${message}</span>
+            <button class="message-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+        </div>
+    `;
     
-    // Insert message after the professional support plan
-    const professionalCard = document.querySelector('.plan-card.professional');
-    if (professionalCard) {
-        professionalCard.parentNode.insertBefore(messageDiv, professionalCard.nextSibling);
-    }
+    // Append message to body for sticky positioning
+    document.body.appendChild(messageDiv);
     
-    // Auto-hide success messages after 10 seconds
+    // Trigger animation by adding visible class after a small delay
+    setTimeout(() => {
+        messageDiv.classList.add('visible');
+    }, 100);
+    
+    // Auto-hide success messages after 8 seconds
     if (type === 'success') {
         setTimeout(() => {
             if (messageDiv.parentNode) {
-                messageDiv.remove();
+                messageDiv.classList.remove('visible');
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 300);
             }
-        }, 10000);
+        }, 8000);
     }
 }
 

@@ -349,29 +349,102 @@ input:checked + .slider:before {
     width: 100%;
 }
 
-/* Success/Error message styling */
+/* Success/Error message styling - Sticky bottom flash message */
 .subscription-message {
-    padding: 1rem;
-    border-radius: 8px;
-    margin: 1rem 0;
-    text-align: center;
-    font-weight: 600;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    text-align: left;
+    font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border-left: 4px solid;
+    z-index: 9999;
+    transform: translateY(100%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.subscription-message.visible {
+    transform: translateY(0);
+}
+
+.subscription-message .message-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.subscription-message .message-text {
+    flex: 1;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.subscription-message .message-close {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.subscription-message .message-close:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .subscription-message.success {
-    background-color: #d1fae5;
+    background-color: rgba(236, 253, 245, 0.95);
     color: #065f46;
+    border-left-color: #10b981;
     border: 1px solid #a7f3d0;
 }
 
 .subscription-message.error {
-    background-color: #fee2e2;
+    background-color: rgba(254, 242, 242, 0.95);
     color: #991b1b;
+    border-left-color: #ef4444;
     border: 1px solid #fca5a5;
 }
 
 .subscription-message.hidden {
     display: none;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .subscription-message {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        padding: 0.875rem 1rem;
+    }
+    
+    .subscription-message .message-text {
+        font-size: 0.9rem;
+    }
+    
+    .subscription-message .message-close {
+        font-size: 1.2rem;
+        width: 20px;
+        height: 20px;
+    }
 }
 
 .support-note {
