@@ -41,7 +41,7 @@ function initializePayPalButtons() {
     // Load PayPal SDK
     if (!window.paypal) {
         const script = document.createElement('script');
-        script.src = 'https://www.paypal.com/sdk/js?client-id=ATA0shTucKNvmh8k-rIzJ-oYBYnTZYDR08ESwYSGMMoPla1o_zjCC4GkXuqYHkbg8x1hQSLn-09wB26W&vault=true&intent=subscription';
+        script.src = 'https://www.paypal.com/sdk/js?client-id=AT1AN3A-SZTy0CoeQzjZO-LMKVYZju4ABAIXr62BrXZ99Xt3bqkbuhXlTA5gj_sM1vskMxjKngLpqcyK&vault=true&intent=subscription';
         script.onload = function() {
             renderPayPalButtons();
         };
