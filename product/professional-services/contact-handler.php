@@ -207,7 +207,7 @@ try {
             $headers = [
                 'MIME-Version: 1.0',
                 'Content-type: text/html; charset=utf-8',
-                'From: Selenix Contact Form <noreply@selenix.io>',
+                'From: Selenix - New Custom Template Form <noreply@selenix.io>',
                 'Reply-To: ' . $email,
                 'X-Mailer: PHP/' . phpversion()
             ];

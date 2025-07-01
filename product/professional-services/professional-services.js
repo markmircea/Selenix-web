@@ -3,10 +3,16 @@
  * Handles interactive functionality for the custom template development page
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Professional Services page loaded');
+/**
+ * Initialize all functionality
+ */
+function initializeAllFunctionality() {
+    // Prevent double initialization
+    if (window.selenixInitialized) {
+        return;
+    }
+    window.selenixInitialized = true;
     
-    // Initialize all functionality
     initSmoothScrolling();
     initFAQFunctionality();
     initAnimations();
@@ -14,6 +20,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initContactFormSubmission();
     initPricingAnimations();
     initProcessStepAnimations();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Professional Services page loaded');
+    initializeAllFunctionality();
     
     // Load components after DOM is ready
     setTimeout(() => {
@@ -79,6 +90,10 @@ function initFAQFunctionality() {
         
         if (!question || !answer || !icon) return;
         
+        // Check if already initialized
+        if (question.dataset.faqInitialized) return;
+        question.dataset.faqInitialized = 'true';
+        
         question.addEventListener('click', () => {
             const isOpen = item.classList.contains('active');
             
@@ -99,13 +114,15 @@ function initFAQFunctionality() {
                 item.classList.add('active');
                 answer.style.maxHeight = answer.scrollHeight + 'px';
                 icon.style.transform = 'rotate(180deg)';
+                question.setAttribute('aria-expanded', 'true');
                 
-                // Add analytics tracking
+                // Track FAQ interaction
                 trackFAQInteraction(question.querySelector('h4').textContent);
             } else {
                 item.classList.remove('active');
                 answer.style.maxHeight = null;
                 icon.style.transform = 'rotate(0deg)';
+                question.setAttribute('aria-expanded', 'false');
             }
         });
         
@@ -135,7 +152,7 @@ function initAnimations() {
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && !entry.target.classList.contains('animate-in')) {
                 entry.target.classList.add('animate-in');
                 
                 // Special handling for different element types
@@ -146,6 +163,9 @@ function initAnimations() {
                 } else if (entry.target.classList.contains('benefit-card')) {
                     animateBenefitCard(entry.target);
                 }
+                
+                // Stop observing this element after animation
+                observer.unobserve(entry.target);
             }
         });
     }, observerOptions);

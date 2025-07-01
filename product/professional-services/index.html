@@ -35,7 +35,7 @@
         "@context": "https://schema.org",
         "@type": "Service",
         "name": "Selenix Professional Services",
-        "description": "Custom template development and automation consulting services for Selenix browser automation platform. Expert developers create tailored solutions for complex workflows.",
+        "description": "Custom automation template development and automation consulting services for Selenix browser automation platform. Expert developers create tailored solutions for complex workflows.",
         "url": "https://selenix.io/product/professional-services/",
         "provider": {
             "@type": "Organization",
@@ -47,7 +47,7 @@
             "price": "200",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "description": "Custom template development starting at $200"
+            "description": "Custom automation template development starting at $200"
         },
         "serviceType": "Software Development",
         "areaServed": "Worldwide"
@@ -795,31 +795,6 @@
                             behavior: 'smooth',
                             block: 'start'
                         });
-                    }
-                });
-            });
-
-            // FAQ functionality
-            document.querySelectorAll('.faq-item').forEach(item => {
-                const question = item.querySelector('.faq-question');
-                const answer = item.querySelector('.faq-answer');
-                const icon = question.querySelector('i');
-                
-                question.addEventListener('click', () => {
-                    const isOpen = item.classList.contains('active');
-                    
-                    // Close all other FAQ items
-                    document.querySelectorAll('.faq-item').forEach(otherItem => {
-                        otherItem.classList.remove('active');
-                        otherItem.querySelector('.faq-answer').style.maxHeight = null;
-                        otherItem.querySelector('.faq-question i').style.transform = 'rotate(0deg)';
-                    });
-                    
-                    // Toggle current item
-                    if (!isOpen) {
-                        item.classList.add('active');
-                        answer.style.maxHeight = answer.scrollHeight + 'px';
-                        icon.style.transform = 'rotate(180deg)';
                     }
                 });
             });
