@@ -4,33 +4,21 @@
  * Handles custom template requests and newsletter subscriptions
  */
 
-// Enable error reporting for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Clean output buffer to prevent any HTML output
+if (ob_get_level()) {
+    ob_clean();
+}
 
-// Include blog configuration and models for newsletter functionality
-try {
-    require_once '../../blog/config.php';
-    require_once '../../blog/models.php';
-    require_once '../../blog/functions.php';
-    
-    // Initialize blog model for newsletter subscription
-    $blogModel = new BlogModel();
-} catch (Exception $e) {
-    // If we can't load the blog files, create basic functions
-    if (!function_exists('sanitizeInput')) {
-        function sanitizeInput($data) {
-            return htmlspecialchars(strip_tags(trim($data)));
-        }
-    }
-    if (!function_exists('isValidEmail')) {
-        function isValidEmail($email) {
-            return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
-        }
-    }
-    $blogModel = null;
-    error_log("Could not load blog components: " . $e->getMessage());
+// Set JSON header immediately
+header('Content-Type: application/json');
+
+// Basic sanitization and validation functions
+function sanitizeInput($data) {
+    return htmlspecialchars(strip_tags(trim($data)));
+}
+
+function isValidEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
 // Response array
@@ -40,47 +28,65 @@ $response = [
     'errors' => []
 ];
 
-// Check if form was submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    // Get and sanitize form data
-    $name = sanitizeInput($_POST['name'] ?? '');
-    $email = sanitizeInput($_POST['email'] ?? '');
-    $automation_type = sanitizeInput($_POST['automation_type'] ?? '');
-    $data_extract = sanitizeInput($_POST['data_extract'] ?? '');
-    $output_format = sanitizeInput($_POST['output_format'] ?? '');
-    $scheduling = sanitizeInput($_POST['scheduling'] ?? '');
-    $budget = sanitizeInput($_POST['budget'] ?? '');
-    $timeline = sanitizeInput($_POST['timeline'] ?? '');
-    $special_requirements = sanitizeInput($_POST['special_requirements'] ?? '');
-    $message = sanitizeInput($_POST['message'] ?? '');
-    $newsletter_subscribe = isset($_POST['newsletter_subscribe']) ? true : false;
-    
-    // Validation - only email and automation_type are required
-    if (empty($email)) {
-        $response['errors']['email'] = 'Email is required';
-    } elseif (!isValidEmail($email)) {
-        $response['errors']['email'] = 'Please enter a valid email address';
-    }
-    
-    if (empty($automation_type)) {
-        $response['errors']['automation_type'] = 'Please describe what you want to automate';
-    }
-    
-    // If no validation errors, process the form
-    if (empty($response['errors'])) {
+try {
+    // Try to connect to the database for newsletter functionality
+    $pdo = null;
+    if (file_exists('../../blog/config.php')) {
+        require_once '../../blog/config.php';
         try {
-            // Subscribe to newsletter if requested
+            $pdo = new PDO(
+                "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME,
+                DB_USER,
+                DB_PASS,
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            );
+        } catch (PDOException $e) {
+            error_log("Database connection failed: " . $e->getMessage());
+        }
+    }
+
+    // Check if form was submitted
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        
+        // Get and sanitize form data
+        $name = sanitizeInput($_POST['name'] ?? '');
+        $email = sanitizeInput($_POST['email'] ?? '');
+        $automation_type = sanitizeInput($_POST['automation_type'] ?? '');
+        $data_extract = sanitizeInput($_POST['data_extract'] ?? '');
+        $output_format = sanitizeInput($_POST['output_format'] ?? '');
+        $scheduling = sanitizeInput($_POST['scheduling'] ?? '');
+        $budget = sanitizeInput($_POST['budget'] ?? '');
+        $timeline = sanitizeInput($_POST['timeline'] ?? '');
+        $special_requirements = sanitizeInput($_POST['special_requirements'] ?? '');
+        $message = sanitizeInput($_POST['message'] ?? '');
+        $newsletter_subscribe = isset($_POST['newsletter_subscribe']) ? true : false;
+        
+        // Validation - only email and automation_type are required
+        if (empty($email)) {
+            $response['errors']['email'] = 'Email is required';
+        } elseif (!isValidEmail($email)) {
+            $response['errors']['email'] = 'Please enter a valid email address';
+        }
+        
+        if (empty($automation_type)) {
+            $response['errors']['automation_type'] = 'Please describe what you want to automate';
+        }
+        
+        // If no validation errors, process the form
+        if (empty($response['errors'])) {
+            // Subscribe to newsletter if requested and available
             $newsletterSuccess = false;
             if ($newsletter_subscribe && $blogModel) {
-                $newsletterSuccess = $blogModel->subscribeNewsletter($email);
-            } elseif ($newsletter_subscribe && !$blogModel) {
-                // If BlogModel not available, just log it
-                error_log("Newsletter subscription requested but BlogModel not available for: $email");
+                try {
+                    $newsletterSuccess = $blogModel->subscribeNewsletter($email);
+                } catch (Exception $e) {
+                    // Newsletter subscription failed, but don't stop the main process
+                    error_log("Newsletter subscription failed: " . $e->getMessage());
+                }
             }
             
             // Prepare email content
-            $emailSubject = "New Custom Template Request from $name";
+            $emailSubject = "New Custom Template Request" . ($name ? " from $name" : "");
             $emailBody = "
             <html>
             <head>
@@ -98,17 +104,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class='header'>
                     <h2>New Custom Template Request</h2>
                 </div>
-                <div class='content'>
+                <div class='content'>";
+            
+            if (!empty($name)) {
+                $emailBody .= "
                     <div class='field'>
                         <span class='label'>Name:</span>
                         <span class='value'>" . htmlspecialchars($name) . "</span>
-                    </div>
+                    </div>";
+            }
+            
+            $emailBody .= "
                     <div class='field'>
                         <span class='label'>Email:</span>
                         <span class='value'>" . htmlspecialchars($email) . "</span>
-                    </div>";
-            
-            $emailBody .= "
+                    </div>
                     <div class='field'>
                         <span class='label'>Automation Type:</span>
                         <span class='value'>" . nl2br(htmlspecialchars($automation_type)) . "</span>
@@ -207,34 +217,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 
                 // Log the successful submission
-                error_log("Professional Services Contact Form Submission: $name ($email) - $automation_type");
+                error_log("Professional Services Contact Form Submission: " . ($name ?: 'No name') . " ($email) - $automation_type");
                 
             } else {
                 $response['message'] = 'There was an error sending your request. Please try again or email us directly at support@selenix.io';
-                error_log("Failed to send professional services contact email for: $name ($email)");
+                error_log("Failed to send professional services contact email for: " . ($name ?: 'No name') . " ($email)");
             }
-            
-        } catch (Exception $e) {
-            $response['message'] = 'There was an error processing your request. Please try again.';
-            error_log("Professional Services Contact Form Error: " . $e->getMessage());
+        } else {
+            $response['message'] = 'Please correct the errors below and try again.';
         }
     } else {
-        $response['message'] = 'Please correct the errors below and try again.';
+        $response['message'] = 'Invalid request method.';
     }
+
+} catch (Exception $e) {
+    $response = [
+        'success' => false,
+        'message' => 'There was an error processing your request. Please try again.',
+        'errors' => []
+    ];
+    error_log("Professional Services Contact Form Error: " . $e->getMessage());
 }
 
-// Handle AJAX requests
-if (isset($_POST['ajax']) || isset($_GET['ajax']) || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) {
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit;
-}
-
-// For non-AJAX requests, redirect back to the form with status
-if ($response['success']) {
-    header('Location: index.html?status=success&message=' . urlencode($response['message']));
-} else {
-    header('Location: index.html?status=error&message=' . urlencode($response['message']));
-}
-exit;
+// Ensure clean JSON output
+echo json_encode($response);
+exit();
 ?>
