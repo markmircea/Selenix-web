@@ -308,7 +308,7 @@ function initContactFormSubmission() {
         // Clear previous errors
         clearFormErrors();
         
-        const submitBtn = contactForm.querySelector('.submit-btn');
+        const submitBtn = this.querySelector('.submit-btn');
         const originalBtnContent = submitBtn.innerHTML;
         
         // Show loading state
@@ -317,7 +317,7 @@ function initContactFormSubmission() {
         submitBtn.classList.add('loading');
         
         try {
-            const formData = new FormData(contactForm);
+            const formData = new FormData(this);
             formData.append('ajax', '1');
             
             const response = await fetch('contact-handler.php', {
@@ -325,11 +325,18 @@ function initContactFormSubmission() {
                 body: formData
             });
             
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const result = await response.json();
             
             if (result.success) {
                 showFormMessage(result.message, true);
-                contactForm.reset();
+                this.reset();
+                
+                // Show confirmation modal
+                showConfirmationModal();
                 
                 // Scroll to success message
                 messagesContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -349,7 +356,7 @@ function initContactFormSubmission() {
             
         } catch (error) {
             console.error('Form submission error:', error);
-            showFormMessage('There was an error sending your request. Please try again or email us directly.', false);
+            showFormMessage('There was an error sending your request. Please try again or email us directly at support@selenix.io', false);
             trackFormSubmission('error', 'Network error');
         } finally {
             // Restore button state
@@ -484,6 +491,111 @@ function validateField(field) {
     }
     
     return isValid;
+}
+
+/**
+ * Show confirmation modal
+ */
+function showConfirmationModal() {
+    // Create modal HTML
+    const modalHTML = `
+        <div class="confirmation-modal-overlay">
+            <div class="confirmation-modal">
+                <div class="modal-header">
+                    <div class="success-icon">
+                        <i class="fa-solid fa-check-circle"></i>
+                    </div>
+                    <h3>Request Sent Successfully!</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Thank you for your interest in our professional template development services!</p>
+                    <div class="confirmation-details">
+                        <div class="detail-item">
+                            <i class="fa-solid fa-clock"></i>
+                            <span>We'll review your requirements and respond within <strong>24 hours</strong></span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>Check your email for a confirmation copy</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>For urgent requests, email us directly at <strong>support@selenix.io</strong></span>
+                        </div>
+                    </div>
+                    <div class="next-steps">
+                        <h4>What happens next?</h4>
+                        <ol>
+                            <li>Our team reviews your automation requirements</li>
+                            <li>We prepare a detailed quote and timeline</li>
+                            <li>We send you a personalized proposal</li>
+                            <li>Upon approval, we start building your custom template</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="primary-button close-modal">
+                        <i class="fa-solid fa-check"></i>
+                        Got it, thanks!
+                    </button>
+                    <a href="../templates/" class="secondary-outline-button">
+                        <i class="fa-solid fa-eye"></i>
+                        Browse Example Templates
+                    </a>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Get modal elements
+    const modalOverlay = document.querySelector('.confirmation-modal-overlay');
+    const modal = document.querySelector('.confirmation-modal');
+    const closeBtn = document.querySelector('.close-modal');
+    
+    // Show modal with animation
+    setTimeout(() => {
+        modalOverlay.style.opacity = '1';
+        modal.style.transform = 'translateY(0) scale(1)';
+    }, 10);
+    
+    // Close modal function
+    function closeModal() {
+        modalOverlay.style.opacity = '0';
+        modal.style.transform = 'translateY(-50px) scale(0.95)';
+        
+        setTimeout(() => {
+            if (modalOverlay.parentNode) {
+                modalOverlay.parentNode.removeChild(modalOverlay);
+            }
+        }, 300);
+    }
+    
+    // Event listeners
+    closeBtn.addEventListener('click', closeModal);
+    
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function escapeHandler(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            document.removeEventListener('keydown', escapeHandler);
+        }
+    });
+    
+    // Auto-close after 30 seconds
+    setTimeout(() => {
+        if (document.querySelector('.confirmation-modal-overlay')) {
+            closeModal();
+        }
+    }, 30000);
 }
 
 /**
