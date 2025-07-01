@@ -3,7 +3,7 @@
 /* Templates Hero */
 .templates-hero {
     background-color: var(--light-bg);
-    padding: 6rem 0;
+    padding: 5rem 0;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -37,8 +37,43 @@
 .templates-hero p {
     font-size: 1.25rem;
     color: var(--text-color);
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     line-height: 1.6;
+}
+
+/* Hero Benefits */
+.hero-benefits {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+
+.benefit-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 2rem;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.benefit-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+    border-color: var(--primary-color);
+}
+
+.benefit-badge i {
+    color: var(--primary-color);
+    font-size: 1rem;
 }
 
 .hero-cta {
@@ -1126,5 +1161,271 @@
         width: 100%;
         max-width: 300px;
         justify-content: center;
+    }
+    
+    .hero-benefits {
+        gap: 0.75rem;
+    }
+    
+    .benefit-badge {
+        font-size: 0.85rem;
+        padding: 0.6rem 1rem;
+    }
+}
+
+/* Quick Start Timeline */
+.quick-start-timeline {
+    padding: 4rem 0;
+    background-color: white;
+}
+
+.timeline-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 900px;
+    margin: 3rem auto 2rem auto;
+    position: relative;
+}
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    position: relative;
+}
+
+.timeline-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    transition: all 0.3s ease;
+    z-index: 2;
+    position: relative;
+}
+
+.timeline-step:hover .timeline-icon {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+.timeline-content h4 {
+    font-size: 1.1rem;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.timeline-content p {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.timeline-connector {
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), rgba(79, 70, 229, 0.3));
+    flex: 1;
+    margin: 0 -1rem;
+    position: relative;
+    top: -30px;
+    z-index: 1;
+}
+
+.timeline-cta {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Services & Community Section */
+.custom-services-community {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, var(--light-bg) 0%, white 100%);
+}
+
+.section-image {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.section-image img {
+    max-width: 60%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.section-image:hover img {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+    .section-image img {
+        max-width: 80%;
+    }
+}
+
+.services-community-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.service-card,
+.community-card {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-card:hover,
+.community-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.service-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-gradient);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+}
+
+.service-header h3,
+.community-header h3 {
+    font-size: 1.75rem;
+    color: var(--heading-color);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.service-header p,
+.community-header p {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+}
+
+.service-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.service-features .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+.service-features .feature-item i {
+    color: var(--primary-color);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.service-cta {
+    margin-bottom: 1.5rem;
+}
+
+.community-image {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.community-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.community-card:hover .community-image img {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Design for New Sections */
+@media (max-width: 1024px) {
+    .services-community-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .timeline-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .timeline-connector {
+        display: none;
+    }
+    
+    .timeline-step {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .service-features,
+    .community-benefits {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .service-card,
+    .community-card {
+        padding: 2rem;
+    }
+    
+    .quick-start-timeline {
+        padding: 3rem 0;
+    }
+    
+    .custom-services-community {
+        padding: 4rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .timeline-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+    
+    .service-header h3,
+    .community-header h3 {
+        font-size: 1.5rem;
     }
 }

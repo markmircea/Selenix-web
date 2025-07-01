@@ -15,17 +15,95 @@
     
     <p>Templates in Selenix are complete automation packages that include tests, test suites, and configurations. You can quickly import templates to get started with proven automation patterns.</p>
     
-    <h3>Importing Templates</h3>
-    <ol class="docs-list">
-        <li><strong>Download template file</strong> - Get the .json template file from our library or community</li>
-        <li><strong>Open Selenix</strong> - Launch the application and open your project</li>
-        <li><strong>Import template</strong> - Go to File → Import → Import from JSON</li>
-        <li><strong>Select template file</strong> - Choose the downloaded template JSON file</li>
-        <li><strong>Review and customize</strong> - Adapt the template to your specific needs</li>
-    </ol>
+    <h3>Step-by-Step Template Usage Guide</h3>
+    <p>Get started with pre-built templates in just a few simple steps:</p>
+    
+    <div class="template-usage-steps">
+        <div class="usage-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Download Template</h4>
+                <p>Browse our template library and download the template that fits your needs. Templates are provided as JSON files that contain complete automation workflows.</p>
+                <div class="step-tips">
+                    <ul>
+                        <li>Choose templates based on your specific use case</li>
+                        <li>Read the template description and requirements</li>
+                        <li>Check compatibility with your target websites</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="usage-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Import to Selenix</h4>
+                <p>Open Selenix application and import the template file through the "Import" option in the File menu.</p>
+                <div class="step-image-container">
+                    <img src="../uploads/templates/img/fileimport.png" alt="Import template file in Selenix" class="step-image">
+                    <div class="image-caption">Use File → Import → Import from JSON to load your template</div>
+                </div>
+                <div class="step-tips">
+                    <ul>
+                        <li>Go to File → Import → Import from JSON</li>
+                        <li>Select the downloaded template JSON file</li>
+                        <li>Choose import options (tests, suites, or full project)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="usage-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Configure as Needed</h4>
+                <p>Customize the template to match your specific requirements by modifying URLs, selectors, variable names, and other parameters.</p>
+                <div class="step-tips">
+                    <ul>
+                        <li>Update target URLs to match your websites</li>
+                        <li>Adjust CSS selectors for your site's structure</li>
+                        <li>Modify variable names and values</li>
+                        <li>Set up export paths and file formats</li>
+                    </ul>
+                </div>
+                <div class="configuration-example">
+                    <h5>Common Configuration Changes:</h5>
+                    <div class="config-item">
+                        <strong>URLs:</strong> Change <code>${baseUrl}</code> to your target website
+                    </div>
+                    <div class="config-item">
+                        <strong>Selectors:</strong> Update CSS selectors to match your site's elements
+                    </div>
+                    <div class="config-item">
+                        <strong>Export Paths:</strong> Set where you want data files saved
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="usage-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h4>Run the Automation</h4>
+                <p>Click "Run" and watch as Selenix automates your tasks for you! Monitor the execution and review the results.</p>
+                <div class="step-image-container">
+                    <img src="../uploads/templates/img/playbutton.png" alt="Run automation in Selenix" class="step-image">
+                    <div class="image-caption">Click the play button to start your automation</div>
+                </div>
+                <div class="step-tips">
+                    <ul>
+                        <li>Test with a small dataset first</li>
+                        <li>Monitor the execution for any errors</li>
+                        <li>Review exported data for accuracy</li>
+                        <li>Schedule regular runs if needed</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="template-import-example">
-        <h4>Template Import Process</h4>
+        <h4>Advanced Import Options</h4>
         <div class="import-steps">
             <div class="import-step">
                 <div class="step-icon"><i class="fa-solid fa-file-import"></i></div>
@@ -784,12 +862,169 @@ store | css=.my-price | priceSelector</code></pre>
     font-weight: bold;
 }
 
+/* Template Usage Steps Styles */
+.template-usage-steps {
+    margin: 2rem 0;
+}
+
+.usage-step {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+.usage-step:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.step-number {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-right: 2rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h4 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.step-content > p {
+    margin: 0 0 1.5rem 0;
+    color: #666;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.step-tips {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #4f46e5;
+}
+
+.step-tips ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.step-tips li {
+    margin-bottom: 0.5rem;
+    color: #555;
+    position: relative;
+    padding-left: 1.5rem;
+    line-height: 1.4;
+}
+
+.step-tips li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #4f46e5;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.step-image-container {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.step-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e5e9;
+}
+
+.image-caption {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+.configuration-example {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #10b981;
+}
+
+.configuration-example h5 {
+    margin: 0 0 1rem 0;
+    color: #065f46;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.config-item {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #d1fae5;
+}
+
+.config-item strong {
+    color: #065f46;
+}
+
+.config-item code {
+    background: rgba(16, 185, 129, 0.1);
+    color: #065f46;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
     .suite-export-options,
     .best-practices,
     .template-list,
     .management-tips {
         grid-template-columns: 1fr;
+    }
+    
+    .usage-step {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .step-number {
+        margin: 0 auto 1.5rem auto;
+    }
+    
+    .step-content {
+        text-align: left;
     }
 }
 </style>
