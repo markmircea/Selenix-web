@@ -74,12 +74,19 @@ try {
         
         // If no validation errors, process the form
         if (empty($response['errors'])) {
-            // Subscribe to newsletter if requested and available
+            // Subscribe to newsletter if requested and database available
             $newsletterSuccess = false;
-            if ($newsletter_subscribe && $blogModel) {
+            if ($newsletter_subscribe && $pdo) {
                 try {
-                    $newsletterSuccess = $blogModel->subscribeNewsletter($email);
-                } catch (Exception $e) {
+                    $stmt = $pdo->prepare("
+                        INSERT INTO newsletter_subscribers (email, subscribed_at, is_active) 
+                        VALUES (:email, CURRENT_TIMESTAMP, true) 
+                        ON CONFLICT (email) 
+                        DO UPDATE SET is_active = true, unsubscribed_at = NULL
+                    ");
+                    $stmt->execute(['email' => $email]);
+                    $newsletterSuccess = true;
+                } catch (PDOException $e) {
                     // Newsletter subscription failed, but don't stop the main process
                     error_log("Newsletter subscription failed: " . $e->getMessage());
                 }
