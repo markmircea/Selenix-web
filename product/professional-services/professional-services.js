@@ -286,7 +286,7 @@ function initContactFormEnhancements() {
  * Contact form submission handling
  */
 function initContactFormSubmission() {
-    const contactForm = document.getElementById('contact-form');
+    const contactForm = document.getElementById('professional-services-form');
     const messagesContainer = document.getElementById('contact-form-messages');
     
     if (!contactForm) {
@@ -323,25 +323,15 @@ function initContactFormSubmission() {
         submitBtn.classList.add('loading');
         
         // Create FormData from the form element
-        const formData = new FormData();
-        
-        // Manually add form fields
-        const formElements = contactForm.elements;
-        for (let element of formElements) {
-            if (element.name && element.value) {
-                if (element.type === 'checkbox') {
-                    if (element.checked) {
-                        formData.append(element.name, 'on');
-                    }
-                } else {
-                    formData.append(element.name, element.value);
-                }
-            }
-        }
-        
+        const formData = new FormData(contactForm);
         formData.append('ajax', '1');
         
         console.log('Sending form data...');
+        
+        // Debug: Log form data contents
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
         
         fetch('contact-handler.php', {
             method: 'POST',
