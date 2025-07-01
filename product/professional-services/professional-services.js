@@ -333,12 +333,24 @@ function initContactFormSubmission() {
             console.log(pair[0] + ': ' + pair[1]);
         }
         
-        fetch('contact-handler.php', {
+        fetch('test-handler.php', {
             method: 'POST',
             body: formData
         })
         .then(response => {
             console.log('Response received:', response.status);
+            console.log('Response headers:', response.headers.get('content-type'));
+            
+            // Check if response is JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                // If not JSON, log the HTML response for debugging
+                return response.text().then(text => {
+                    console.error('Non-JSON response received:', text.substring(0, 500));
+                    throw new Error('Server returned HTML instead of JSON. Check server logs.');
+                });
+            }
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

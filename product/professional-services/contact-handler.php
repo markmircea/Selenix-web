@@ -4,13 +4,34 @@
  * Handles custom template requests and newsletter subscriptions
  */
 
-// Include blog configuration and models for newsletter functionality
-require_once '../../blog/config.php';
-require_once '../../blog/models.php';
-require_once '../../blog/functions.php';
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Initialize blog model for newsletter subscription
-$blogModel = new BlogModel();
+// Include blog configuration and models for newsletter functionality
+try {
+    require_once '../../blog/config.php';
+    require_once '../../blog/models.php';
+    require_once '../../blog/functions.php';
+    
+    // Initialize blog model for newsletter subscription
+    $blogModel = new BlogModel();
+} catch (Exception $e) {
+    // If we can't load the blog files, create basic functions
+    if (!function_exists('sanitizeInput')) {
+        function sanitizeInput($data) {
+            return htmlspecialchars(strip_tags(trim($data)));
+        }
+    }
+    if (!function_exists('isValidEmail')) {
+        function isValidEmail($email) {
+            return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+        }
+    }
+    $blogModel = null;
+    error_log("Could not load blog components: " . $e->getMessage());
+}
 
 // Response array
 $response = [
@@ -51,8 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             // Subscribe to newsletter if requested
             $newsletterSuccess = false;
-            if ($newsletter_subscribe) {
+            if ($newsletter_subscribe && $blogModel) {
                 $newsletterSuccess = $blogModel->subscribeNewsletter($email);
+            } elseif ($newsletter_subscribe && !$blogModel) {
+                // If BlogModel not available, just log it
+                error_log("Newsletter subscription requested but BlogModel not available for: $email");
             }
             
             // Prepare email content
@@ -200,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Handle AJAX requests
-if (isset($_GET['ajax']) || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) {
+if (isset($_POST['ajax']) || isset($_GET['ajax']) || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) {
     header('Content-Type: application/json');
     echo json_encode($response);
     exit;
