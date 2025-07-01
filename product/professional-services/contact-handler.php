@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = sanitizeInput($_POST['name'] ?? '');
     $email = sanitizeInput($_POST['email'] ?? '');
     $automation_type = sanitizeInput($_POST['automation_type'] ?? '');
-    $target_websites = sanitizeInput($_POST['target_websites'] ?? '');
     $data_extract = sanitizeInput($_POST['data_extract'] ?? '');
     $output_format = sanitizeInput($_POST['output_format'] ?? '');
     $scheduling = sanitizeInput($_POST['scheduling'] ?? '');
@@ -36,11 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = sanitizeInput($_POST['message'] ?? '');
     $newsletter_subscribe = isset($_POST['newsletter_subscribe']) ? true : false;
     
-    // Validation
-    if (empty($name)) {
-        $response['errors']['name'] = 'Name is required';
-    }
-    
+    // Validation - only email and automation_type are required
     if (empty($email)) {
         $response['errors']['email'] = 'Email is required';
     } elseif (!isValidEmail($email)) {
@@ -49,10 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($automation_type)) {
         $response['errors']['automation_type'] = 'Please describe what you want to automate';
-    }
-    
-    if (empty($target_websites)) {
-        $response['errors']['target_websites'] = 'Please specify target websites';
     }
     
     // If no validation errors, process the form
@@ -93,30 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <span class='value'>" . htmlspecialchars($email) . "</span>
                     </div>";
             
-            if (!empty($company)) {
-                $emailBody .= "
-                    <div class='field'>
-                        <span class='label'>Company:</span>
-                        <span class='value'>" . htmlspecialchars($company) . "</span>
-                    </div>";
-            }
-            
-            if (!empty($website)) {
-                $emailBody .= "
-                    <div class='field'>
-                        <span class='label'>Website:</span>
-                        <span class='value'>" . htmlspecialchars($website) . "</span>
-                    </div>";
-            }
-            
             $emailBody .= "
                     <div class='field'>
                         <span class='label'>Automation Type:</span>
                         <span class='value'>" . nl2br(htmlspecialchars($automation_type)) . "</span>
-                    </div>
-                    <div class='field'>
-                        <span class='label'>Target Websites:</span>
-                        <span class='value'>" . nl2br(htmlspecialchars($target_websites)) . "</span>
                     </div>";
             
             if (!empty($data_extract)) {

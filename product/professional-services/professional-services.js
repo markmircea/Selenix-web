@@ -289,7 +289,12 @@ function initContactFormSubmission() {
     const contactForm = document.getElementById('contact-form');
     const messagesContainer = document.getElementById('contact-form-messages');
     
-    if (!contactForm) return;
+    if (!contactForm) {
+        console.log('Contact form not found');
+        return;
+    }
+    
+    console.log('Contact form found and event listener being added');
     
     // Check for URL parameters on page load
     const urlParams = new URLSearchParams(window.location.search);
@@ -302,13 +307,14 @@ function initContactFormSubmission() {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
     
-    contactForm.addEventListener('submit', async function(e) {
+    contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
+        console.log('Form submitted');
         
         // Clear previous errors
         clearFormErrors();
         
-        const submitBtn = this.querySelector('.submit-btn');
+        const submitBtn = contactForm.querySelector('.submit-btn');
         const originalBtnContent = submitBtn.innerHTML;
         
         // Show loading state
@@ -316,30 +322,52 @@ function initContactFormSubmission() {
         submitBtn.innerHTML = '<i class="fa-solid fa-spinner loading-spinner"></i> <span>Sending...</span>';
         submitBtn.classList.add('loading');
         
-        try {
-            const formData = new FormData(this);
-            formData.append('ajax', '1');
-            
-            const response = await fetch('contact-handler.php', {
-                method: 'POST',
-                body: formData
-            });
-            
+        // Create FormData from the form element
+        const formData = new FormData();
+        
+        // Manually add form fields
+        const formElements = contactForm.elements;
+        for (let element of formElements) {
+            if (element.name && element.value) {
+                if (element.type === 'checkbox') {
+                    if (element.checked) {
+                        formData.append(element.name, 'on');
+                    }
+                } else {
+                    formData.append(element.name, element.value);
+                }
+            }
+        }
+        
+        formData.append('ajax', '1');
+        
+        console.log('Sending form data...');
+        
+        fetch('contact-handler.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('Response received:', response.status);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
-            const result = await response.json();
+            return response.json();
+        })
+        .then(result => {
+            console.log('Result:', result);
             
             if (result.success) {
                 showFormMessage(result.message, true);
-                this.reset();
+                contactForm.reset();
                 
                 // Show confirmation modal
                 showConfirmationModal();
                 
                 // Scroll to success message
-                messagesContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (messagesContainer) {
+                    messagesContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
                 
                 // Track successful submission
                 trackFormSubmission('success');
@@ -348,22 +376,24 @@ function initContactFormSubmission() {
                 if (result.errors && Object.keys(result.errors).length > 0) {
                     showFieldErrors(result.errors);
                 }
-                showFormMessage(result.message, false);
+                showFormMessage(result.message || 'There was an error processing your request.', false);
                 
                 // Track failed submission
                 trackFormSubmission('error', result.message);
             }
             
-        } catch (error) {
+        })
+        .catch(error => {
             console.error('Form submission error:', error);
             showFormMessage('There was an error sending your request. Please try again or email us directly at support@selenix.io', false);
-            trackFormSubmission('error', 'Network error');
-        } finally {
+            trackFormSubmission('error', 'Network error: ' + error.message);
+        })
+        .finally(() => {
             // Restore button state
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnContent;
             submitBtn.classList.remove('loading');
-        }
+        });
     });
     
     // Real-time validation
