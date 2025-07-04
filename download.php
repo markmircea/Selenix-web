@@ -731,6 +731,64 @@ if __name__ == "__main__":
                     max-height: 50px;
                 }
                 
+                /* Newsletter Checkbox Styles */
+                .checkbox-group {
+                    margin: 20px 0;
+                }
+                
+                .checkbox-label {
+                    display: flex;
+                    align-items: flex-start;
+                    cursor: pointer;
+                    font-size: 14px;
+                    line-height: 1.4;
+                    color: #333;
+                    gap: 12px;
+                }
+                
+                .checkbox-label input[type="checkbox"] {
+                    display: none;
+                }
+                
+                .checkmark {
+                    position: relative;
+                    width: 20px;
+                    height: 20px;
+                    background: white;
+                    border: 2px solid #e1e5e9;
+                    border-radius: 4px;
+                    transition: all 0.3s ease;
+                    flex-shrink: 0;
+                    margin-top: 2px;
+                }
+                
+                .checkbox-label:hover .checkmark {
+                    border-color: #667eea;
+                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                }
+                
+                .checkbox-label input[type="checkbox"]:checked + .checkmark {
+                    background: #667eea;
+                    border-color: #667eea;
+                }
+                
+                .checkmark:after {
+                    content: '';
+                    position: absolute;
+                    display: none;
+                    left: 6px;
+                    top: 2px;
+                    width: 5px;
+                    height: 10px;
+                    border: solid white;
+                    border-width: 0 2px 2px 0;
+                    transform: rotate(45deg);
+                }
+                
+                .checkbox-label input[type="checkbox"]:checked + .checkmark:after {
+                    display: block;
+                }
+                
                 .system-requirements {
                     background: #f8f9ff;
                     border-radius: 12px;
@@ -988,6 +1046,28 @@ if __name__ == "__main__":
                     .platform-details {
                         font-size: 10px;
                         margin-top: 6px;
+                    }
+                    
+                    .checkbox-group {
+                        margin: 15px 0;
+                    }
+                    
+                    .checkbox-label {
+                        font-size: 13px;
+                        gap: 10px;
+                    }
+                    
+                    .checkmark {
+                        width: 18px;
+                        height: 18px;
+                        margin-top: 1px;
+                    }
+                    
+                    .checkmark:after {
+                        left: 5px;
+                        top: 1px;
+                        width: 4px;
+                        height: 9px;
                     }
                     
                     .download-btn {
@@ -1297,6 +1377,14 @@ if __name__ == "__main__":
                         </div>
                     </div>
                     
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="newsletter_subscribe" name="newsletter_subscribe" checked>
+                            <span class="checkmark"></span>
+                            Subscribe to our newsletter for automation tips, new templates, and product updates
+                        </label>
+                    </div>
+                    
                     <button type="submit" class="download-btn" id="downloadBtn">
                         <div class="btn-content">
                             <i class="fas fa-download"></i>
@@ -1311,7 +1399,7 @@ if __name__ == "__main__":
                 
                 <p class="privacy-note">
                     <i class="fas fa-lock"></i>
-                    Your email is only used to provide updates and support. Both platforms include the same 135+ automation commands and AI-powered web scraping features. We never share your information.
+                    Your email is used to provide updates, support, and newsletter content (if subscribed). Both platforms include the same 135+ automation commands and AI-powered web scraping features. We never share your information and you can unsubscribe anytime.
                 </p>
             </div>
             
@@ -1355,6 +1443,24 @@ if __name__ == "__main__":
                         downloadBtn.disabled = true;
                         btnContent.style.opacity = '0';
                         btnLoading.style.display = 'block';
+                        
+                        // Handle newsletter subscription if checked
+                        const newsletterCheckbox = document.getElementById('newsletter_subscribe');
+                        const email = document.getElementById('email').value;
+                        
+                        if (newsletterCheckbox && newsletterCheckbox.checked && email) {
+                            // Subscribe to newsletter (async, don't wait for it)
+                            fetch('newsletter-subscribe.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: 'email=' + encodeURIComponent(email) + '&source=download'
+                            }).catch(function(error) {
+                                console.log('Newsletter subscription error:', error);
+                                // Don't interrupt download process
+                            });
+                        }
                         
                         // Show overlay after a short delay
                         setTimeout(function() {
