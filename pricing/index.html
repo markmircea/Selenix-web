@@ -33,37 +33,73 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "Product",
+        "@type": "SoftwareApplication",
         "name": "Selenix Browser Automation",
         "description": "Free AI-powered browser automation tool with optional professional support services",
-        "brand": {
-            "@type": "Brand",
+        "image": "https://selenix.io/selenixlogo.png",
+        "url": "https://selenix.io",
+        "downloadUrl": "https://selenix.io/download.php",
+        "operatingSystem": "Windows",
+        "applicationCategory": "DeveloperApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+        },
+        "author": {
+            "@type": "Organization",
             "name": "Selenix.io"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Selenix.io"
+        },
+        "softwareVersion": "1.0",
+        "releaseNotes": "AI-powered browser automation with unlimited usage",
+        "screenshot": "https://selenix.io/selenixlogo.png",
+        "featureList": [
+            "AI-powered automation",
+            "Browser automation",
+            "Template library",
+            "Unlimited usage",
+            "Community support"
+        ]
+    }
+    </script>
+    
+    <!-- Service Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Selenix Support Services",
+        "description": "Professional support and custom development services for Selenix browser automation scraping tool",
+        "provider": {
+            "@type": "Organization",
+            "name": "Selenix.io",
+            "url": "https://selenix.io"
         },
         "offers": [
             {
                 "@type": "Offer",
-                "name": "Community Support",
-                "price": "0",
-                "priceCurrency": "USD",
-                "availability": "https://schema.org/InStock",
-                "description": "Free app with community support"
-            },
-            {
-                "@type": "Offer",
                 "name": "Professional Support",
+                "description": "Priority support with installation assistance",
                 "price": "49",
                 "priceCurrency": "USD",
+                "pricePer": "monthly",
                 "availability": "https://schema.org/InStock",
-                "description": "Priority support with template installation help"
+                "category": "Support Service"
             },
             {
                 "@type": "Offer",
                 "name": "Custom Development",
+                "description": "Custom automation development and implementation services",
                 "price": "149",
                 "priceCurrency": "USD",
+                "pricePer": "monthly",
                 "availability": "https://schema.org/InStock",
-                "description": "Custom template development and implementation"
+                "category": "Development Service"
             }
         ]
     }
