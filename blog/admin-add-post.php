@@ -51,36 +51,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $metaDescription = sanitizeInput($_POST['meta_description']);
     $isFeatured = isset($_POST['is_featured']) ? true : false;
     $isPublished = isset($_POST['is_published']) ? true : false;
-    
+
     $errors = [];
-    
+
     // Validation
     if (empty($title)) {
         $errors[] = 'Title is required';
     }
-    
+
     if (empty($content)) {
         $errors[] = 'Content is required';
     }
-    
+
     if (empty($category)) {
         $errors[] = 'Category is required';
     }
-    
+
     if (empty($authorName)) {
         $errors[] = 'Author name is required';
     }
-    
+
     if ($readTime < 1) {
         $readTime = estimateReadingTime($content);
     }
-    
+
     // Handle featured image upload
     $featuredImage = $isEdit ? $post['featured_image'] : '';
-    
+
     if (isset($_FILES['featured_image']) && $_FILES['featured_image']['error'] === UPLOAD_ERR_OK) {
         $uploadResult = handleFileUpload($_FILES['featured_image']);
-        
+
         if ($uploadResult['success']) {
             // Delete old image if editing
             if ($isEdit && !empty($post['featured_image'])) {
@@ -91,13 +91,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Error uploading featured image: ' . $uploadResult['error'];
         }
     }
-    
+
     // Handle author avatar upload
     $authorAvatar = $isEdit ? $post['author_avatar'] : '';
-    
+
     if (isset($_FILES['author_avatar']) && $_FILES['author_avatar']['error'] === UPLOAD_ERR_OK) {
         $uploadResult = handleFileUpload($_FILES['author_avatar']);
-        
+
         if ($uploadResult['success']) {
             // Delete old avatar if editing
             if ($isEdit && !empty($post['author_avatar'])) {
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = 'Error uploading author avatar: ' . $uploadResult['error'];
         }
     }
-    
+
     if (empty($errors)) {
         // Generate slug
         if ($isEdit) {
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $slug = $blogModel->generateUniqueSlug($title);
         }
-        
+
         // Auto-generate excerpt if empty
         if (empty($excerpt)) {
             // If meta description is provided, use it as excerpt
@@ -126,17 +126,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $excerpt = generateExcerpt($content);
             }
         }
-        
+
         // Auto-generate meta title if empty
         if (empty($metaTitle)) {
             $metaTitle = $title . ' - ' . BLOG_TITLE;
         }
-        
+
         // Auto-generate meta description if empty
         if (empty($metaDescription)) {
             $metaDescription = $excerpt;
         }
-        
+
         $publishedAt = null;
         if ($isPublished === true) {
             if ($isEdit && $post['is_published'] === false) {
@@ -150,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $publishedAt = date('Y-m-d H:i:s');
             }
         }
-        
+
         $postData = [
             'title' => $title,
             'slug' => $slug,
@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'meta_description' => $metaDescription,
             'published_at' => $publishedAt
         ];
-        
+
         if ($isEdit) {
             if ($blogModel->updatePost($postId, $postData)) {
                 header('Location: admin-posts.php?message=updated');
@@ -192,6 +192,7 @@ global $BLOG_CATEGORIES;
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -206,6 +207,7 @@ global $BLOG_CATEGORIES;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body class="admin-body">
     <div class="admin-wrapper">
         <!-- Sidebar -->
@@ -216,21 +218,28 @@ global $BLOG_CATEGORIES;
                     <span class="admin-label">Admin</span>
                 </h2>
             </div>
-            
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="admin-dashboard.php"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="admin-dashboard.php" class="active"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
                     <li><a href="admin-posts.php"><i class="fa-solid fa-newspaper"></i> Posts</a></li>
                     <li><a href="admin-add-post.php" class="<?php echo !$isEdit ? 'active' : ''; ?>"><i class="fa-solid fa-plus"></i> Add New Post</a></li>
+                    <li><a href="admin-ai-generate.php"><i class="fa-solid fa-brain"></i> AI Generator</a></li>
                     <li><a href="admin-comments.php"><i class="fa-solid fa-comments"></i> Comments</a></li>
-                    <li><a href="admin-subscribers.php"><i class="fa-solid fa-users"></i> Subscribers</a></li>
+                    <li><a href="admin-subscribers.php"><i class="fa-solid fa-users"></i> Newsletter Subscribers</a></li>
+
                     <li class="nav-divider"></li>
+                    <li><a href="../../admin.php"><i class="fa-solid fa-users"></i> Downloads Admin</a></li>
+                    <li><a href="../support/admin.php"><i class="fa-solid fa-users"></i> Support Admin</a></li>
+
+                    <li class="nav-divider"></li>
+
                     <li><a href="blog.php" target="_blank"><i class="fa-solid fa-external-link-alt"></i> View Blog</a></li>
                     <li><a href="admin-logout.php"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
+
         </aside>
-        
+
         <!-- Main Content -->
         <main class="admin-main">
             <div class="admin-header">
@@ -242,14 +251,14 @@ global $BLOG_CATEGORIES;
                     </a>
                 </div>
             </div>
-            
+
             <?php if ($message): ?>
                 <div class="admin-message <?php echo $messageType; ?>">
                     <i class="fa-solid fa-<?php echo $messageType === 'success' ? 'check-circle' : 'exclamation-circle'; ?>"></i>
                     <?php echo htmlspecialchars($message); ?>
                 </div>
             <?php endif; ?>
-            
+
             <?php if (!empty($errors)): ?>
                 <div class="admin-message error">
                     <i class="fa-solid fa-exclamation-circle"></i>
@@ -260,160 +269,160 @@ global $BLOG_CATEGORIES;
                     </div>
                 </div>
             <?php endif; ?>
-            
+
             <!-- Post Form -->
             <form method="POST" enctype="multipart/form-data" class="admin-form">
                 <div class="form-grid">
                     <div class="form-main">
                         <div class="form-group">
                             <label for="title">Title *</label>
-                            <input type="text" id="title" name="title" required 
-                                   value="<?php echo $isEdit ? htmlspecialchars($post['title']) : ''; ?>"
-                                   placeholder="Enter post title">
+                            <input type="text" id="title" name="title" required
+                                value="<?php echo $isEdit ? htmlspecialchars($post['title']) : ''; ?>"
+                                placeholder="Enter post title">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="content">Content *</label>
-                            <textarea id="content" name="content" rows="20" required 
-                                      placeholder="Write your post content here..."><?php echo $isEdit ? htmlspecialchars($post['content']) : ''; ?></textarea>
+                            <textarea id="content" name="content" rows="20" required
+                                placeholder="Write your post content here..."><?php echo $isEdit ? htmlspecialchars($post['content']) : ''; ?></textarea>
                             <div class="form-help">You can use HTML tags for formatting.</div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="excerpt">Excerpt</label>
-                            <textarea id="excerpt" name="excerpt" rows="3" 
-                                      placeholder="Brief description of the post (auto-generated if left empty)"><?php echo $isEdit ? htmlspecialchars($post['excerpt']) : ''; ?></textarea>
+                            <textarea id="excerpt" name="excerpt" rows="3"
+                                placeholder="Brief description of the post (auto-generated if left empty)"><?php echo $isEdit ? htmlspecialchars($post['excerpt']) : ''; ?></textarea>
                             <div class="form-help">Used in post previews and meta descriptions.</div>
                         </div>
                     </div>
-                    
+
                     <div class="form-sidebar">
                         <div class="form-section">
                             <h3>Publish</h3>
-                            
+
                             <div class="form-group">
                                 <label>
-                                    <input type="checkbox" name="is_published" 
-                                           <?php echo ($isEdit && $post['is_published'] === true) ? 'checked' : (!$isEdit ? 'checked' : ''); ?>>
+                                    <input type="checkbox" name="is_published"
+                                        <?php echo ($isEdit && $post['is_published'] === true) ? 'checked' : (!$isEdit ? 'checked' : ''); ?>>
                                     <?php echo $isEdit ? 'Published' : 'Publish immediately'; ?>
                                 </label>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>
-                                    <input type="checkbox" name="is_featured" 
-                                           <?php echo ($isEdit && $post['is_featured'] === true) ? 'checked' : ''; ?>>
+                                    <input type="checkbox" name="is_featured"
+                                        <?php echo ($isEdit && $post['is_featured'] === true) ? 'checked' : ''; ?>>
                                     Featured post
                                 </label>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Post Details</h3>
-                            
+
                             <div class="form-group">
                                 <label for="category">Category *</label>
                                 <select id="category" name="category" required>
                                     <option value="">Select category</option>
                                     <?php foreach ($BLOG_CATEGORIES as $key => $name): ?>
-                                        <option value="<?php echo $key; ?>" 
-                                                <?php echo ($isEdit && $post['category'] === $key) ? 'selected' : ''; ?>>
+                                        <option value="<?php echo $key; ?>"
+                                            <?php echo ($isEdit && $post['category'] === $key) ? 'selected' : ''; ?>>
                                             <?php echo htmlspecialchars($name); ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="read_time">Reading Time (minutes)</label>
                                 <input type="number" id="read_time" name="read_time" min="1" max="120"
-                                       value="<?php echo $isEdit ? $post['read_time'] : ''; ?>"
-                                       placeholder="Auto-calculate">
+                                    value="<?php echo $isEdit ? $post['read_time'] : ''; ?>"
+                                    placeholder="Auto-calculate">
                                 <div class="form-help">Leave empty to auto-calculate.</div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Featured Image</h3>
-                            
+
                             <?php if ($isEdit && !empty($post['featured_image'])): ?>
                                 <div class="current-image">
-                                    <img src="<?php echo UPLOAD_URL . $post['featured_image']; ?>" 
-                                         alt="Current featured image" style="max-width: 100%; height: auto;">
+                                    <img src="<?php echo UPLOAD_URL . $post['featured_image']; ?>"
+                                        alt="Current featured image" style="max-width: 100%; height: auto;">
                                 </div>
                             <?php endif; ?>
-                            
+
                             <div class="form-group">
                                 <label for="featured_image">
                                     <?php echo ($isEdit && !empty($post['featured_image'])) ? 'Replace Image' : 'Upload Image'; ?>
                                 </label>
-                                <input type="file" id="featured_image" name="featured_image" 
-                                       accept="image/*">
+                                <input type="file" id="featured_image" name="featured_image"
+                                    accept="image/*">
                                 <div class="form-help">JPG, PNG, GIF, WebP. Max 5MB.</div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Author Info</h3>
-                            
+
                             <div class="form-group">
                                 <label for="author_name">Author Name *</label>
-                                <input type="text" id="author_name" name="author_name" required 
-                                       value="<?php echo $isEdit ? htmlspecialchars($post['author_name']) : ''; ?>"
-                                       placeholder="John Smith">
+                                <input type="text" id="author_name" name="author_name" required
+                                    value="<?php echo $isEdit ? htmlspecialchars($post['author_name']) : ''; ?>"
+                                    placeholder="John Smith">
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="author_title">Author Title</label>
-                                <input type="text" id="author_title" name="author_title" 
-                                       value="<?php echo $isEdit ? htmlspecialchars($post['author_title']) : ''; ?>"
-                                       placeholder="Lead Developer">
+                                <input type="text" id="author_title" name="author_title"
+                                    value="<?php echo $isEdit ? htmlspecialchars($post['author_title']) : ''; ?>"
+                                    placeholder="Lead Developer">
                             </div>
-                            
+
                             <?php if ($isEdit && !empty($post['author_avatar'])): ?>
                                 <div class="current-avatar">
-                                    <img src="<?php echo UPLOAD_URL . $post['author_avatar']; ?>" 
-                                         alt="Current author avatar" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                                    <img src="<?php echo UPLOAD_URL . $post['author_avatar']; ?>"
+                                        alt="Current author avatar" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
                                 </div>
                             <?php endif; ?>
-                            
+
                             <div class="form-group">
                                 <label for="author_avatar">
                                     <?php echo ($isEdit && !empty($post['author_avatar'])) ? 'Replace Avatar' : 'Author Avatar'; ?>
                                 </label>
-                                <input type="file" id="author_avatar" name="author_avatar" 
-                                       accept="image/*">
+                                <input type="file" id="author_avatar" name="author_avatar"
+                                    accept="image/*">
                                 <div class="form-help">Square image recommended.</div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>SEO Settings</h3>
-                            
+
                             <div class="form-group">
                                 <label for="meta_title">Meta Title</label>
                                 <input type="text" id="meta_title" name="meta_title" maxlength="60"
-                                       value="<?php echo $isEdit ? htmlspecialchars($post['meta_title']) : ''; ?>"
-                                       placeholder="Auto-generated if empty">
+                                    value="<?php echo $isEdit ? htmlspecialchars($post['meta_title']) : ''; ?>"
+                                    placeholder="Auto-generated if empty">
                                 <div class="form-help">Recommended: 50-60 characters.</div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="meta_description">Meta Description</label>
                                 <textarea id="meta_description" name="meta_description" rows="3" maxlength="160"
-                                          placeholder="Auto-generated if empty"><?php echo $isEdit ? htmlspecialchars($post['meta_description']) : ''; ?></textarea>
+                                    placeholder="Auto-generated if empty"><?php echo $isEdit ? htmlspecialchars($post['meta_description']) : ''; ?></textarea>
                                 <div class="form-help">Recommended: 150-160 characters.</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="fa-solid fa-save"></i>
                         <?php echo $isEdit ? 'Update Post' : 'Create Post'; ?>
                     </button>
-                    
+
                     <a href="admin-posts.php" class="btn btn-secondary btn-lg">
                         <i class="fa-solid fa-times"></i>
                         Cancel
@@ -433,29 +442,29 @@ global $BLOG_CATEGORIES;
                     this.style.height = (this.scrollHeight) + 'px';
                 });
             }
-            
+
             // Character counters for SEO fields
             const metaTitle = document.getElementById('meta_title');
             const metaDescription = document.getElementById('meta_description');
-            
+
             function addCharCounter(input, maxLength) {
                 const counter = document.createElement('div');
                 counter.className = 'char-counter';
                 counter.style.fontSize = '0.8rem';
                 counter.style.color = '#6b7280';
                 counter.style.marginTop = '0.25rem';
-                
+
                 function updateCounter() {
                     const length = input.value.length;
                     counter.textContent = `${length}/${maxLength} characters`;
                     counter.style.color = length > maxLength ? '#ef4444' : '#6b7280';
                 }
-                
+
                 input.addEventListener('input', updateCounter);
                 input.parentNode.appendChild(counter);
                 updateCounter();
             }
-            
+
             if (metaTitle) addCharCounter(metaTitle, 60);
             if (metaDescription) addCharCounter(metaDescription, 160);
         });
@@ -467,27 +476,27 @@ global $BLOG_CATEGORIES;
             grid-template-columns: 2fr 1fr;
             gap: 2rem;
         }
-        
+
         .form-main {
             background: white;
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        
+
         .form-sidebar {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
-        
+
         .form-section {
             background: white;
             padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        
+
         .form-section h3 {
             margin: 0 0 1rem 0;
             color: var(--heading-color);
@@ -495,7 +504,7 @@ global $BLOG_CATEGORIES;
             padding-bottom: 0.5rem;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         .current-image,
         .current-avatar {
             margin-bottom: 1rem;
@@ -504,11 +513,11 @@ global $BLOG_CATEGORIES;
             border-radius: 8px;
             text-align: center;
         }
-        
+
         .current-image img {
             border-radius: 8px;
         }
-        
+
         .form-actions {
             margin-top: 2rem;
             padding: 2rem;
@@ -516,7 +525,7 @@ global $BLOG_CATEGORIES;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        
+
         @media (max-width: 1024px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -524,4 +533,5 @@ global $BLOG_CATEGORIES;
         }
     </style>
 </body>
+
 </html>

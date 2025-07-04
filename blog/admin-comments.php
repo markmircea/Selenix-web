@@ -10,7 +10,7 @@ $blogModel = new BlogModel();
 // Handle comment actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $commentId = intval($_POST['comment_id']);
-    
+
     switch ($_POST['action']) {
         case 'approve':
             if ($blogModel->approveComment($commentId)) {
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $messageType = 'error';
             }
             break;
-            
+
         case 'delete':
             if ($blogModel->deleteComment($commentId)) {
                 $message = 'Comment deleted successfully';
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 $messageType = 'error';
             }
             break;
-            
+
         case 'bulk_approve':
             $commentIds = $_POST['comment_ids'] ?? [];
             $approved = 0;
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $message = "Approved $approved comment(s) successfully";
             $messageType = 'success';
             break;
-            
+
         case 'bulk_delete':
             $commentIds = $_POST['comment_ids'] ?? [];
             $deleted = 0;
@@ -74,7 +74,7 @@ if ($status === 'pending') {
         WHERE c.is_approved = false
         ORDER BY c.created_at DESC
         LIMIT " . ADMIN_POSTS_PER_PAGE . " OFFSET " . (($page - 1) * ADMIN_POSTS_PER_PAGE);
-    
+
     $countSql = "SELECT COUNT(*) FROM comments WHERE is_approved = false";
 } elseif ($status === 'approved') {
     $sql = "
@@ -84,7 +84,7 @@ if ($status === 'pending') {
         WHERE c.is_approved = true
         ORDER BY c.created_at DESC
         LIMIT " . ADMIN_POSTS_PER_PAGE . " OFFSET " . (($page - 1) * ADMIN_POSTS_PER_PAGE);
-    
+
     $countSql = "SELECT COUNT(*) FROM comments WHERE is_approved = true";
 } else {
     $sql = "
@@ -93,7 +93,7 @@ if ($status === 'pending') {
         JOIN posts p ON c.post_id = p.id
         ORDER BY c.created_at DESC
         LIMIT " . ADMIN_POSTS_PER_PAGE . " OFFSET " . (($page - 1) * ADMIN_POSTS_PER_PAGE);
-    
+
     $countSql = "SELECT COUNT(*) FROM comments";
 }
 
@@ -112,6 +112,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -126,6 +127,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
+
 <body class="admin-body">
     <div class="admin-wrapper">
         <!-- Sidebar -->
@@ -136,21 +138,28 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                     <span class="admin-label">Admin</span>
                 </h2>
             </div>
-            
+
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="admin-dashboard.php"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
+                    <li><a href="admin-dashboard.php" class="active"><i class="fa-solid fa-dashboard"></i> Dashboard</a></li>
                     <li><a href="admin-posts.php"><i class="fa-solid fa-newspaper"></i> Posts</a></li>
                     <li><a href="admin-add-post.php"><i class="fa-solid fa-plus"></i> Add New Post</a></li>
-                    <li><a href="admin-comments.php" class="active"><i class="fa-solid fa-comments"></i> Comments</a></li>
-                    <li><a href="admin-subscribers.php"><i class="fa-solid fa-users"></i> Subscribers</a></li>
+                    <li><a href="admin-ai-generate.php"><i class="fa-solid fa-brain"></i> AI Generator</a></li>
+                    <li><a href="admin-comments.php"><i class="fa-solid fa-comments"></i> Comments</a></li>
+                    <li><a href="admin-subscribers.php"><i class="fa-solid fa-users"></i> Newsletter Subscribers</a></li>
+
                     <li class="nav-divider"></li>
+                    <li><a href="../../admin.php"><i class="fa-solid fa-users"></i> Downloads Admin</a></li>
+                    <li><a href="../support/admin.php"><i class="fa-solid fa-users"></i> Support Admin</a></li>
+
+                    <li class="nav-divider"></li>
+
                     <li><a href="blog.php" target="_blank"><i class="fa-solid fa-external-link-alt"></i> View Blog</a></li>
                     <li><a href="admin-logout.php"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
         </aside>
-        
+
         <!-- Main Content -->
         <main class="admin-main">
             <div class="admin-header">
@@ -164,14 +173,14 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                     <?php endif; ?>
                 </div>
             </div>
-            
+
             <?php if (isset($message)): ?>
                 <div class="admin-message <?php echo $messageType; ?>">
                     <i class="fa-solid fa-<?php echo $messageType === 'success' ? 'check-circle' : 'exclamation-circle'; ?>"></i>
                     <?php echo htmlspecialchars($message); ?>
                 </div>
             <?php endif; ?>
-            
+
             <!-- Filter Tabs -->
             <div class="filter-tabs">
                 <a href="admin-comments.php?status=all" class="filter-tab <?php echo $status === 'all' ? 'active' : ''; ?>">
@@ -184,7 +193,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                     Approved (<?php echo $approvedCount; ?>)
                 </a>
             </div>
-            
+
             <!-- Bulk Actions -->
             <?php if (!empty($comments)): ?>
                 <form method="POST" id="bulk-form">
@@ -201,13 +210,13 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                                 Approve Selected
                             </button>
                             <button type="submit" name="action" value="bulk_delete" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('Are you sure you want to delete the selected comments?')">
+                                onclick="return confirm('Are you sure you want to delete the selected comments?')">
                                 <i class="fa-solid fa-trash"></i>
                                 Delete Selected
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- Comments List -->
                     <div class="comments-admin-list">
                         <?php foreach ($comments as $comment): ?>
@@ -215,12 +224,12 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                                 <div class="comment-select">
                                     <input type="checkbox" name="comment_ids[]" value="<?php echo $comment['id']; ?>" class="comment-checkbox">
                                 </div>
-                                
+
                                 <div class="comment-avatar">
-                                    <img src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($comment['email']))); ?>?s=50&d=identicon" 
-                                         alt="<?php echo htmlspecialchars($comment['name']); ?>">
+                                    <img src="https://www.gravatar.com/avatar/<?php echo md5(strtolower(trim($comment['email']))); ?>?s=50&d=identicon"
+                                        alt="<?php echo htmlspecialchars($comment['name']); ?>">
                                 </div>
-                                
+
                                 <div class="comment-details">
                                     <div class="comment-header">
                                         <div class="comment-author">
@@ -232,7 +241,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                                                 </a>
                                             <?php endif; ?>
                                         </div>
-                                        
+
                                         <div class="comment-meta">
                                             <span class="comment-date"><?php echo timeAgo(strtotime($comment['created_at'])); ?></span>
                                             <span class="comment-status <?php echo ($comment['is_approved'] === true || $comment['is_approved'] === 't' || $comment['is_approved'] === '1') ? 'approved' : 'pending'; ?>">
@@ -240,19 +249,19 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                                             </span>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="comment-post-link">
                                         <i class="fa-solid fa-newspaper"></i>
                                         On: <a href="post.php?slug=<?php echo $comment['post_slug']; ?>" target="_blank">
                                             <?php echo htmlspecialchars($comment['post_title']); ?>
                                         </a>
                                     </div>
-                                    
+
                                     <div class="comment-content">
                                         <p><?php echo nl2br(htmlspecialchars($comment['content'])); ?></p>
                                     </div>
                                 </div>
-                                
+
                                 <div class="comment-actions">
                                     <?php if ($comment['is_approved'] === false || $comment['is_approved'] === 'f' || $comment['is_approved'] === '0' || $comment['is_approved'] === 0): ?>
                                         <form method="POST" style="display: inline;">
@@ -263,12 +272,12 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                                             </button>
                                         </form>
                                     <?php endif; ?>
-                                    
+
                                     <form method="POST" style="display: inline;">
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="comment_id" value="<?php echo $comment['id']; ?>">
                                         <button type="submit" class="btn btn-sm btn-danger" title="Delete"
-                                                onclick="return confirm('Are you sure you want to delete this comment?')">
+                                            onclick="return confirm('Are you sure you want to delete this comment?')">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </form>
@@ -284,7 +293,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                     <p><?php echo $status === 'pending' ? 'No pending comments.' : ($status === 'approved' ? 'No approved comments.' : 'No comments yet.'); ?></p>
                 </div>
             <?php endif; ?>
-            
+
             <!-- Pagination -->
             <?php if ($totalPages > 1): ?>
                 <div class="pagination-section">
@@ -310,11 +319,11 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                     }, 300);
                 }, 5000);
             }
-            
+
             // Select all functionality
             const selectAllCheckbox = document.getElementById('select-all');
             const commentCheckboxes = document.querySelectorAll('.comment-checkbox');
-            
+
             if (selectAllCheckbox) {
                 selectAllCheckbox.addEventListener('change', function() {
                     commentCheckboxes.forEach(checkbox => {
@@ -322,20 +331,20 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
                     });
                 });
             }
-            
+
             // Update select all when individual checkboxes change
             commentCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
                     const allChecked = Array.from(commentCheckboxes).every(cb => cb.checked);
                     const noneChecked = Array.from(commentCheckboxes).every(cb => !cb.checked);
-                    
+
                     if (selectAllCheckbox) {
                         selectAllCheckbox.checked = allChecked;
                         selectAllCheckbox.indeterminate = !allChecked && !noneChecked;
                     }
                 });
             });
-            
+
             // Bulk form submission validation
             const bulkForm = document.getElementById('bulk-form');
             if (bulkForm) {
@@ -362,7 +371,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .filter-tabs {
             display: flex;
             gap: 0.5rem;
@@ -372,7 +381,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        
+
         .filter-tab {
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
@@ -382,14 +391,14 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
             transition: all 0.3s ease;
             border: 1px solid var(--border-color);
         }
-        
+
         .filter-tab:hover,
         .filter-tab.active {
             background: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
         }
-        
+
         .bulk-actions {
             display: flex;
             justify-content: space-between;
@@ -399,7 +408,7 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
             border-radius: 12px 12px 0 0;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         .bulk-select label {
             display: flex;
             align-items: center;
@@ -407,18 +416,18 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
             font-weight: 600;
             color: var(--heading-color);
         }
-        
+
         .bulk-buttons {
             display: flex;
             gap: 0.5rem;
         }
-        
+
         .comments-admin-list {
             background: white;
             border-radius: 0 0 12px 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        
+
         .comment-admin-item {
             display: flex;
             gap: 1rem;
@@ -426,84 +435,84 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
             border-bottom: 1px solid var(--border-color);
             transition: background 0.3s ease;
         }
-        
+
         .comment-admin-item:hover {
             background: var(--light-bg);
         }
-        
+
         .comment-admin-item:last-child {
             border-bottom: none;
         }
-        
+
         .comment-select {
             display: flex;
             align-items: flex-start;
             padding-top: 0.5rem;
         }
-        
+
         .comment-avatar img {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
         }
-        
+
         .comment-details {
             flex: 1;
         }
-        
+
         .comment-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 0.75rem;
         }
-        
+
         .comment-author {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             flex-wrap: wrap;
         }
-        
+
         .comment-email {
             color: #6b7280;
             font-size: 0.9rem;
         }
-        
+
         .comment-website {
             color: var(--primary-color);
             text-decoration: none;
         }
-        
+
         .comment-meta {
             display: flex;
             gap: 1rem;
             align-items: center;
             font-size: 0.9rem;
         }
-        
+
         .comment-date {
             color: #6b7280;
         }
-        
+
         .comment-status {
             padding: 0.25rem 0.75rem;
             border-radius: 12px;
             font-weight: 600;
             font-size: 0.8rem;
         }
-        
+
         .comment-status.approved {
             background: #d1fae5;
             color: #065f46;
         }
-        
+
         .comment-status.pending {
             background: #fee2e2;
             color: #991b1b;
         }
-        
+
         .comment-post-link {
             margin-bottom: 1rem;
             font-size: 0.9rem;
@@ -512,61 +521,62 @@ $totalCount = $db->query("SELECT COUNT(*) FROM comments")->fetchColumn();
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .comment-post-link a {
             color: var(--primary-color);
             text-decoration: none;
         }
-        
+
         .comment-post-link a:hover {
             text-decoration: underline;
         }
-        
+
         .comment-content {
             background: var(--light-bg);
             padding: 1rem;
             border-radius: 8px;
             border-left: 3px solid var(--primary-color);
         }
-        
+
         .comment-content p {
             margin: 0;
             line-height: 1.6;
         }
-        
+
         .comment-actions {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
             padding-top: 0.5rem;
         }
-        
+
         @media (max-width: 768px) {
             .comment-admin-item {
                 flex-direction: column;
                 gap: 1rem;
             }
-            
+
             .comment-header {
                 flex-direction: column;
                 gap: 0.5rem;
                 align-items: flex-start;
             }
-            
+
             .comment-actions {
                 flex-direction: row;
             }
-            
+
             .bulk-actions {
                 flex-direction: column;
                 gap: 1rem;
                 align-items: stretch;
             }
-            
+
             .filter-tabs {
                 flex-direction: column;
             }
         }
     </style>
 </body>
+
 </html>
