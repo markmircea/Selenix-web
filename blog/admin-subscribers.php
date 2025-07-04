@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             
             fclose($output);
             exit;
-            break;
             
         case 'bulk_delete':
             $emails = $_POST['subscriber_emails'] ?? [];

@@ -60,6 +60,129 @@ if (isset($_GET['ajax'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $category ? getCategoryName($category) . ' - ' : ''; ?>Blog - Selenix.io</title>
     <meta name="description" content="<?php echo BLOG_DESCRIPTION; ?>">
+    <meta name="keywords" content="browser automation blog, web scraping tutorials, automation guides, selenix updates, RPA insights, workflow automation">
+    <meta name="author" content="Selenix.io">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="<?php echo $category ? getCategoryName($category) . ' - ' : ''; ?>The Selenix Blog">
+    <meta property="og:description" content="<?php echo BLOG_DESCRIPTION; ?>">
+    <meta property="og:image" content="https://selenix.io/selenixlogo.png">
+    <meta property="og:url" content="<?php echo BLOG_URL . ($category ? '?category=' . $category : ''); ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Selenix.io">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?php echo $category ? getCategoryName($category) . ' - ' : ''; ?>The Selenix Blog">
+    <meta name="twitter:description" content="<?php echo BLOG_DESCRIPTION; ?>">
+    <meta name="twitter:image" content="https://selenix.io/selenixlogo.png">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#667eea">
+    <link rel="canonical" href="<?php echo BLOG_URL . ($category ? '?category=' . $category : ''); ?>">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "<?php echo BLOG_TITLE; ?>",
+        "description": "<?php echo BLOG_DESCRIPTION; ?>",
+        "url": "<?php echo BLOG_URL; ?>",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Selenix.io",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://selenix.io/selenixlogo.png"
+            },
+            "url": "https://selenix.io"
+        },
+        "blogPost": [
+            <?php 
+            $blogPosts = [];
+            foreach ($posts as $post) {
+                $postData = '{
+                    "@type": "BlogPosting",
+                    "headline": "' . addslashes(htmlspecialchars($post['title'])) . '",
+                    "description": "' . addslashes(htmlspecialchars(strip_tags(cleanAIContent($post['excerpt'])))) . '",
+                    "url": "' . BLOG_URL . '/post.php?slug=' . $post['slug'] . '",
+                    "datePublished": "' . date('c', strtotime($post['published_timestamp'])) . '",
+                    "dateModified": "' . date('c', strtotime($post['updated_timestamp'] ?: $post['published_timestamp'])) . '",
+                    "author": {
+                        "@type": "Person",
+                        "name": "' . addslashes(htmlspecialchars($post['author_name'])) . '"
+                    },
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "Selenix.io",
+                        "logo": {
+                            "@type": "ImageObject",
+                            "url": "https://selenix.io/selenixlogo.png"
+                        }
+                    },';
+                if ($post['featured_image']) {
+                    $postData .= '
+                    "image": {
+                        "@type": "ImageObject",
+                        "url": "' . UPLOAD_URL . $post['featured_image'] . '"
+                    },';
+                }
+                $postData .= '
+                    "articleSection": "' . getCategoryName($post['category']) . '",
+                    "wordCount": "' . $post['read_time'] * 200 . '"
+                }';
+                $blogPosts[] = $postData;
+            }
+            echo implode(',\n            ', array_slice($blogPosts, 0, 5)); // Limit to first 5 posts for performance
+            ?>
+        ],
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "<?php echo BLOG_URL; ?>"
+        }
+    }
+    </script>
+    
+    <?php if ($featuredPost && !$category && $page === 1): ?>
+    <!-- Featured Post Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "<?php echo addslashes(htmlspecialchars($featuredPost['title'])); ?>",
+        "description": "<?php echo addslashes(htmlspecialchars(strip_tags(cleanAIContent($featuredPost['excerpt'])))); ?>",
+        "url": "<?php echo BLOG_URL . '/post.php?slug=' . $featuredPost['slug']; ?>",
+        "datePublished": "<?php echo date('c', strtotime($featuredPost['published_timestamp'])); ?>",
+        "dateModified": "<?php echo date('c', strtotime($featuredPost['updated_timestamp'] ?: $featuredPost['published_timestamp'])); ?>",
+        "author": {
+            "@type": "Person",
+            "name": "<?php echo addslashes(htmlspecialchars($featuredPost['author_name'])); ?>"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Selenix.io",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://selenix.io/selenixlogo.png"
+            }
+        },
+        <?php if ($featuredPost['featured_image']): ?>
+        "image": {
+            "@type": "ImageObject",
+            "url": "<?php echo UPLOAD_URL . $featuredPost['featured_image']; ?>"
+        },
+        <?php endif; ?>
+        "articleSection": "<?php echo getCategoryName($featuredPost['category']); ?>",
+        "wordCount": "<?php echo $featuredPost['read_time'] * 200; ?>",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "<?php echo BLOG_URL . '/post.php?slug=' . $featuredPost['slug']; ?>"
+        }
+    }
+    </script>
+    <?php endif; ?>
     
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="../components/components.css">
