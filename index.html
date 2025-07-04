@@ -339,6 +339,30 @@
             <div class="cta-content fade-in-element">
                 <h2>Start Automating with AI in Minutes</h2>
                 <p>No credit card required • One year free license • AI assistant included</p>
+                
+                <!-- Newsletter Subscription Box -->
+                <div class="newsletter-subscription">
+                    <div class="newsletter-content">
+                        <div class="newsletter-icon">
+                            <i class="fa-solid fa-envelope-open"></i>
+                        </div>
+                        <div class="newsletter-text">
+                            <h3>Get Automation Tips & New Templates</h3>
+                            <p>Join 2,500+ users getting weekly tips, template releases, and AI automation insights</p>
+                        </div>
+                    </div>
+                    <form class="newsletter-form" id="index-newsletter-form">
+                        <div class="email-input-group">
+                            <input type="email" id="newsletter-email" name="email" placeholder="your@email.com" required>
+                            <button type="submit" class="newsletter-btn">
+                                <i class="fa-solid fa-paper-plane"></i>
+                                Subscribe
+                            </button>
+                        </div>
+                        <div class="newsletter-status" id="newsletter-status"></div>
+                    </form>
+                </div>
+                
                 <a href="download.php" class="secondary-button">
                     <i class="fa-solid fa-download"></i>
                     Download Selenix + License
@@ -365,5 +389,72 @@
     <!-- Load all necessary scripts -->
     <script src="script.js"></script>
     <script src="components/components.js"></script>
+    
+    <!-- Newsletter Subscription JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsletterForm = document.getElementById('index-newsletter-form');
+            const newsletterStatus = document.getElementById('newsletter-status');
+            
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('newsletter-email').value.trim();
+                    const submitBtn = newsletterForm.querySelector('.newsletter-btn');
+                    
+                    if (!email) {
+                        showStatus('Please enter a valid email address', 'error');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Subscribing...';
+                    showStatus('Subscribing you to our newsletter...', 'loading');
+                    
+                    // Submit to newsletter handler
+                    fetch('newsletter-subscribe.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'email=' + encodeURIComponent(email) + '&source=homepage'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showStatus('🎉 Successfully subscribed! Check your email for confirmation.', 'success');
+                            newsletterForm.reset();
+                        } else {
+                            showStatus(data.message || 'Subscription failed. Please try again.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Newsletter subscription error:', error);
+                        showStatus('Something went wrong. Please try again later.', 'error');
+                    })
+                    .finally(() => {
+                        // Reset button state
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Subscribe';
+                    });
+                });
+            }
+            
+            function showStatus(message, type) {
+                newsletterStatus.textContent = message;
+                newsletterStatus.className = 'newsletter-status ' + type;
+                
+                // Clear success/error messages after 5 seconds
+                if (type === 'success' || type === 'error') {
+                    setTimeout(() => {
+                        newsletterStatus.textContent = '';
+                        newsletterStatus.className = 'newsletter-status';
+                    }, 5000);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
