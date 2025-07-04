@@ -121,10 +121,9 @@ class SelenixDownloader {
     }
     
     /**
-     * Store email and license in database, and handle newsletter subscription
+     * Store email and license in database
      */
     private function storeDownload($email, $licenseKey, $platform) {
-        // Store download info
         $stmt = $this->pdo->prepare(
             "INSERT INTO downloads (email, license_key, ip_address, user_agent, platform) VALUES (?, ?, ?, ?, ?)"
         );
@@ -132,54 +131,7 @@ class SelenixDownloader {
         $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
         
-        $downloadStored = $stmt->execute([$email, $licenseKey, $ipAddress, $userAgent, $platform]);
-        
-        // Handle newsletter subscription if requested
-        $newsletterSubscribe = isset($_POST['newsletter_subscribe']) ? true : false;
-        if ($newsletterSubscribe) {
-            $this->subscribeToNewsletter($email);
-        }
-        
-        return $downloadStored;
-    }
-    
-    /**
-     * Subscribe email to newsletter (compatible with professional services system)
-     */
-    private function subscribeToNewsletter($email) {
-        try {
-            // Try to connect to the blog database for newsletter functionality
-            // This matches the logic from professional-services/contact-handler.php
-            if (file_exists('/blog/config.php')) {
-                require_once '/blog/config.php';
-                try {
-                    $newsletterPdo = new PDO(
-                        "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME,
-                        DB_USER,
-                        DB_PASS,
-                        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-                    );
-                    
-                    $stmt = $newsletterPdo->prepare("
-                        INSERT INTO newsletter_subscribers (email, subscribed_at, is_active) 
-                        VALUES (:email, CURRENT_TIMESTAMP, true) 
-                        ON CONFLICT (email) 
-                        DO UPDATE SET is_active = true, unsubscribed_at = NULL
-                    ");
-                    $stmt->execute(['email' => $email]);
-                    
-                    // Log successful newsletter subscription
-                    error_log("Newsletter subscription added for download: $email");
-                    
-                } catch (PDOException $e) {
-                    // Newsletter subscription failed, but don't stop the download process
-                    error_log("Newsletter subscription failed for download: " . $e->getMessage());
-                }
-            }
-        } catch (Exception $e) {
-            // Newsletter subscription failed, but don't stop the download process
-            error_log("Newsletter subscription error for download: " . $e->getMessage());
-        }
+        return $stmt->execute([$email, $licenseKey, $ipAddress, $userAgent, $platform]);
     }
     
     /**
@@ -779,64 +731,6 @@ if __name__ == "__main__":
                     max-height: 50px;
                 }
                 
-                /* Newsletter Checkbox Styles */
-                .checkbox-group {
-                    margin: 20px 0;
-                }
-                
-                .checkbox-label {
-                    display: flex;
-                    align-items: flex-start;
-                    cursor: pointer;
-                    font-size: 14px;
-                    line-height: 1.4;
-                    color: #333;
-                    gap: 12px;
-                }
-                
-                .checkbox-label input[type="checkbox"] {
-                    display: none;
-                }
-                
-                .checkmark {
-                    position: relative;
-                    width: 20px;
-                    height: 20px;
-                    background: white;
-                    border: 2px solid #e1e5e9;
-                    border-radius: 4px;
-                    transition: all 0.3s ease;
-                    flex-shrink: 0;
-                    margin-top: 2px;
-                }
-                
-                .checkbox-label:hover .checkmark {
-                    border-color: #667eea;
-                    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-                }
-                
-                .checkbox-label input[type="checkbox"]:checked + .checkmark {
-                    background: #667eea;
-                    border-color: #667eea;
-                }
-                
-                .checkmark:after {
-                    content: '';
-                    position: absolute;
-                    display: none;
-                    left: 6px;
-                    top: 2px;
-                    width: 5px;
-                    height: 10px;
-                    border: solid white;
-                    border-width: 0 2px 2px 0;
-                    transform: rotate(45deg);
-                }
-                
-                .checkbox-label input[type="checkbox"]:checked + .checkmark:after {
-                    display: block;
-                }
-                
                 .system-requirements {
                     background: #f8f9ff;
                     border-radius: 12px;
@@ -1094,28 +988,6 @@ if __name__ == "__main__":
                     .platform-details {
                         font-size: 10px;
                         margin-top: 6px;
-                    }
-                    
-                    .checkbox-group {
-                        margin: 15px 0;
-                    }
-                    
-                    .checkbox-label {
-                        font-size: 13px;
-                        gap: 10px;
-                    }
-                    
-                    .checkmark {
-                        width: 18px;
-                        height: 18px;
-                        margin-top: 1px;
-                    }
-                    
-                    .checkmark:after {
-                        left: 5px;
-                        top: 1px;
-                        width: 4px;
-                        height: 9px;
                     }
                     
                     .download-btn {
@@ -1425,14 +1297,6 @@ if __name__ == "__main__":
                         </div>
                     </div>
                     
-                    <div class="form-group checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="newsletter_subscribe" name="newsletter_subscribe" checked>
-                            <span class="checkmark"></span>
-                            Subscribe to our newsletter for automation tips, new templates, and product updates
-                        </label>
-                    </div>
-                    
                     <button type="submit" class="download-btn" id="downloadBtn">
                         <div class="btn-content">
                             <i class="fas fa-download"></i>
@@ -1447,7 +1311,7 @@ if __name__ == "__main__":
                 
                 <p class="privacy-note">
                     <i class="fas fa-lock"></i>
-                    Your email is used to provide updates, support, and newsletter content (if subscribed). Both platforms include the same 135+ automation commands and AI-powered web scraping features. We never share your information and you can unsubscribe anytime.
+                    Your email is only used to provide updates and support. Both platforms include the same 135+ automation commands and AI-powered web scraping features. We never share your information.
                 </p>
             </div>
             
