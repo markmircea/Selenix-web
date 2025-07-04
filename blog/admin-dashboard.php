@@ -82,8 +82,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <li><a href="admin-add-post.php"><i class="fa-solid fa-plus"></i> Add New Post</a></li>
                     <li><a href="admin-ai-generate.php"><i class="fa-solid fa-brain"></i> AI Generator</a></li>
                     <li><a href="admin-comments.php"><i class="fa-solid fa-comments"></i> Comments</a></li>
-                    <li><a href="admin-subscribers.php"><i class="fa-solid fa-users"></i> Subscribers</a></li>
+                    <li><a href="admin-subscribers.php"><i class="fa-solid fa-users"></i> Newsletter Subscribers</a></li>
+                    
                     <li class="nav-divider"></li>
+                    <li><a href="../../admin.php"><i class="fa-solid fa-users"></i> Downloads Admin</a></li>
+                    <li><a href="../support/admin.php"><i class="fa-solid fa-users"></i> Support Admin</a></li>
+
+                                        <li class="nav-divider"></li>
+
                     <li><a href="blog.php" target="_blank"><i class="fa-solid fa-external-link-alt"></i> View Blog</a></li>
                     <li><a href="admin-logout.php"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
                 </ul>

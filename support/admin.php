@@ -13,11 +13,10 @@ session_start();
 if (!isset($_SESSION['admin_logged_in'])) {
     // Simple login form
     if (isset($_POST['login'])) {
-        $username = $_POST['username'] ?? '';
         $password = $_POST['password'] ?? '';
         
         // Simple hardcoded authentication (replace with database check)
-        if ($username === 'admin' && $password === 'selenix2024') {
+        if ($password === 'selenix2024') {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_user'] = $username;
             header('Location: ' . $_SERVER['PHP_SELF']);
@@ -56,10 +55,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 <div class="error"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
             <form method="POST">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
+
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
