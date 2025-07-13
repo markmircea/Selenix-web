@@ -19,7 +19,7 @@ $HMAC_KEY = '74518ca45f74fe5fc2dfa8f5e235a14142b8ed07e41d9d65476622d54ce1753f';
 
 // Files to download
 $DOWNLOAD_FILES = [
-    'windows' => 'Selenix-win-LicenseBETA.zip',
+    'windows' => 'Selenix-win-with-LicenseBETA.zip',
     'mac' => 'Selenix-mac-with-LicenseBETA.zip'
 ];
 
