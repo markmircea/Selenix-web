@@ -118,6 +118,7 @@ const ALL_COMMANDS = {
         { name: 'exportToCSV', badge: 'Basic', description: 'Exports a variable containing an array of objects to a CSV file' },
         { name: 'exportToJSON', badge: 'Basic', description: 'Exports a variable to a JSON file' },
         { name: 'httpRequest', badge: 'Advanced', description: 'Sends an HTTP request and stores the response in a variable' },
+        { name: 'sendEmail', badge: 'Advanced', description: 'Sends an email via SMTP and optionally stores the result in a variable' },
         { name: 'importFromCSV', badge: 'Advanced', description: 'Imports data from a CSV file and stores it in a variable as an array of objects' },
         { name: 'importFromJSON', badge: 'Advanced', description: 'Imports data from a JSON file and stores it in a variable' }
     ],

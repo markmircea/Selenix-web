@@ -543,6 +543,127 @@
             </div>
         </div>
       
+                <!-- Send Email -->
+        <div class="command-item" id="sendEmail">
+            <div class="command-header">
+                <h3><code>sendEmail</code></h3>
+                <div class="command-badge">Advanced</div>
+            </div>
+            <p class="command-description">Sends an email via SMTP and optionally stores the result in a variable. Supports full SMTP configuration, HTML and plain text bodies, CC/BCC recipients, and variable interpolation in all fields.</p>
+
+            <div class="command-syntax">
+                <h4>Syntax</h4>
+                <code>sendEmail | emailConfig | variableName</code>
+            </div>
+
+            <div class="command-params">
+                <h4>Parameters</h4>
+                <div class="param">
+                    <strong>Target:</strong> JSON configuration for the email (SMTP server, recipients, subject, body, etc.). Use the gear icon to open the visual configuration dialog.
+                </div>
+                <div class="param">
+                    <strong>Value:</strong> Optional variable name (without brackets) to store the send result. Example: "emailResult" would store the result in ${emailResult}.
+                </div>
+            </div>
+
+            <div class="command-examples">
+                <h4>Examples</h4>
+
+                <div class="example">
+                    <div class="example-code">
+                        <code>// Send a simple notification email</code>
+                        <code>sendEmail | {"smtpHost":"smtp.gmail.com","smtpPort":587,"smtpSecure":false,"smtpUser":"your-email@gmail.com","smtpPass":"your-app-password","from":"your-email@gmail.com","to":"recipient@example.com","cc":"","bcc":"","subject":"Automation Report","body":"The automation completed successfully.","isHtml":false} | emailResult</code>
+                        <code>echo | Email sent: ${emailResult.messageId}</code>
+                    </div>
+                    <div class="example-desc">Send a plain text notification email via Gmail SMTP</div>
+                </div>
+
+                <div class="example">
+                    <div class="example-code">
+                        <code>// Send HTML email with scraped data using variables</code>
+                        <code>scrapeCollection | css=.product-name | products</code>
+                        <code>store | smtp.office365.com | smtpHost</code>
+                        <code>store | your-email@company.com | smtpUser</code>
+                        <code>store | your-password | smtpPass</code>
+                        <code>sendEmail | {"smtpHost":"${smtpHost}","smtpPort":587,"smtpSecure":false,"smtpUser":"${smtpUser}","smtpPass":"${smtpPass}","from":"${smtpUser}","to":"team@company.com","cc":"manager@company.com","bcc":"","subject":"Daily Report","body":"&lt;h1&gt;Product Report&lt;/h1&gt;&lt;p&gt;Found ${products.length} products.&lt;/p&gt;","isHtml":true} | result</code>
+                    </div>
+                    <div class="example-desc">Send an HTML report email with variable interpolation and scraped data</div>
+                </div>
+
+                <div class="example">
+                    <div class="example-code">
+                        <code>// Error notification workflow</code>
+                        <code>store | success | status</code>
+                        <code>// ... run your automation ...</code>
+                        <code>if | "${status}" !== "success"</code>
+                        <code>  sendEmail | {"smtpHost":"smtp.gmail.com","smtpPort":587,"smtpSecure":false,"smtpUser":"${emailUser}","smtpPass":"${emailPass}","from":"${emailUser}","to":"alerts@company.com","cc":"","bcc":"","subject":"Automation FAILED","body":"&lt;h2 style='color:red'&gt;Alert&lt;/h2&gt;&lt;p&gt;The automation encountered an error.&lt;/p&gt;","isHtml":true} | alertResult</code>
+                        <code>end</code>
+                    </div>
+                    <div class="example-desc">Conditionally send an alert email when automation fails</div>
+                </div>
+            </div>
+
+            <div class="command-notes">
+                <h4>SMTP Configuration</h4>
+                <ul>
+                    <li><strong>smtpHost:</strong> SMTP server hostname (e.g., smtp.gmail.com, smtp.office365.com)</li>
+                    <li><strong>smtpPort:</strong> SMTP port number (587 for TLS, 465 for SSL)</li>
+                    <li><strong>smtpSecure:</strong> Set to true for SSL (port 465), false for TLS/STARTTLS (port 587)</li>
+                    <li><strong>smtpUser:</strong> SMTP authentication username (usually your email address)</li>
+                    <li><strong>smtpPass:</strong> SMTP authentication password or app-specific password</li>
+                </ul>
+
+                <h4>Recipient Fields</h4>
+                <ul>
+                    <li><strong>from:</strong> Sender email address</li>
+                    <li><strong>to:</strong> Comma-separated list of recipient email addresses</li>
+                    <li><strong>cc:</strong> Comma-separated list of CC recipients (optional)</li>
+                    <li><strong>bcc:</strong> Comma-separated list of BCC recipients (optional)</li>
+                </ul>
+
+                <h4>Message Options</h4>
+                <ul>
+                    <li><strong>subject:</strong> Email subject line</li>
+                    <li><strong>body:</strong> Email body content (supports HTML when isHtml is true)</li>
+                    <li><strong>isHtml:</strong> Set to true to send HTML formatted email, false for plain text</li>
+                </ul>
+
+                <h4>Variable Interpolation</h4>
+                <ul>
+                    <li>Use <code>${variableName}</code> syntax in any string field (host, user, pass, from, to, cc, bcc, subject, body)</li>
+                    <li>Store sensitive credentials in variables rather than hardcoding them</li>
+                    <li>Combine with scraped data to send dynamic email reports</li>
+                </ul>
+
+                <h4>Result Object</h4>
+                <p>When a variable name is provided, the result object contains:</p>
+                <ul>
+                    <li><strong>success:</strong> Boolean indicating if the email was sent successfully</li>
+                    <li><strong>messageId:</strong> The message ID assigned by the SMTP server</li>
+                    <li><strong>accepted:</strong> Array of accepted recipient addresses</li>
+                    <li><strong>rejected:</strong> Array of rejected recipient addresses</li>
+                    <li><strong>response:</strong> SMTP server response string</li>
+                    <li><strong>error:</strong> Error message if the send failed</li>
+                </ul>
+
+                <h4>Visual Configuration</h4>
+                <ul>
+                    <li>Click the gear icon next to the Target field to open the visual email configuration dialog</li>
+                    <li>The dialog provides a tabbed interface: SMTP Settings, Recipients, and Message</li>
+                    <li>Configuration is automatically serialized to JSON in the Target field</li>
+                    <li>You can also edit the JSON directly in the Target field for advanced use</li>
+                </ul>
+
+                <h4>Gmail App Passwords</h4>
+                <ul>
+                    <li>Gmail requires an "App Password" instead of your regular password</li>
+                    <li>Enable 2-Factor Authentication on your Google account first</li>
+                    <li>Generate an App Password at: Google Account &gt; Security &gt; App Passwords</li>
+                    <li>Use the 16-character app password in the smtpPass field</li>
+                </ul>
+            </div>
+        </div>
+
                 <!-- Download Files -->
         <div class="command-item" id="downloadFiles">
             <div class="command-header">
