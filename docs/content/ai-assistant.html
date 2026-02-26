@@ -1,0 +1,469 @@
+<h1 class="docs-title">AI Assistant</h1>
+
+<p class="docs-intro">The Selenix AI Assistant is your personal automation expert, built directly into the interface. It can analyze your browser context, identify elements, suggest commands, troubleshoot errors, and insert complete workflows into your tests with a single click.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-brain"></i>
+    <div>
+        <strong>Powered by AI</strong>
+        <p>The AI Assistant requires an <strong>OpenRouter API key</strong> and a configured AI model in your project settings. The recommended model is <strong>Claude 4 by Anthropic</strong>.</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-comment-dots"></i> Getting Started with the AI Assistant</h2>
+
+    <p>The AI Assistant lives in the <strong>Logger panel</strong> at the bottom of the Selenix interface, accessible via the <strong>AI Assistant</strong> tab next to the console output.</p>
+
+    <h3>Opening the AI Assistant</h3>
+    <ol>
+        <li>Look at the bottom panel of the Selenix interface (the Logger area)</li>
+        <li>Click the <strong>AI Assistant</strong> tab</li>
+        <li>Type your question or request in the text field and press <strong>Send</strong> or hit <strong>Enter</strong></li>
+    </ol>
+
+    <h3>Configuration</h3>
+    <p>Before using the AI Assistant, configure your API settings:</p>
+    <ol>
+        <li>Go to <strong>Project Settings</strong></li>
+        <li>Under <strong>AI Assistant Settings</strong>, enter your <strong>OpenRouter API Key</strong></li>
+        <li>Select your preferred <strong>AI Model</strong> (Claude 4 recommended)</li>
+    </ol>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-wand-magic-sparkles"></i> What the AI Assistant Can Do</h2>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-card-icon">
+                <i class="fa-solid fa-crosshairs"></i>
+            </div>
+            <h4>Identify Elements</h4>
+            <p>Analyzes page structure to suggest reliable CSS and XPath selectors for any element on the page.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-card-icon">
+                <i class="fa-solid fa-list-check"></i>
+            </div>
+            <h4>Build Workflows</h4>
+            <p>Generates complete command sequences from natural language descriptions and inserts them directly into your test.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-card-icon">
+                <i class="fa-solid fa-bug"></i>
+            </div>
+            <h4>Debug Errors</h4>
+            <p>Reads execution logs, analyzes failures, and suggests fixes for broken commands or selectors.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-card-icon">
+                <i class="fa-solid fa-camera"></i>
+            </div>
+            <h4>Visual Analysis</h4>
+            <p>Captures screenshots of the browser window and uses visual understanding to identify elements and page layout.</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-database"></i> Context Access</h2>
+
+    <p>The AI Assistant has access to rich contextual information about your workspace, allowing it to give accurate, relevant advice:</p>
+
+    <div class="context-grid">
+        <div class="context-item">
+            <h4><i class="fa-solid fa-code"></i> Page HTML</h4>
+            <p>Can retrieve and analyze the full HTML of the active browser page, with interactive elements highlighted for easy identification.</p>
+        </div>
+        <div class="context-item">
+            <h4><i class="fa-solid fa-image"></i> Screenshots</h4>
+            <p>Captures screenshots of the browser window for visual element identification and layout analysis.</p>
+        </div>
+        <div class="context-item">
+            <h4><i class="fa-solid fa-bullseye"></i> Element Details</h4>
+            <p>Retrieves comprehensive information about a selected command's target element including DOM hierarchy, attributes, accessibility properties, and computed styles.</p>
+        </div>
+        <div class="context-item">
+            <h4><i class="fa-solid fa-flask"></i> Test Structure</h4>
+            <p>Views your current test commands, available tests, project metadata, and active suite information.</p>
+        </div>
+        <div class="context-item">
+            <h4><i class="fa-solid fa-terminal"></i> Command Reference</h4>
+            <p>Has full knowledge of all 100+ Selenix commands and their parameters, ensuring suggestions are always valid.</p>
+        </div>
+        <div class="context-item">
+            <h4><i class="fa-solid fa-triangle-exclamation"></i> Execution Logs</h4>
+            <p>Reviews recent error and warning logs to help diagnose test failures and suggest targeted fixes.</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-square-plus"></i> Adding Suggested Commands to Your Test</h2>
+
+    <p>When you ask the AI Assistant for help building a workflow, it provides step-by-step command suggestions along with <strong>interactive command cards</strong> that let you insert commands directly into your active test.</p>
+
+    <div class="image-container screenshot">
+        <img src="./images/aicommandimport.png" alt="AI Assistant command suggestion cards with Add to Test buttons" class="docs-image" style="cursor: pointer;">
+        <div class="image-caption">The AI Assistant suggesting 11 commands for a Google search workflow, with all commands added to the test</div>
+    </div>
+
+    <h3>How It Works</h3>
+    <ol>
+        <li><strong>Ask for help</strong> &mdash; Describe what you want to automate in natural language</li>
+        <li><strong>Review the suggestions</strong> &mdash; The AI responds with an explanation and a command card showing each suggested command</li>
+        <li><strong>Add individual commands</strong> &mdash; Click the <strong>+</strong> button next to any command to insert it into your test at the current selection point</li>
+        <li><strong>Add all commands at once</strong> &mdash; Click <strong>Add All to Test</strong> to insert the entire suggested workflow in sequence</li>
+    </ol>
+
+    <div class="alert alert-success">
+        <i class="fa-solid fa-lightbulb"></i>
+        <div>
+            <strong>Insertion Point</strong>
+            <p>Commands are inserted after the currently selected command in your test, following the same behavior as the Add button in the test editor. Select a command in your test first to control where new commands are placed.</p>
+        </div>
+    </div>
+
+    <h3>Command Card Features</h3>
+    <ul>
+        <li><strong>Command name</strong> &mdash; Displayed as a chip showing the exact command identifier (e.g., <code>click</code>, <code>waitForElementVisible</code>, <code>scrapeStructured</code>)</li>
+        <li><strong>Target preview</strong> &mdash; Shows the locator or target value, with a tooltip for the full text on hover</li>
+        <li><strong>Value preview</strong> &mdash; Shows the value parameter when applicable</li>
+        <li><strong>Add button (+)</strong> &mdash; Inserts that single command into the test</li>
+        <li><strong>Add All to Test</strong> &mdash; Inserts all commands in the card as a group</li>
+        <li><strong>Added indicator</strong> &mdash; Shows a green checkmark after a command has been inserted</li>
+    </ul>
+
+    <h3>Multiple Suggestions</h3>
+    <p>When the AI suggests alternative approaches, each approach appears as a separate command card. You can choose which set of commands to add &mdash; they are independent of each other.</p>
+
+    <div class="alert alert-info">
+        <i class="fa-solid fa-circle-info"></i>
+        <div>
+            <strong>Requires an Active Test</strong>
+            <p>The Add buttons are only enabled when you have a test open and selected. If no test is active, the command card displays a warning. The buttons are also disabled during test playback and recording.</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-comments"></i> Example Conversations</h2>
+
+    <h3>Building a Search and Scrape Workflow</h3>
+    <div class="conversation-example">
+        <div class="chat-message user-message">
+            <strong>You:</strong> I need to go to Google, search for "marketing companies near me", and scrape the first 3 results including titles, URLs, and descriptions. Export to JSON.
+        </div>
+        <div class="chat-message ai-message">
+            <strong>AI Assistant:</strong> Here's a complete workflow to search Google and scrape the results:
+            <div class="suggested-commands-preview">
+                <div class="preview-header">Suggested Commands (11)</div>
+                <div class="preview-command"><code>open</code> <span>https://www.google.com</span></div>
+                <div class="preview-command"><code>waitForElementVisible</code> <span>id=W0wltc</span> <em>= 5000</em></div>
+                <div class="preview-command"><code>click</code> <span>id=W0wltc</span></div>
+                <div class="preview-command"><code>type</code> <span>id=APjFqb</span> <em>= marketing companies near me</em></div>
+                <div class="preview-command"><code>sendKeys</code> <span>id=APjFqb</span> <em>= ${KEY_ENTER}</em></div>
+                <div class="preview-command"><code>waitForElementPresent</code> <span>css=#search</span> <em>= 10000</em></div>
+                <div class="preview-command"><code>scrapeStructured</code> <span>{"_root":"css=#search div.g",...}</span> <em>= searchResults</em></div>
+                <div class="preview-command"><code>exporttojson</code> <span>searchResults</span> <em>= marketing_companies.json</em></div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Troubleshooting an Error</h3>
+    <div class="conversation-example">
+        <div class="chat-message user-message">
+            <strong>You:</strong> My test is failing at the click command. Can you check what's wrong?
+        </div>
+        <div class="chat-message ai-message">
+            <strong>AI Assistant:</strong> Let me analyze the target element and check the logs...
+            <br><br>
+            The issue is that your selector <code>css=.btn-submit</code> matches 3 elements on the page. I recommend using a more specific selector: <code>css=form.login-form button[type='submit']</code>
+        </div>
+    </div>
+
+    <h3>Using Screenshots for Element Identification</h3>
+    <div class="conversation-example">
+        <div class="chat-message user-message">
+            <strong>You:</strong> <em>[attaches a screenshot]</em> How do I click the blue "Continue" button in this screenshot?
+        </div>
+        <div class="chat-message ai-message">
+            <strong>AI Assistant:</strong> I can see the Continue button in the screenshot. Let me search the page HTML to find a reliable selector...
+            <br><br>
+            The button can be targeted with: <code>xpath=//button[contains(text(),'Continue')]</code>
+            <div class="suggested-commands-preview">
+                <div class="preview-header">Suggested Commands (1)</div>
+                <div class="preview-command"><code>click</code> <span>xpath=//button[contains(text(),'Continue')]</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-paperclip"></i> Attachments and Screenshots</h2>
+
+    <p>You can attach images and capture screenshots to give the AI Assistant visual context about what you're working with.</p>
+
+    <h3>Attaching Images</h3>
+    <p>Click the <strong>paperclip icon</strong> next to the message input to attach an image file from your computer. This is useful for sharing mockups, error screenshots, or reference designs.</p>
+
+    <h3>Capturing Screenshots</h3>
+    <p>Click the <strong>camera icon</strong> to capture a live screenshot of the active browser window in the playback window. The AI can visually analyze the screenshot to identify elements, understand page layout, and suggest accurate selectors.</p>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-gear"></i> Chat Management</h2>
+
+    <ul>
+        <li><strong>Edit messages</strong> &mdash; Click the menu icon (<i class="fa-solid fa-ellipsis-vertical"></i>) on any of your messages and select Edit to modify and regenerate the AI's response</li>
+        <li><strong>Delete messages</strong> &mdash; Remove individual messages from the conversation history</li>
+        <li><strong>Clear chat</strong> &mdash; Click the <strong>trash icon</strong> in the top-right corner to clear the entire conversation and start fresh</li>
+        <li><strong>Stop processing</strong> &mdash; Click the <strong>stop icon</strong> to cancel an in-progress AI request</li>
+        <li><strong>Persistent history</strong> &mdash; Chat history is saved locally and persists across sessions</li>
+    </ul>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-star"></i> Tips and Best Practices</h2>
+
+    <div class="tips-grid">
+        <div class="tip-card">
+            <h4><i class="fa-solid fa-bullseye"></i> Be Specific</h4>
+            <p>Instead of "help me click something", try "help me click the Submit button on the login form. The button has a blue background." More context leads to better suggestions.</p>
+        </div>
+        <div class="tip-card">
+            <h4><i class="fa-solid fa-camera"></i> Use Screenshots</h4>
+            <p>When asking about elements, attach a screenshot first. Visual context helps the AI identify the correct elements much faster than text descriptions alone.</p>
+        </div>
+        <div class="tip-card">
+            <h4><i class="fa-solid fa-bug"></i> Share Errors</h4>
+            <p>When troubleshooting, paste the error message directly into the chat. The AI can read your execution logs automatically, but direct error text helps it focus on the right issue.</p>
+        </div>
+        <div class="tip-card">
+            <h4><i class="fa-solid fa-layer-group"></i> Build Incrementally</h4>
+            <p>For complex workflows, build step by step. Ask the AI for each section of your automation separately, add the commands, test them, then move to the next section.</p>
+        </div>
+    </div>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Next Steps</strong>
+            <p>Learn about all available commands in the <a href="#actions">Commands & Actions</a> guide, or explore <a href="#selectors">Smart Selectors</a> to understand how element targeting works in Selenix.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.feature-card {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin: 0 auto 1rem;
+}
+
+.feature-card h4 {
+    margin: 0.5rem 0;
+    color: #1a1a2e;
+}
+
+.feature-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+}
+
+.context-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.context-item {
+    padding: 1.25rem;
+    background: #f8f9fa;
+    border-left: 4px solid #4f46e5;
+    border-radius: 0 8px 8px 0;
+}
+
+.context-item h4 {
+    margin: 0 0 0.5rem 0;
+    color: #1a1a2e;
+}
+
+.context-item h4 i {
+    color: #4f46e5;
+    margin-right: 0.5rem;
+}
+
+.context-item p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.conversation-example {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0 2rem;
+}
+
+.chat-message {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+}
+
+.user-message {
+    background: #e3f2fd;
+    border-left: 3px solid #1976d2;
+}
+
+.ai-message {
+    background: #ffffff;
+    border-left: 3px solid #4f46e5;
+}
+
+.chat-message strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.user-message strong { color: #1976d2; }
+.ai-message strong { color: #4f46e5; }
+
+.suggested-commands-preview {
+    margin-top: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fafafa;
+}
+
+.preview-header {
+    padding: 0.5rem 1rem;
+    background: #f0f0f0;
+    border-bottom: 1px solid #d1d5db;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.preview-command {
+    padding: 0.4rem 1rem;
+    border-bottom: 1px solid #eee;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.preview-command:last-child {
+    border-bottom: none;
+}
+
+.preview-command code {
+    background: #4f46e5;
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+}
+
+.preview-command span {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.preview-command em {
+    color: #777;
+    font-size: 0.8rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.tip-card {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
+    border-radius: 12px;
+}
+
+.tip-card h4 {
+    margin: 0 0 0.5rem 0;
+    color: #1a1a2e;
+}
+
+.tip-card h4 i {
+    color: #d97706;
+    margin-right: 0.5rem;
+}
+
+.tip-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+}
+
+.image-container {
+    margin: 1.5rem 0;
+    text-align: center;
+}
+
+.docs-image {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+}
+
+.image-caption {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: #666;
+    font-style: italic;
+}
+</style>

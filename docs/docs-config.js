@@ -37,6 +37,12 @@ const docsConfig = {
                     file: "workflows.html"
                 },
                 {
+                    id: "ai-assistant",
+                    title: "AI Assistant",
+                    icon: "fa-solid fa-robot",
+                    file: "ai-assistant.html"
+                },
+                {
                     id: "actions",
                     title: "Commands & Actions",
                     icon: "fa-solid fa-play",
