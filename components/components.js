@@ -164,7 +164,11 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(html => {
                 footerContainer.innerHTML = html;
-                // console.log('Footer loaded successfully');
+                // Update copyright year dynamically
+                const yearSpan = footerContainer.querySelector('.footer-copyright-year');
+                if (yearSpan) {
+                    yearSpan.textContent = new Date().getFullYear();
+                }
             })
             .catch(error => {
                 console.error('Error loading footer:', error);
