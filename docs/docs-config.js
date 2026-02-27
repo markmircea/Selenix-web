@@ -95,6 +95,12 @@ const docsConfig = {
                     title: "Integrations",
                     icon: "fa-solid fa-plug",
                     file: "integrations.html"
+                },
+                {
+                    id: "mcp-server",
+                    title: "MCP Server (Claude Desktop)",
+                    icon: "fa-solid fa-plug-circle-bolt",
+                    file: "mcp-server.html"
                 }
             ]
         },

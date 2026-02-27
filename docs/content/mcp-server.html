@@ -1,0 +1,495 @@
+<h1 class="docs-title">MCP Server (Claude Desktop)</h1>
+
+<p class="docs-intro">Connect Claude Desktop to Selenix via the Model Context Protocol (MCP). Chat with Claude to create, run, debug, and manage browser automation tests — the same capabilities as the built-in AI Assistant, but powered by Claude and accessible from Claude Desktop's interface.</p>
+
+<div class="alert alert-info">
+    <i class="fa-solid fa-circle-info"></i>
+    <div>
+        <strong>Prerequisites</strong>
+        <p>You need <a href="https://selenix.io" target="_blank">Selenix</a> desktop app installed, <a href="https://claude.ai/download" target="_blank">Claude Desktop</a> installed, and <a href="https://nodejs.org/" target="_blank">Node.js</a> 18 or later.</p>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-toggle-on"></i> Enable in Selenix</h2>
+
+    <p>Before connecting Claude Desktop, you need to enable the MCP bridge server inside Selenix:</p>
+
+    <ol>
+        <li>Open Selenix</li>
+        <li>Go to <strong>System Settings</strong> (gear icon in the sidebar)</li>
+        <li>Scroll to the <strong>MCP Server</strong> section</li>
+        <li>Set <strong>Enable MCP Server</strong> to <strong>Yes</strong></li>
+    </ol>
+
+    <p>This starts a local bridge server on your machine that Claude Desktop will connect to. The bridge runs quietly in the background whenever Selenix is open.</p>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-download"></i> Setup</h2>
+
+    <p>Choose one of the following methods to install the MCP server:</p>
+
+    <div class="setup-options">
+        <div class="setup-option">
+            <div class="setup-option-header">
+                <span class="setup-badge recommended">Recommended</span>
+                <h3>Option A: Install via npm</h3>
+            </div>
+            <p>Install the MCP server globally:</p>
+            <pre><code>npm install -g @selenix/mcp-server</code></pre>
+            <p>Then find your global npm path:</p>
+            <pre><code>npm root -g</code></pre>
+            <p>Open your Claude Desktop config file:</p>
+            <ul>
+                <li><strong>Windows:</strong> Press <code>Win+R</code>, paste <code>%APPDATA%\Claude\claude_desktop_config.json</code>, press Enter</li>
+                <li><strong>macOS:</strong> Open <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></li>
+            </ul>
+            <p>Add the Selenix MCP server, replacing the path with the output from <code>npm root -g</code>:</p>
+            <pre><code>{
+  "mcpServers": {
+    "selenix": {
+      "command": "node",
+      "args": ["&lt;npm-root-path&gt;/@selenix/mcp-server/dist/bundle.js"]
+    }
+  }
+}</code></pre>
+
+            <p><strong>Example (Windows with nvm):</strong></p>
+            <pre><code>{
+  "mcpServers": {
+    "selenix": {
+      "command": "node",
+      "args": ["C:/Users/YourName/AppData/Local/nvm/v18.20.8/node_modules/@selenix/mcp-server/dist/bundle.js"]
+    }
+  }
+}</code></pre>
+
+            <p><strong>Example (macOS/Linux):</strong></p>
+            <pre><code>{
+  "mcpServers": {
+    "selenix": {
+      "command": "node",
+      "args": ["/usr/local/lib/node_modules/@selenix/mcp-server/dist/bundle.js"]
+    }
+  }
+}</code></pre>
+        </div>
+
+        <div class="setup-option">
+            <div class="setup-option-header">
+                <h3>Option B: Use the Bundled Version</h3>
+            </div>
+            <p>If you installed Selenix as a desktop app, the MCP server is already bundled — no npm required. Find your Selenix install folder and look for <code>resources/mcp-server/index.js</code>:</p>
+            <pre><code>{
+  "mcpServers": {
+    "selenix": {
+      "command": "node",
+      "args": ["C:/path/to/Selenix/resources/mcp-server/index.js"]
+    }
+  }
+}</code></pre>
+            <p><strong>Typical Windows path:</strong></p>
+            <pre><code>C:/Users/YourName/AppData/Local/Programs/Selenix/resources/mcp-server/index.js</code></pre>
+        </div>
+
+        <div class="setup-option">
+            <div class="setup-option-header">
+                <h3>Option C: Manual Download</h3>
+            </div>
+            <ol>
+                <li>Download <code>bundle.js</code> from the <a href="https://www.npmjs.com/package/@selenix/mcp-server" target="_blank">npm package page</a></li>
+                <li>Save it somewhere on your machine (e.g., <code>C:/selenix-mcp/bundle.js</code>)</li>
+                <li>Add to your Claude Desktop config:</li>
+            </ol>
+            <pre><code>{
+  "mcpServers": {
+    "selenix": {
+      "command": "node",
+      "args": ["C:/selenix-mcp/bundle.js"]
+    }
+  }
+}</code></pre>
+            <p>Node.js is still required — the MCP server is a single JavaScript file with no other dependencies.</p>
+        </div>
+    </div>
+
+    <div class="alert alert-warning">
+        <i class="fa-solid fa-arrows-rotate"></i>
+        <div>
+            <strong>Restart Claude Desktop</strong>
+            <p>After editing the config file, you must quit and reopen Claude Desktop for the changes to take effect. You should see the Selenix tools icon (hammer) in the chat input area.</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-comments"></i> Using It</h2>
+
+    <p>Once connected, just chat with Claude naturally. Claude has full access to your Selenix workspace and will call the right tools automatically.</p>
+
+    <h3>Example Prompts</h3>
+    <div class="conversation-example">
+        <div class="chat-message user-message">
+            <strong>You:</strong> What tests are in my Selenix project?
+        </div>
+        <div class="chat-message ai-message">
+            <strong>Claude:</strong> <em>(calls get_test_list)</em> — Your project has 3 tests: "Login Flow" (8 commands), "Search Products" (12 commands), and "Checkout" (15 commands).
+        </div>
+    </div>
+
+    <div class="conversation-example">
+        <div class="chat-message user-message">
+            <strong>You:</strong> Create a test that goes to google.com and searches for "selenium automation"
+        </div>
+        <div class="chat-message ai-message">
+            <strong>Claude:</strong> <em>(calls get_command_list, clear_and_replace_commands, run_test)</em> — I've created and run the test. All 5 commands passed successfully. The search results page is now loaded.
+        </div>
+    </div>
+
+    <div class="conversation-example">
+        <div class="chat-message user-message">
+            <strong>You:</strong> Take a screenshot of the browser
+        </div>
+        <div class="chat-message ai-message">
+            <strong>Claude:</strong> <em>(calls get_screenshot)</em> — Here's a screenshot of the current browser window showing the Google search results for "selenium automation".
+        </div>
+    </div>
+
+    <div class="conversation-example">
+        <div class="chat-message user-message">
+            <strong>You:</strong> The login test is failing. Check the results and fix it.
+        </div>
+        <div class="chat-message ai-message">
+            <strong>Claude:</strong> <em>(calls get_step_results, get_page_html, fix_commands, run_test)</em> — Found the issue: the submit button selector changed. I've updated the selector from <code>css=.btn-submit</code> to <code>css=form button[type='submit']</code> and the test now passes.
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-wrench"></i> Available Tools</h2>
+
+    <p>Claude has access to 18 tools for reading information from Selenix and making changes to your tests.</p>
+
+    <h3>Reading & Inspection</h3>
+    <table class="tools-table">
+        <thead>
+            <tr>
+                <th>Tool</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><code>get_screenshot</code></td><td>Capture a screenshot of the browser window</td></tr>
+            <tr><td><code>get_page_html</code></td><td>Get the page HTML with interactive elements annotated</td></tr>
+            <tr><td><code>get_search_html</code></td><td>Search page HTML by regex pattern</td></tr>
+            <tr><td><code>get_selected_command_info</code></td><td>Get DOM context for a command's target element</td></tr>
+            <tr><td><code>get_current_test</code></td><td>Get all commands in the current test</td></tr>
+            <tr><td><code>get_test_list</code></td><td>List all tests in the project</td></tr>
+            <tr><td><code>get_test_by_name</code></td><td>Get a test by its name</td></tr>
+            <tr><td><code>get_command_list</code></td><td>List all available Selenix commands</td></tr>
+            <tr><td><code>get_command_info</code></td><td>Get detailed docs for a specific command</td></tr>
+            <tr><td><code>get_project_info</code></td><td>Get project metadata (name, URL, counts)</td></tr>
+            <tr><td><code>get_active_suite</code></td><td>Get the active test suite info</td></tr>
+            <tr><td><code>get_step_results</code></td><td>Get pass/fail results from the last test run</td></tr>
+            <tr><td><code>get_logs</code></td><td>Get recent error and warning logs</td></tr>
+            <tr><td><code>get_workspace_context</code></td><td>Get a summary of the current workspace</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Writing & Execution</h3>
+    <table class="tools-table">
+        <thead>
+            <tr>
+                <th>Tool</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><code>add_commands</code></td><td>Add commands to a test at a specific position</td></tr>
+            <tr><td><code>run_test</code></td><td>Run a test and wait for results (up to 2 minutes)</td></tr>
+            <tr><td><code>clear_and_replace_commands</code></td><td>Replace all commands in a test</td></tr>
+            <tr><td><code>fix_commands</code></td><td>Apply targeted fixes — update, remove, or insert commands by index</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-diagram-project"></i> How It Works</h2>
+
+    <div class="architecture-diagram">
+        <div class="arch-box arch-claude">
+            <i class="fa-solid fa-comment-dots"></i>
+            <span>Claude Desktop</span>
+            <small>MCP Client</small>
+        </div>
+        <div class="arch-arrow">
+            <i class="fa-solid fa-arrows-left-right"></i>
+            <small>stdio</small>
+        </div>
+        <div class="arch-box arch-mcp">
+            <i class="fa-solid fa-plug-circle-bolt"></i>
+            <span>MCP Server</span>
+            <small>@selenix/mcp-server</small>
+        </div>
+        <div class="arch-arrow">
+            <i class="fa-solid fa-arrows-left-right"></i>
+            <small>HTTP localhost</small>
+        </div>
+        <div class="arch-box arch-selenix">
+            <i class="fa-solid fa-atom"></i>
+            <span>Selenix</span>
+            <small>Bridge Server</small>
+        </div>
+    </div>
+
+    <ul>
+        <li><strong>Claude Desktop</strong> spawns the MCP server as a child process and communicates over stdio using the Model Context Protocol</li>
+        <li><strong>MCP Server</strong> translates Claude's tool calls into HTTP requests to the bridge server running inside Selenix</li>
+        <li><strong>Bridge Server</strong> has direct access to Selenix internals — the same session, controllers, and APIs used by the built-in AI Assistant</li>
+    </ul>
+
+    <p>The MCP server re-reads connection details on every tool call, so if you restart Selenix, Claude Desktop will automatically reconnect without needing to be restarted.</p>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-shield-halved"></i> Security</h2>
+
+    <ul>
+        <li><strong>Localhost only</strong> — The bridge server binds to <code>127.0.0.1</code>. It is not accessible from the network.</li>
+        <li><strong>Bearer token auth</strong> — Every request requires a valid bearer token in the Authorization header.</li>
+        <li><strong>Per-session tokens</strong> — A new random token is generated each time Selenix starts, preventing token reuse.</li>
+        <li><strong>Explicit opt-in</strong> — The bridge server only starts when you enable it in System Settings. It is off by default.</li>
+        <li><strong>No cloud relay</strong> — All communication stays on your local machine. Nothing is proxied through external servers.</li>
+    </ul>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-circle-question"></i> Troubleshooting</h2>
+
+    <h3>"Cannot read Selenix bridge config"</h3>
+    <p>Selenix isn't running or the MCP Server isn't enabled. Open Selenix, go to System Settings, and set Enable MCP Server to Yes.</p>
+
+    <h3>"Cannot connect to Selenix bridge"</h3>
+    <p>Selenix may have just restarted. Try the request again — the MCP server will automatically pick up the new connection details.</p>
+
+    <h3>Tools not appearing in Claude Desktop</h3>
+    <p>Make sure you restarted Claude Desktop after editing the config file. Verify the JSON is valid — common issues include missing commas between entries and trailing commas after the last entry.</p>
+
+    <h3>Claude Desktop won't open after config change</h3>
+    <p>The config JSON is likely malformed. Open the config file in a text editor, fix the syntax, and try again. You can temporarily remove the <code>"selenix"</code> entry to verify Claude Desktop opens without it.</p>
+
+    <h3>"Request timed out"</h3>
+    <p>The <code>run_test</code> tool has a 2-minute timeout. If your test takes longer, it may need to be broken into smaller steps or optimized.</p>
+</div>
+
+<div class="docs-section">
+    <h2><i class="fa-solid fa-trash-can"></i> Uninstall</h2>
+
+    <p>To remove the MCP server:</p>
+    <pre><code>npm uninstall -g @selenix/mcp-server</code></pre>
+    <p>Then remove the <code>"selenix"</code> entry from your Claude Desktop config file and restart Claude Desktop.</p>
+    <p>In Selenix, set <strong>Enable MCP Server</strong> back to <strong>No</strong> in System Settings.</p>
+</div>
+
+<div class="next-steps">
+    <div class="alert alert-success">
+        <i class="fa-solid fa-arrow-right"></i>
+        <div>
+            <strong>Next Steps</strong>
+            <p>Learn about the built-in <a href="#ai-assistant">AI Assistant</a> chat interface, or explore the <a href="#command-reference">Command Reference</a> for all available Selenix commands.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.setup-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.setup-option {
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+}
+
+.setup-option-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.setup-option-header h3 {
+    margin: 0;
+}
+
+.setup-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.setup-badge.recommended {
+    background: #10b981;
+    color: white;
+}
+
+.tools-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.tools-table thead {
+    background: #f0f0f0;
+}
+
+.tools-table th,
+.tools-table td {
+    padding: 0.6rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.tools-table td:first-child {
+    white-space: nowrap;
+}
+
+.tools-table code {
+    background: #4f46e5;
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.architecture-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.arch-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 140px;
+}
+
+.arch-box i {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.arch-box span {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.arch-box small {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.arch-claude {
+    background: linear-gradient(135deg, #f0eaff, #e0d4ff);
+    border: 2px solid #7c3aed;
+    color: #5b21b6;
+}
+
+.arch-mcp {
+    background: linear-gradient(135deg, #e8f4fd, #d0e8f7);
+    border: 2px solid #1976d2;
+    color: #0d47a1;
+}
+
+.arch-selenix {
+    background: linear-gradient(135deg, #e8faf0, #d0f0e0);
+    border: 2px solid #10b981;
+    color: #065f46;
+}
+
+.arch-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    color: #999;
+}
+
+.arch-arrow i {
+    font-size: 1.1rem;
+}
+
+.arch-arrow small {
+    font-size: 0.7rem;
+}
+
+.conversation-example {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.chat-message {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+}
+
+.chat-message:last-child {
+    margin-bottom: 0;
+}
+
+.user-message {
+    background: #e3f2fd;
+    border-left: 3px solid #1976d2;
+}
+
+.ai-message {
+    background: #ffffff;
+    border-left: 3px solid #7c3aed;
+}
+
+.chat-message strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.user-message strong { color: #1976d2; }
+.ai-message strong { color: #7c3aed; }
+
+.chat-message em {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .architecture-diagram {
+        flex-direction: column;
+    }
+    .arch-arrow {
+        transform: rotate(90deg);
+    }
+}
+</style>

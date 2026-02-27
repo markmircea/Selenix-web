@@ -6,7 +6,7 @@
     <i class="fa-solid fa-brain"></i>
     <div>
         <strong>Powered by AI</strong>
-        <p>The AI Assistant requires an <strong>OpenRouter API key</strong> and a configured AI model in your project settings. The recommended model is <strong>Claude 4 by Anthropic</strong>.</p>
+        <p>The AI Assistant requires an <strong>OpenRouter API key</strong> and a configured AI model in your project settings OR <strong>MCP Server</strong> enabled in settings. The recommended model is <strong>Claude 3.5+ (Sonnet or Opus) by Anthropic</strong>. No other models have been tested and have a high chance of error.</p>
     </div>
 </div>
 
@@ -228,6 +228,86 @@
 </div>
 
 <div class="docs-section">
+    <h2><i class="fa-solid fa-rocket"></i> Auto-Run: Automated Test Generation</h2>
+
+    <p>Auto-Run is a fully automated workflow that generates commands from your description, runs the test, verifies the results, and fixes any failures — all without manual intervention. It's the fastest way to build working tests from scratch.</p>
+
+    <div class="alert alert-info">
+        <i class="fa-solid fa-circle-info"></i>
+        <div>
+            <strong>Same AI Model</strong>
+            <p>Auto-Run uses the same OpenRouter API key and AI model configured in your project settings. Make sure you have a model selected before using this feature.</p>
+        </div>
+    </div>
+
+    <h3>How to Start Auto-Run</h3>
+    <ol>
+        <li>Type your request in the AI Assistant chat (e.g., "Go to google.com and search for selenium automation")</li>
+        <li>Click the <strong>rocket button</strong> (<i class="fa-solid fa-rocket"></i>) next to the Send button</li>
+        <li>Watch the status bar as the AI works through each phase automatically</li>
+    </ol>
+
+    <h3>The Auto-Run Cycle</h3>
+    <p>Each iteration follows this sequence:</p>
+
+    <div class="autorun-phases">
+        <div class="phase-card">
+            <div class="phase-number">1</div>
+            <div class="phase-content">
+                <h4>Generating</h4>
+                <p>The AI analyzes your request, takes a screenshot of the browser, and generates a set of Selenix commands to accomplish the task.</p>
+            </div>
+        </div>
+        <div class="phase-card">
+            <div class="phase-number">2</div>
+            <div class="phase-content">
+                <h4>Applying</h4>
+                <p>Commands are automatically inserted into your active test. On the first iteration, the test is cleared and replaced. On fix iterations, targeted patches are applied.</p>
+            </div>
+        </div>
+        <div class="phase-card">
+            <div class="phase-number">3</div>
+            <div class="phase-content">
+                <h4>Running</h4>
+                <p>The test is executed in the browser. The status bar shows a progress indicator while the test runs (up to 2 minutes per run).</p>
+            </div>
+        </div>
+        <div class="phase-card">
+            <div class="phase-number">4</div>
+            <div class="phase-content">
+                <h4>Verifying</h4>
+                <p>After the test passes, the AI takes a screenshot and checks whether the result actually matches your original request — catching issues like wrong pages, 404 errors, or incorrect data.</p>
+            </div>
+        </div>
+        <div class="phase-card">
+            <div class="phase-number">5</div>
+            <div class="phase-content">
+                <h4>Fixing</h4>
+                <p>If the test failed or verification didn't pass, the AI receives the error details and generates fixes. It can either replace individual commands (surgical patches) or regenerate the entire test.</p>
+            </div>
+        </div>
+    </div>
+
+    <h3>Status Bar</h3>
+    <p>The status bar at the top of the AI Assistant panel shows the current state:</p>
+    <ul>
+        <li><strong style="color: #1976d2;">Blue border</strong> — Auto-Run is in progress, showing the current phase and iteration count</li>
+        <li><strong style="color: #10b981;">Green border</strong> — Test passed and was verified successfully</li>
+        <li><strong style="color: #ef4444;">Red border</strong> — Auto-Run failed after all retry attempts</li>
+    </ul>
+
+    <p>The AI will retry up to <strong>5 times</strong> before giving up. You can click the <strong>Stop</strong> button at any time to cancel the auto-run process.</p>
+
+    <div class="alert alert-warning">
+        <i class="fa-solid fa-lightbulb"></i>
+        <div>
+            <strong>Fix Strategies</strong>
+            <p>The AI uses two strategies for fixing failures: <strong>targeted patches</strong> (update, remove, or insert specific commands by index) for minor issues, and <strong>full replacement</strong> (clear and regenerate all commands) for major problems. This keeps fix iterations fast and focused.</p>
+        </div>
+    </div>
+</div>
+
+<div class="docs-section">
     <h2><i class="fa-solid fa-star"></i> Tips and Best Practices</h2>
 
     <div class="tips-grid">
@@ -255,7 +335,7 @@
         <i class="fa-solid fa-arrow-right"></i>
         <div>
             <strong>Next Steps</strong>
-            <p>Learn about all available commands in the <a href="#actions">Commands & Actions</a> guide, or explore <a href="#selectors">Smart Selectors</a> to understand how element targeting works in Selenix.</p>
+            <p>Learn about using <a href="#mcp-server">Claude Desktop with the MCP Server</a> for an alternative AI-powered workflow, or explore the <a href="#actions">Commands & Actions</a> guide and <a href="#selectors">Smart Selectors</a> documentation.</p>
         </div>
     </div>
 </div>
@@ -465,5 +545,47 @@
     font-size: 0.85rem;
     color: #666;
     font-style: italic;
+}
+
+.autorun-phases {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.phase-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #4f46e5;
+}
+
+.phase-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.phase-content h4 {
+    margin: 0 0 0.4rem 0;
+    color: #1a1a2e;
+}
+
+.phase-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
 }
 </style>

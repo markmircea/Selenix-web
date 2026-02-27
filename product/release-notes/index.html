@@ -15,6 +15,372 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Favicon -->
     <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
+    <style>
+        /* Summary Stats */
+        .release-summary {
+            padding: 3rem 0;
+            background: #f8f9fa;
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+        .stat-item {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4f46e5;
+            margin-bottom: 0.25rem;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #1a1a2e;
+            margin-bottom: 0.75rem;
+        }
+        .section-header p {
+            font-size: 1.15rem;
+            color: #6b7280;
+        }
+
+        /* Releases */
+        .releases {
+            padding: 5rem 0;
+        }
+        .releases-timeline {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 3px solid #e5e7eb;
+        }
+        .release-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: box-shadow 0.3s ease;
+        }
+        .release-item:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        .release-item::before {
+            content: '';
+            position: absolute;
+            left: -2.65rem;
+            top: 2.25rem;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #d1d5db;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #d1d5db;
+        }
+        .release-item.latest::before {
+            background: #4f46e5;
+            box-shadow: 0 0 0 2px #4f46e5;
+        }
+        .release-badge {
+            position: absolute;
+            top: -12px;
+            left: 1.5rem;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .release-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .release-version h3 {
+            font-size: 1.5rem;
+            color: #1a1a2e;
+            margin: 0 0 0.25rem 0;
+        }
+        .release-date {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        .release-type {
+            padding: 0.35rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .release-type.major {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+        .release-type.minor {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        .release-type.patch {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Release Content */
+        .release-section {
+            margin-bottom: 1.5rem;
+        }
+        .release-section:last-child {
+            margin-bottom: 0;
+        }
+        .release-section h4 {
+            font-size: 1rem;
+            color: #374151;
+            margin: 0 0 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .release-section h4 i {
+            font-size: 0.85rem;
+        }
+        .feature-list i { color: #10b981; }
+        .release-section h4 .fa-plus { color: #10b981; }
+        .release-section h4 .fa-wrench { color: #3b82f6; }
+        .release-section h4 .fa-bug { color: #ef4444; }
+
+        .feature-list,
+        .improvement-list,
+        .bugfix-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .feature-list li,
+        .improvement-list li,
+        .bugfix-list li {
+            position: relative;
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            font-size: 0.95rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .feature-list li::before {
+            content: '+';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .improvement-list li::before {
+            content: '\f0d8';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-size: 0.8rem;
+            top: 0.65rem;
+        }
+        .bugfix-list li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: #ef4444;
+            font-size: 0.75rem;
+            top: 0.65rem;
+        }
+        .release-section li strong {
+            color: #1a1a2e;
+        }
+        .release-section li code {
+            background: #f3f4f6;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #4f46e5;
+        }
+
+        /* Roadmap */
+        .roadmap {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+        .roadmap-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .roadmap-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .roadmap-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .roadmap-item h3 {
+            font-size: 1.25rem;
+            color: #1a1a2e;
+            margin: 1rem 0 0.5rem;
+        }
+        .roadmap-item p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .roadmap-status {
+            display: inline-block;
+            padding: 0.3rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .roadmap-status.coming-soon {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .roadmap-status.in-development {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .roadmap-status.planned {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .roadmap-eta {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            right: -5%;
+            width: 40%;
+            height: 120%;
+            background: rgba(255,255,255,0.08);
+            transform: rotate(-10deg);
+        }
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        .cta-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            color: white;
+        }
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .secondary-outline-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.75rem;
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        .secondary-outline-button:hover {
+            background: white;
+            color: #4f46e5;
+        }
+        .cta-section .primary-button {
+            background: white;
+            color: #4f46e5;
+        }
+        .cta-section .primary-button:hover {
+            box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .summary-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .stat-number { font-size: 1.5rem; }
+            .releases-timeline {
+                padding-left: 1.5rem;
+            }
+            .release-item { padding: 1.5rem; }
+            .release-item::before { left: -2.15rem; }
+            .release-version h3 { font-size: 1.25rem; }
+            .section-header h2 { font-size: 2rem; }
+            .cta-content h2 { font-size: 2rem; }
+            .roadmap-items { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .summary-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+            .stat-item { padding: 1rem; }
+            .stat-number { font-size: 1.25rem; }
+            .release-header { flex-direction: column; }
+            .releases { padding: 3rem 0; }
+            .roadmap { padding: 3rem 0; }
+            .cta-section { padding: 3rem 0; }
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar Component -->
@@ -46,20 +412,20 @@
         <div class="container">
             <div class="summary-stats">
                 <div class="stat-item">
-                    <div class="stat-number">v2.4.1</div>
+                    <div class="stat-number">v1.5.0</div>
                     <div class="stat-label">Latest Version</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">Dec 15</div>
+                    <div class="stat-number">Feb 2026</div>
                     <div class="stat-label">Last Updated</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">New Features</div>
+                    <div class="stat-number">40+</div>
+                    <div class="stat-label">Commands</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">25+</div>
-                    <div class="stat-label">Bug Fixes</div>
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Releases</div>
                 </div>
             </div>
         </div>
@@ -73,12 +439,14 @@
             </div>
 
             <div class="releases-timeline">
+
+                <!-- v1.5.0 -->
                 <div class="release-item latest">
                     <div class="release-badge">Latest</div>
                     <div class="release-header">
                         <div class="release-version">
-                            <h3>Version 2.4.1</h3>
-                            <span class="release-date">December 15, 2024</span>
+                            <h3>Version 1.5.0</h3>
+                            <span class="release-date">February 26, 2026</span>
                         </div>
                         <div class="release-type major">Major Release</div>
                     </div>
@@ -86,41 +454,26 @@
                         <div class="release-section">
                             <h4><i class="fa-solid fa-plus"></i> New Features</h4>
                             <ul class="feature-list">
-                                <li><strong>AI-Powered Element Detection</strong> - Automatically find the best selectors using machine learning</li>
-                                <li><strong>Visual Workflow Builder</strong> - New drag-and-drop interface for creating complex automations</li>
-                                <li><strong>Cloud Sync</strong> - Sync your workflows across multiple devices seamlessly</li>
-                                <li><strong>Advanced Scheduling</strong> - Set up complex schedules with multiple triggers and conditions</li>
-                                <li><strong>Error Recovery System</strong> - Automatic retry and fallback mechanisms for failed actions</li>
+                                <li><strong>AI Command Suggestion Cards</strong> - The AI Assistant now shows interactive command cards with "Add to Test" buttons, letting you insert suggested commands directly into your test with one click</li>
+                                <li><strong>sendEmail Command</strong> - Send emails directly from your automation workflows with configurable recipients, subjects, and body content via JSON configuration</li>
                             </ul>
                         </div>
                         <div class="release-section">
                             <h4><i class="fa-solid fa-wrench"></i> Improvements</h4>
                             <ul class="improvement-list">
-                                <li>50% faster execution speed for large workflows</li>
-                                <li>Improved memory usage and resource optimization</li>
-                                <li>Enhanced user interface with better accessibility</li>
-                                <li>More reliable element detection in dynamic websites</li>
-                                <li>Better error messages and debugging information</li>
-                            </ul>
-                        </div>
-                        <div class="release-section">
-                            <h4><i class="fa-solid fa-bug"></i> Bug Fixes</h4>
-                            <ul class="bugfix-list">
-                                <li>Fixed issue with browser extension not connecting on macOS</li>
-                                <li>Resolved memory leaks in long-running workflows</li>
-                                <li>Fixed data export formatting issues with special characters</li>
-                                <li>Corrected timing issues with very fast websites</li>
-                                <li>Fixed crash when handling very large datasets</li>
+                                <li>AI Assistant system prompt updated to output machine-readable command blocks alongside natural language explanations</li>
+                                <li>Command name normalization handles case-insensitive matching for all 40+ commands</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
+                <!-- v1.4.0 -->
                 <div class="release-item">
                     <div class="release-header">
                         <div class="release-version">
-                            <h3>Version 2.3.2</h3>
-                            <span class="release-date">November 28, 2024</span>
+                            <h3>Version 1.4.0</h3>
+                            <span class="release-date">July 13, 2025</span>
                         </div>
                         <div class="release-type minor">Minor Release</div>
                     </div>
@@ -128,55 +481,33 @@
                         <div class="release-section">
                             <h4><i class="fa-solid fa-plus"></i> New Features</h4>
                             <ul class="feature-list">
-                                <li><strong>Template Sharing</strong> - Share workflows with the community</li>
-                                <li><strong>Custom Variables</strong> - Create and manage custom variables across workflows</li>
-                                <li><strong>Webhook Integration</strong> - Trigger workflows from external systems</li>
+                                <li><strong>macOS DMG Installer</strong> - Native macOS disk image for streamlined installation on Mac</li>
                             </ul>
                         </div>
-                        <div class="release-section">
-                            <h4><i class="fa-solid fa-bug"></i> Bug Fixes</h4>
-                            <ul class="bugfix-list">
-                                <li>Fixed issue with dropdown selection in certain websites</li>
-                                <li>Resolved browser extension compatibility with Chrome 120+</li>
-                                <li>Fixed workflow import/export functionality</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="release-item">
-                    <div class="release-header">
-                        <div class="release-version">
-                            <h3>Version 2.3.1</h3>
-                            <span class="release-date">November 12, 2024</span>
-                        </div>
-                        <div class="release-type patch">Patch Release</div>
-                    </div>
-                    <div class="release-content">
                         <div class="release-section">
                             <h4><i class="fa-solid fa-wrench"></i> Improvements</h4>
                             <ul class="improvement-list">
-                                <li>Enhanced performance for data extraction operations</li>
-                                <li>Improved stability for headless browser execution</li>
-                                <li>Better handling of CAPTCHA detection</li>
+                                <li>Improved <code>scrapeCollection</code> command with better descriptions and support for @ attribute selectors</li>
+                                <li>Enhanced <code>httpRequest</code> command reliability and configuration</li>
                             </ul>
                         </div>
                         <div class="release-section">
                             <h4><i class="fa-solid fa-bug"></i> Bug Fixes</h4>
                             <ul class="bugfix-list">
-                                <li>Fixed critical issue with scheduling on Windows</li>
-                                <li>Resolved data loss issue during workflow editing</li>
-                                <li>Fixed browser crash with certain websites</li>
+                                <li>Fixed scheduler time calculation for accurate test scheduling</li>
+                                <li>Fixed XPath selectors containing @ symbols not being parsed correctly</li>
+                                <li>Fixed import feature not saving comments alongside test data</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
+                <!-- v1.3.0 -->
                 <div class="release-item">
                     <div class="release-header">
                         <div class="release-version">
-                            <h3>Version 2.3.0</h3>
-                            <span class="release-date">October 25, 2024</span>
+                            <h3>Version 1.3.0</h3>
+                            <span class="release-date">May 29, 2025</span>
                         </div>
                         <div class="release-type major">Major Release</div>
                     </div>
@@ -184,22 +515,160 @@
                         <div class="release-section">
                             <h4><i class="fa-solid fa-plus"></i> New Features</h4>
                             <ul class="feature-list">
-                                <li><strong>Mobile Device Support</strong> - Test automations on mobile browsers</li>
-                                <li><strong>API Integration</strong> - Connect with REST APIs and external services</li>
-                                <li><strong>Advanced Data Export</strong> - Export to more formats including JSON and XML</li>
-                                <li><strong>Team Collaboration</strong> - Share workflows with team members</li>
+                                <li><strong>executePowerShell Command</strong> - Execute PowerShell scripts from within your tests, pass arguments including variables, and capture structured output</li>
+                                <li><strong>Desktop Application</strong> - Selenix now runs as a standalone desktop app with system tray support, minimize-to-tray, and custom application icons</li>
+                                <li><strong>License Management</strong> - Built-in license activation and validation system with encrypted license keys</li>
                             </ul>
                         </div>
                         <div class="release-section">
                             <h4><i class="fa-solid fa-wrench"></i> Improvements</h4>
                             <ul class="improvement-list">
-                                <li>Completely redesigned user interface</li>
-                                <li>75% improvement in startup time</li>
-                                <li>Enhanced security with encrypted workflow storage</li>
+                                <li>Application window shows minimize balloon notification on first minimize to tray</li>
+                                <li>Removed unnecessary console logs for cleaner production builds</li>
+                                <li>Improved EXE logger output for better debugging in built versions</li>
+                            </ul>
+                        </div>
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-bug"></i> Bug Fixes</h4>
+                            <ul class="bugfix-list">
+                                <li>Fixed CSV export for arrays producing malformed output</li>
+                                <li>Fixed PowerShell command not handling multiple arguments correctly</li>
                             </ul>
                         </div>
                     </div>
                 </div>
+
+                <!-- v1.2.0 -->
+                <div class="release-item">
+                    <div class="release-header">
+                        <div class="release-version">
+                            <h3>Version 1.2.0</h3>
+                            <span class="release-date">April 13, 2025</span>
+                        </div>
+                        <div class="release-type major">Major Release</div>
+                    </div>
+                    <div class="release-content">
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-plus"></i> New Features</h4>
+                            <ul class="feature-list">
+                                <li><strong>sendToAI Command</strong> - Leverage AI to generate, transform, or analyze data during test execution by processing existing variables or generating new content from instructions</li>
+                                <li><strong>Smart Element Locator</strong> - Visual element selector with crosshair coordinates, element metadata display, and advanced selector tooltips</li>
+                                <li><strong>AI Screenshot Analysis</strong> - Capture browser screenshots and send them to the AI Assistant for visual element identification and selector suggestions</li>
+                                <li><strong>Import/Export Workflows</strong> - Import and export test workflows as JSON files for backup and sharing</li>
+                            </ul>
+                        </div>
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-wrench"></i> Improvements</h4>
+                            <ul class="improvement-list">
+                                <li><code>type</code> command now supports all keyboard keys and key combinations like <code>&lt;ctrl&gt;+&lt;a&gt;</code></li>
+                                <li><code>type</code> command now accepts variable interpolation in values</li>
+                                <li>AI Assistant now sends chat history for contextual follow-up conversations</li>
+                                <li>AI context commands (<code>getSearchHTML</code>, <code>getCurrentTest</code>, <code>getSelectedCommandInfo</code>) now accept ID parameters for targeted queries</li>
+                                <li>Added intermediate status messages during AI processing so users can see what the assistant is doing</li>
+                                <li>Added stop button and keyboard arrow navigation to AI Assistant chat</li>
+                                <li>Adding a new test while a suite is selected now adds it to the current suite</li>
+                                <li>Truncation applied to <code>getSearchHTML</code> for better AI performance on large pages</li>
+                            </ul>
+                        </div>
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-bug"></i> Bug Fixes</h4>
+                            <ul class="bugfix-list">
+                                <li>Fixed <code>transformVariable</code> not working correctly with certain data types</li>
+                                <li>Fixed import feature not loading saved test data properly</li>
+                                <li>Fixed <code>clickAtCoordinates</code> target field not accepting user text input</li>
+                                <li>Fixed AI instructions for screenshot-based locator detection</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- v1.1.0 -->
+                <div class="release-item">
+                    <div class="release-header">
+                        <div class="release-version">
+                            <h3>Version 1.1.0</h3>
+                            <span class="release-date">March 25, 2025</span>
+                        </div>
+                        <div class="release-type major">Major Release</div>
+                    </div>
+                    <div class="release-content">
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-plus"></i> New Features</h4>
+                            <ul class="feature-list">
+                                <li><strong>AI Assistant</strong> - Built-in AI chat interface in the Logger panel with continuous conversation, message editing, deletion, and clear history. Powered by OpenRouter with configurable API key and model selection</li>
+                                <li><strong>monitorElement Command</strong> - Watch elements for changes over time with configurable intervals, attribute monitoring, and conditional stop values</li>
+                                <li><strong>combineVariables Command</strong> - Merge multiple variables into arrays, objects, or strings with advanced options like object-to-entries conversion and custom separators</li>
+                                <li><strong>inspectVariable Command</strong> - Debug and inspect variable contents, types, and structure during test execution</li>
+                                <li><strong>createSnapshot / restoreSnapshot Commands</strong> - Save and restore variable state snapshots with JSON export and import support</li>
+                                <li><strong>Test Scheduling</strong> - Schedule tests to run automatically at configured times</li>
+                            </ul>
+                        </div>
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-wrench"></i> Improvements</h4>
+                            <ul class="improvement-list">
+                                <li>AI Assistant uses two-step processing: first gathers information, then returns structured results</li>
+                                <li>AI can run multiple special context commands in sequence for comprehensive analysis</li>
+                                <li>Refactored internal JavaScript functions into separate module files for better maintainability</li>
+                            </ul>
+                        </div>
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-bug"></i> Bug Fixes</h4>
+                            <ul class="bugfix-list">
+                                <li>Fixed array and object handling in <code>combineVariables</code></li>
+                                <li>Fixed <code>getPageHTML</code> context command not returning content</li>
+                                <li>Fixed AI Assistant displaying raw AI response in the log output</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- v1.0.0 -->
+                <div class="release-item">
+                    <div class="release-header">
+                        <div class="release-version">
+                            <h3>Version 1.0.0</h3>
+                            <span class="release-date">March 14, 2025</span>
+                        </div>
+                        <div class="release-type major">Initial Release</div>
+                    </div>
+                    <div class="release-content">
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-plus"></i> New Features</h4>
+                            <ul class="feature-list">
+                                <li><strong>scrapeCollection Command</strong> - Extract arrays of similar elements from web pages using CSS or XPath selectors</li>
+                                <li><strong>scrapeStructured Command</strong> - Extract complex structured data using JSON field mapping with support for nested selectors and multiple data types</li>
+                                <li><strong>scrollAndWait Command</strong> - Automatically scroll pages and wait for dynamic content to load, with support for infinite scroll handling</li>
+                                <li><strong>transformVariable Command</strong> - Transform variable data with built-in operations like filtering, mapping, sorting, and format conversion</li>
+                                <li><strong>downloadFiles Command</strong> - Download files from URLs directly within test execution</li>
+                                <li><strong>exportToJSON / exportToCSV Commands</strong> - Export scraped data and variables to JSON or CSV files</li>
+                                <li><strong>importFromJSON / importFromCSV Commands</strong> - Import data from external JSON and CSV files into test variables</li>
+                                <li><strong>httpRequest Command</strong> - Make HTTP GET/POST requests with full configuration for headers, body, query parameters, and variable interpolation. Includes a visual request builder with JSON formatting and live preview</li>
+                                <li><strong>curlRequest Command</strong> - Execute cURL commands directly from tests for advanced API interactions</li>
+                                <li><strong>File and Folder Upload</strong> - Upload single files, multiple files, or entire folders with MIME type detection</li>
+                                <li><strong>Element Selection Tooltip</strong> - Visual tooltip when hovering over elements in the browser, showing selector information in both the command fields and command row</li>
+                            </ul>
+                        </div>
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-wrench"></i> Improvements</h4>
+                            <ul class="improvement-list">
+                                <li>HTTP request UI with reorderable parameter lists and double-click configuration</li>
+                                <li>Variable interpolation support in HTTP request URLs, headers, body, and parameters</li>
+                                <li><code>echo</code> command updated to handle objects and complex data types</li>
+                                <li>Export commands support objects, strings, and arrays with automatic format detection</li>
+                            </ul>
+                        </div>
+                        <div class="release-section">
+                            <h4><i class="fa-solid fa-bug"></i> Bug Fixes</h4>
+                            <ul class="bugfix-list">
+                                <li>Fixed scroll command behavior on dynamic pages</li>
+                                <li>Fixed dialog box UI glitches during file operations</li>
+                                <li>Fixed JSON parsing for variable types in HTTP request body and parameters</li>
+                                <li>Fixed HTTP request save functionality</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -214,23 +683,23 @@
             <div class="roadmap-items">
                 <div class="roadmap-item">
                     <div class="roadmap-status coming-soon">Coming Soon</div>
-                    <h3>Advanced AI Features</h3>
-                    <p>AI-powered workflow suggestions and automatic optimization of existing automations.</p>
-                    <div class="roadmap-eta">Expected: Q1 2025</div>
+                    <h3>Chrome Driver Integration</h3>
+                    <p>Built-in Chrome and ChromeDriver management for seamless browser automation without manual driver setup.</p>
+                    <div class="roadmap-eta">Expected: Q2 2026</div>
                 </div>
 
                 <div class="roadmap-item">
                     <div class="roadmap-status in-development">In Development</div>
-                    <h3>Browser Extension V3</h3>
-                    <p>Complete rewrite of the browser extension with improved performance and new recording capabilities.</p>
-                    <div class="roadmap-eta">Expected: Q2 2025</div>
+                    <h3>Enhanced AI Workflows</h3>
+                    <p>Expanded AI capabilities including automatic test generation from natural language descriptions and intelligent test repair when selectors break.</p>
+                    <div class="roadmap-eta">Expected: Q2 2026</div>
                 </div>
 
                 <div class="roadmap-item">
                     <div class="roadmap-status planned">Planned</div>
-                    <h3>Enterprise Dashboard</h3>
-                    <p>Centralized dashboard for managing automations across large organizations with advanced analytics.</p>
-                    <div class="roadmap-eta">Expected: Q2 2025</div>
+                    <h3>Template Marketplace</h3>
+                    <p>Community-driven template library for sharing and discovering pre-built automation workflows across common use cases.</p>
+                    <div class="roadmap-eta">Expected: Q3 2026</div>
                 </div>
             </div>
         </div>
